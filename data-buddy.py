@@ -34,6 +34,7 @@ except ImportError: # if it's not there locally, try the wxPython lib.
 ########################################################################
 ID_EXIT = wx.NewId()
 ID_ABOUT = wx.NewId()
+LOAD_FILE_ID = wx.NewId()
 e=sys.exit
 update_cache=True
 dBtn='N/A'
@@ -2742,36 +2743,11 @@ class DataBuddy(wx.Frame):
 			rb_v.Enable(False)
 			boxsizer.Add(rb_v, flag=wx.LEFT|wx.TOP, border=5)
 			boxsizer.Add( wx.TextCtrl(panel), flag=wx.LEFT|wx.TOP, border=5)
-			boxsizer.Add( wx.Button(panel, label="Browse..."), flag=wx.LEFT|wx.TOP, border=5)
-
+			btn_browse = wx.Button(panel,LOAD_FILE_ID, label="Browse...", style=wx.BU_EXACTFIT)
+			boxsizer.Add(btn_browse, flag=wx.LEFT|wx.TOP, border=5)
+			self.Bind(wx.EVT_BUTTON, self.loadFile, btn_browse)
 			sizer.Add(boxsizer, pos=(2, 3),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)			
 			
-		if 0:
-			text2 = wx.StaticText(panel, label="Name")
-			sizer.Add(text2, pos=(3, 0), flag=wx.LEFT, border=10)
-
-			tc1 = wx.TextCtrl(panel)
-			sizer.Add(tc1, pos=(3, 1), span=(1, 3), flag=wx.TOP|wx.EXPAND)
-
-			text3 = wx.StaticText(panel, label="Package")
-			sizer.Add(text3, pos=(4, 0), flag=wx.LEFT|wx.TOP, border=10)
-
-			tc2 = wx.TextCtrl(panel)
-			sizer.Add(tc2, pos=(4, 1), span=(1, 3), flag=wx.TOP|wx.EXPAND, 
-				border=5)
-
-			button1 = wx.Button(panel, label="New")
-			sizer.Add(button1, pos=(4, 4), flag=wx.TOP|wx.RIGHT, border=5)
-
-			text4 = wx.StaticText(panel, label="Extends")
-			sizer.Add(text4, pos=(5, 0), flag=wx.TOP|wx.LEFT, border=10)
-
-			combo = wx.ComboBox(panel)
-			sizer.Add(combo, pos=(5, 1), span=(1, 3), 
-				flag=wx.TOP|wx.EXPAND, border=5)
-
-			button2 = wx.Button(panel, label="Delete")
-			sizer.Add(button2, pos=(5, 4), flag=wx.TOP|wx.RIGHT, border=5)
 		if 1:
 			from editor import TacoTextEditor
 			nb = fnb.FlatNotebook(panel, -1, agwStyle=fnb.FNB_COLOURFUL_TABS|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_NO_X_BUTTON|fnb.FNB_NO_NAV_BUTTONS|fnb.FNB_NODRAG) #|fnb.FNB_DCLICK_CLOSES_TABS|fnb.FNB_X_ON_TAB|fnb.FNB_X|fnb.FNB_TAB_X|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_BTN_NONE|fnb.FNB_BTN_PRESSED|fnb.FNB_COLOURFUL_TABS|fnb.FNB_BOTTOM|fnb.FNB_SMART_TABS|fnb.FNB_DROPDOWN_TABS_LIST|fnb.FNB_DROP_DOWN_ARROW|fnb.FNB_BTN_HOVER|fnb.FNB_NO_X_BUTTON) #|fnb.FNB_HIDE_ON_SINGLE_TAB)
@@ -2894,11 +2870,6 @@ class DataBuddy(wx.Frame):
 		boxsizer.Add(cb, flag=wx.LEFT|wx.TOP, border=5)
 		cb.SetValue(True)
 		#print(dir(cb))
-		if 0:
-			boxsizer.Add(wx.CheckBox(panel, label="Generate Default Constructor"),
-				flag=wx.LEFT, border=5)
-			boxsizer.Add(wx.CheckBox(panel, label="Generate Main Method"), 
-				flag=wx.LEFT|wx.BOTTOM, border=5)
 		sizer.Add(boxsizer, pos=(8, 0), span=(1, 5), 
 			flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=10)
 
@@ -2955,7 +2926,10 @@ class DataBuddy(wx.Frame):
 			self.Bind(wx.EVT_BUTTON, self.onAboutHtmlDlg, aboutBtn)
 			#self.Bind(wx.EVT_BUTTON, self.onAboutDlg, id=ID_ABOUT)
 			panel2.SetSizer(vsizer)
-
+		
+		self.Bind(wx.EVT_MENU, self.loadFile, id=LOAD_FILE_ID)
+		accel_tbl = wx.AcceleratorTable([(wx.ACCEL_CTRL,  ord('O'), LOAD_FILE_ID )])
+		self.SetAcceleratorTable(accel_tbl)		
 		panel.SetSizer(sizer)
 		self.Center()
 		#self.SetSizeHints(250,300,500,400)
@@ -2963,7 +2937,14 @@ class DataBuddy(wx.Frame):
 		self.Refresh()
 		self.Show(True)
 
-
+	def loadFile(self, event):
+		path=os.path.dirname(os.path.abspath(__file__))
+		openFileDialog = wx.FileDialog(self, "Open", path, "", 
+			"exe files (*.exe)|*.exe", 
+			wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
+		openFileDialog.ShowModal()
+		print openFileDialog.GetPath()
+		openFileDialog.Destroy()
 
 	def gen_bind(self, type, instance, handler, *args, **kwargs):
 		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)			
