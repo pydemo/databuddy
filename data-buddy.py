@@ -227,7 +227,9 @@ class SessionList(wx.ListCtrl):
 		#self.sm_up = self.il.Add(images.SmallUpArrow.GetBitmap())
 		#self.sm_dn = self.il.Add(images.SmallDnArrow.GetBitmap())		
 		for i in range(len(self.images)):
+			
 			img=self.images[i]
+			print img
 			self.il.Add(wx.Bitmap(img))
 			self.image_refs[img]=i
 		self.SetImageList(self.il, wx.IMAGE_LIST_SMALL)	
