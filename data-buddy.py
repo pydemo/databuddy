@@ -2738,11 +2738,11 @@ class DataBuddy(wx.Frame):
 		if 1: #Transport
 			sb = wx.StaticBox(panel, label="Transport")
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			rb_v=wx.RadioButton(panel, label="dm32.exe",style=wx.RB_GROUP)
+			self.rb_transport=wx.RadioButton(panel, label="dm32.exe",style=wx.RB_GROUP)
 			#b_vector = wx.Button(panel, label="ora2ora")
-			rb_v.Enable(False)
-			boxsizer.Add(rb_v, flag=wx.LEFT|wx.TOP, border=5)
-			boxsizer.Add( wx.TextCtrl(panel), flag=wx.LEFT|wx.TOP, border=5)
+			self.rb_transport.Enable(False)
+			boxsizer.Add(self.rb_transport, flag=wx.LEFT|wx.TOP, border=5)
+			boxsizer.Add( wx.TextCtrl(panel,value='\\dm32\\dm32.exe'), flag=wx.LEFT|wx.TOP, border=5)
 			btn_browse = wx.Button(panel,LOAD_FILE_ID, label="Browse...", style=wx.BU_EXACTFIT)
 			boxsizer.Add(btn_browse, flag=wx.LEFT|wx.TOP, border=5)
 			self.Bind(wx.EVT_BUTTON, self.loadFile, btn_browse)
@@ -2880,7 +2880,8 @@ class DataBuddy(wx.Frame):
 		btn_open = wx.Button(panel, label="Open")
 		sizer.Add(btn_open, pos=(9, 3),flag=wx.BOTTOM|wx.ALIGN_RIGHT)
 		#self.Bind(wx.EVT_BUTTON, self.onAboutHtmlDlg, btn_open)
-		button5 = wx.Button(panel, label="Cancel")
+		button5 = wx.Button(panel, ID_EXIT, label="Cancel")
+		#self.Bind(wx.EVT_BUTTON, self.onAboutHtmlDlg, aboutBtn)
 		sizer.Add(button5, pos=(9, 4), span=(1, 1), flag=wx.BOTTOM|wx.RIGHT, border=5)
 
 		#sizer.AddGrowableCol(2)
@@ -2945,6 +2946,7 @@ class DataBuddy(wx.Frame):
 		openFileDialog.ShowModal()
 		print openFileDialog.GetPath()
 		openFileDialog.Destroy()
+		
 
 	def gen_bind(self, type, instance, handler, *args, **kwargs):
 		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)			
