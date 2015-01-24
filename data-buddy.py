@@ -22,6 +22,8 @@ import common_utils as cu
 import images
 import os, sys
 from pprint import pprint
+import webbrowser
+import wx.html 
 e=sys.exit
 blog=cu.blog
 
@@ -31,6 +33,7 @@ except ImportError: # if it's not there locally, try the wxPython lib.
     from wx.lib.agw import ultimatelistctrl as ULC
 ########################################################################
 ID_EXIT = wx.NewId()
+ID_ABOUT = wx.NewId()
 e=sys.exit
 update_cache=True
 dBtn='N/A'
@@ -2680,8 +2683,10 @@ class ConfigTree(wx.Frame):
 class DataBuddy(wx.Frame):
 	def __init__(self, parent, id, title):
 		#wx.Frame.__init__(self, parent, -1, title)
-		super(DataBuddy, self).__init__(parent, title=title , size=(900, 565))
-		global prog
+		#super(DataBuddy, self).__init__(parent, title=title , size=(900, 565))
+		global app_title
+		wx.Frame.__init__(self, None, wx.ID_ANY, title=app_title)
+		
 		#self.splitter = wx.SplitterWindow(self, ID_SPLITTER, style=wx.SP_BORDER)
 		#self.splitter = MultiSplitterWindow(self, style=wx.SP_LIVE_UPDATE)
 		#s=self.splitter
@@ -2689,7 +2694,8 @@ class DataBuddy(wx.Frame):
 		#panel layout
 		self.panel_pos=[(0,i) for i in range(3)]
 		#print self.panel_pos
-		panel = wx.Panel(self)
+		self.panel = wx.Panel(self)
+		panel=self.panel
 		sizer = wx.GridBagSizer(5, 5)
 		if 1:
 			text1 = wx.StaticText(panel, label="Session name:")
@@ -2729,7 +2735,7 @@ class DataBuddy(wx.Frame):
 		if 1: #Transport
 			sb = wx.StaticBox(panel, label="Transport")
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			rb_v=wx.RadioButton(panel, label="qc32.exe",style=wx.RB_GROUP)
+			rb_v=wx.RadioButton(panel, label="dm32.exe",style=wx.RB_GROUP)
 			#b_vector = wx.Button(panel, label="ora2ora")
 			rb_v.Enable(False)
 			boxsizer.Add(rb_v, flag=wx.LEFT|wx.TOP, border=5)
@@ -2777,7 +2783,7 @@ class DataBuddy(wx.Frame):
 				hbox = wx.BoxSizer(wx.HORIZONTAL)
 
 				fgs = wx.FlexGridSizer(3, 4, 9, 20)
-				ttl=['From table','From database','nls_date_format','nls_timestamp_format','nls_timestamp_tz_format','Client home']
+				ttl=['Copy vector','Pool size','Num of shards','Field terminator','Truncate target']
 				l=[wx.StaticText(panel_from, label="%s:" % t) for t in ttl]
 
 				p=[wx.TextCtrl(panel_from) for t in ttl]
@@ -2898,19 +2904,18 @@ class DataBuddy(wx.Frame):
 		sizer.Add(button3, pos=(9, 0), flag=wx.LEFT, border=10)
 		button3.Enable(False)
 
-		button4 = wx.Button(panel, label="Open")
-		sizer.Add(button4, pos=(9, 3),flag=wx.BOTTOM|wx.ALIGN_RIGHT)
-
+		btn_open = wx.Button(panel, label="Open")
+		sizer.Add(btn_open, pos=(9, 3),flag=wx.BOTTOM|wx.ALIGN_RIGHT)
+		#self.Bind(wx.EVT_BUTTON, self.onAboutHtmlDlg, btn_open)
 		button5 = wx.Button(panel, label="Cancel")
-		sizer.Add(button5, pos=(9, 4), span=(1, 1),  
-			flag=wx.BOTTOM|wx.RIGHT, border=5)
+		sizer.Add(button5, pos=(9, 4), span=(1, 1), flag=wx.BOTTOM|wx.RIGHT, border=5)
 
 		#sizer.AddGrowableCol(2)
 		sizer.AddGrowableRow(7)
-		panel.SetSizer(sizer)		
+				
 		if 1:
-			panel2 = wx.Panel(self)
-		
+			self.panel2 = wx.Panel(self, wx.ID_ANY)
+			panel2=self.panel2
 			vsizer =  wx.BoxSizer(wx.VERTICAL)
 			#wx.BoxSizer(wx.VERTICAL)
 			#if 1:
@@ -2923,9 +2928,9 @@ class DataBuddy(wx.Frame):
 				
 
 			#self.vsizer.Add(self.sizer,pos=(0,1),flag=wx.EXPAND)
-			btnHome = wx.Button(panel2, -1, "About", style=wx.BU_EXACTFIT) #, size=(30,20)
-			vsizer.Add(btnHome,0,wx.TOP|wx.BOTTOM|wx.LEFT|wx.RIGHT, border=5)
-			panel2.SetSizer(vsizer)
+			aboutBtn = wx.Button(panel2, ID_ABOUT, "About", style=wx.BU_EXACTFIT) #, size=(30,20)
+			vsizer.Add(aboutBtn,0,wx.TOP|wx.BOTTOM|wx.LEFT|wx.RIGHT, border=5)
+			
 			
 
 			#self.log=cu.NullLog()
@@ -2945,9 +2950,15 @@ class DataBuddy(wx.Frame):
 			#self.sb = self.CreateStatusBar()
 			#self.sb.SetStatusText(os.getcwd())
 			self.Bind(wx.EVT_BUTTON, self.OnExit, id=ID_EXIT)
+			self.Bind(wx.EVT_BUTTON, self.onAboutHtmlDlg, aboutBtn)
+			#self.Bind(wx.EVT_BUTTON, self.onAboutDlg, id=ID_ABOUT)
+			panel2.SetSizer(vsizer)
 
-		
+		panel.SetSizer(sizer)
 		self.Center()
+		#self.SetSizeHints(250,300,500,400)
+		self.Fit()
+		self.Refresh()
 		self.Show(True)
 
 
@@ -2957,11 +2968,50 @@ class DataBuddy(wx.Frame):
 
 	def OnExit(self,e):
 		self.Close(True)
+	def onAboutDlg(self, event):
+		
+		from wx.lib.wordwrap import wordwrap
+		info = wx.AboutDialogInfo()
+		info.Name = "data-buddy"
+		info.Version = "0.0.1 Beta"
+		info.Copyright = "(C) 2015 SequelWorks Inc."
+		info.Description = wordwrap(
+			'This is session manager for  <b><a href="https://github.com/DataMigrator/DataMigrator-for-Oracle">DataMigrator</a></b>.</p>',
+			350, wx.ClientDC(self.panel))
+		info.WebSite = ("https://github.com/alexbuz", "My Github")
+		info.Developers = ["Alex Buzunov"]
+		info.License = wordwrap("Open source", 500,
+								wx.ClientDC(self.panel))
+		# Show the wx.AboutBox
+		wx.AboutBox(info)	
+	def onAboutHtmlDlg(self, event):
+		aboutDlg = AboutDlg(None)
+		aboutDlg.Show()		
 	def OnClose(self, event):
-
 		#self.ticker.Stop()
 		self.Destroy()
+class AboutDlg(wx.Frame): 
+	def __init__(self, parent):
+		wx.Frame.__init__(self, parent, wx.ID_ANY, title="About", size=(400,400))
+		html = wxHTML(self)
+		html.SetPage(
+			''
+			"<h2>About data-buddy</h2>"
+			'<p>Session manager for <b><a href="https://github.com/DataMigrator/DataMigrator-for-Oracle">DataMigrator</a></b>.</p>'
+			'<p>Created in Jan. 2015 by Alex Buzunov.</p>'
+			"<p><b>Software used in making this demo:</h3></p>"
+			'<p><b><a href="http://www.python.org">Python 2.7</a></b></p>'
+			'<p><b><a href="http://www.wxpython.org">wxPython 2.8</a></b></p>'
+			)
+		self.Center()
+		self.SetSize((300,300))
+		#self.Fit()
+		self.Refresh()
 
+
+class wxHTML(wx.html.HtmlWindow):	
+	def OnLinkClicked(self, link):
+		webbrowser.open(link.GetHref())
 		
 if __name__ == '__main__':
 	freeze_support()	
