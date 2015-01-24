@@ -10,7 +10,10 @@ from tc_init import *
 import xml.dom.minidom
 from xml.dom.minidom import Node
 from  tree_lib import *
+from wx.lib.pubsub import setupkwargs
 
+# regular pubsub import
+from wx.lib.pubsub import pub	
 
 		
 if 0:
@@ -29,10 +32,7 @@ if 0:
 		from wx.lib.pubsub import setupkwargs
 		from wx.lib.pubsub import Publisher as pub
 if 1:		
-	from wx.lib.pubsub import setupkwargs
 
-	# regular pubsub import
-	from wx.lib.pubsub import pub	
 	def sub(method,  signal):
 		#print args
 		pub.subscribe(method, signal)
@@ -43,6 +43,9 @@ if 1:
 		#print args
 		#print signal,  charge
 		#print '#'*60
+		print signal
+		print charge
+		print extra1
 		pub.sendMessage(signal,data=charge, extra1=extra1)
 		return 0
 else:

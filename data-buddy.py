@@ -2940,21 +2940,22 @@ class DataBuddy(wx.Frame):
 		self.Fit()
 		self.Refresh()
 		self.Show(True)
-	def onTransportLoc(self, evt):		
-		(tloc) = evt.data
+	def onTransportLoc(self, data, extra1, extra2=None):		
+		(tloc) = data
 		print tloc
 
 	def loadFile(self, event):
 		path=os.path.dirname(os.path.abspath(__file__))
-		openFileDialog = wx.FileDialog(self, "Open", path, "", 
+		openFileDialog = wx.FileDialog(self, "Path to DataMigrator (dm*.exe)", path, "", 
 			"exe files (*.exe)|*.exe", 
 			wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
 		openFileDialog.ShowModal()
 		tloc= openFileDialog.GetPath()
-		#send( "set_transport_location", (tloc,) )
+		send( "set_transport_location", (tloc,) )
 		openFileDialog.Destroy()
-		self.rb_transport.Enable(True)
-		self.txt_transport.Value=tloc
+		if 0 and tloc:
+			self.rb_transport.Enable(True)
+			self.txt_transport.Value=tloc
 
 	def gen_bind(self, type, instance, handler, *args, **kwargs):
 		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)			
