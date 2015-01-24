@@ -24,6 +24,7 @@ import os, sys
 from pprint import pprint
 import webbrowser
 import wx.html 
+from tc_lib import sub, send
 e=sys.exit
 blog=cu.blog
 
@@ -2742,7 +2743,8 @@ class DataBuddy(wx.Frame):
 			#b_vector = wx.Button(panel, label="ora2ora")
 			self.rb_transport.Enable(False)
 			boxsizer.Add(self.rb_transport, flag=wx.LEFT|wx.TOP, border=5)
-			boxsizer.Add( wx.TextCtrl(panel,value='\\dm32\\dm32.exe'), flag=wx.LEFT|wx.TOP, border=5)
+			self.txt_transport= wx.TextCtrl(panel,value='\\dm32\\dm32.exe')
+			boxsizer.Add(self.txt_transport, flag=wx.LEFT|wx.TOP, border=5)
 			btn_browse = wx.Button(panel,LOAD_FILE_ID, label="Browse...", style=wx.BU_EXACTFIT)
 			boxsizer.Add(btn_browse, flag=wx.LEFT|wx.TOP, border=5)
 			self.Bind(wx.EVT_BUTTON, self.loadFile, btn_browse)
@@ -2932,11 +2934,15 @@ class DataBuddy(wx.Frame):
 		accel_tbl = wx.AcceleratorTable([(wx.ACCEL_CTRL,  ord('O'), LOAD_FILE_ID )])
 		self.SetAcceleratorTable(accel_tbl)		
 		panel.SetSizer(sizer)
+		sub(self.onTransportLoc, "set_transport_location")
 		self.Center()
 		#self.SetSizeHints(250,300,500,400)
 		self.Fit()
 		self.Refresh()
 		self.Show(True)
+	def onTransportLoc(self, evt):		
+		(tloc) = evt.data
+		print tloc
 
 	def loadFile(self, event):
 		path=os.path.dirname(os.path.abspath(__file__))
@@ -2944,9 +2950,11 @@ class DataBuddy(wx.Frame):
 			"exe files (*.exe)|*.exe", 
 			wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
 		openFileDialog.ShowModal()
-		print openFileDialog.GetPath()
+		tloc= openFileDialog.GetPath()
+		#send( "set_transport_location", (tloc,) )
 		openFileDialog.Destroy()
-		
+		self.rb_transport.Enable(True)
+		self.txt_transport.Value=tloc
 
 	def gen_bind(self, type, instance, handler, *args, **kwargs):
 		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)			
