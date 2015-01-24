@@ -1,0 +1,27 @@
+##
+##dm32.exe -h 
+##
+----------------------------------------------------------------------
+#FreeUkraine #SaveUkraine #StopRussia #PutinKhuilo #CrimeaIsUkraine
+----------------------------------------------------------------------
+DataMigrator for Oracle (v1.23.9, beta, 2015/01/12 05:14:20) [32bit]
+Copyright (c): 2014 Alex Buzunov, All rights reserved.
+Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
+----------------------------------------------------------------------
+Databases suported (1):
+1. Oracle
+
+Data formats suported (1):
+1. CSV
+
+For detailed help use one of the options:
+
+From Oracle:
+
+	To Oracle              : dm32.exe -h ora2ora
+	To CSV                 : dm32.exe -h ora2csv
+
+To Oracle:
+
+	From CSV               : dm32.exe -h csv2ora
+

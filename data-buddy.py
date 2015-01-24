@@ -2999,7 +2999,7 @@ class AboutDlg(wx.Frame):
 			"<h2>About data-buddy</h2>"
 			'<p>Session manager for <b><a href="https://github.com/DataMigrator/DataMigrator-for-Oracle">DataMigrator</a></b>.</p>'
 			'<p>Created in Jan. 2015 by Alex Buzunov.</p>'
-			"<p><b>Software used in making this demo:</h3></p>"
+			"<p><b>Software used in making this tool:</h3></p>"
 			'<p><b><a href="http://www.python.org">Python 2.7</a></b></p>'
 			'<p><b><a href="http://www.wxpython.org">wxPython 2.8</a></b></p>'
 			)
