@@ -16,17 +16,7 @@ try:
 	
 except ImportError: # if paramiko not there use pscp.
 	use_paramico=False
-	if 0:
-		tc_srv='bk_dev'
-		tc_home='netezza'
-		tc_host= {tc_srv:("zkqfas6",lpwd,'lrche25546')}
-		tc_loc = {tc_srv:{tc_home:('/home/zkqfas6/tab_copy', 'pipeline/posix/','clients/table_copy/tab_copy/')}}
-		tc_runat = {}
-		for name, locs in tc_loc.items():
-			#tc_runat[name]={}
-			for loc_name, loc in locs.items():
-				tc_runat['%s.%s' % (name,loc_name)]=(tc_host[name][2],loc[0],loc_name)
-		print tc_runat
+
 class PanelLog:
 	def log(self,msg,  panel_id=None):
 		#Publisher().sendMessage( "append_log", (msg,(0,1),panel_id) )
@@ -70,17 +60,7 @@ def rcopyFile(from_loc, to_loc, pos, panel_id):
 		return(0,[])
 	else:
 		if use_paramico:
-			
-			
-
-			#hostname = 'swmapetldev01.nam.nsroot.net'
-			#password = 'prince987!'
-			#username = "bk94994"
 			port = 22
-
-			#mypath='C:\\Python27.2.5\\_TaCo_\\Projects\\table_copy\\out\\tc_copy_test.xml'
-			#remotepath='/opt/etl/apps/smart_dev/volumes/etl/scripts/tab_copy/tc_copy_test.xml'
-
 
 			t = paramiko.Transport((hostname, 22))
 			t.connect(username=username, password=password)
@@ -212,9 +192,6 @@ def execTaCo( specs, worker,panel_id):
 	(out,err)=((),0)
 	if use_paramico:
 		print 'using paramico'
-		#plink_loc=r'C:\Program Files\PuTTY'
-		#command = r"%s\plink.exe -ssh zkqfas6@lrche25546 -pw %s cd tab_copy;time python tc.py --pipeline_spec=%s --pipeline=%s" % (plink_loc, lpwd, specs,worker)
-		#print command
 		(out, err) = execRemoteCmd(specs, worker,panel_id)
 		#sys.exit(1)
 	else:
