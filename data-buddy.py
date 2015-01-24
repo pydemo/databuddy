@@ -2,7 +2,7 @@
 # Version: 	1.0
 # Author: 	Alex Buzunov
 # Description:
-#			Session manager for QueryCopy.		
+#			Session manager for DataMigrator.		
 # Environment:
 #			Python 2.7 and wxPython 2.8		
 #
@@ -2768,21 +2768,50 @@ class DataBuddy(wx.Frame):
 			from editor import TacoTextEditor
 			nb = fnb.FlatNotebook(panel, -1, agwStyle=fnb.FNB_COLOURFUL_TABS|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_NO_X_BUTTON|fnb.FNB_NO_NAV_BUTTONS|fnb.FNB_NODRAG) #|fnb.FNB_DCLICK_CLOSES_TABS|fnb.FNB_X_ON_TAB|fnb.FNB_X|fnb.FNB_TAB_X|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_BTN_NONE|fnb.FNB_BTN_PRESSED|fnb.FNB_COLOURFUL_TABS|fnb.FNB_BOTTOM|fnb.FNB_SMART_TABS|fnb.FNB_DROPDOWN_TABS_LIST|fnb.FNB_DROP_DOWN_ARROW|fnb.FNB_BTN_HOVER|fnb.FNB_NO_X_BUTTON) #|fnb.FNB_HIDE_ON_SINGLE_TAB)
 			args_panel = wx.Panel(panel)
+			args_vbox = wx.BoxSizer(wx.VERTICAL)
 			args_hbox = wx.BoxSizer(wx.HORIZONTAL)
 
-			if 1: #Source
+			if 1: #Common
 				
 				panel_from = wx.Panel(args_panel)
 				hbox = wx.BoxSizer(wx.HORIZONTAL)
 
-				fgs = wx.FlexGridSizer(3, 2, 9, 25)
+				fgs = wx.FlexGridSizer(3, 4, 9, 20)
 				ttl=['From table','From database','nls_date_format','nls_timestamp_format','nls_timestamp_tz_format','Client home']
 				l=[wx.StaticText(panel_from, label="%s:" % t) for t in ttl]
 
 				p=[wx.TextCtrl(panel_from) for t in ttl]
 				pprint(dir(fgs))
 				for lid in range(len(l)):
-					fgs.AddMany([(l[lid]), (p[lid], 1, wx.EXPAND)])
+					fgs.AddMany([(l[lid], 0, wx.EXPAND, 5), (p[lid])])
+		
+				#fgs.AddMany([(title), (tc1, 1, wx.EXPAND), (author), 
+				#	(tc2, 1, wx.EXPAND), (review, 1, wx.EXPAND), (tc3, 1, wx.EXPAND)])
+
+				#fgs.AddGrowableRow(2, 1)
+				#fgs.AddGrowableCol(1, 1)
+
+				hbox.Add(fgs,  flag=wx.ALL, border=5)	
+				panel_from.SetSizer(hbox)
+				sb_from = wx.StaticBox(args_panel, label="Common")
+				boxsizer = wx.StaticBoxSizer(sb_from, wx.VERTICAL)
+				boxsizer.Add(panel_from, flag=wx.LEFT|wx.TOP, border=5)
+				#sizer.Add(boxsizer, pos=(3, 0), span=(1, 3), flag=wx.TOP|wx.EXPAND, border=5)
+				
+				args_vbox.Add(boxsizer,1, flag=wx.ALL|wx.EXPAND, border=5)
+			if 1: #Source
+				
+				panel_from = wx.Panel(args_panel)
+				hbox = wx.BoxSizer(wx.HORIZONTAL)
+
+				fgs = wx.FlexGridSizer(3, 2, 9, 5)
+				ttl=['From table','From database','nls_date_format','nls_timestamp_format','nls_timestamp_tz_format','Client home']
+				l=[wx.StaticText(panel_from, label="%s:" % t) for t in ttl]
+
+				p=[wx.TextCtrl(panel_from) for t in ttl]
+				pprint(dir(fgs))
+				for lid in range(len(l)):
+					fgs.AddMany([(l[lid]), (p[lid], 1, wx.EXPAND|wx.TOP)])
 		
 				#fgs.AddMany([(title), (tc1, 1, wx.EXPAND), (author), 
 				#	(tc2, 1, wx.EXPAND), (review, 1, wx.EXPAND), (tc3, 1, wx.EXPAND)])
@@ -2797,14 +2826,14 @@ class DataBuddy(wx.Frame):
 				boxsizer.Add(panel_from, flag=wx.LEFT|wx.TOP, border=5)
 				#sizer.Add(boxsizer, pos=(3, 0), span=(1, 3), flag=wx.TOP|wx.EXPAND, border=5)
 				
-				args_hbox.Add(boxsizer,  flag=wx.ALL|wx.EXPAND, border=5)
+				args_hbox.Add(boxsizer, 1, flag=wx.ALL|wx.EXPAND, border=5)
 
 			
 			if 1: #Target
 				panel_from = wx.Panel(args_panel)
 				hbox = wx.BoxSizer(wx.HORIZONTAL)
 
-				fgs = wx.FlexGridSizer(3, 2, 9, 25)
+				fgs = wx.FlexGridSizer(3, 2, 9, 5)
 
 				ttl=['To database','To table','To partition','nls_date_format','nls_timestamp_format','nls_timestamp_tz_format','Client home']
 				l=[wx.StaticText(panel_from, label="%s:" % t) for t in ttl]
@@ -2812,7 +2841,7 @@ class DataBuddy(wx.Frame):
 				p=[wx.TextCtrl(panel_from) for t in ttl]
 				pprint(dir(fgs))
 				for lid in range(len(l)):
-					fgs.AddMany([(l[lid]), (p[lid], 1, wx.EXPAND)])
+					fgs.AddMany([(l[lid]), (p[lid], 1, wx.EXPAND|wx.TOP)])
 		
 				#fgs.AddMany([(title), (tc1, 1, wx.EXPAND), (author), 
 				#	(tc2, 1, wx.EXPAND), (review, 1, wx.EXPAND), (tc3, 1, wx.EXPAND)])
@@ -2820,14 +2849,15 @@ class DataBuddy(wx.Frame):
 				#fgs.AddGrowableRow(2, 1)
 				#fgs.AddGrowableCol(1, 1)
 
-				hbox.Add(fgs, proportion=1, flag=wx.ALL|wx.EXPAND, border=5)	
+				hbox.Add(fgs, flag=wx.ALL|wx.EXPAND)	
 				panel_from.SetSizer(hbox)
 				sb_from = wx.StaticBox(args_panel, label="Target")
 				boxsizer = wx.StaticBoxSizer(sb_from, wx.VERTICAL)
-				boxsizer.Add(panel_from, flag=wx.LEFT|wx.TOP, border=5)
+				boxsizer.Add(panel_from, flag=wx.LEFT|wx.TOP)
 				#sizer.Add(boxsizer, pos=(3, 3),  flag=wx.TOP|wx.EXPAND, border=5)
-				args_hbox.Add(boxsizer,  flag=wx.ALL|wx.EXPAND, border=5)
-			args_panel.SetSizer(args_hbox)
+				args_hbox.Add(boxsizer, 1, flag=wx.ALL|wx.EXPAND, border=5)
+			args_vbox.Add(args_hbox,0,flag=wx.ALL|wx.EXPAND|wx.GROW)
+			args_panel.SetSizer(args_vbox)
 			nb.AddPage(args_panel, 'Arguments')
 			logger = TacoTextEditor(panel)
 			nb.AddPage(logger, 'Command')
@@ -2861,22 +2891,22 @@ class DataBuddy(wx.Frame):
 				flag=wx.LEFT, border=5)
 			boxsizer.Add(wx.CheckBox(panel, label="Generate Main Method"), 
 				flag=wx.LEFT|wx.BOTTOM, border=5)
-		sizer.Add(boxsizer, pos=(7, 0), span=(1, 5), 
+		sizer.Add(boxsizer, pos=(8, 0), span=(1, 5), 
 			flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=10)
 
 		button3 = wx.Button(panel, label='Help')
-		sizer.Add(button3, pos=(8, 0), flag=wx.LEFT, border=10)
+		sizer.Add(button3, pos=(9, 0), flag=wx.LEFT, border=10)
 		button3.Enable(False)
 
 		button4 = wx.Button(panel, label="Open")
-		sizer.Add(button4, pos=(8, 3))
+		sizer.Add(button4, pos=(9, 3),flag=wx.BOTTOM|wx.ALIGN_RIGHT)
 
 		button5 = wx.Button(panel, label="Cancel")
-		sizer.Add(button5, pos=(8, 4), span=(1, 1),  
+		sizer.Add(button5, pos=(9, 4), span=(1, 1),  
 			flag=wx.BOTTOM|wx.RIGHT, border=5)
 
 		#sizer.AddGrowableCol(2)
-		sizer.AddGrowableRow(6)
+		sizer.AddGrowableRow(7)
 		panel.SetSizer(sizer)		
 		if 1:
 			panel2 = wx.Panel(self)
