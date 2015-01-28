@@ -2743,7 +2743,7 @@ class DataBuddy(wx.Frame):
 			#b_vector = wx.Button(panel, label="ora2ora")
 			self.rb_transport.Enable(False)
 			boxsizer.Add(self.rb_transport, flag=wx.LEFT|wx.TOP, border=5)
-			self.txt_transport= wx.TextCtrl(panel,value='\\dm32\\dm32.exe')
+			self.txt_transport= wx.TextCtrl(panel,value='.\\dm32\\dm32.exe')
 			boxsizer.Add(self.txt_transport, flag=wx.LEFT|wx.TOP, border=5)
 			btn_browse = wx.Button(panel,LOAD_FILE_ID, label="Browse...", style=wx.BU_EXACTFIT)
 			boxsizer.Add(btn_browse, flag=wx.LEFT|wx.TOP, border=5)
@@ -2845,8 +2845,27 @@ class DataBuddy(wx.Frame):
 			args_vbox.Add(args_hbox,0,flag=wx.ALL|wx.EXPAND|wx.GROW)
 			args_panel.SetSizer(args_vbox)
 			nb.AddPage(args_panel, 'Arguments')
-			logger = TacoTextEditor(panel)
-			nb.AddPage(logger, 'Command')
+			editor = TacoTextEditor(panel)
+			editor.AppendText(r"""echo y|C:\Python27\dm_dist_32\20150112_051420\dm32\dm32.exe ^
+-w ora2ora ^
+-o 1 ^
+-r 1 ^
+-t "|" ^
+-c SCOTT.Date_test_from ^
+-f SCOTT/tiger2@orcl ^
+-e "YYYY-MM-DD HH24.MI.SS" ^
+-m "YYYY-MM-DD HH24.MI.SS.FF2" ^
+-O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" ^
+-z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" ^
+-g SCOTT/tiger2@orcl ^
+-a SCOTT.Partitioned_test_to ^
+-G part_15 ^
+-e "YYYY-MM-DD HH24.MI.SS" ^
+-m "YYYY-MM-DD HH24.MI.SS.FF2" ^
+-O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" ^
+-Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN"
+""")
+			nb.AddPage(editor, 'Command')
 			nb.SetSelection(0)
 				
 			sizer.Add(nb, pos=(3, 0), span=(4, 4), flag=wx.GROW|wx.EXPAND|wx.ALL, border=0)
