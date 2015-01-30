@@ -2739,16 +2739,23 @@ class DataBuddy(wx.Frame):
 		if 1: #Transport
 			sb = wx.StaticBox(panel, label="Transport")
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			self.rb_transport=wx.RadioButton(panel, label="dm32.exe",style=wx.RB_GROUP)
+			self.rb_transport32=wx.RadioButton(panel, label="32bit",style=wx.RB_GROUP)
 			#b_vector = wx.Button(panel, label="ora2ora")
-			self.rb_transport.Enable(False)
-			boxsizer.Add(self.rb_transport, flag=wx.LEFT|wx.TOP, border=5)
+			#self.rb_transport.Enable(False)
+			boxsizer.Add(self.rb_transport32, flag=wx.LEFT|wx.TOP, border=5)
+			self.rb_transport64=wx.RadioButton(panel, label="64bit")
+			#b_vector = wx.Button(panel, label="ora2ora")
+			#self.rb_transport.Enable(False)
+			boxsizer.Add(self.rb_transport64, flag=wx.LEFT|wx.TOP, border=5)			
 			self.txt_transport= wx.TextCtrl(panel,value='.\\dm32\\dm32.exe')
-			boxsizer.Add(self.txt_transport, flag=wx.LEFT|wx.TOP, border=5)
-			btn_browse = wx.Button(panel,LOAD_FILE_ID, label="Browse...", style=wx.BU_EXACTFIT)
-			boxsizer.Add(btn_browse, flag=wx.LEFT|wx.TOP, border=5)
-			self.Bind(wx.EVT_BUTTON, self.loadFile, btn_browse)
-			sizer.Add(boxsizer, pos=(2, 3),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)			
+			boxsizer.Add(self.txt_transport, flag=wx.LEFT|wx.TOP|wx.ALIGN_TOP, border=5)
+			self.txt_transport.Enable(False)
+			#btn_browse = wx.Button(panel,LOAD_FILE_ID, label="Browse...", style=wx.BU_EXACTFIT)
+			#boxsizer.Add(btn_browse, flag=wx.LEFT|wx.TOP, border=5)
+			#self.Bind(wx.EVT_BUTTON, self.loadFile, btn_browse)
+			sizer.Add(boxsizer, pos=(2, 3),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
+			self.rb_transport32.Bind(wx.EVT_RADIOBUTTON, self.onRadioButton)			
+			self.rb_transport64.Bind(wx.EVT_RADIOBUTTON, self.onRadioButton)			
 			
 		if 1:
 			from editor import TacoTextEditor
@@ -2846,7 +2853,7 @@ class DataBuddy(wx.Frame):
 			args_panel.SetSizer(args_vbox)
 			nb.AddPage(args_panel, 'Arguments')
 			editor = TacoTextEditor(panel)
-			editor.AppendText(r"""echo y|C:\Python27\dm_dist_32\20150112_051420\dm32\dm32.exe ^
+			editor.AppendText(r"""echo y|.\dm32\dm32.exe ^
 -w ora2ora ^
 -o 1 ^
 -r 1 ^
@@ -2875,7 +2882,7 @@ class DataBuddy(wx.Frame):
 			#l=[wx.StaticText(panel_from, label="Title"), wx.StaticText(panel_from, label="Author"),wx.StaticText(panel_from, label="Review")]
 
 			#p=[wx.TextCtrl(panel_from), wx.TextCtrl(panel_from), wx.TextCtrl(panel_from)]
-			pprint(dir(fgs))
+			#pprint(dir(fgs))
 			fgs.AddMany([(wx.Button(panel, label="New"), 1, wx.EXPAND),(wx.Button(panel, label="Delete"), 1, wx.EXPAND),wx.StaticText(panel, label=' '),(wx.Button(panel, label="Clear All"), 1, wx.EXPAND)])
 				
 			#button1 = wx.Button(panel, label="New")
@@ -2959,6 +2966,22 @@ class DataBuddy(wx.Frame):
 		self.Fit()
 		self.Refresh()
 		self.Show(True)
+	def onRadioButton(self, event):
+		"""
+		This method is fired when its corresponding button is pressed
+		"""
+		btn = event.GetEventObject()
+		label = btn.GetLabel()
+		#print label
+		#print self.txt_transport.GetLabel()
+		self.txt_transport.SetLabel('.\dm32\dm%s.exe' % label[:2])
+		if 0:
+			message = "You just selected %s" % label
+			dlg = wx.MessageDialog(None, message, 'Message', 
+								   wx.OK|wx.ICON_EXCLAMATION)
+			dlg.ShowModal()
+			dlg.Destroy()
+		
 	def onTransportLoc(self, data, extra1, extra2=None):		
 		(tloc) = data
 		print tloc
