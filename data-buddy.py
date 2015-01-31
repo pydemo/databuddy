@@ -32,6 +32,18 @@ try:
     from agw import ultimatelistctrl as ULC
 except ImportError: # if it's not there locally, try the wxPython lib.
     from wx.lib.agw import ultimatelistctrl as ULC
+
+try:
+	from agw import flatmenu as FM
+	from agw.artmanager import ArtManager, RendererBase, DCSaver
+	from agw.fmresources import ControlFocus, ControlPressed
+	from agw.fmresources import FM_OPT_SHOW_CUSTOMIZE, FM_OPT_SHOW_TOOLBAR, FM_OPT_MINIBAR
+except ImportError: # if it's not there locally, try the wxPython lib.
+	import wx.lib.agw.flatmenu as FM
+	from wx.lib.agw.artmanager import ArtManager, RendererBase, DCSaver
+	from wx.lib.agw.fmresources import ControlFocus, ControlPressed
+	from wx.lib.agw.fmresources import FM_OPT_SHOW_CUSTOMIZE, FM_OPT_SHOW_TOOLBAR, FM_OPT_MINIBAR
+	
 ########################################################################
 ID_EXIT = wx.NewId()
 ID_ABOUT = wx.NewId()
@@ -2690,7 +2702,7 @@ class DataBuddy(wx.Frame):
 		#super(DataBuddy, self).__init__(parent, title=title , size=(900, 565))
 		global app_title
 		wx.Frame.__init__(self, None, wx.ID_ANY, title=app_title)
-		
+		self._vectMenu=None
 		#self.splitter = wx.SplitterWindow(self, ID_SPLITTER, style=wx.SP_BORDER)
 		#self.splitter = MultiSplitterWindow(self, style=wx.SP_LIVE_UPDATE)
 		#s=self.splitter
@@ -2732,30 +2744,31 @@ class DataBuddy(wx.Frame):
 			sb = wx.StaticBox(panel, label="Vector")
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
 			#rb_v=wx.RadioButton(panel, label="ora2ora",style=wx.RB_GROUP)
-			b_vector = wx.Button(panel, label="ora2ora")
+			self.b_vector = wx.Button(panel, label="ora2ora")
 			#b_vector.Enable(True)
-			boxsizer.Add(b_vector, flag=wx.LEFT|wx.TOP, border=5)
+			boxsizer.Add(self.b_vector, flag=wx.LEFT|wx.TOP, border=5)
 			sizer.Add(boxsizer, pos=(2, 2),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
+			self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))
 		if 1: #Transport
-			sb = wx.StaticBox(panel, label="Transport")
+			sb = wx.StaticBox(panel, label="DataMigrator")
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			self.rb_transport32=wx.RadioButton(panel, label="32bit",style=wx.RB_GROUP)
+			#self.rb_transport32=wx.RadioButton(panel, label="DataMigrator",style=wx.RB_GROUP)
+			#b_vector = wx.Button(panel, label="ora2ora")
+			#self.rb_transport32.Enable(False)
+			#boxsizer.Add(self.rb_transport32, flag=wx.LEFT|wx.TOP, border=5)
+			#self.rb_transport64=wx.RadioButton(panel, label="64bit")
 			#b_vector = wx.Button(panel, label="ora2ora")
 			#self.rb_transport.Enable(False)
-			boxsizer.Add(self.rb_transport32, flag=wx.LEFT|wx.TOP, border=5)
-			self.rb_transport64=wx.RadioButton(panel, label="64bit")
-			#b_vector = wx.Button(panel, label="ora2ora")
-			#self.rb_transport.Enable(False)
-			boxsizer.Add(self.rb_transport64, flag=wx.LEFT|wx.TOP, border=5)			
+			#boxsizer.Add(self.rb_transport64, flag=wx.LEFT|wx.TOP, border=5)			
 			self.txt_transport= wx.TextCtrl(panel,value='.\\dm32\\dm32.exe')
 			boxsizer.Add(self.txt_transport, flag=wx.LEFT|wx.TOP|wx.ALIGN_TOP, border=5)
-			self.txt_transport.Enable(False)
-			#btn_browse = wx.Button(panel,LOAD_FILE_ID, label="Browse...", style=wx.BU_EXACTFIT)
-			#boxsizer.Add(btn_browse, flag=wx.LEFT|wx.TOP, border=5)
-			#self.Bind(wx.EVT_BUTTON, self.loadFile, btn_browse)
+			#self.txt_transport.Enable(False)
+			btn_browse = wx.Button(panel,LOAD_FILE_ID, label="Browse...", style=wx.BU_EXACTFIT)
+			boxsizer.Add(btn_browse, flag=wx.LEFT|wx.TOP, border=5)
+			self.Bind(wx.EVT_BUTTON, self.loadFile, btn_browse)
 			sizer.Add(boxsizer, pos=(2, 3),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
-			self.rb_transport32.Bind(wx.EVT_RADIOBUTTON, self.onRadioButton)			
-			self.rb_transport64.Bind(wx.EVT_RADIOBUTTON, self.onRadioButton)			
+			#self.rb_transport32.Bind(wx.EVT_RADIOBUTTON, self.onRadioButton)			
+			#self.rb_transport64.Bind(wx.EVT_RADIOBUTTON, self.onRadioButton)			
 			
 		if 1:
 			from editor import TacoTextEditor
@@ -2966,6 +2979,76 @@ class DataBuddy(wx.Frame):
 		self.Fit()
 		self.Refresh()
 		self.Show(True)
+		
+	def OnVectorButton(self, event,params):
+		(loc)=params
+		print (loc)
+		#print dir(event)
+		#btn=event.GetEventObject()
+		#print btn.GetPosition()
+		#print btn.GetSize()
+		#print btn.GetPosition()[0]
+		btn = event.GetEventObject()
+		#import flat_menu2
+		# Create the popup menu
+		#self.CreateLongPopupMenu()
+		self.CreateVectMenu(loc)
+
+		# Postion the menu:
+		# The menu should be positioned at the bottom left corner of the button.
+		btnSize = btn.GetSize()
+
+		# btnPt is returned relative to its parent 
+		# so, we need to convert it to screen 
+		btnPt  = btn.GetPosition()
+		btnPt = btn.GetParent().ClientToScreen(btnPt)
+		#self._longPopUpMenu.SetOwnerHeight(btnSize.y)
+		#self._longPopUpMenu.Popup(wx.Point(btnPt.x, btnPt.y), self)
+		self._vectMenu.SetOwnerHeight(btnSize.y)
+		self._vectMenu.Popup(wx.Point(btnPt.x, btnPt.y), self)
+	def CreateVectMenu(self,loc):
+
+		if 1 or not self._popUpMenu.has_key(loc):
+			#print self.list.data[loc]
+			pmenu=FM.FlatMenu()
+			self._vectMenu = pmenu
+			#-----------------------------------------------
+			# Flat Menu test
+			#-----------------------------------------------
+
+			# First we create the sub-menu item
+			#subMenu = FM.FlatMenu()
+			#subSubMenu = FM.FlatMenu()
+			id=wx.ID_ANY
+			# Create the menu items
+			#relative_path=self.getVarsToPath()
+			for id in range(10):
+				#path=self.hist_btn.keys()[id]
+				#loc_to=self.hist_btn[path]
+				
+				itype=wx.ITEM_NORMAL
+				#print '>>>>>>>>>>>>>>',relative_path,path
+				if 3==id:
+					itype=wx.ITEM_CHECK
+				menuItem = FM.FlatMenuItem(pmenu, wx.ID_ANY, '%s' % ( id), "", itype)
+				#print item[0], self.list.nav_list['vars'][loc],  item[0]==self.list.nav_list['vars'][loc]
+				pmenu.AppendItem(menuItem)				
+				if 3==id:
+					menuItem.Check(True)
+					#subMenu.UpdateItem(menuItem)
+					#print menuItem.IsChecked(), menuItem.IsCheckable()
+					#menuItem.Enable(False)
+				#pmenu.AppendRadioItem(wx.ID_ANY,menuItem)
+
+				#print menuItem.isChecked()
+				#print menuItem.IsChecked(), menuItem.IsChecked()
+				#menuItem.Enable(True)
+				#self.Bind(FM.EVT_FLAT_MENU_SELECTED, self.OnMenu, id=20001+key)
+				#
+				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnVectMenu,(3,id))		
+	def OnVectMenu(self, event, params):
+		(a,b) = params
+		print a,b	
 	def onRadioButton(self, event):
 		"""
 		This method is fired when its corresponding button is pressed
@@ -2985,6 +3068,7 @@ class DataBuddy(wx.Frame):
 	def onTransportLoc(self, data, extra1, extra2=None):		
 		(tloc) = data
 		print tloc
+		self.txt_transport.SetLabel(tloc[0])
 
 	def loadFile(self, event):
 		path=os.path.dirname(os.path.abspath(__file__))
