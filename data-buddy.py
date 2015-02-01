@@ -27,6 +27,7 @@ import wx.html
 from tc_lib import sub, send
 e=sys.exit
 blog=cu.blog
+from collections import OrderedDict
 
 try:
     from agw import ultimatelistctrl as ULC
@@ -2714,6 +2715,9 @@ class DataBuddy(wx.Frame):
 		self.panel = wx.Panel(self)
 		panel=self.panel
 		sizer = wx.GridBagSizer(5, 5)
+		self.home=path=os.path.dirname(os.path.abspath(__file__))
+		
+		self.transport=os.path.join(self.home,r'dm32\dm32.exe')
 		if 1:
 			text1 = wx.StaticText(panel, label="Session name:")
 			sizer.Add(text1, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
@@ -2742,10 +2746,10 @@ class DataBuddy(wx.Frame):
 				rb.Enable(False)			
 			sizer.Add(boxsizer, pos=(2, 0), span=(1, 2), flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
 		if 1: #Vector
-			sb = wx.StaticBox(panel, label="Vector")
+			sb = wx.StaticBox(panel, label='Vector')
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
 			#rb_v=wx.RadioButton(panel, label="ora2ora",style=wx.RB_GROUP)
-			self.b_vector = wx.Button(panel, label="ora2ora")
+			self.b_vector = wx.Button(panel, label="ora11g->ora11g",size=(100,25))
 			#b_vector.Enable(True)
 			boxsizer.Add(self.b_vector, flag=wx.LEFT|wx.TOP, border=5)
 			self.b_vector.Bind(wx.EVT_BUTTON, self.OnButtonClicked)
@@ -2868,7 +2872,7 @@ class DataBuddy(wx.Frame):
 			args_panel.SetSizer(args_vbox)
 			nb.AddPage(args_panel, 'Arguments')
 			editor = TacoTextEditor(panel)
-			editor.AppendText(r"""echo y|.\dm32\dm32.exe ^
+			editor.AppendText(r"""echo y|%s ^
 -w ora2ora ^
 -o 1 ^
 -r 1 ^
@@ -2886,7 +2890,7 @@ class DataBuddy(wx.Frame):
 -m "YYYY-MM-DD HH24.MI.SS.FF2" ^
 -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" ^
 -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN"
-""")
+""" % self.transport)
 			nb.AddPage(editor, 'Command')
 			nb.SetSelection(0)
 				
@@ -2981,9 +2985,18 @@ class DataBuddy(wx.Frame):
 		self.Fit()
 		self.Refresh()
 		self.Show(True)
+		self.mitems=OrderedDict()
+		self.mitems['ORA11G']='Oracle 11G'
+		self.mitems['ORA10G']='Oracle 10G'
+		self.mitems['ORA9I']='Oracle 9i'
+		self.mitems['ORA8I']='Oracle 8i'
+		self.mitems['ORA73']='Oracle 7.3'
+		self.mitems['ORAXE']='OracleXE'
+		self.mitems['EXAD']='Exadata'
 	def set_vector_btn(self,a,b):	
 		print a,b
-		self.b_vector.SetLabel('%s2%s' % (a,b))
+		lbl='%s->%s' % (a,b)
+		self.b_vector.SetLabel(lbl.lower())
 	def CreatePopupMenu(self):
 
 		if not self._popUpMenu:
@@ -3027,31 +3040,32 @@ class DataBuddy(wx.Frame):
 
 	def set_submenu(self,subMenu,pid):
 		
-		items=['Oracle 11G', 'Oracle 10G','Oracle 9i','Oracle 8i','Oracle 7.3','OracleXE','Exadata']
-		for i in range(len(items)):
-			m=items[i]
+		
+		#print items
+		i=0
+		for k,m in self.mitems.items():
+			#m=items[items.keys()[i]]
+			print k,m 
 			subSubMenu = FM.FlatMenu()
 			menuItem = FM.FlatMenuItem(subMenu, 20000+pid*100+i, "From %s" % m, "", wx.ITEM_NORMAL, subSubMenu)
 			subMenu.AppendItem(menuItem)
-			self.set_sub_submenu(subSubMenu,i,m)
+			self.set_sub_submenu(subSubMenu,i,k)
+			i +=1
 
 				
 	def set_sub_submenu(self,subSubMenu,pid, pmenu):
 		# Create the submenu items and add them 
-		items=['Oracle 11G', 'Oracle 10G','Oracle 9i','Oracle 8i','Oracle 7.3','OracleXE','Exadata','CSV']
-		for i in range(len(items)):
-			m=items[i]
-			if pmenu not in ('CSV'):
-				if m in ('CSV'):
-					subSubMenu.AppendSeparator()
-				menuItem = FM.FlatMenuItem(subSubMenu, 20000+pid*1000+i, 'To %s' % m , "", wx.ITEM_NORMAL)
-				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(pmenu,m))
-				subSubMenu.AppendItem(menuItem)
-			elif m not in ('CSV'):
-				menuItem = FM.FlatMenuItem(subSubMenu, 20000+pid*1000+i, 'To %s' % m , "", wx.ITEM_NORMAL)
-				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(pmenu,m))
-				subSubMenu.AppendItem(menuItem)				
-
+		i=0
+		for k,m in self.mitems.items():			
+			menuItem = FM.FlatMenuItem(subSubMenu, 20000+pid*1000+i, 'To %s' % m , "", wx.ITEM_NORMAL)
+			self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(pmenu,k))
+			subSubMenu.AppendItem(menuItem)
+			i +=1
+		if pmenu not in ('CSV'):
+			subSubMenu.AppendSeparator()
+			menuItem = FM.FlatMenuItem(subSubMenu, 20000+pid*1000+i, 'To CSV' , "", wx.ITEM_NORMAL)
+			self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(pmenu,'CSV'))
+			subSubMenu.AppendItem(menuItem)
 	def OnButtonClicked(self, event):
 
 		# Demonstrate using the wxFlatMenu without a menu bar
@@ -3167,8 +3181,8 @@ class DataBuddy(wx.Frame):
 		self.txt_transport.SetLabel(tloc[0])
 
 	def loadFile(self, event):
-		path=os.path.dirname(os.path.abspath(__file__))
-		openFileDialog = wx.FileDialog(self, "Path to DataMigrator (dm*.exe)", path, "", 
+		
+		openFileDialog = wx.FileDialog(self, "Path to DataMigrator (dm*.exe)", self.home, "", 
 			"exe files (*.exe)|*.exe", 
 			wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
 		openFileDialog.ShowModal()
