@@ -2751,7 +2751,7 @@ class DataBuddy(wx.Frame):
 			self.b_vector.Bind(wx.EVT_BUTTON, self.OnButtonClicked)
 			sizer.Add(boxsizer, pos=(2, 2),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
 			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))
-		if 1: #Transport
+		if 0: #Transport
 			sb = wx.StaticBox(panel, label="DataMigrator")
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
 			#self.rb_transport32=wx.RadioButton(panel, label="DataMigrator",style=wx.RB_GROUP)
@@ -2981,6 +2981,9 @@ class DataBuddy(wx.Frame):
 		self.Fit()
 		self.Refresh()
 		self.Show(True)
+	def set_vector_btn(self,a,b):	
+		print a,b
+		self.b_vector.SetLabel('%s2%s' % (a,b))
 	def CreatePopupMenu(self):
 
 		if not self._popUpMenu:
@@ -3020,7 +3023,7 @@ class DataBuddy(wx.Frame):
 	
 	def OnMenu(self, event, params):
 		(a,b) = params
-		print a,b				
+		self.set_vector_btn(a,b)				
 
 	def set_submenu(self,subMenu,pid):
 		
