@@ -2991,92 +2991,64 @@ class DataBuddy(wx.Frame):
 			#-----------------------------------------------
 
 			# First we create the sub-menu item
-			subMenu = FM.FlatMenu()
+			
 			subSubMenu = FM.FlatMenu()
 
 
 
 			
-
+			subMenu = FM.FlatMenu()
 			# Add sub-menu to main menu
-			menuItem = FM.FlatMenuItem(self._popUpMenu, 20004, "From Oracle", "", wx.ITEM_NORMAL, subMenu)
+			menuItem = FM.FlatMenuItem(self._popUpMenu, 20001, "From Oracle", "", wx.ITEM_NORMAL, subMenu)
 			self._popUpMenu.AppendItem(menuItem)
-			if 1:
-				# Create the submenu items and add them 
-				subSubMenu = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(subMenu, 20005, "From &Oracle 11G", "", wx.ITEM_NORMAL, subSubMenu)
-				subMenu.AppendItem(menuItem)
-				self.set_submenu(subSubMenu)
-				subSubMenu = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(subMenu, 20006, "From Oracle 10G", "", wx.ITEM_NORMAL, subSubMenu)
-				subMenu.AppendItem(menuItem)
-				self.set_submenu(subSubMenu)
-				subSubMenu = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(subMenu, 20013, "From Oracle 9i", "", wx.ITEM_NORMAL, subSubMenu)
-				subMenu.AppendItem(menuItem)
-				self.set_submenu(subSubMenu)
-				subSubMenu = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(subMenu, 20013, "From Oracle 8i", "", wx.ITEM_NORMAL, subSubMenu)
-				self.set_submenu(subSubMenu)
-				subMenu.AppendItem(menuItem)
-				subSubMenu = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(subMenu, 20013, "From Oracle 7.3i", "", wx.ITEM_NORMAL, subSubMenu)
-				subMenu.AppendItem(menuItem)				
-				self.set_submenu(subSubMenu)
-				subSubMenu = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(subMenu, 20007, "From OracleXE", "", wx.ITEM_NORMAL, subSubMenu)
-				subMenu.AppendItem(menuItem)
-				self.set_submenu(subSubMenu)
-				subSubMenu = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(subMenu, 20008, "From Exadata", "", wx.ITEM_NORMAL, subSubMenu)
-				subMenu.AppendItem(menuItem)
-				self.set_submenu(subSubMenu)
-				# Add sub-menu to submenu menu
+			self.set_submenu(subMenu,)
 
 
 			self._popUpMenu.AppendSeparator()
 			
 			subMenu = FM.FlatMenu()
 			##############################################################################
-			menuItem = FM.FlatMenuItem(self._popUpMenu, 20004, "From CSV", "", wx.ITEM_NORMAL, subMenu)
+			menuItem = FM.FlatMenuItem(self._popUpMenu, 20002, "From CSV", "", wx.ITEM_NORMAL, subMenu)
 			self._popUpMenu.AppendItem(menuItem)
 			if 1:
+				subMenu = FM.FlatMenu()
 				# Create the submenu items and add them 
-				menuItem = FM.FlatMenuItem(subMenu, 20005, "To &Oracle11G", "", wx.ITEM_NORMAL)
+				subSubMenu = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(subMenu, 20003, "To &Oracle", "", wx.ITEM_NORMAL, subSubMenu)
 				subMenu.AppendItem(menuItem)
-			
-				menuItem = FM.FlatMenuItem(subMenu, 20006, "To Oracle 10G", "", wx.ITEM_NORMAL)
-				subMenu.AppendItem(menuItem)
-
-				menuItem = FM.FlatMenuItem(subMenu, 20007, "To OracleXE", "", wx.ITEM_NORMAL)
-				subMenu.AppendItem(menuItem)
-
-				menuItem = FM.FlatMenuItem(subMenu, 20008, "To Exadata", "", wx.ITEM_NORMAL)
-				subMenu.AppendItem(menuItem)
-	def set_submenu(self,subSubMenu):
-		# Create the submenu items and add them 
-		menuItem = FM.FlatMenuItem(subSubMenu, 20009, "To &Oracle 11G", "", wx.ITEM_NORMAL)
-		subSubMenu.AppendItem(menuItem)
+				self.set_sub_submenu(subSubMenu,1, 'CSV')
 	
-		menuItem = FM.FlatMenuItem(subSubMenu, 20010, "To Oracle 10G", "", wx.ITEM_NORMAL)
-		subSubMenu.AppendItem(menuItem)
+	def OnMenu(self, event, params):
+		(a,b) = params
+		print a,b				
 
+	def set_submenu(self,subMenu):
+		
+		items=['Oracle 11G', 'Oracle 10G','Oracle 9i','Oracle 8i','Oracle 7.3','OracleXE','Exadata','CSV']
+		for i in range(len(items)):
+			m=items[i]
+			subSubMenu = FM.FlatMenu()
+			menuItem = FM.FlatMenuItem(subMenu, 20000+i, "From %s" % m, "", wx.ITEM_NORMAL, subSubMenu)
+			subMenu.AppendItem(menuItem)
+			self.set_sub_submenu(subSubMenu,i,m)
 
-		menuItem = FM.FlatMenuItem(subSubMenu, 20012, "To Oracle 9i", "", wx.ITEM_NORMAL)
-		subSubMenu.AppendItem(menuItem)
-		menuItem = FM.FlatMenuItem(subSubMenu, 20012, "To Oracle 8i", "", wx.ITEM_NORMAL)
-		subSubMenu.AppendItem(menuItem)
-		menuItem = FM.FlatMenuItem(subSubMenu, 20012, "To Oracle 7.3", "", wx.ITEM_NORMAL)
-		subSubMenu.AppendItem(menuItem)						
-		menuItem = FM.FlatMenuItem(subSubMenu, 20011, "To OracleXE", "", wx.ITEM_NORMAL)
-		subSubMenu.AppendItem(menuItem)
-		
-		menuItem = FM.FlatMenuItem(subSubMenu, 20011, "To Exadata", "", wx.ITEM_NORMAL)
-		subSubMenu.AppendItem(menuItem)
-		
-		subSubMenu.AppendSeparator()
-		menuItem = FM.FlatMenuItem(subSubMenu, 20012, "To CSV", "", wx.ITEM_NORMAL)
-		subSubMenu.AppendItem(menuItem)	
+				
+	def set_sub_submenu(self,subSubMenu,pid, pmenu):
+		# Create the submenu items and add them 
+		items=['Oracle 11G', 'Oracle 10G','Oracle 9i','Oracle 8i','Oracle 7.3','OracleXE','Exadata','CSV']
+		for i in range(len(items)):
+			m=items[i]
+			if pmenu not in ('CSV'):
+				if m in ('CSV'):
+					subSubMenu.AppendSeparator()
+				menuItem = FM.FlatMenuItem(subSubMenu, 20000+pid*100+i, 'To %s' % m , "", wx.ITEM_NORMAL)
+				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(pmenu,m))
+				subSubMenu.AppendItem(menuItem)
+			elif m not in ('CSV'):
+				menuItem = FM.FlatMenuItem(subSubMenu, 20000+pid*100+i, 'To %s' % m , "", wx.ITEM_NORMAL)
+				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(pmenu,m))
+				subSubMenu.AppendItem(menuItem)				
+
 	def OnButtonClicked(self, event):
 
 		# Demonstrate using the wxFlatMenu without a menu bar
