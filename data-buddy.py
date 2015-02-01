@@ -2703,6 +2703,7 @@ class DataBuddy(wx.Frame):
 		global app_title
 		wx.Frame.__init__(self, None, wx.ID_ANY, title=app_title)
 		self._vectMenu=None
+		self._popUpMenu = None
 		#self.splitter = wx.SplitterWindow(self, ID_SPLITTER, style=wx.SP_BORDER)
 		#self.splitter = MultiSplitterWindow(self, style=wx.SP_LIVE_UPDATE)
 		#s=self.splitter
@@ -2747,8 +2748,9 @@ class DataBuddy(wx.Frame):
 			self.b_vector = wx.Button(panel, label="ora2ora")
 			#b_vector.Enable(True)
 			boxsizer.Add(self.b_vector, flag=wx.LEFT|wx.TOP, border=5)
+			self.b_vector.Bind(wx.EVT_BUTTON, self.OnButtonClicked)
 			sizer.Add(boxsizer, pos=(2, 2),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
-			self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))
+			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))
 		if 1: #Transport
 			sb = wx.StaticBox(panel, label="DataMigrator")
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
@@ -2979,7 +2981,126 @@ class DataBuddy(wx.Frame):
 		self.Fit()
 		self.Refresh()
 		self.Show(True)
+	def CreatePopupMenu(self):
+
+		if not self._popUpMenu:
 		
+			self._popUpMenu = FM.FlatMenu()
+			#-----------------------------------------------
+			# Flat Menu test
+			#-----------------------------------------------
+
+			# First we create the sub-menu item
+			subMenu = FM.FlatMenu()
+			subSubMenu = FM.FlatMenu()
+
+
+
+			
+
+			# Add sub-menu to main menu
+			menuItem = FM.FlatMenuItem(self._popUpMenu, 20004, "From Oracle", "", wx.ITEM_NORMAL, subMenu)
+			self._popUpMenu.AppendItem(menuItem)
+			if 1:
+				# Create the submenu items and add them 
+				subSubMenu = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(subMenu, 20005, "From &Oracle 11G", "", wx.ITEM_NORMAL, subSubMenu)
+				subMenu.AppendItem(menuItem)
+				self.set_submenu(subSubMenu)
+				subSubMenu = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(subMenu, 20006, "From Oracle 10G", "", wx.ITEM_NORMAL, subSubMenu)
+				subMenu.AppendItem(menuItem)
+				self.set_submenu(subSubMenu)
+				subSubMenu = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(subMenu, 20013, "From Oracle 9i", "", wx.ITEM_NORMAL, subSubMenu)
+				subMenu.AppendItem(menuItem)
+				self.set_submenu(subSubMenu)
+				subSubMenu = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(subMenu, 20013, "From Oracle 8i", "", wx.ITEM_NORMAL, subSubMenu)
+				self.set_submenu(subSubMenu)
+				subMenu.AppendItem(menuItem)
+				subSubMenu = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(subMenu, 20013, "From Oracle 7.3i", "", wx.ITEM_NORMAL, subSubMenu)
+				subMenu.AppendItem(menuItem)				
+				self.set_submenu(subSubMenu)
+				subSubMenu = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(subMenu, 20007, "From OracleXE", "", wx.ITEM_NORMAL, subSubMenu)
+				subMenu.AppendItem(menuItem)
+				self.set_submenu(subSubMenu)
+				subSubMenu = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(subMenu, 20008, "From Exadata", "", wx.ITEM_NORMAL, subSubMenu)
+				subMenu.AppendItem(menuItem)
+				self.set_submenu(subSubMenu)
+				# Add sub-menu to submenu menu
+
+
+			self._popUpMenu.AppendSeparator()
+			
+			subMenu = FM.FlatMenu()
+			##############################################################################
+			menuItem = FM.FlatMenuItem(self._popUpMenu, 20004, "From CSV", "", wx.ITEM_NORMAL, subMenu)
+			self._popUpMenu.AppendItem(menuItem)
+			if 1:
+				# Create the submenu items and add them 
+				menuItem = FM.FlatMenuItem(subMenu, 20005, "To &Oracle11G", "", wx.ITEM_NORMAL)
+				subMenu.AppendItem(menuItem)
+			
+				menuItem = FM.FlatMenuItem(subMenu, 20006, "To Oracle 10G", "", wx.ITEM_NORMAL)
+				subMenu.AppendItem(menuItem)
+
+				menuItem = FM.FlatMenuItem(subMenu, 20007, "To OracleXE", "", wx.ITEM_NORMAL)
+				subMenu.AppendItem(menuItem)
+
+				menuItem = FM.FlatMenuItem(subMenu, 20008, "To Exadata", "", wx.ITEM_NORMAL)
+				subMenu.AppendItem(menuItem)
+	def set_submenu(self,subSubMenu):
+		# Create the submenu items and add them 
+		menuItem = FM.FlatMenuItem(subSubMenu, 20009, "To &Oracle 11G", "", wx.ITEM_NORMAL)
+		subSubMenu.AppendItem(menuItem)
+	
+		menuItem = FM.FlatMenuItem(subSubMenu, 20010, "To Oracle 10G", "", wx.ITEM_NORMAL)
+		subSubMenu.AppendItem(menuItem)
+
+
+		menuItem = FM.FlatMenuItem(subSubMenu, 20012, "To Oracle 9i", "", wx.ITEM_NORMAL)
+		subSubMenu.AppendItem(menuItem)
+		menuItem = FM.FlatMenuItem(subSubMenu, 20012, "To Oracle 8i", "", wx.ITEM_NORMAL)
+		subSubMenu.AppendItem(menuItem)
+		menuItem = FM.FlatMenuItem(subSubMenu, 20012, "To Oracle 7.3", "", wx.ITEM_NORMAL)
+		subSubMenu.AppendItem(menuItem)						
+		menuItem = FM.FlatMenuItem(subSubMenu, 20011, "To OracleXE", "", wx.ITEM_NORMAL)
+		subSubMenu.AppendItem(menuItem)
+		
+		menuItem = FM.FlatMenuItem(subSubMenu, 20011, "To Exadata", "", wx.ITEM_NORMAL)
+		subSubMenu.AppendItem(menuItem)
+		
+		subSubMenu.AppendSeparator()
+		menuItem = FM.FlatMenuItem(subSubMenu, 20012, "To CSV", "", wx.ITEM_NORMAL)
+		subSubMenu.AppendItem(menuItem)	
+	def OnButtonClicked(self, event):
+
+		# Demonstrate using the wxFlatMenu without a menu bar
+		btn = event.GetEventObject()
+
+		# Create the popup menu
+		self.CreatePopupMenu()
+
+		# Position the menu:
+		# The menu should be positioned at the bottom left corner of the button.
+		btnSize = btn.GetSize()
+		btnPt = btn.GetPosition()
+
+		# Since the btnPt (button position) is in client coordinates, 
+		# and the menu coordinates is relative to screen we convert
+		# the coords
+		btnPt = btn.GetParent().ClientToScreen(btnPt)
+
+		# A nice feature with the Popup menu, is the ability to provide an 
+		# object that we wish to handle the menu events, in this case we
+		# pass 'self'
+		# if we wish the menu to appear under the button, we provide its height
+		self._popUpMenu.SetOwnerHeight(btnSize.y)
+		self._popUpMenu.Popup(wx.Point(btnPt.x, btnPt.y), self)		
 	def OnVectorButton(self, event,params):
 		(loc)=params
 		print (loc)
