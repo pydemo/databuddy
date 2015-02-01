@@ -28,6 +28,7 @@ from tc_lib import sub, send
 e=sys.exit
 blog=cu.blog
 from collections import OrderedDict
+e=sys.exit
 
 try:
     from agw import ultimatelistctrl as ULC
@@ -2718,6 +2719,25 @@ class DataBuddy(wx.Frame):
 		self.home=path=os.path.dirname(os.path.abspath(__file__))
 		
 		self.transport=os.path.join(self.home,r'dm32\dm32.exe')
+		self.cmd=r"""%s ^
+-w ora2ora ^
+-o 1 ^
+-r 1 ^
+-t "|" ^
+-c SCOTT.Date_test_from ^
+-f SCOTT/tiger2@orcl ^
+-e "YYYY-MM-DD HH24.MI.SS" ^
+-m "YYYY-MM-DD HH24.MI.SS.FF2" ^
+-O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" ^
+-z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" ^
+-g SCOTT/tiger2@orcl ^
+-a SCOTT.Partitioned_test_to ^
+-G part_15 ^
+-e "YYYY-MM-DD HH24.MI.SS" ^
+-m "YYYY-MM-DD HH24.MI.SS.FF2" ^
+-O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" ^
+-Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN"
+""" % self.transport
 		if 1:
 			text1 = wx.StaticText(panel, label="Session name:")
 			sizer.Add(text1, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
@@ -2872,25 +2892,7 @@ class DataBuddy(wx.Frame):
 			args_panel.SetSizer(args_vbox)
 			nb.AddPage(args_panel, 'Arguments')
 			editor = TacoTextEditor(panel)
-			editor.AppendText(r"""echo y|%s ^
--w ora2ora ^
--o 1 ^
--r 1 ^
--t "|" ^
--c SCOTT.Date_test_from ^
--f SCOTT/tiger2@orcl ^
--e "YYYY-MM-DD HH24.MI.SS" ^
--m "YYYY-MM-DD HH24.MI.SS.FF2" ^
--O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" ^
--z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" ^
--g SCOTT/tiger2@orcl ^
--a SCOTT.Partitioned_test_to ^
--G part_15 ^
--e "YYYY-MM-DD HH24.MI.SS" ^
--m "YYYY-MM-DD HH24.MI.SS.FF2" ^
--O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" ^
--Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN"
-""" % self.transport)
+			editor.AppendText(self.cmd)
 			nb.AddPage(editor, 'Command')
 			nb.SetSelection(0)
 				
@@ -2925,6 +2927,7 @@ class DataBuddy(wx.Frame):
 		button3.Enable(False)
 
 		btn_open = wx.Button(panel, label="Open")
+		btn_open.Bind(wx.EVT_BUTTON, self.OnButtonOpen)
 		sizer.Add(btn_open, pos=(9, 3),flag=wx.BOTTOM|wx.ALIGN_RIGHT)
 		#self.Bind(wx.EVT_BUTTON, self.onAboutHtmlDlg, btn_open)
 		button5 = wx.Button(panel, ID_EXIT, label="Cancel")
@@ -2993,6 +2996,43 @@ class DataBuddy(wx.Frame):
 		self.mitems['ORA73']='Oracle 7.3'
 		self.mitems['ORAXE']='OracleXE'
 		self.mitems['EXAD']='Exadata'
+	def OnButtonOpen(self, event):
+
+		# Demonstrate using the wxFlatMenu without a menu bar
+		btn = event.GetEventObject()
+		print btn.GetLabel()
+		from subprocess import Popen,PIPE
+		if 0:
+			
+			#Popen("cmd /w dir")
+			import shlex 
+			cmd=''.join(self.cmd.split('^\n'))
+			print cmd
+			lexer=shlex.shlex(cmd)
+			#lexer = shlex.shlex(input)
+			lexer.quotes = '"'
+			#lexer.wordchars += '\''
+			lexer.whitespace_split = True
+			lexer.commenters = ''
+			cfg = list(lexer)
+			pprint(cfg)		
+			#e(0)
+			p = Popen(cfg, stdin=PIPE, stdout=PIPE, shell=True)
+			out, err = p.communicate('y\n')
+			p.wait()
+			print err
+			print out
+			print '-'*40
+		if 0:
+			p=Popen(['start "test"', 'cmd', '/k','.\\dm32\\dm32.exe', '-w', 'ora2ora', '-o', '1', '-r', '1',  '-c', 'SCOTT.Date_test_from', '-f', 'SCOTT/tiger2@orcl', '-e', '"YYYY-MM-DD HH24.MI.SS"', '-m', '"YYYY-MM-DD HH24.MI.SS.FF2"', '-O', '"YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM"','-z', '"C:\app\alex_buz\product\11.2.0\dbhome_2\BIN"', '-g', 'SCOTT/tiger2@orcl', '-a', 'SCOTT.Partitioned_test_to', '-G', 'part_15', '-e', '"YYYY-MM-DD HH24.MI.SS"', '-m', '"YYYY-MM-DD HH24.MI.SS.FF2"', '-O', '"YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM"', '-Z', '"C:\app\alex_buz\product\11.2.0\dbhome_2\BIN"'], stdin=PIPE, stdout=PIPE, shell=True)
+			out, err = p.communicate('y\n')
+			print out, err
+			p.wait()
+			p.close()
+		os.system(r'start cmd /k echo y^|C:\Users\alex_buz\Documents\GitHub\DataBuddy\dm32\dm32.exe -w ora2ora -o 1 -r 1 -t "|" -c SCOTT.Date_test_from -f SCOTT/tiger2@orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -g SCOTT/tiger2@orcl -a SCOTT.Partitioned_test_to -G part_15 -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN"')
+		#C:\Users\alex_buz\Documents\GitHub\DataBuddy\dm32\dm32.exe -w ora2ora -o 1 -r 1 -t "|" -c SCOTT.Date_test_from -f SCOTT/tiger2@orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -g SCOTT/tiger2@orcl -a SCOTT.Partitioned_test_to -G part_15 -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN"
+		#from subprocess import call
+		#call(["dir"])
 	def set_vector_btn(self,a,b):	
 		print a,b
 		lbl='%s->%s' % (a,b)
