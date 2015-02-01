@@ -3024,7 +3024,7 @@ class DataBuddy(wx.Frame):
 
 	def set_submenu(self,subMenu,pid):
 		
-		items=['Oracle 11G', 'Oracle 10G','Oracle 9i','Oracle 8i','Oracle 7.3','OracleXE','Exadata','CSV']
+		items=['Oracle 11G', 'Oracle 10G','Oracle 9i','Oracle 8i','Oracle 7.3','OracleXE','Exadata']
 		for i in range(len(items)):
 			m=items[i]
 			subSubMenu = FM.FlatMenu()
