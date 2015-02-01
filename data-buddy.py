@@ -2573,8 +2573,8 @@ class SessionListCtrlPanelManager(wx.Panel):
 		self.list=start.list
 		self.nb.AddPage(start,'')
 		self.nb.SetPageText(0, 'My Sessions')
-		tmpl=SessionListCtrlPanel(self,pos,self.panel_pos)
-		self.nb.AddPage(tmpl,'Templates')
+		#tmpl=SessionListCtrlPanel(self,pos,self.panel_pos)
+		#self.nb.AddPage(tmpl,'Templates')
 		
 		self.nb.SetSelection(0)
 		
