@@ -3001,7 +3001,7 @@ class DataBuddy(wx.Frame):
 			# Add sub-menu to main menu
 			menuItem = FM.FlatMenuItem(self._popUpMenu, 20001, "From Oracle", "", wx.ITEM_NORMAL, subMenu)
 			self._popUpMenu.AppendItem(menuItem)
-			self.set_submenu(subMenu,)
+			self.set_submenu(subMenu,0)
 
 
 			self._popUpMenu.AppendSeparator()
@@ -3011,10 +3011,10 @@ class DataBuddy(wx.Frame):
 			menuItem = FM.FlatMenuItem(self._popUpMenu, 20002, "From CSV", "", wx.ITEM_NORMAL, subMenu)
 			self._popUpMenu.AppendItem(menuItem)
 			if 1:
-				subMenu = FM.FlatMenu()
+				#subMenu = FM.FlatMenu()
 				# Create the submenu items and add them 
 				subSubMenu = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(subMenu, 20003, "To &Oracle", "", wx.ITEM_NORMAL, subSubMenu)
+				menuItem = FM.FlatMenuItem(subMenu, 21000, "To &Oracle", "", wx.ITEM_NORMAL, subSubMenu)
 				subMenu.AppendItem(menuItem)
 				self.set_sub_submenu(subSubMenu,1, 'CSV')
 	
@@ -3022,13 +3022,13 @@ class DataBuddy(wx.Frame):
 		(a,b) = params
 		print a,b				
 
-	def set_submenu(self,subMenu):
+	def set_submenu(self,subMenu,pid):
 		
 		items=['Oracle 11G', 'Oracle 10G','Oracle 9i','Oracle 8i','Oracle 7.3','OracleXE','Exadata','CSV']
 		for i in range(len(items)):
 			m=items[i]
 			subSubMenu = FM.FlatMenu()
-			menuItem = FM.FlatMenuItem(subMenu, 20000+i, "From %s" % m, "", wx.ITEM_NORMAL, subSubMenu)
+			menuItem = FM.FlatMenuItem(subMenu, 20000+pid*100+i, "From %s" % m, "", wx.ITEM_NORMAL, subSubMenu)
 			subMenu.AppendItem(menuItem)
 			self.set_sub_submenu(subSubMenu,i,m)
 
@@ -3041,11 +3041,11 @@ class DataBuddy(wx.Frame):
 			if pmenu not in ('CSV'):
 				if m in ('CSV'):
 					subSubMenu.AppendSeparator()
-				menuItem = FM.FlatMenuItem(subSubMenu, 20000+pid*100+i, 'To %s' % m , "", wx.ITEM_NORMAL)
+				menuItem = FM.FlatMenuItem(subSubMenu, 20000+pid*1000+i, 'To %s' % m , "", wx.ITEM_NORMAL)
 				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(pmenu,m))
 				subSubMenu.AppendItem(menuItem)
 			elif m not in ('CSV'):
-				menuItem = FM.FlatMenuItem(subSubMenu, 20000+pid*100+i, 'To %s' % m , "", wx.ITEM_NORMAL)
+				menuItem = FM.FlatMenuItem(subSubMenu, 20000+pid*1000+i, 'To %s' % m , "", wx.ITEM_NORMAL)
 				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(pmenu,m))
 				subSubMenu.AppendItem(menuItem)				
 
