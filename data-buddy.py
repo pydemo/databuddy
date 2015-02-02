@@ -48,6 +48,7 @@ except ImportError: # if it's not there locally, try the wxPython lib.
 	
 ########################################################################
 ID_EXIT = wx.NewId()
+ID_USE = wx.NewId()
 ID_ABOUT = wx.NewId()
 LOAD_FILE_ID = wx.NewId()
 e=sys.exit
@@ -2696,7 +2697,402 @@ class ConfigTree(wx.Frame):
 		item =  event.GetItem()
 		self.display.SetLabel(self.tree.GetItemText(item))
 
+class NewSessionDialog(wx.Dialog):
+	def __init__(
+			self, parent, ID, title, size,plist, pos=wx.DefaultPosition, 
+			style=wx.DEFAULT_DIALOG_STYLE,
+			useMetal=False, 
+			):
 
+		# Instead of calling wx.Dialog.__init__ we precreate the dialog
+		# so we can set an extra style that must be set before
+		# creation, and then we create the GUI object using the Create
+		# method.
+		self.parent=parent
+		self.plist=plist
+		self._popUpMenu = None
+		pre = wx.PreDialog()
+		pre.SetExtraStyle(wx.DIALOG_EX_CONTEXTHELP)
+		pre.Create(parent, ID, title, pos, size, style)
+	
+		# This next step is the most important, it turns this Python
+		# object into the real wrapper of the dialog (instead of pre)
+		# as far as the wxPython extension is concerned.
+		self.PostCreate(pre)
+
+		# This extra style can be set after the UI object has been created.
+		if 'wxMac' in wx.PlatformInfo and useMetal:
+			self.SetExtraStyle(wx.DIALOG_EX_METAL)
+
+
+		# Now continue with the normal construction of the dialog
+		# contents
+		sizer = wx.BoxSizer(wx.VERTICAL)
+		#self.initParams()
+		#suffix=''
+		#if len(self.data)>1:
+		#	suffix='s'
+		#label = wx.StaticText(self, -1, "Clear %d password%s." % (len(self.data),suffix))
+		#label.SetHelpText('Number of passwords to clear. \nPless "Cancel" button to exit.')
+		#mode_btn = wx.Button(self, ID_BUTTON + 3, "Mode(SYNC)")
+	
+		#mode_sizer = wx.BoxSizer(wx.HORIZONTAL)
+		#mode_sizer.Add(label, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL, 5)
+		#mode_sizer.Add((6,6),0)
+		#mode_sizer.Add(mode_btn, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+		#mode_sizer.Add((6,6),0)
+		#mode_sizer.Add(shards_btn, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)		
+		#sizer.Add(mode_sizer, 0, wx.ALIGN_LEFT|wx.ALL, 5)
+
+		#box = wx.BoxSizer(wx.HORIZONTAL)
+
+		#label = wx.StaticText(self, -1, "From:",size=(50,-1))
+		#label.SetHelpText("Table copy source schema.")
+		#box.Add(label, 0, wx.ALIGN_CENTRE|wx.ALL, 0)
+
+		#text = wx.TextCtrl(self, -1, self.parent.getVarsToPath()[4:], size=(300,-1))
+		#text.Enable(False)
+		#text.SetLabel()
+		#text.SetHelpText("Table copy SOURCE schema")
+		#box.Add(text, 1, wx.ALIGN_CENTRE|wx.ALL, 0)
+
+		#sizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+
+		self.tc_tables={}
+		self.shards_btn={}
+		if 1: #Source tmpl
+			self.listCtrl = wx.ListCtrl(self, -1, style=wx.LC_REPORT|wx.LC_VRULES|wx.LC_HRULES)
+			self.listCtrl.InsertColumn(0, 'Source Template Name')	
+			if 0:
+				self.listCtrl.InsertColumn(1, 'Type')		
+				self.listCtrl.InsertColumn(2, 'Database')		
+				self.listCtrl.InsertColumn(3, 'Object')
+				self.listCtrl.InsertColumn(4, 'Limit')
+				self.listCtrl.InsertColumn(5, 'Header')
+				self.listCtrl.InsertColumn(6, 'Sharded')
+				self.listCtrl.InsertColumn(7, 'Parallel')
+			
+			self.listCtrl.SetColumnWidth(0, 320)
+			if 0:
+				self.listCtrl.SetColumnWidth(1, 40)
+				self.listCtrl.SetColumnWidth(2, 80)
+				self.listCtrl.SetColumnWidth(3, 50)
+				self.listCtrl.SetColumnWidth(4, 50)
+				self.listCtrl.SetColumnWidth(5, 50)
+				self.listCtrl.SetColumnWidth(6, 60)
+				self.listCtrl.SetColumnWidth(7, 50)
+
+			self.plist={'ORA_QueryFile':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
+			'ORA_QueryFile_withHeader':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
+			'ORA_QueryFile_noHeader':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
+			'ORA_QueryFile_trimWhitespace':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
+			'ORA_TimestampTable':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
+			'ORA_TimestampTable_trimWhitespace_withHeader':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
+			'ORA_DateTable':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
+			'ORA_Table_KeepSpoolFile':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
+			'ORA_Table_Limit10':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
+			'ORA_Partition':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
+			'ORA_Subpartition_Validate':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes')}
+			for tmpl, details in self.plist.items():
+				self.listCtrl.InsertStringItem(0, tmpl)
+				if 0:
+					for i in range(len(details)):
+						self.listCtrl.SetStringItem(0, i+1, details[i])
+		if 1: #Target tmpl
+			self.targlistCtrl = wx.ListCtrl(self, -1, style=wx.LC_REPORT|wx.LC_VRULES|wx.LC_HRULES)
+			self.targlistCtrl.InsertColumn(0, 'Target Template Name')	
+			if 0:
+				self.targlistCtrl.InsertColumn(1, 'Type')		
+				self.targlistCtrl.InsertColumn(2, 'Database')		
+				self.targlistCtrl.InsertColumn(3, 'Object')
+				self.targlistCtrl.InsertColumn(4, 'Limit')
+				self.targlistCtrl.InsertColumn(5, 'Header')
+				self.targlistCtrl.InsertColumn(6, 'Sharded')
+				self.targlistCtrl.InsertColumn(7, 'Parallel')
+			
+			self.targlistCtrl.SetColumnWidth(0, 320)
+			if 0:
+				self.targlistCtrl.SetColumnWidth(1, 40)
+				self.targlistCtrl.SetColumnWidth(2, 80)
+				self.targlistCtrl.SetColumnWidth(3, 50)
+				self.targlistCtrl.SetColumnWidth(4, 50)
+				self.targlistCtrl.SetColumnWidth(5, 50)
+				self.targlistCtrl.SetColumnWidth(6, 60)
+				self.targlistCtrl.SetColumnWidth(7, 50)
+
+			self.plist={'ORA_Table':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
+			'ORA_Table_NoClient':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
+			'ORA_Table_TruncateTarget':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
+			'ORA_Table_TruncateTarget_NoClient':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
+			'ORA_Partition':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
+			'ORA_Partition_TruncateTarget':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
+			'ORA_Subpartition':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
+			'ORA_Subpartition_TruncateTarget':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),}
+			for tmpl, details in self.plist.items():
+				self.targlistCtrl.InsertStringItem(0, tmpl)
+				if 0:
+					for i in range(len(details)):
+						self.targlistCtrl.SetStringItem(0, i+1, details[i])		
+		
+		#button4 = wx.Button(self, ID_EXIT, "Test")
+		if 1:
+			sb = wx.StaticBox(self, label="Type")
+			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
+			boxsizer.Add(wx.RadioButton(self, label="Copy",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=5)
+			boxsizer.Add(wx.RadioButton(self, label="Extract"), flag=wx.LEFT|wx.TOP, border=5)
+			boxsizer.Add(wx.RadioButton(self, label="Load"), flag=wx.LEFT|wx.TOP, border=5)
+			if 0:
+				rb=wx.RadioButton(self, label="FTP")
+				boxsizer.Add(rb, flag=wx.LEFT|wx.TOP, border=5)
+				rb.Enable(False)
+				rb=wx.RadioButton(self, label="Pipe")
+				boxsizer.Add(rb, flag=wx.LEFT|wx.TOP, border=5)
+				rb.Enable(False)			
+			#sizer.Add(boxsizer, pos=(2, 0), span=(1, 2), flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)
+		if 1: #Vector
+			sb = wx.StaticBox(self, label='Vector')
+			vboxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
+			#rb_v=wx.RadioButton(panel, label="ora2ora",style=wx.RB_GROUP)
+			self.b_vector = wx.Button(self, label="ora11g->ora11g",size=(100,25))
+			#b_vector.Enable(True)
+			vboxsizer.Add(self.b_vector, flag=wx.LEFT|wx.TOP, border=5)
+			self.b_vector.Bind(wx.EVT_BUTTON, self.OnButtonClicked)
+			#sizer.Add(boxsizer, pos=(2, 2),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
+			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))
+		optsizer = wx.BoxSizer(wx.HORIZONTAL)	
+		optsizer.Add(boxsizer, 0 , wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT)		
+		optsizer.Add((3,3),0)
+		optsizer.Add(vboxsizer, 0 , wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT)		
+		optsizer.Add((3,3),0)
+		#optsizer.Add((5,5),1, wx.EXPAND)
+		#optsizer.Add(button4, 0 , wx.RIGHT)
+		sizer.Add(optsizer, 0, wx.EXPAND|wx.ALL, 5)	
+		listsizer = wx.BoxSizer(wx.HORIZONTAL)	
+		listsizer.Add(self.listCtrl, 1 , wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL,5)	
+		listsizer.Add(self.targlistCtrl, 1 , wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL,5)		
+		sizer.Add(listsizer, 1, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+		if 1:
+			sb = wx.StaticBox(self, label="Object")
+			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
+			boxsizer.Add(wx.RadioButton(self, label="Query",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=5)
+			boxsizer.Add(wx.RadioButton(self, label="Table"), flag=wx.LEFT|wx.TOP, border=5)
+			boxsizer.Add(wx.RadioButton(self, label="Partition"), flag=wx.LEFT|wx.TOP, border=5)
+			boxsizer.Add(wx.RadioButton(self, label="Sub-Partition"), flag=wx.LEFT|wx.TOP, border=5)
+			if 0:
+				rb=wx.RadioButton(self, label="FTP")
+				boxsizer.Add(rb, flag=wx.LEFT|wx.TOP, border=5)
+				rb.Enable(False)
+				rb=wx.RadioButton(self, label="Pipe")
+				boxsizer.Add(rb, flag=wx.LEFT|wx.TOP, border=5)
+				rb.Enable(False)			
+			#sizer.Add(boxsizer, pos=(2, 0), span=(1, 2), flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)
+		optsizer.Add(boxsizer, 0 , wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT)	
+		line = wx.StaticLine(self, -1, size=(20,-1), style=wx.LI_HORIZONTAL)
+		sizer.Add(line, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
+		btnsizer = wx.BoxSizer(wx.HORIZONTAL)
+		use_btn = wx.Button(self, ID_USE, "Use")
+		button4 = wx.Button(self, ID_EXIT, "Cancel")
+		btnsizer.Add((3,3),1)
+		btnsizer.Add(use_btn, 0 , wx.RIGHT)
+		btnsizer.Add((40,5),0)
+		
+		btnsizer.Add(button4, 0 , wx.RIGHT)
+		
+		self.Bind(wx.EVT_BUTTON, self.OnUse, id=ID_USE)
+		self.Bind(wx.EVT_BUTTON, self.OnExit, id=ID_EXIT)
+		#self.Bind(wx.EVT_BUTTON, self.OnTrial, id=ID_TRIAL)
+		sizer.Add(btnsizer, 0, wx.EXPAND|wx.ALL, 5)
+
+		self.mitems=OrderedDict()
+		self.mitems['ORA11G']='Oracle 11G'
+		self.mitems['ORA10G']='Oracle 10G'
+		self.mitems['ORA9I']='Oracle 9i'
+		self.mitems['ORA8I']='Oracle 8i'
+		self.mitems['ORA73']='Oracle 7.3'
+		self.mitems['ORAXE']='OracleXE'
+		self.mitems['EXAD']='Exadata'
+		self.SetSizer(sizer)
+		sizer.Fit(self)
+		self.SetSize((600,400))
+	def OnTrial(self,e):
+		self.table_to={}
+	
+		if 1:
+			for i in range(len(self.data)):
+				#item=self.data[i]
+				#tname=item[2].strip('[]')				
+				row=[self.listCtrl.GetItem(i, col).GetText() for col in range(self.listCtrl.GetColumnCount())]
+				self.table_to[row[0]]=row
+				(config,env)=self.parent.getVarsToPath(self.pos_from).split('/')
+				self.parent.deleteConnect('%s.xml' % config,env,row,self.parent.pos)
+				#print  self.table_to[tname]
+		self.status='Trial'
+		self.Close(True)
+		
+	def _initParams(self):		
+		if 1:
+			(self.pos_from, self.data)=(self.parent.pos, self.parent.delete_conn)
+			#print 'init:', self.parent.drag_pos
+			#print 'init:', 		self.parent.drop_pos
+			#print 'init:', 		self.parent.dd_data
+	def OnUse(self,e):
+		self.Close(True)			
+	def OnExit(self,e):
+		self.Close(True)
+	def _OnClear(self,e):
+		self.table_to={}
+	
+		if 1:
+			for i in range(len(self.data)):
+				#item=self.data[i]
+				#tname=item[2].strip('[]')				
+				row=[self.listCtrl.GetItem(i, col).GetText() for col in range(self.listCtrl.GetColumnCount())]
+				self.table_to[row[0]]=row
+				print self.parent.getVarsToPath().strip('/').split('/')
+				(root,config,env)=self.parent.getVarsToPath().strip('/').split('/')
+				print row
+				self.parent.frame.clearConnectPassword('%s.xml' % config,env,row,self.parent.pos)
+				
+		self.status='Delete'
+		self.Close(True)
+	def OnClear(self,e):
+		self.table_to={}
+	
+		if 0:
+			for i in range(len(self.data)):
+				#item=self.data[i]
+				#tname=item[2].strip('[]')				
+				row=[self.listCtrl.GetItem(i, col).GetText() for col in range(self.listCtrl.GetColumnCount())]
+				self.table_to[row[0]]=row
+				print self.parent.getVarsToPath().strip('/').split('/')
+				(root,config,env)=self.parent.getVarsToPath().strip('/').split('/')
+				print row
+				self.parent.frame.clearConnectPassword('%s.xml' % config,env,row,self.parent.pos)
+				
+		#self.status='Delete'
+		
+		for conf, envs in self.plist.items():
+			#conf = self.plist[i]
+			
+			#box.Add((10,5),0)
+			#tname=item[2].strip('[]')
+			for env, cons in envs.items():
+				for item in cons:
+					#ORACLE.xml
+					#['CSMARTVOL_SMARTS1', 'CSMARTVOL', 'SMARTS1']
+					#DEV.oracle
+					#item=self.data[i]
+					#tname=item[2].strip('[]')				
+					#row=[self.listCtrl.GetItem(i, col).GetText() for col in range(self.listCtrl.GetColumnCount())]
+					#self.table_to[row[0]]=row
+					#print self.parent.getVarsToPath().strip('/').split('/')
+					#(root,config,env)=self.parent.getVarsToPath().strip('/').split('/')
+					row =item[:1]+item[2:]
+					self.table_to[row[0]]=row
+					self.parent.frame.clearConnectPassword('%s.xml' % conf,env,row,self.parent.pos)
+					#sys.exit(1)
+				blog.log('all passwords cleared for %s/%s' % (conf,env), self.parent.pos)
+		self.Close(True)		
+	def OnButtonClicked(self, event):
+
+		# Demonstrate using the wxFlatMenu without a menu bar
+		btn = event.GetEventObject()
+
+		# Create the popup menu
+		self.CreatePopupMenu()
+
+		# Position the menu:
+		# The menu should be positioned at the bottom left corner of the button.
+		btnSize = btn.GetSize()
+		btnPt = btn.GetPosition()
+
+		# Since the btnPt (button position) is in client coordinates, 
+		# and the menu coordinates is relative to screen we convert
+		# the coords
+		btnPt = btn.GetParent().ClientToScreen(btnPt)
+
+		# A nice feature with the Popup menu, is the ability to provide an 
+		# object that we wish to handle the menu events, in this case we
+		# pass 'self'
+		# if we wish the menu to appear under the button, we provide its height
+		self._popUpMenu.SetOwnerHeight(btnSize.y)
+		self._popUpMenu.Popup(wx.Point(btnPt.x, btnPt.y), self)	
+	def CreatePopupMenu(self):
+
+		if not self._popUpMenu:
+		
+			self._popUpMenu = FM.FlatMenu()
+			#-----------------------------------------------
+			# Flat Menu test
+			#-----------------------------------------------
+
+			# First we create the sub-menu item
+			
+			subSubMenu = FM.FlatMenu()
+
+
+
+			
+			subMenu = FM.FlatMenu()
+			# Add sub-menu to main menu
+			menuItem = FM.FlatMenuItem(self._popUpMenu, 20001, "From Oracle", "", wx.ITEM_NORMAL, subMenu)
+			self._popUpMenu.AppendItem(menuItem)
+			self.set_submenu(subMenu,0)
+
+
+			self._popUpMenu.AppendSeparator()
+			
+			subMenu = FM.FlatMenu()
+			##############################################################################
+			menuItem = FM.FlatMenuItem(self._popUpMenu, 20002, "From CSV", "", wx.ITEM_NORMAL, subMenu)
+			self._popUpMenu.AppendItem(menuItem)
+			if 1:
+				#subMenu = FM.FlatMenu()
+				# Create the submenu items and add them 
+				subSubMenu = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(subMenu, 21000, "To &Oracle", "", wx.ITEM_NORMAL, subSubMenu)
+				subMenu.AppendItem(menuItem)
+				self.set_sub_submenu(subSubMenu,1, 'CSV')
+	def set_vector_btn(self,a,b):	
+		print a,b
+		lbl='%s->%s' % (a,b)
+		self.b_vector.SetLabel(lbl.lower())
+
+	def OnMenu(self, event, params):
+		(a,b) = params
+		self.set_vector_btn(a,b)				
+
+	def set_submenu(self,subMenu,pid):
+		
+		
+		#print items
+		i=0
+		for k,m in self.mitems.items():
+			#m=items[items.keys()[i]]
+			print k,m 
+			subSubMenu = FM.FlatMenu()
+			menuItem = FM.FlatMenuItem(subMenu, 20000+pid*100+i, "From %s" % m, "", wx.ITEM_NORMAL, subSubMenu)
+			subMenu.AppendItem(menuItem)
+			self.set_sub_submenu(subSubMenu,i,k)
+			i +=1
+
+				
+	def set_sub_submenu(self,subSubMenu,pid, pmenu):
+		# Create the submenu items and add them 
+		i=0
+		for k,m in self.mitems.items():			
+			menuItem = FM.FlatMenuItem(subSubMenu, 20000+pid*1000+i, 'To %s' % m , "", wx.ITEM_NORMAL)
+			self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(pmenu,k))
+			subSubMenu.AppendItem(menuItem)
+			i +=1
+		if pmenu not in ('CSV'):
+			subSubMenu.AppendSeparator()
+			menuItem = FM.FlatMenuItem(subSubMenu, 20000+pid*1000+i, 'To CSV' , "", wx.ITEM_NORMAL)
+			self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(pmenu,'CSV'))
+			subSubMenu.AppendItem(menuItem)
+	def gen_bind(self, type, instance, handler, *args, **kwargs):
+		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)		
+	
 ###################################################################################################
 class DataBuddy(wx.Frame):
 	def __init__(self, parent, id, title):
@@ -2751,7 +3147,7 @@ class DataBuddy(wx.Frame):
 			sizer.Add(line, pos=(1, 0), span=(1, 5), 
 				flag=wx.EXPAND|wx.BOTTOM, border=0)
 
-		if 1: #Type
+		if 0: #Type
 			sb = wx.StaticBox(panel, label="Type")
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
 			boxsizer.Add(wx.RadioButton(panel, label="Copy",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=5)
@@ -2765,7 +3161,7 @@ class DataBuddy(wx.Frame):
 				boxsizer.Add(rb, flag=wx.LEFT|wx.TOP, border=5)
 				rb.Enable(False)			
 			sizer.Add(boxsizer, pos=(2, 0), span=(1, 2), flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
-		if 1: #Vector
+		if 0: #Vector
 			sb = wx.StaticBox(panel, label='Vector')
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
 			#rb_v=wx.RadioButton(panel, label="ora2ora",style=wx.RB_GROUP)
@@ -2904,8 +3300,9 @@ class DataBuddy(wx.Frame):
 
 			#p=[wx.TextCtrl(panel_from), wx.TextCtrl(panel_from), wx.TextCtrl(panel_from)]
 			#pprint(dir(fgs))
-			fgs.AddMany([(wx.Button(panel, label="New"), 1, wx.EXPAND),(wx.Button(panel, label="Delete"), 1, wx.EXPAND),wx.StaticText(panel, label=' '),(wx.Button(panel, label="Clear All"), 1, wx.EXPAND)])
-				
+			new_btn=wx.Button(panel, label="New")
+			fgs.AddMany([(new_btn, 1, wx.EXPAND),(wx.Button(panel, label="Delete"), 1, wx.EXPAND),wx.StaticText(panel, label=' '),(wx.Button(panel, label="Clear All"), 1, wx.EXPAND)])
+			new_btn.Bind(wx.EVT_BUTTON, self.OnNewButton)	
 			#button1 = wx.Button(panel, label="New")
 			#sizer.Add(button1, pos=(3, 5), flag=wx.TOP|wx.RIGHT, border=5)
 
@@ -2988,14 +3385,20 @@ class DataBuddy(wx.Frame):
 		self.Fit()
 		self.Refresh()
 		self.Show(True)
-		self.mitems=OrderedDict()
-		self.mitems['ORA11G']='Oracle 11G'
-		self.mitems['ORA10G']='Oracle 10G'
-		self.mitems['ORA9I']='Oracle 9i'
-		self.mitems['ORA8I']='Oracle 8i'
-		self.mitems['ORA73']='Oracle 7.3'
-		self.mitems['ORAXE']='OracleXE'
-		self.mitems['EXAD']='Exadata'
+
+	def OnNewButton(self, event):
+		dlg = NewSessionDialog(self, -1, "Defaults for new session.", size=(250, 250),
+						 #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
+						 style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
+						 useMetal=False, plist=None
+						 )
+		dlg.CenterOnScreen()
+		# this does not return until the dialog is closed.
+		val = dlg.ShowModal()
+		print val
+
+		dlg.Destroy()
+		
 	def OnButtonOpen(self, event):
 
 		# Demonstrate using the wxFlatMenu without a menu bar
@@ -3032,103 +3435,8 @@ class DataBuddy(wx.Frame):
 		#os.system("mode 45, 20");
 		#os.system(r'start "ora2ora" cmd /k echo y^|C:\Users\alex_buz\Documents\GitHub\DataBuddy\dm32\dm32.exe -w ora2ora -o 1 -r 1 -t "|" -c SCOTT.Date_test_from -f SCOTT/tiger2@orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -g SCOTT/tiger2@orcl -a SCOTT.Partitioned_test_to -G part_15 -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN"')
 		os.system(r'start "test" cmd.exe  /k "mode 100,45 && echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\dm32\dm32.exe -w ora2ora -o 1 -r 1 -t "^|" -c SCOTT.Date_test_from -f SCOTT/tiger2@orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -g SCOTT/tiger2@orcl -a SCOTT.Partitioned_test_to -G part_15 -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN""')
-	def set_vector_btn(self,a,b):	
-		print a,b
-		lbl='%s->%s' % (a,b)
-		self.b_vector.SetLabel(lbl.lower())
-	def CreatePopupMenu(self):
 
-		if not self._popUpMenu:
 		
-			self._popUpMenu = FM.FlatMenu()
-			#-----------------------------------------------
-			# Flat Menu test
-			#-----------------------------------------------
-
-			# First we create the sub-menu item
-			
-			subSubMenu = FM.FlatMenu()
-
-
-
-			
-			subMenu = FM.FlatMenu()
-			# Add sub-menu to main menu
-			menuItem = FM.FlatMenuItem(self._popUpMenu, 20001, "From Oracle", "", wx.ITEM_NORMAL, subMenu)
-			self._popUpMenu.AppendItem(menuItem)
-			self.set_submenu(subMenu,0)
-
-
-			self._popUpMenu.AppendSeparator()
-			
-			subMenu = FM.FlatMenu()
-			##############################################################################
-			menuItem = FM.FlatMenuItem(self._popUpMenu, 20002, "From CSV", "", wx.ITEM_NORMAL, subMenu)
-			self._popUpMenu.AppendItem(menuItem)
-			if 1:
-				#subMenu = FM.FlatMenu()
-				# Create the submenu items and add them 
-				subSubMenu = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(subMenu, 21000, "To &Oracle", "", wx.ITEM_NORMAL, subSubMenu)
-				subMenu.AppendItem(menuItem)
-				self.set_sub_submenu(subSubMenu,1, 'CSV')
-	
-	def OnMenu(self, event, params):
-		(a,b) = params
-		self.set_vector_btn(a,b)				
-
-	def set_submenu(self,subMenu,pid):
-		
-		
-		#print items
-		i=0
-		for k,m in self.mitems.items():
-			#m=items[items.keys()[i]]
-			print k,m 
-			subSubMenu = FM.FlatMenu()
-			menuItem = FM.FlatMenuItem(subMenu, 20000+pid*100+i, "From %s" % m, "", wx.ITEM_NORMAL, subSubMenu)
-			subMenu.AppendItem(menuItem)
-			self.set_sub_submenu(subSubMenu,i,k)
-			i +=1
-
-				
-	def set_sub_submenu(self,subSubMenu,pid, pmenu):
-		# Create the submenu items and add them 
-		i=0
-		for k,m in self.mitems.items():			
-			menuItem = FM.FlatMenuItem(subSubMenu, 20000+pid*1000+i, 'To %s' % m , "", wx.ITEM_NORMAL)
-			self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(pmenu,k))
-			subSubMenu.AppendItem(menuItem)
-			i +=1
-		if pmenu not in ('CSV'):
-			subSubMenu.AppendSeparator()
-			menuItem = FM.FlatMenuItem(subSubMenu, 20000+pid*1000+i, 'To CSV' , "", wx.ITEM_NORMAL)
-			self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(pmenu,'CSV'))
-			subSubMenu.AppendItem(menuItem)
-	def OnButtonClicked(self, event):
-
-		# Demonstrate using the wxFlatMenu without a menu bar
-		btn = event.GetEventObject()
-
-		# Create the popup menu
-		self.CreatePopupMenu()
-
-		# Position the menu:
-		# The menu should be positioned at the bottom left corner of the button.
-		btnSize = btn.GetSize()
-		btnPt = btn.GetPosition()
-
-		# Since the btnPt (button position) is in client coordinates, 
-		# and the menu coordinates is relative to screen we convert
-		# the coords
-		btnPt = btn.GetParent().ClientToScreen(btnPt)
-
-		# A nice feature with the Popup menu, is the ability to provide an 
-		# object that we wish to handle the menu events, in this case we
-		# pass 'self'
-		# if we wish the menu to appear under the button, we provide its height
-		self._popUpMenu.SetOwnerHeight(btnSize.y)
-		self._popUpMenu.Popup(wx.Point(btnPt.x, btnPt.y), self)		
 	def OnVectorButton(self, event,params):
 		(loc)=params
 		print (loc)
