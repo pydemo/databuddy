@@ -2760,6 +2760,20 @@ class NewSessionDialog(wx.Dialog):
 
 		self.tc_tables={}
 		self.shards_btn={}
+
+		namesizer = wx.BoxSizer(wx.HORIZONTAL)	
+		text1 = wx.StaticText(self, label="Session name:")
+		#sizer.Add(text1, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
+		tc0 = wx.TextCtrl(self)
+		namesizer.Add((3,3),0)
+		namesizer.Add(text1,0, border=5)
+		namesizer.Add((3,3),0)
+		namesizer.Add(tc0,1, border=5)
+		namesizer.Add((3,3),0)
+		sizer.Add(namesizer, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
+		line = wx.StaticLine(self, -1, size=(20,-1), style=wx.LI_HORIZONTAL)
+		sizer.Add(line, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
+		
 		if 1: #Source tmpl
 			self.listCtrl = wx.ListCtrl(self, -1, style=wx.LC_REPORT|wx.LC_VRULES|wx.LC_HRULES)
 			self.listCtrl.InsertColumn(0, 'Source Template Name')	
@@ -2866,7 +2880,7 @@ class NewSessionDialog(wx.Dialog):
 		optsizer.Add((3,3),0)
 		#optsizer.Add((5,5),1, wx.EXPAND)
 		#optsizer.Add(button4, 0 , wx.RIGHT)
-		sizer.Add(optsizer, 0, wx.EXPAND|wx.ALL, 5)	
+		sizer.Add(optsizer, 0, wx.EXPAND|wx.ALL|wx.GROW, 5)	
 		listsizer = wx.BoxSizer(wx.HORIZONTAL)	
 		listsizer.Add(self.listCtrl, 1 , wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL,5)	
 		listsizer.Add(self.targlistCtrl, 1 , wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL,5)		
@@ -2887,8 +2901,7 @@ class NewSessionDialog(wx.Dialog):
 				rb.Enable(False)			
 			#sizer.Add(boxsizer, pos=(2, 0), span=(1, 2), flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)
 		optsizer.Add(boxsizer, 0 , wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT)	
-		line = wx.StaticLine(self, -1, size=(20,-1), style=wx.LI_HORIZONTAL)
-		sizer.Add(line, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
+
 		btnsizer = wx.BoxSizer(wx.HORIZONTAL)
 		use_btn = wx.Button(self, ID_USE, "Use")
 		button4 = wx.Button(self, ID_EXIT, "Cancel")
@@ -3137,7 +3150,8 @@ class DataBuddy(wx.Frame):
 		if 1:
 			text1 = wx.StaticText(panel, label="Session name:")
 			sizer.Add(text1, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
-			tc0 = wx.TextCtrl(panel)
+			tc0 = wx.TextCtrl(panel,value='my_test_session')
+			tc0.Enable(False)
 			sizer.Add(tc0, pos=(0, 1), span=(1, 3), flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=10)
 			icon = wx.StaticBitmap(panel, bitmap=wx.Bitmap('exec.png'))
 			sizer.Add(icon, pos=(0, 4), flag=wx.TOP|wx.RIGHT|wx.ALIGN_RIGHT,border=6)
@@ -3147,30 +3161,37 @@ class DataBuddy(wx.Frame):
 			sizer.Add(line, pos=(1, 0), span=(1, 5), 
 				flag=wx.EXPAND|wx.BOTTOM, border=0)
 
-		if 0: #Type
+		if 1: #Type
 			sb = wx.StaticBox(panel, label="Type")
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			boxsizer.Add(wx.RadioButton(panel, label="Copy",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=5)
-			boxsizer.Add(wx.RadioButton(panel, label="Extract"), flag=wx.LEFT|wx.TOP, border=5)
-			boxsizer.Add(wx.RadioButton(panel, label="Load"), flag=wx.LEFT|wx.TOP, border=5)
-			if 0:
-				rb=wx.RadioButton(panel, label="FTP")
-				boxsizer.Add(rb, flag=wx.LEFT|wx.TOP, border=5)
-				rb.Enable(False)
-				rb=wx.RadioButton(panel, label="Pipe")
-				boxsizer.Add(rb, flag=wx.LEFT|wx.TOP, border=5)
-				rb.Enable(False)			
-			sizer.Add(boxsizer, pos=(2, 0), span=(1, 2), flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
-		if 0: #Vector
+			text1 = wx.StaticText(panel, label="Table Copy")
+			boxsizer.Add(text1, flag=wx.LEFT|wx.TOP, border=5)
+						
+			sizer.Add(boxsizer, pos=(2, 0),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
+		if 1: #Vector
 			sb = wx.StaticBox(panel, label='Vector')
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			#rb_v=wx.RadioButton(panel, label="ora2ora",style=wx.RB_GROUP)
-			self.b_vector = wx.Button(panel, label="ora11g->ora11g",size=(100,25))
-			#b_vector.Enable(True)
-			boxsizer.Add(self.b_vector, flag=wx.LEFT|wx.TOP, border=5)
-			self.b_vector.Bind(wx.EVT_BUTTON, self.OnButtonClicked)
-			sizer.Add(boxsizer, pos=(2, 2),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
+			text1 = wx.StaticText(panel, label="Oracle 11G -> Oracle 11G")
+			boxsizer.Add(text1, flag=wx.LEFT|wx.TOP, border=5)
+			
+			sizer.Add(boxsizer, pos=(2, 1),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
 			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))
+		if 1: #Vector
+			sb = wx.StaticBox(panel, label='Source template')
+			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
+			text1 = wx.StaticText(panel, label="ORA_QueryFile_withHeader")
+			boxsizer.Add(text1, flag=wx.LEFT|wx.TOP, border=5)
+			
+			sizer.Add(boxsizer, pos=(2, 2),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
+			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))	
+		if 1: #Vector
+			sb = wx.StaticBox(panel, label='Target template')
+			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
+			text1 = wx.StaticText(panel, label="ORA_Partition")
+			boxsizer.Add(text1, flag=wx.LEFT|wx.TOP, border=5)
+			
+			sizer.Add(boxsizer, pos=(2, 3),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
+			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))				
 		if 0: #Transport
 			sb = wx.StaticBox(panel, label="DataMigrator")
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
