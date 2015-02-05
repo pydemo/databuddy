@@ -2865,15 +2865,23 @@ class NewSessionDialog(wx.Dialog):
 		if 1:
 			sb = wx.StaticBox(self, label="Source Object")
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
+			
 			self.rb_so_query=wx.RadioButton(self, label="Query",style=wx.RB_GROUP)
 			boxsizer.Add(self.rb_so_query, flag=wx.LEFT|wx.TOP, border=5)
 			self.rb_set_manually.Bind(wx.EVT_RADIOBUTTON, self.onSourceObjButton)
-			boxsizer.Add(wx.RadioButton(self, label="Table"), flag=wx.LEFT|wx.TOP, border=5)
-			self.rb_set_manually.Bind(wx.EVT_RADIOBUTTON, self.onSourceObjButton)
-			boxsizer.Add(wx.RadioButton(self, label="Partition"), flag=wx.LEFT|wx.TOP, border=5)
-			self.rb_set_manually.Bind(wx.EVT_RADIOBUTTON, self.onSourceObjButton)
-			boxsizer.Add(wx.RadioButton(self, label="Sub-Partition"), flag=wx.LEFT|wx.TOP, border=5)
-			self.rb_set_manually.Bind(wx.EVT_RADIOBUTTON, self.onSourceObjButton)
+			
+			self.rb_so_table=wx.RadioButton(self, label="Table")
+			boxsizer.Add(self.rb_so_table, flag=wx.LEFT|wx.TOP, border=5)
+			self.rb_so_table.Bind(wx.EVT_RADIOBUTTON, self.onSourceObjButton)
+			
+			self.rb_so_part=wx.RadioButton(self, label="Partition")
+			boxsizer.Add(self.rb_so_part, flag=wx.LEFT|wx.TOP, border=5)
+			self.rb_so_part.Bind(wx.EVT_RADIOBUTTON, self.onSourceObjButton)
+			
+			self.rb_so_spart=wx.RadioButton(self, label="Sub-Partition")
+			boxsizer.Add(self.rb_so_spart, flag=wx.LEFT|wx.TOP, border=5)
+			self.rb_so_spart.Bind(wx.EVT_RADIOBUTTON, self.onSourceObjButton)
+			
 			if 0:
 				rb=wx.RadioButton(self, label="FTP")
 				boxsizer.Add(rb, flag=wx.LEFT|wx.TOP, border=5)
