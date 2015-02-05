@@ -2822,24 +2822,25 @@ class NewSessionDialog(wx.Dialog):
 			api_home=os.path.join(home,'args_api')
 			from_home=os.path.join(api_home,from_to[0])
 			to_home=os.path.join(from_home,from_to[1])
-			assert os.path.isdir(from_home), 'From args_api %s does not exists in %s' % (from_to[0],api_home)
-			assert os.path.isdir(to_home), 'To args_api %s does not exists in %s' % (from_to[1], from_home)
-			self.plist={'ORA_QueryFile':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
-			'ORA_QueryFile_withHeader':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
-			'ORA_QueryFile_noHeader':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
-			'ORA_QueryFile_trimWhitespace':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
-			'ORA_TimestampTable':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
-			'ORA_TimestampTable_trimWhitespace_withHeader':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
-			'ORA_DateTable':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
-			'ORA_Table_KeepSpoolFile':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
-			'ORA_Table_Limit10':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
-			'ORA_Partition':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
-			'ORA_Subpartition_Validate':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes')}
-			for tmpl, details in self.plist.items():
-				self.listCtrl.InsertStringItem(0, tmpl)
+			assert os.path.isdir(from_home), '"From" args_api %s does not exists in %s' % (from_to[0],api_home)
+			assert os.path.isdir(to_home), '"To" args_api %s does not exists in %s' % (from_to[1], from_home)
+			from os import listdir
+			from os.path import isfile, join
+			apifiles = { f for f in listdir(to_home) if isfile(join(to_home,f)) and 'default' not in f }
+			tmpl={}
+			for f in apifiles:
+				print f
+				(t_from,t_to,_) = f.split('.')
+				if not tmpl.has_key(t_from): tmpl[t_from]=[]
+				tmpl[t_from].append(t_to)
+			#pprint(tmpl)
+			self.plist={'ORA_QueryFile':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),}
+			for t in tmpl.keys():
+				self.listCtrl.InsertStringItem(0, t)
 				if 0:
-					for i in range(len(details)):
-						self.listCtrl.SetStringItem(0, i+1, details[i])
+					for i in range(len(tmpl.keys())):
+						self.listCtrl.SetStringItem(0, i+1, t)
+			
 		if 1: #Target tmpl
 			self.targlistCtrl = wx.ListCtrl(self, -1, style=wx.LC_REPORT|wx.LC_VRULES|wx.LC_HRULES)
 			self.targlistCtrl.InsertColumn(0, 'Target Template')	
@@ -2861,21 +2862,21 @@ class NewSessionDialog(wx.Dialog):
 				self.targlistCtrl.SetColumnWidth(5, 50)
 				self.targlistCtrl.SetColumnWidth(6, 60)
 				self.targlistCtrl.SetColumnWidth(7, 50)
-
-			self.plist={'ORA_Table':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
-			'ORA_Table_NoClient':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
-			'ORA_Table_TruncateTarget':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
-			'ORA_Table_TruncateTarget_NoClient':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
-			'ORA_Partition':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
-			'ORA_Partition_TruncateTarget':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
-			'ORA_Subpartition':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
-			'ORA_Subpartition_TruncateTarget':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),}
-			for tmpl, details in self.plist.items():
-				self.targlistCtrl.InsertStringItem(0, tmpl)
-				if 0:
-					for i in range(len(details)):
-						self.targlistCtrl.SetStringItem(0, i+1, details[i])		
-		
+			if 0:
+				self.plist={'ORA_Table':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
+				'ORA_Table_NoClient':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
+				'ORA_Table_TruncateTarget':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
+				'ORA_Table_TruncateTarget_NoClient':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
+				'ORA_Partition':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
+				'ORA_Partition_TruncateTarget':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
+				'ORA_Subpartition':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
+				'ORA_Subpartition_TruncateTarget':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),}
+				for tmpl, details in self.plist.items():
+					self.targlistCtrl.InsertStringItem(0, tmpl)
+					if 0:
+						for i in range(len(details)):
+							self.targlistCtrl.SetStringItem(0, i+1, details[i])		
+		self.listCtrl.Select(0)
 		#button4 = wx.Button(self, ID_EXIT, "Test")
 		if 0:
 			sb = wx.StaticBox(self, label="Type")
@@ -2973,6 +2974,14 @@ class NewSessionDialog(wx.Dialog):
 		(l,w) =self.parent.GetClientSizeTuple()
 		dl,dw= 600,400
 		self.SetDimensions(x+(l-dl)/2, y+(w-dw)/2, dl,dw)
+		self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected, self.listCtrl)
+	def OnItemSelected(self,event):
+		print str(self.__class__) + " - OnItemSelected"
+		if not self.dirty:
+			self.dirty = True
+			wx.CallAfter(self.Cleanup)
+		event.Skip()
+		
 	def OnTrial(self,e):
 		self.table_to={}
 	
