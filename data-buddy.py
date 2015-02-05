@@ -53,7 +53,7 @@ blog=cu.blog
 home=os.path.dirname(os.path.abspath(__file__))
 
 ID_EXIT = wx.NewId()
-ID_USE = wx.NewId()
+ID_CREATE = wx.NewId()
 ID_ABOUT = wx.NewId()
 LOAD_FILE_ID = wx.NewId()
 update_cache=True
@@ -2732,50 +2732,9 @@ class NewSessionDialog(wx.Dialog):
 		# Now continue with the normal construction of the dialog
 		# contents
 		sizer = wx.BoxSizer(wx.VERTICAL)
-		#self.initParams()
-		#suffix=''
-		#if len(self.data)>1:
-		#	suffix='s'
-		#label = wx.StaticText(self, -1, "Clear %d password%s." % (len(self.data),suffix))
-		#label.SetHelpText('Number of passwords to clear. \nPless "Cancel" button to exit.')
-		#mode_btn = wx.Button(self, ID_BUTTON + 3, "Mode(SYNC)")
-	
-		#mode_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		#mode_sizer.Add(label, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL, 5)
-		#mode_sizer.Add((6,6),0)
-		#mode_sizer.Add(mode_btn, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
-		#mode_sizer.Add((6,6),0)
-		#mode_sizer.Add(shards_btn, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)		
-		#sizer.Add(mode_sizer, 0, wx.ALIGN_LEFT|wx.ALL, 5)
-
-		#box = wx.BoxSizer(wx.HORIZONTAL)
-
-		#label = wx.StaticText(self, -1, "From:",size=(50,-1))
-		#label.SetHelpText("Table copy source schema.")
-		#box.Add(label, 0, wx.ALIGN_CENTRE|wx.ALL, 0)
-
-		#text = wx.TextCtrl(self, -1, self.parent.getVarsToPath()[4:], size=(300,-1))
-		#text.Enable(False)
-		#text.SetLabel()
-		#text.SetHelpText("Table copy SOURCE schema")
-		#box.Add(text, 1, wx.ALIGN_CENTRE|wx.ALL, 0)
-
-		#sizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
-
 		self.tc_tables={}
 		self.shards_btn={}
 		self.tmpl={}
-		if 0:
-			namesizer = wx.BoxSizer(wx.HORIZONTAL)	
-			text1 = wx.StaticText(self, label="Session name:")
-			#sizer.Add(text1, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
-			tc0 = wx.TextCtrl(self)
-			namesizer.Add((3,3),0)
-			namesizer.Add(text1,0, border=5)
-			namesizer.Add((3,3),0)
-			namesizer.Add(tc0,1, border=5)
-			namesizer.Add((3,3),0)
-			sizer.Add(namesizer, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
 
 		if 1:
 			#namesizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -2783,11 +2742,11 @@ class NewSessionDialog(wx.Dialog):
 			
 			text1 = wx.StaticText(self, label="Session name:")
 			#sizer.Add(text1, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
-			tc0 = wx.TextCtrl(self,size=(400,23))
+			self.tc_sname = wx.TextCtrl(self,size=(400,23))
 			#namesizer.Add((3,3),0)
 			namesizer.Add(text1, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
 			
-			namesizer.Add(tc0, pos=(0, 1),  flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND|wx.GROW, border=10)
+			namesizer.Add(self.tc_sname, pos=(0, 1),  flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND|wx.GROW, border=10)
 			namesizer.Add((60,3),pos=(0, 2),  flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND|wx.GROW, border=10)
 			icon = wx.StaticBitmap(self, bitmap=wx.Bitmap('exec.png'))
 			#namesizer.Add((3,3),0)
@@ -2947,7 +2906,7 @@ class NewSessionDialog(wx.Dialog):
 			boxsizer.Add(wx.RadioButton(self, label="Set manually"), flag=wx.LEFT|wx.TOP, border=5)
 			btnsizer.Add(boxsizer, 0 , wx.TOP|wx.BOTTOM|wx.LEFT)
 			
-		self.create_btn = wx.Button(self, ID_USE, "Create")
+		self.create_btn = wx.Button(self, ID_CREATE, "Create")
 		self.create_btn.Enable(False)
 		button4 = wx.Button(self, ID_EXIT, "Cancel")
 		btnsizer.Add((3,3),1)
@@ -2956,7 +2915,7 @@ class NewSessionDialog(wx.Dialog):
 		
 		btnsizer.Add(button4, 0 , wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM)
 		
-		self.Bind(wx.EVT_BUTTON, self.OnUse, id=ID_USE)
+		self.Bind(wx.EVT_BUTTON, self.OnCreate, id=ID_CREATE)
 		self.Bind(wx.EVT_BUTTON, self.OnExit, id=ID_EXIT)
 		#self.Bind(wx.EVT_BUTTON, self.OnTrial, id=ID_TRIAL)
 		sizer.Add(btnsizer, 0, wx.EXPAND|wx.ALL, 5)
@@ -3043,10 +3002,21 @@ class NewSessionDialog(wx.Dialog):
 			#print 'init:', self.parent.drag_pos
 			#print 'init:', 		self.parent.drop_pos
 			#print 'init:', 		self.parent.dd_data
-	def OnUse(self,e):
-		self.Close(True)			
+			
 	def OnExit(self,e):
 		self.Close(True)
+	def OnCreate(self,e):
+		if not self.tc_sname.GetValue():
+			self.Warn('Enter session name.')
+			self.tc_sname.SetFocus()	
+		else:
+			send("create_new_session", (self.tc_sname.GetValue()) )
+			self.Close(True)
+	def Warn(self, message, caption = 'Warning!'):
+		dlg = wx.MessageDialog(self, message, caption, wx.OK | wx.ICON_WARNING)
+		dlg.ShowModal()
+		dlg.Destroy()
+  
 	def _OnClear(self,e):
 		self.table_to={}
 	
@@ -3544,13 +3514,16 @@ class DataBuddy(wx.Frame):
 		self.SetAcceleratorTable(accel_tbl)		
 		panel.SetSizer(sizer)
 		sub(self.onTransportLoc, "set_transport_location")
-		
+		sub(self.onNewSession, "create_new_session")
 		#self.SetSizeHints(250,300,500,400)
 		self.Fit()
 		self.Refresh()
 		self.Center()
 		self.Show(True)
-
+	def onNewSession(self, data, extra1, extra2=None):		
+		(sname) = data
+		print sname
+		#self.txt_transport.SetLabel(tloc[0])
 
 	def OnNewButton(self, event):
 		dlg = NewSessionDialog(self, -1, "Defaults for new session.", size=(250, 250),
