@@ -2764,6 +2764,7 @@ class NewSessionDialog(wx.Dialog):
 
 		self.tc_tables={}
 		self.shards_btn={}
+		self.tmpl={}
 		if 0:
 			namesizer = wx.BoxSizer(wx.HORIZONTAL)	
 			text1 = wx.StaticText(self, label="Session name:")
@@ -2827,18 +2828,18 @@ class NewSessionDialog(wx.Dialog):
 			from os import listdir
 			from os.path import isfile, join
 			apifiles = { f for f in listdir(to_home) if isfile(join(to_home,f)) and 'default' not in f }
-			tmpl={}
+			
 			for f in apifiles:
 				print f
 				(t_from,t_to,_) = f.split('.')
-				if not tmpl.has_key(t_from): tmpl[t_from]=[]
-				tmpl[t_from].append(t_to)
+				if not self.tmpl.has_key(t_from): self.tmpl[t_from]=[]
+				self.tmpl[t_from].append(t_to)
 			#pprint(tmpl)
 			self.plist={'ORA_QueryFile':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),}
-			for t in tmpl.keys():
+			for t in self.tmpl.keys():
 				self.listCtrl.InsertStringItem(0, t)
 				if 0:
-					for i in range(len(tmpl.keys())):
+					for i in range(len(self.tmpl.keys())):
 						self.listCtrl.SetStringItem(0, i+1, t)
 			
 		if 1: #Target tmpl
@@ -2871,12 +2872,12 @@ class NewSessionDialog(wx.Dialog):
 				'ORA_Partition_TruncateTarget':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
 				'ORA_Subpartition':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
 				'ORA_Subpartition_TruncateTarget':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),}
-				for tmpl, details in self.plist.items():
-					self.targlistCtrl.InsertStringItem(0, tmpl)
+				for t, details in self.plist.items():
+					self.targlistCtrl.InsertStringItem(0, t)
 					if 0:
 						for i in range(len(details)):
 							self.targlistCtrl.SetStringItem(0, i+1, details[i])		
-		self.listCtrl.Select(0)
+		#self.listCtrl.Select(0)
 		#button4 = wx.Button(self, ID_EXIT, "Test")
 		if 0:
 			sb = wx.StaticBox(self, label="Type")
@@ -2946,10 +2947,11 @@ class NewSessionDialog(wx.Dialog):
 			boxsizer.Add(wx.RadioButton(self, label="Set manually"), flag=wx.LEFT|wx.TOP, border=5)
 			btnsizer.Add(boxsizer, 0 , wx.TOP|wx.BOTTOM|wx.LEFT)
 			
-		use_btn = wx.Button(self, ID_USE, "Create")
+		self.create_btn = wx.Button(self, ID_USE, "Create")
+		self.create_btn.Enable(False)
 		button4 = wx.Button(self, ID_EXIT, "Cancel")
 		btnsizer.Add((3,3),1)
-		btnsizer.Add(use_btn, 0 , wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM)
+		btnsizer.Add(self.create_btn, 0 , wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM)
 		btnsizer.Add((40,5),0)
 		
 		btnsizer.Add(button4, 0 , wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM)
@@ -2974,14 +2976,52 @@ class NewSessionDialog(wx.Dialog):
 		(l,w) =self.parent.GetClientSizeTuple()
 		dl,dw= 600,400
 		self.SetDimensions(x+(l-dl)/2, y+(w-dw)/2, dl,dw)
-		self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected, self.listCtrl)
-	def OnItemSelected(self,event):
+		self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnSrcTmplSelected, self.listCtrl)
+		self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnTargTmplSelected, self.targlistCtrl)
+		self.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.OnTargTmplDeselected, self.targlistCtrl)
+	def OnSrcTmplSelected(self,event):
 		print str(self.__class__) + " - OnItemSelected"
-		if not self.dirty:
-			self.dirty = True
-			wx.CallAfter(self.Cleanup)
+		currentItem = event.m_itemIndex
+		self.targlistCtrl.ClearAll()
+		src_val=self.listCtrl.GetItem(itemId=currentItem, col=0).GetText()
+		#self.list_ctrl.GetItem(itemId=currentItem, col=0).GetText()
+        #    print item
+		self.targlistCtrl.InsertColumn(0, 'Target Template')	
+		self.targlistCtrl.SetColumnWidth(0, 320)
+		for t in self.tmpl[src_val]:
+			self.targlistCtrl.InsertStringItem(0, t)
+		event.Skip()
+	def OnTargTmplSelected(self,event):
+		print str(self.__class__) + " - OnItemSelected"
+		self.create_btn.Enable(True)
+		if 0:
+			if not self.dirty:
+				self.dirty = True
+				wx.CallAfter(self.Cleanup)
 		event.Skip()
 		
+	def OnTargTmplDeselected(self,event):
+		print str(self.__class__) + " - OnItemDeselected"
+		self.create_btn.Enable(False)
+		event.Skip()	
+	def onMouseOver(self, event):
+		print "mouse over"
+		for item in range(self.list_ctrl.GetItemCount()):
+			 self.list_ctrl.SetItemBackgroundColour(item,wx.NullColor)
+		x = event.GetX()
+		y = event.GetY()
+		item, flags = self.list_ctrl.HitTest((x, y))
+		self.list_ctrl.SetItemBackgroundColour(item,wx.RED)
+		#self.list_ctrl.RefreshItems(0,2)
+		event.Skip()
+
+	def onMouseLeave(self, event):
+		print "mouse leave"
+		for item in range(self.list_ctrl.GetItemCount()):
+			 self.list_ctrl.SetItemBackgroundColour(item,wx.NullColor)
+		#self.list_ctrl.RefreshItems(0,2)
+		event.Skip()
+	
 	def OnTrial(self,e):
 		self.table_to={}
 	
