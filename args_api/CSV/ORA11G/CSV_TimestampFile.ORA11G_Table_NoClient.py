@@ -1,4 +1,7 @@
-## CSV_TimestampFile -->> ORA11G_Table_NoClient
+# Title:	CSV_TimestampFile -->> ORA11G_Table_NoClient
+# Description:	Arguments API for data-buddy.
+__author__ = "Alex Buzunov, Sequelworks Inc."
+__copyright__ = "Copyright 2015, data-buddy"
 from args_api import args_api
 api=args_api({'field_term': ('-t', '--field_term', '"|"', 'Field terminator.'), 'copy_vector': ('-w', '--copy_vector', 'csv2ora11g', 'Data copy direction.'), 'num_of_shards': ('-r', '--num_of_shards', 1, 'Number of shards.'), 'pool_size': ('-o', '--pool_size', 1, 'Pool size.')}, 
 	{'shard_size_kb': ('-y', '--shard_size_kb', 1000, 'Shard size in KBytes (to partition file and to estimate number of lines in input CSV file).'), 'input_file': ('-i', '--input_file', 'c:\\Python27\\data_migrator_1239\\test\\v101\\data\\oracle_shard_0_ts.data', 'Input CSV file.')}, 

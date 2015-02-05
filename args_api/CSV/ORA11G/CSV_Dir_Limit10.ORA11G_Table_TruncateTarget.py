@@ -1,4 +1,7 @@
-## CSV_Dir_Limit10 -->> ORA11G_Table_TruncateTarget
+# Title:	CSV_Dir_Limit10 -->> ORA11G_Table_TruncateTarget
+# Description:	Arguments API for data-buddy.
+__author__ = "Alex Buzunov, Sequelworks Inc."
+__copyright__ = "Copyright 2015, data-buddy"
 from args_api import args_api
 api=args_api({'lame_duck': ('-l', '--lame_duck', 10, 'Limit rows (lame duck run).'), 'field_term': ('-t', '--field_term', '"|"', 'Field terminator.'), 'num_of_shards': ('-r', '--num_of_shards', 1, 'Number of shards.'), 'pool_size': ('-o', '--pool_size', 1, 'Pool size.'), 'copy_vector': ('-w', '--copy_vector', 'csv2ora11g', 'Data copy direction.'), 'truncate_target': ('-U', '--truncate_target', 1, 'Truncate target table/partition/subpartition.')}, 
 	{'input_dir': ('-I', '--input_dir', 'c:\\Python27\\data_migrator_1239\\test\\v101\\data\\ora_data_dir', 'Input CSV directory.'), 'shard_size_kb': ('-y', '--shard_size_kb', 1000, 'Shard size in KBytes (to partition file and to estimate number of lines in input CSV file).')}, 

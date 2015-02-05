@@ -1,11 +1,18 @@
 # Title: 	data-buddy
-# Version: 	1.0
-# Author: 	Alex Buzunov
 # Description:
 #			Session manager for DataMigrator.		
 # Environment:
 #			Python 2.7 and wxPython 2.8		
 #
+__author__ = "Alex Buzunov, Sequelworks Inc."
+__copyright__ = "Copyright 2015, data-buddy"
+__credits__ = []
+__license__ = "GPL"
+__version__ = "1.0.1"
+__maintainer__ = "Alex Buzunov"
+__email__ = "alexbuzunov@gmail.com"
+__status__ = "Development"
+__title__ = "data-buddy"
 
 import wx.lib.inspection
 import wx.lib.mixins.inspection
@@ -2735,7 +2742,7 @@ class NewSessionDialog(wx.Dialog):
 		self.tc_tables={}
 		self.shards_btn={}
 		self.tmpl={}
-
+		self.copy_vector=[]
 		if 1:
 			#namesizer = wx.BoxSizer(wx.HORIZONTAL)
 			namesizer = wx.GridBagSizer(1, 4)			
@@ -2777,29 +2784,8 @@ class NewSessionDialog(wx.Dialog):
 				self.listCtrl.SetColumnWidth(5, 50)
 				self.listCtrl.SetColumnWidth(6, 60)
 				self.listCtrl.SetColumnWidth(7, 50)
-			copy_vector='ORA11G2ORA11G'
-			from_to = copy_vector.split('2')
-			api_home=os.path.join(home,'args_api')
-			from_home=os.path.join(api_home,from_to[0])
-			to_home=os.path.join(from_home,from_to[1])
-			assert os.path.isdir(from_home), '"From" args_api %s does not exists in %s' % (from_to[0],api_home)
-			assert os.path.isdir(to_home), '"To" args_api %s does not exists in %s' % (from_to[1], from_home)
-			from os import listdir
-			from os.path import isfile, join
-			apifiles = { f for f in listdir(to_home) if isfile(join(to_home,f)) and 'default' not in f }
+			#copy_vector='ORA11G2ORA11G'
 			
-			for f in apifiles:
-				print f
-				(t_from,t_to,_) = f.split('.')
-				if not self.tmpl.has_key(t_from): self.tmpl[t_from]=[]
-				self.tmpl[t_from].append(t_to)
-			#pprint(tmpl)
-			self.plist={'ORA_QueryFile':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),}
-			for t in self.tmpl.keys():
-				self.listCtrl.InsertStringItem(0, t)
-				if 0:
-					for i in range(len(self.tmpl.keys())):
-						self.listCtrl.SetStringItem(0, i+1, t)
 			
 		if 1: #Target tmpl
 			self.targlistCtrl = wx.ListCtrl(self, -1, style=wx.LC_REPORT|wx.LC_VRULES|wx.LC_HRULES)
@@ -2856,7 +2842,8 @@ class NewSessionDialog(wx.Dialog):
 			sb = wx.StaticBox(self, label='Copy Vector')
 			vboxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
 			#rb_v=wx.RadioButton(panel, label="ora2ora",style=wx.RB_GROUP)
-			self.b_vector = wx.Button(self, label="ora11g->ora11g",size=(100,25))
+			lbl='Click to set'
+			self.b_vector = wx.Button(self, label=lbl,size=(100,25))
 			#b_vector.Enable(True)
 			vboxsizer.Add(self.b_vector, flag=wx.LEFT|wx.TOP, border=0)
 			self.b_vector.Bind(wx.EVT_BUTTON, self.OnButtonClicked)
@@ -2902,8 +2889,12 @@ class NewSessionDialog(wx.Dialog):
 		if 1:
 			sb = wx.StaticBox(self, label='Arguments')
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			boxsizer.Add(wx.RadioButton(self, label="Use templates",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=5)
-			boxsizer.Add(wx.RadioButton(self, label="Set manually"), flag=wx.LEFT|wx.TOP, border=5)
+			self.rb_use_templates=wx.RadioButton(self, label="Use templates",style=wx.RB_GROUP)
+			boxsizer.Add(self.rb_use_templates, flag=wx.LEFT|wx.TOP, border=5)
+			self.rb_set_manually=wx.RadioButton(self, label="Set manually")
+			boxsizer.Add(self.rb_set_manually, flag=wx.LEFT|wx.TOP, border=5)
+			self.rb_use_templates.Bind(wx.EVT_RADIOBUTTON, self.onUseRbButton)
+			self.rb_set_manually.Bind(wx.EVT_RADIOBUTTON, self.onUseRbButton)
 			btnsizer.Add(boxsizer, 0 , wx.TOP|wx.BOTTOM|wx.LEFT)
 			
 		self.create_btn = wx.Button(self, ID_CREATE, "Create")
@@ -2938,6 +2929,48 @@ class NewSessionDialog(wx.Dialog):
 		self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnSrcTmplSelected, self.listCtrl)
 		self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnTargTmplSelected, self.targlistCtrl)
 		self.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.OnTargTmplDeselected, self.targlistCtrl)
+	def onUseRbButton(self, event): 
+		""" 
+		Use type
+		"""
+		btn = event.GetEventObject()
+		label = btn.GetLabel()
+		if 'MANUALLY' in label.upper():
+			self.create_btn.Enable(True)	
+		else:
+			print 'targlistCtrl',self.targlistCtrl.GetFirstSelected()
+			if self.targlistCtrl.GetFirstSelected()<0:
+				self.create_btn.Enable(False)
+			else:
+				print 'listCtrl', self.listCtrl.GetFirstSelected()
+				if self.listCtrl.GetFirstSelected()<0:
+					self.create_btn.Enable(False)
+
+			
+	def refresh_src_list(self):
+		assert self.copy_vector, 'copy_vector is not set.'
+		from_to = self.copy_vector
+		api_home=os.path.join(home,'args_api')
+		from_home=os.path.join(api_home,from_to[0])
+		to_home=os.path.join(from_home,from_to[1])
+		assert os.path.isdir(from_home), '"From" args_api %s does not exists in %s' % (from_to[0],api_home)
+		assert os.path.isdir(to_home), '"To" args_api %s does not exists in %s' % (from_to[1], from_home)
+		#from os import listdir
+		#from os.path import isfile, join
+		apifiles = { f for f in os.listdir(to_home) if os.path.isfile(os.path.join(to_home,f)) and 'default' not in f }
+		
+		for f in apifiles:
+			print f
+			(t_from,t_to,_) = f.split('.')
+			if not self.tmpl.has_key(t_from): self.tmpl[t_from]=[]
+			self.tmpl[t_from].append(t_to)
+		#pprint(tmpl)
+		#self.plist={'ORA_QueryFile':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),}
+		for t in self.tmpl.keys():
+			self.listCtrl.InsertStringItem(0, t)
+			if 0:
+				for i in range(len(self.tmpl.keys())):
+					self.listCtrl.SetStringItem(0, i+1, t)
 	def OnSrcTmplSelected(self,event):
 		print str(self.__class__) + " - OnItemSelected"
 		currentItem = event.m_itemIndex
@@ -2981,28 +3014,7 @@ class NewSessionDialog(wx.Dialog):
 		#self.list_ctrl.RefreshItems(0,2)
 		event.Skip()
 	
-	def OnTrial(self,e):
-		self.table_to={}
-	
-		if 1:
-			for i in range(len(self.data)):
-				#item=self.data[i]
-				#tname=item[2].strip('[]')				
-				row=[self.listCtrl.GetItem(i, col).GetText() for col in range(self.listCtrl.GetColumnCount())]
-				self.table_to[row[0]]=row
-				(config,env)=self.parent.getVarsToPath(self.pos_from).split('/')
-				self.parent.deleteConnect('%s.xml' % config,env,row,self.parent.pos)
-				#print  self.table_to[tname]
-		self.status='Trial'
-		self.Close(True)
-		
-	def _initParams(self):		
-		if 1:
-			(self.pos_from, self.data)=(self.parent.pos, self.parent.delete_conn)
-			#print 'init:', self.parent.drag_pos
-			#print 'init:', 		self.parent.drop_pos
-			#print 'init:', 		self.parent.dd_data
-			
+
 	def OnExit(self,e):
 		self.Close(True)
 	def OnCreate(self,e):
@@ -3017,60 +3029,8 @@ class NewSessionDialog(wx.Dialog):
 		dlg.ShowModal()
 		dlg.Destroy()
   
-	def _OnClear(self,e):
-		self.table_to={}
+
 	
-		if 1:
-			for i in range(len(self.data)):
-				#item=self.data[i]
-				#tname=item[2].strip('[]')				
-				row=[self.listCtrl.GetItem(i, col).GetText() for col in range(self.listCtrl.GetColumnCount())]
-				self.table_to[row[0]]=row
-				print self.parent.getVarsToPath().strip('/').split('/')
-				(root,config,env)=self.parent.getVarsToPath().strip('/').split('/')
-				print row
-				self.parent.frame.clearConnectPassword('%s.xml' % config,env,row,self.parent.pos)
-				
-		self.status='Delete'
-		self.Close(True)
-	def OnClear(self,e):
-		self.table_to={}
-	
-		if 0:
-			for i in range(len(self.data)):
-				#item=self.data[i]
-				#tname=item[2].strip('[]')				
-				row=[self.listCtrl.GetItem(i, col).GetText() for col in range(self.listCtrl.GetColumnCount())]
-				self.table_to[row[0]]=row
-				print self.parent.getVarsToPath().strip('/').split('/')
-				(root,config,env)=self.parent.getVarsToPath().strip('/').split('/')
-				print row
-				self.parent.frame.clearConnectPassword('%s.xml' % config,env,row,self.parent.pos)
-				
-		#self.status='Delete'
-		
-		for conf, envs in self.plist.items():
-			#conf = self.plist[i]
-			
-			#box.Add((10,5),0)
-			#tname=item[2].strip('[]')
-			for env, cons in envs.items():
-				for item in cons:
-					#ORACLE.xml
-					#['CSMARTVOL_SMARTS1', 'CSMARTVOL', 'SMARTS1']
-					#DEV.oracle
-					#item=self.data[i]
-					#tname=item[2].strip('[]')				
-					#row=[self.listCtrl.GetItem(i, col).GetText() for col in range(self.listCtrl.GetColumnCount())]
-					#self.table_to[row[0]]=row
-					#print self.parent.getVarsToPath().strip('/').split('/')
-					#(root,config,env)=self.parent.getVarsToPath().strip('/').split('/')
-					row =item[:1]+item[2:]
-					self.table_to[row[0]]=row
-					self.parent.frame.clearConnectPassword('%s.xml' % conf,env,row,self.parent.pos)
-					#sys.exit(1)
-				blog.log('all passwords cleared for %s/%s' % (conf,env), self.parent.pos)
-		self.Close(True)		
 	def OnButtonClicked(self, event):
 
 		# Demonstrate using the wxFlatMenu without a menu bar
@@ -3135,6 +3095,8 @@ class NewSessionDialog(wx.Dialog):
 		print a,b
 		lbl='%s->%s' % (a,b)
 		self.b_vector.SetLabel(lbl.lower())
+		self.copy_vector=[a,b]
+		self.refresh_src_list()
 
 	def OnMenu(self, event, params):
 		(a,b) = params
@@ -3731,7 +3693,7 @@ class wxHTML(wx.html.HtmlWindow):
 		
 if __name__ == '__main__':
 	freeze_support()	
-	app_title='data-buddy 1.0'
+	app_title='%s %s' % (__title__,__version__)
 	class MyApp(wx.App, wx.lib.mixins.inspection.InspectionMixin):
 		def OnInit(self):
 			import images as i
