@@ -2868,7 +2868,7 @@ class NewSessionDialog(wx.Dialog):
 			
 			self.rb_so_query=wx.RadioButton(self, label="Query",style=wx.RB_GROUP)
 			boxsizer.Add(self.rb_so_query, flag=wx.LEFT|wx.TOP, border=5)
-			self.rb_set_manually.Bind(wx.EVT_RADIOBUTTON, self.onSourceObjButton)
+			self.rb_so_query.Bind(wx.EVT_RADIOBUTTON, self.onSourceObjButton)
 			
 			self.rb_so_table=wx.RadioButton(self, label="Table")
 			boxsizer.Add(self.rb_so_table, flag=wx.LEFT|wx.TOP, border=5)
@@ -2943,6 +2943,14 @@ class NewSessionDialog(wx.Dialog):
 		self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnSrcTmplSelected, self.listCtrl)
 		self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnTargTmplSelected, self.targlistCtrl)
 		self.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.OnTargTmplDeselected, self.targlistCtrl)
+	def onSourceObjButton(self, event): 
+		""" 
+		Source object filter
+		"""
+		btn = event.GetEventObject()
+		label = btn.GetLabel()
+
+		
 	def onUseRbButton(self, event): 
 		""" 
 		Use type
