@@ -26,6 +26,9 @@ import webbrowser
 import wx.html 
 from tc_lib import sub, send
 from collections import OrderedDict
+import __builtin__
+__builtin__.copy_vector = None
+__builtin__.cvarg = None
 from common.v101.config import dbs
 e=sys.exit
 blog=cu.blog
