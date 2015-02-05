@@ -2948,8 +2948,12 @@ class NewSessionDialog(wx.Dialog):
 		self.mitems['ORAXE']='OracleXE'
 		self.mitems['EXAD']='Exadata'
 		self.SetSizer(sizer)
-		sizer.Fit(self)
-		self.SetSize((600,400))
+		#sizer.Fit(self)
+		#self.SetSize((600,400))
+		(x,y) = self.parent.GetScreenPositionTuple()
+		(l,w) =self.parent.GetClientSizeTuple()
+		dl,dw= 600,400
+		self.SetDimensions(x+(l-dl)/2, y+(w-dw)/2, dl,dw)
 	def OnTrial(self,e):
 		self.table_to={}
 	
@@ -3472,11 +3476,13 @@ class DataBuddy(wx.Frame):
 		self.SetAcceleratorTable(accel_tbl)		
 		panel.SetSizer(sizer)
 		sub(self.onTransportLoc, "set_transport_location")
-		self.Center()
+		
 		#self.SetSizeHints(250,300,500,400)
 		self.Fit()
 		self.Refresh()
+		self.Center()
 		self.Show(True)
+
 
 	def OnNewButton(self, event):
 		dlg = NewSessionDialog(self, -1, "Defaults for new session.", size=(250, 250),
@@ -3484,7 +3490,7 @@ class DataBuddy(wx.Frame):
 						 style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
 						 useMetal=False, plist=None
 						 )
-		dlg.CenterOnScreen()
+		#dlg.CenterOnScreen()
 		# this does not return until the dialog is closed.
 		val = dlg.ShowModal()
 		print val
