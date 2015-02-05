@@ -2765,20 +2765,38 @@ class NewSessionDialog(wx.Dialog):
 
 		self.tc_tables={}
 		self.shards_btn={}
+		if 0:
+			namesizer = wx.BoxSizer(wx.HORIZONTAL)	
+			text1 = wx.StaticText(self, label="Session name:")
+			#sizer.Add(text1, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
+			tc0 = wx.TextCtrl(self)
+			namesizer.Add((3,3),0)
+			namesizer.Add(text1,0, border=5)
+			namesizer.Add((3,3),0)
+			namesizer.Add(tc0,1, border=5)
+			namesizer.Add((3,3),0)
+			sizer.Add(namesizer, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
 
-		namesizer = wx.BoxSizer(wx.HORIZONTAL)	
-		text1 = wx.StaticText(self, label="Session name:")
-		#sizer.Add(text1, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
-		tc0 = wx.TextCtrl(self)
-		namesizer.Add((3,3),0)
-		namesizer.Add(text1,0, border=5)
-		namesizer.Add((3,3),0)
-		namesizer.Add(tc0,1, border=5)
-		namesizer.Add((3,3),0)
-		sizer.Add(namesizer, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
+		if 1:
+			#namesizer = wx.BoxSizer(wx.HORIZONTAL)
+			namesizer = wx.GridBagSizer(1, 4)			
+			
+			text1 = wx.StaticText(self, label="Session name:")
+			#sizer.Add(text1, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
+			tc0 = wx.TextCtrl(self,size=(400,23))
+			#namesizer.Add((3,3),0)
+			namesizer.Add(text1, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
+			
+			namesizer.Add(tc0, pos=(0, 1),  flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND|wx.GROW, border=10)
+			namesizer.Add((60,3),pos=(0, 2),  flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND|wx.GROW, border=10)
+			icon = wx.StaticBitmap(self, bitmap=wx.Bitmap('exec.png'))
+			#namesizer.Add((3,3),0)
+			namesizer.Add(icon, pos=(0, 3), flag=wx.TOP|wx.RIGHT|wx.ALIGN_RIGHT,border=6)
+			sizer.Add(namesizer, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP|wx.EXPAND, 5)
+
+			
 		line = wx.StaticLine(self, -1, size=(20,-1), style=wx.LI_HORIZONTAL)
-		sizer.Add(line, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
-		
+		sizer.Add(line, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)			
 		if 1: #Source tmpl
 			self.listCtrl = wx.ListCtrl(self, -1, style=wx.LC_REPORT|wx.LC_VRULES|wx.LC_HRULES)
 			self.listCtrl.InsertColumn(0, 'Source Template Name')	
@@ -2854,7 +2872,7 @@ class NewSessionDialog(wx.Dialog):
 						self.targlistCtrl.SetStringItem(0, i+1, details[i])		
 		
 		#button4 = wx.Button(self, ID_EXIT, "Test")
-		if 1:
+		if 0:
 			sb = wx.StaticBox(self, label="Type")
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
 			boxsizer.Add(wx.RadioButton(self, label="Copy",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=5)
@@ -2879,8 +2897,8 @@ class NewSessionDialog(wx.Dialog):
 			#sizer.Add(boxsizer, pos=(2, 2),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
 			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))
 		optsizer = wx.BoxSizer(wx.HORIZONTAL)	
-		optsizer.Add(boxsizer, 0 , wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT)		
-		optsizer.Add((3,3),0)
+		#optsizer.Add(boxsizer, 0 , wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT)		
+		#optsizer.Add((3,3),0)
 		optsizer.Add(vboxsizer, 0 , wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT)		
 		optsizer.Add((3,3),0)
 		#optsizer.Add((5,5),1, wx.EXPAND)
