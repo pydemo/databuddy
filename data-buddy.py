@@ -3105,7 +3105,145 @@ class NewSessionDialog(wx.Dialog):
 			subSubMenu.AppendItem(menuItem)
 	def gen_bind(self, type, instance, handler, *args, **kwargs):
 		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)		
+###################################################################################################
+
+class default_args(wx.Panel):
+	"""Arguments"""
+	def __init__(self, parent, style):
+		wx.Panel.__init__(self, parent, -1, style=style)
+		#self.frame=frame
+		ID_TC_MODE = wx.NewId()
+		ID_RUN_AT = wx.NewId()
+		#self.SetSizer(sizer)
+		#sizer.Fit(self)
+		args_vbox = wx.BoxSizer(wx.VERTICAL)
+		args_hbox = wx.BoxSizer(wx.HORIZONTAL)
+		
+		if 1: #Common
+			
+			panel_from = wx.Panel(self)
+			hbox = wx.BoxSizer(wx.HORIZONTAL)
+			fgs = wx.GridBagSizer(4, 4)
+			#sizer.Add(text1, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
+			#sizer.Add(tc0, pos=(0, 1), span=(1, 3), flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=10)
+			#fgs = wx.FlexGridSizer(3, 4, 9, 20)
+			ttl=['Copy vector','Pool size','Num of shards','Field terminator','Truncate target']
+			#pprint(dir(fgs))
+			
+			txt, txt_ctrl= (wx.StaticText(panel_from, label='Copy vector:'), wx.TextCtrl(panel_from,value='ora11g2ora11g'))
+			#txt_ctrl.Value=
+			txt_ctrl.Enable(False)
+			fgs.Add(txt, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+			fgs.Add(txt_ctrl, pos=(0, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+			txt, txt_ctrl= (wx.StaticText(panel_from, label='Field terminator:'), wx.TextCtrl(panel_from, size=(20,-1), value='|'))
+			fgs.Add(txt, pos=(1, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+			fgs.Add(txt_ctrl, pos=(1, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+			txt, txt_ctrl= (wx.StaticText(panel_from, label='Pool size:'), wx.TextCtrl(panel_from, size=(20,-1), value='1'))
+			fgs.Add(txt, pos=(2, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+			fgs.Add(txt_ctrl, pos=(2, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+			txt, txt_ctrl= (wx.StaticText(panel_from, label='Num of shards:'), wx.TextCtrl(panel_from, size=(20,-1), value='1'))
+			fgs.Add(txt, pos=(3, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+			fgs.Add(txt_ctrl, pos=(3, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+
+			#sb = wx.StaticBox(panel_from, label="Truncate Target:")
+			txt=wx.StaticText(panel_from, label='Truncate target:')
+			ynbox =  wx.BoxSizer( wx.HORIZONTAL)
+			ynbox.Add(wx.RadioButton(panel_from, label="Yes",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=0)
+			ynbox.Add(wx.RadioButton(panel_from, label="No"), flag=wx.LEFT|wx.TOP, border=0)
+			fgs.Add(txt, pos=(0, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=5)
+			fgs.Add(ynbox, pos=(0, 3), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=5)
+			if 0:
+				fgs.AddMany([(txt, 0, wx.EXPAND, 5), (txt_ctrl)])
+				txt, txt_ctrl= (wx.StaticText(panel_from, label='Field terminator:'), wx.TextCtrl(panel_from, size=(20,-1), value='|'))
+				fgs.AddMany([(txt, 0, wx.EXPAND, 5), (txt_ctrl)])
+				txt, txt_ctrl= (wx.StaticText(panel_from, label='Pool size:'), wx.TextCtrl(panel_from, size=(20,-1), value='1'))
+				fgs.AddMany([(txt, 0, wx.EXPAND, 5), (txt_ctrl)])
+				
+				sb = wx.StaticBox(panel_from, label="Truncate Target")
+			
+				ynbox =  wx.StaticBoxSizer(sb, wx.HORIZONTAL)
+				ynbox.Add(wx.RadioButton(panel_from, label="Yes",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=0)
+				ynbox.Add(wx.RadioButton(panel_from, label="No"), flag=wx.LEFT|wx.TOP, border=0)
+				
+			
+				txt_ctrl= ( ynbox)
+				fgs.AddMany([(txt_ctrl, 0, wx.EXPAND, 5)])
+				txt, txt_ctrl= (wx.StaticText(panel_from, label='Num of shards:'), wx.TextCtrl(panel_from, size=(20,-1), value='1'))
+				fgs.AddMany([(txt, 0, wx.EXPAND, 5), (txt_ctrl)])
+			
+			
+			
+			
+			
+			hbox.Add(fgs, 1, flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=5)	
+			panel_from.SetSizer(hbox)
+			sb_from = wx.StaticBox(self, label="Common")
+			boxsizer = wx.StaticBoxSizer(sb_from, wx.VERTICAL)
+			boxsizer.Add(panel_from, flag=wx.LEFT|wx.TOP, border=5)
+			#sizer.Add(boxsizer, pos=(3, 0), span=(1, 3), flag=wx.TOP|wx.EXPAND, border=5)
+			
+			args_vbox.Add(boxsizer,1, flag=wx.ALL|wx.EXPAND, border=5)
+		if 1: #Source
+			
+			panel_from = wx.Panel(self)
+			hbox = wx.BoxSizer(wx.HORIZONTAL)
+
+			fgs = wx.FlexGridSizer(3, 2, 9, 5)
+			ttl=['From table','From database','nls_date_format','nls_timestamp_format','nls_timestamp_tz_format','Client home']
+			l=[wx.StaticText(panel_from, label="%s:" % t) for t in ttl]
+
+			p=[wx.TextCtrl(panel_from) for t in ttl]
+			pprint(dir(fgs))
+			for lid in range(len(l)):
+				fgs.AddMany([(l[lid]), (p[lid], 1, wx.EXPAND|wx.TOP)])
 	
+			#fgs.AddMany([(title), (tc1, 1, wx.EXPAND), (author), 
+			#	(tc2, 1, wx.EXPAND), (review, 1, wx.EXPAND), (tc3, 1, wx.EXPAND)])
+
+			#fgs.AddGrowableRow(2, 1)
+			#fgs.AddGrowableCol(1, 1)
+
+			hbox.Add(fgs, proportion=1, flag=wx.ALL|wx.EXPAND, border=5)	
+			panel_from.SetSizer(hbox)
+			sb_from = wx.StaticBox(self, label="Source")
+			boxsizer = wx.StaticBoxSizer(sb_from, wx.VERTICAL)
+			boxsizer.Add(panel_from, flag=wx.LEFT|wx.TOP, border=5)
+			#sizer.Add(boxsizer, pos=(3, 0), span=(1, 3), flag=wx.TOP|wx.EXPAND, border=5)
+			
+			args_hbox.Add(boxsizer, 1, flag=wx.ALL|wx.EXPAND, border=5)
+
+		
+		if 1: #Target
+			panel_from = wx.Panel(self)
+			hbox = wx.BoxSizer(wx.HORIZONTAL)
+
+			fgs = wx.FlexGridSizer(3, 2, 9, 5)
+
+			ttl=['To database','To table','To partition','nls_date_format','nls_timestamp_format','nls_timestamp_tz_format','Client home']
+			l=[wx.StaticText(panel_from, label="%s:" % t) for t in ttl]
+
+			p=[wx.TextCtrl(panel_from) for t in ttl]
+			pprint(dir(fgs))
+			for lid in range(len(l)):
+				fgs.AddMany([(l[lid]), (p[lid], 1, wx.EXPAND|wx.TOP)])
+	
+			#fgs.AddMany([(title), (tc1, 1, wx.EXPAND), (author), 
+			#	(tc2, 1, wx.EXPAND), (review, 1, wx.EXPAND), (tc3, 1, wx.EXPAND)])
+
+			#fgs.AddGrowableRow(2, 1)
+			#fgs.AddGrowableCol(1, 1)
+
+			hbox.Add(fgs, flag=wx.ALL|wx.EXPAND)	
+			panel_from.SetSizer(hbox)
+			sb_from = wx.StaticBox(self, label="Target")
+			boxsizer = wx.StaticBoxSizer(sb_from, wx.VERTICAL)
+			boxsizer.Add(panel_from, flag=wx.LEFT|wx.TOP)
+			#sizer.Add(boxsizer, pos=(3, 3),  flag=wx.TOP|wx.EXPAND, border=5)
+			args_hbox.Add(boxsizer, 1, flag=wx.ALL|wx.EXPAND, border=5)
+		args_vbox.Add(args_hbox,0,flag=wx.ALL|wx.EXPAND|wx.GROW)
+		self.SetSizer(args_vbox)
+		self.Fit()
+		
 ###################################################################################################
 class DataBuddy(wx.Frame):
 	def __init__(self, parent, id, title):
@@ -3216,133 +3354,7 @@ class DataBuddy(wx.Frame):
 		if 1:
 			from editor import TacoTextEditor
 			nb = fnb.FlatNotebook(panel, -1, agwStyle=fnb.FNB_COLOURFUL_TABS|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_NO_X_BUTTON|fnb.FNB_NO_NAV_BUTTONS|fnb.FNB_NODRAG) #|fnb.FNB_DCLICK_CLOSES_TABS|fnb.FNB_X_ON_TAB|fnb.FNB_X|fnb.FNB_TAB_X|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_BTN_NONE|fnb.FNB_BTN_PRESSED|fnb.FNB_COLOURFUL_TABS|fnb.FNB_BOTTOM|fnb.FNB_SMART_TABS|fnb.FNB_DROPDOWN_TABS_LIST|fnb.FNB_DROP_DOWN_ARROW|fnb.FNB_BTN_HOVER|fnb.FNB_NO_X_BUTTON) #|fnb.FNB_HIDE_ON_SINGLE_TAB)
-			args_panel = wx.Panel(panel)
-			args_vbox = wx.BoxSizer(wx.VERTICAL)
-			args_hbox = wx.BoxSizer(wx.HORIZONTAL)
-
-			if 1: #Common
-				
-				panel_from = wx.Panel(args_panel)
-				hbox = wx.BoxSizer(wx.HORIZONTAL)
-				fgs = wx.GridBagSizer(4, 4)
-				#sizer.Add(text1, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
-				#sizer.Add(tc0, pos=(0, 1), span=(1, 3), flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=10)
-				#fgs = wx.FlexGridSizer(3, 4, 9, 20)
-				ttl=['Copy vector','Pool size','Num of shards','Field terminator','Truncate target']
-				#pprint(dir(fgs))
-				
-				txt, txt_ctrl= (wx.StaticText(panel_from, label='Copy vector:'), wx.TextCtrl(panel_from,value='ora11g2ora11g'))
-				#txt_ctrl.Value=
-				txt_ctrl.Enable(False)
-				fgs.Add(txt, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-				fgs.Add(txt_ctrl, pos=(0, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-				txt, txt_ctrl= (wx.StaticText(panel_from, label='Field terminator:'), wx.TextCtrl(panel_from, size=(20,-1), value='|'))
-				fgs.Add(txt, pos=(1, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-				fgs.Add(txt_ctrl, pos=(1, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-				txt, txt_ctrl= (wx.StaticText(panel_from, label='Pool size:'), wx.TextCtrl(panel_from, size=(20,-1), value='1'))
-				fgs.Add(txt, pos=(2, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-				fgs.Add(txt_ctrl, pos=(2, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-				txt, txt_ctrl= (wx.StaticText(panel_from, label='Num of shards:'), wx.TextCtrl(panel_from, size=(20,-1), value='1'))
-				fgs.Add(txt, pos=(3, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-				fgs.Add(txt_ctrl, pos=(3, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-
-				#sb = wx.StaticBox(panel_from, label="Truncate Target:")
-				txt=wx.StaticText(panel_from, label='Truncate target:')
-				ynbox =  wx.BoxSizer( wx.HORIZONTAL)
-				ynbox.Add(wx.RadioButton(panel_from, label="Yes",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=0)
-				ynbox.Add(wx.RadioButton(panel_from, label="No"), flag=wx.LEFT|wx.TOP, border=0)
-				fgs.Add(txt, pos=(0, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=5)
-				fgs.Add(ynbox, pos=(0, 3), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=5)
-				if 0:
-					fgs.AddMany([(txt, 0, wx.EXPAND, 5), (txt_ctrl)])
-					txt, txt_ctrl= (wx.StaticText(panel_from, label='Field terminator:'), wx.TextCtrl(panel_from, size=(20,-1), value='|'))
-					fgs.AddMany([(txt, 0, wx.EXPAND, 5), (txt_ctrl)])
-					txt, txt_ctrl= (wx.StaticText(panel_from, label='Pool size:'), wx.TextCtrl(panel_from, size=(20,-1), value='1'))
-					fgs.AddMany([(txt, 0, wx.EXPAND, 5), (txt_ctrl)])
-					
-					sb = wx.StaticBox(panel_from, label="Truncate Target")
-				
-					ynbox =  wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-					ynbox.Add(wx.RadioButton(panel_from, label="Yes",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=0)
-					ynbox.Add(wx.RadioButton(panel_from, label="No"), flag=wx.LEFT|wx.TOP, border=0)
-					
-				
-					txt_ctrl= ( ynbox)
-					fgs.AddMany([(txt_ctrl, 0, wx.EXPAND, 5)])
-					txt, txt_ctrl= (wx.StaticText(panel_from, label='Num of shards:'), wx.TextCtrl(panel_from, size=(20,-1), value='1'))
-					fgs.AddMany([(txt, 0, wx.EXPAND, 5), (txt_ctrl)])
-				
-				
-				
-				
-				
-				hbox.Add(fgs, 1, flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=5)	
-				panel_from.SetSizer(hbox)
-				sb_from = wx.StaticBox(args_panel, label="Common")
-				boxsizer = wx.StaticBoxSizer(sb_from, wx.VERTICAL)
-				boxsizer.Add(panel_from, flag=wx.LEFT|wx.TOP, border=5)
-				#sizer.Add(boxsizer, pos=(3, 0), span=(1, 3), flag=wx.TOP|wx.EXPAND, border=5)
-				
-				args_vbox.Add(boxsizer,1, flag=wx.ALL|wx.EXPAND, border=5)
-			if 1: #Source
-				
-				panel_from = wx.Panel(args_panel)
-				hbox = wx.BoxSizer(wx.HORIZONTAL)
-
-				fgs = wx.FlexGridSizer(3, 2, 9, 5)
-				ttl=['From table','From database','nls_date_format','nls_timestamp_format','nls_timestamp_tz_format','Client home']
-				l=[wx.StaticText(panel_from, label="%s:" % t) for t in ttl]
-
-				p=[wx.TextCtrl(panel_from) for t in ttl]
-				pprint(dir(fgs))
-				for lid in range(len(l)):
-					fgs.AddMany([(l[lid]), (p[lid], 1, wx.EXPAND|wx.TOP)])
-		
-				#fgs.AddMany([(title), (tc1, 1, wx.EXPAND), (author), 
-				#	(tc2, 1, wx.EXPAND), (review, 1, wx.EXPAND), (tc3, 1, wx.EXPAND)])
-
-				#fgs.AddGrowableRow(2, 1)
-				#fgs.AddGrowableCol(1, 1)
-
-				hbox.Add(fgs, proportion=1, flag=wx.ALL|wx.EXPAND, border=5)	
-				panel_from.SetSizer(hbox)
-				sb_from = wx.StaticBox(args_panel, label="Source")
-				boxsizer = wx.StaticBoxSizer(sb_from, wx.VERTICAL)
-				boxsizer.Add(panel_from, flag=wx.LEFT|wx.TOP, border=5)
-				#sizer.Add(boxsizer, pos=(3, 0), span=(1, 3), flag=wx.TOP|wx.EXPAND, border=5)
-				
-				args_hbox.Add(boxsizer, 1, flag=wx.ALL|wx.EXPAND, border=5)
-
-			
-			if 1: #Target
-				panel_from = wx.Panel(args_panel)
-				hbox = wx.BoxSizer(wx.HORIZONTAL)
-
-				fgs = wx.FlexGridSizer(3, 2, 9, 5)
-
-				ttl=['To database','To table','To partition','nls_date_format','nls_timestamp_format','nls_timestamp_tz_format','Client home']
-				l=[wx.StaticText(panel_from, label="%s:" % t) for t in ttl]
-
-				p=[wx.TextCtrl(panel_from) for t in ttl]
-				pprint(dir(fgs))
-				for lid in range(len(l)):
-					fgs.AddMany([(l[lid]), (p[lid], 1, wx.EXPAND|wx.TOP)])
-		
-				#fgs.AddMany([(title), (tc1, 1, wx.EXPAND), (author), 
-				#	(tc2, 1, wx.EXPAND), (review, 1, wx.EXPAND), (tc3, 1, wx.EXPAND)])
-
-				#fgs.AddGrowableRow(2, 1)
-				#fgs.AddGrowableCol(1, 1)
-
-				hbox.Add(fgs, flag=wx.ALL|wx.EXPAND)	
-				panel_from.SetSizer(hbox)
-				sb_from = wx.StaticBox(args_panel, label="Target")
-				boxsizer = wx.StaticBoxSizer(sb_from, wx.VERTICAL)
-				boxsizer.Add(panel_from, flag=wx.LEFT|wx.TOP)
-				#sizer.Add(boxsizer, pos=(3, 3),  flag=wx.TOP|wx.EXPAND, border=5)
-				args_hbox.Add(boxsizer, 1, flag=wx.ALL|wx.EXPAND, border=5)
-			args_vbox.Add(args_hbox,0,flag=wx.ALL|wx.EXPAND|wx.GROW)
-			args_panel.SetSizer(args_vbox)
+			args_panel = default_args(self,style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			nb.AddPage(args_panel, 'Arguments')
 			editor = TacoTextEditor(panel)
 			editor.AppendText(self.cmd)
