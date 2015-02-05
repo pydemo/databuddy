@@ -25,9 +25,11 @@ from pprint import pprint
 import webbrowser
 import wx.html 
 from tc_lib import sub, send
+from collections import OrderedDict
+from common.v101.config import dbs
 e=sys.exit
 blog=cu.blog
-from collections import OrderedDict
+
 e=sys.exit
 
 try:
