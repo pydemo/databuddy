@@ -29,11 +29,7 @@ from collections import OrderedDict
 import __builtin__
 __builtin__.copy_vector = None
 __builtin__.cvarg = None
-from common.v101.config import dbs
-e=sys.exit
-blog=cu.blog
-
-e=sys.exit
+import common.v101.config as conf
 
 try:
     from agw import ultimatelistctrl as ULC
@@ -52,11 +48,14 @@ except ImportError: # if it's not there locally, try the wxPython lib.
 	from wx.lib.agw.fmresources import FM_OPT_SHOW_CUSTOMIZE, FM_OPT_SHOW_TOOLBAR, FM_OPT_MINIBAR
 	
 ########################################################################
+e=sys.exit
+blog=cu.blog
+home=os.path.dirname(os.path.abspath(__file__))
+
 ID_EXIT = wx.NewId()
 ID_USE = wx.NewId()
 ID_ABOUT = wx.NewId()
 LOAD_FILE_ID = wx.NewId()
-e=sys.exit
 update_cache=True
 dBtn='N/A'
 
@@ -2799,7 +2798,7 @@ class NewSessionDialog(wx.Dialog):
 		sizer.Add(line, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)			
 		if 1: #Source tmpl
 			self.listCtrl = wx.ListCtrl(self, -1, style=wx.LC_REPORT|wx.LC_VRULES|wx.LC_HRULES)
-			self.listCtrl.InsertColumn(0, 'Source Template Name')	
+			self.listCtrl.InsertColumn(0, 'Source Template')	
 			if 0:
 				self.listCtrl.InsertColumn(1, 'Type')		
 				self.listCtrl.InsertColumn(2, 'Database')		
@@ -2818,7 +2817,13 @@ class NewSessionDialog(wx.Dialog):
 				self.listCtrl.SetColumnWidth(5, 50)
 				self.listCtrl.SetColumnWidth(6, 60)
 				self.listCtrl.SetColumnWidth(7, 50)
-
+			copy_vector='ORA11G2ORA11G'
+			from_to = copy_vector.split('2')
+			api_home=os.path.join(home,'args_api')
+			from_home=os.path.join(api_home,from_to[0])
+			to_home=os.path.join(from_home,from_to[1])
+			assert os.path.isdir(from_home), 'From args_api %s does not exists in %s' % (from_to[0],api_home)
+			assert os.path.isdir(to_home), 'To args_api %s does not exists in %s' % (from_to[1], from_home)
 			self.plist={'ORA_QueryFile':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
 			'ORA_QueryFile_withHeader':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
 			'ORA_QueryFile_noHeader':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),
@@ -2837,7 +2842,7 @@ class NewSessionDialog(wx.Dialog):
 						self.listCtrl.SetStringItem(0, i+1, details[i])
 		if 1: #Target tmpl
 			self.targlistCtrl = wx.ListCtrl(self, -1, style=wx.LC_REPORT|wx.LC_VRULES|wx.LC_HRULES)
-			self.targlistCtrl.InsertColumn(0, 'Target Template Name')	
+			self.targlistCtrl.InsertColumn(0, 'Target Template')	
 			if 0:
 				self.targlistCtrl.InsertColumn(1, 'Type')		
 				self.targlistCtrl.InsertColumn(2, 'Database')		
@@ -2887,12 +2892,12 @@ class NewSessionDialog(wx.Dialog):
 				rb.Enable(False)			
 			#sizer.Add(boxsizer, pos=(2, 0), span=(1, 2), flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)
 		if 1: #Vector
-			sb = wx.StaticBox(self, label='Vector')
+			sb = wx.StaticBox(self, label='Copy Vector')
 			vboxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
 			#rb_v=wx.RadioButton(panel, label="ora2ora",style=wx.RB_GROUP)
 			self.b_vector = wx.Button(self, label="ora11g->ora11g",size=(100,25))
 			#b_vector.Enable(True)
-			vboxsizer.Add(self.b_vector, flag=wx.LEFT|wx.TOP, border=5)
+			vboxsizer.Add(self.b_vector, flag=wx.LEFT|wx.TOP, border=0)
 			self.b_vector.Bind(wx.EVT_BUTTON, self.OnButtonClicked)
 			#sizer.Add(boxsizer, pos=(2, 2),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
 			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))
@@ -2900,7 +2905,7 @@ class NewSessionDialog(wx.Dialog):
 		#optsizer.Add(boxsizer, 0 , wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT)		
 		#optsizer.Add((3,3),0)
 		optsizer.Add(vboxsizer, 0 , wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT)		
-		optsizer.Add((3,3),0)
+		#optsizer.Add((3,3),0)
 		#optsizer.Add((5,5),1, wx.EXPAND)
 		#optsizer.Add(button4, 0 , wx.RIGHT)
 		sizer.Add(optsizer, 0, wx.EXPAND|wx.ALL|wx.GROW, 5)	
@@ -2909,7 +2914,7 @@ class NewSessionDialog(wx.Dialog):
 		listsizer.Add(self.targlistCtrl, 1 , wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL,5)		
 		sizer.Add(listsizer, 1, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
 		if 1:
-			sb = wx.StaticBox(self, label="Object")
+			sb = wx.StaticBox(self, label="Source Object")
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
 			boxsizer.Add(wx.RadioButton(self, label="Query",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=5)
 			boxsizer.Add(wx.RadioButton(self, label="Table"), flag=wx.LEFT|wx.TOP, border=5)
@@ -2923,16 +2928,30 @@ class NewSessionDialog(wx.Dialog):
 				boxsizer.Add(rb, flag=wx.LEFT|wx.TOP, border=5)
 				rb.Enable(False)			
 			#sizer.Add(boxsizer, pos=(2, 0), span=(1, 2), flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)
-		optsizer.Add(boxsizer, 0 , wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT)	
-
+			optsizer.Add(boxsizer, 0 , wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT)	
+		if 1:
+			sb = wx.StaticBox(self, label="Target Object")
+			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
+			#boxsizer.Add(wx.RadioButton(self, label="Query",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=5)
+			boxsizer.Add(wx.RadioButton(self, label="Table",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=5)
+			boxsizer.Add(wx.RadioButton(self, label="Partition"), flag=wx.LEFT|wx.TOP, border=5)
+			boxsizer.Add(wx.RadioButton(self, label="Sub-Partition"), flag=wx.LEFT|wx.TOP, border=5)
+			optsizer.Add(boxsizer, 0 , wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT)	
 		btnsizer = wx.BoxSizer(wx.HORIZONTAL)
-		use_btn = wx.Button(self, ID_USE, "Use")
+		if 1:
+			sb = wx.StaticBox(self, label='Arguments')
+			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
+			boxsizer.Add(wx.RadioButton(self, label="Use templates",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=5)
+			boxsizer.Add(wx.RadioButton(self, label="Set manually"), flag=wx.LEFT|wx.TOP, border=5)
+			btnsizer.Add(boxsizer, 0 , wx.TOP|wx.BOTTOM|wx.LEFT)
+			
+		use_btn = wx.Button(self, ID_USE, "Create")
 		button4 = wx.Button(self, ID_EXIT, "Cancel")
 		btnsizer.Add((3,3),1)
-		btnsizer.Add(use_btn, 0 , wx.RIGHT)
+		btnsizer.Add(use_btn, 0 , wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM)
 		btnsizer.Add((40,5),0)
 		
-		btnsizer.Add(button4, 0 , wx.RIGHT)
+		btnsizer.Add(button4, 0 , wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM)
 		
 		self.Bind(wx.EVT_BUTTON, self.OnUse, id=ID_USE)
 		self.Bind(wx.EVT_BUTTON, self.OnExit, id=ID_EXIT)
@@ -3276,7 +3295,7 @@ class DataBuddy(wx.Frame):
 	def __init__(self, parent, id, title):
 		#wx.Frame.__init__(self, parent, -1, title)
 		#super(DataBuddy, self).__init__(parent, title=title , size=(900, 565))
-		global app_title
+		global app_title, home
 		wx.Frame.__init__(self, None, wx.ID_ANY, title=app_title)
 		self._vectMenu=None
 		self._popUpMenu = None
@@ -3290,7 +3309,7 @@ class DataBuddy(wx.Frame):
 		self.panel = wx.Panel(self)
 		panel=self.panel
 		sizer = wx.GridBagSizer(5, 5)
-		self.home=path=os.path.dirname(os.path.abspath(__file__))
+		self.home=home
 		
 		self.transport=os.path.join(self.home,r'dm32\dm32.exe')
 		self.cmd=r"""%s ^
