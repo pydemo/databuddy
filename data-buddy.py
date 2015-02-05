@@ -4,15 +4,16 @@
 # Environment:
 #			Python 2.7 and wxPython 2.8		
 #
-__author__ = "Alex Buzunov, Sequelworks Inc."
-__copyright__ = "Copyright 2015, data-buddy"
+__author__ = "Alex Buzunov"
+__copyright__ = "Copyright 2015, SequelWorks Inc."
 __credits__ = []
 __license__ = "GPL"
+__title__ = "data-buddy"
 __version__ = "1.0.1"
 __maintainer__ = "Alex Buzunov"
 __email__ = "alexbuzunov@gmail.com"
 __status__ = "Development"
-__title__ = "data-buddy"
+
 
 import wx.lib.inspection
 import wx.lib.mixins.inspection
@@ -169,7 +170,7 @@ class UltListCtrl(ULC.UltimateListCtrl):
 					item = self.GetItem(idx,1)
 					item.SetMask(ULC.ULC_MASK_BACKCOLOUR)
 					pink=wx.Colour(255, 168, 168, 255)
-					item.SetBackgroundColour(pink)
+					item.SetBackgroundColour(pink) 
 					self.SetItem(item)
 				items +=1
 		else:
@@ -2864,10 +2865,15 @@ class NewSessionDialog(wx.Dialog):
 		if 1:
 			sb = wx.StaticBox(self, label="Source Object")
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			boxsizer.Add(wx.RadioButton(self, label="Query",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=5)
+			self.rb_so_query=wx.RadioButton(self, label="Query",style=wx.RB_GROUP)
+			boxsizer.Add(self.rb_so_query, flag=wx.LEFT|wx.TOP, border=5)
+			self.rb_set_manually.Bind(wx.EVT_RADIOBUTTON, self.onSourceObjButton)
 			boxsizer.Add(wx.RadioButton(self, label="Table"), flag=wx.LEFT|wx.TOP, border=5)
+			self.rb_set_manually.Bind(wx.EVT_RADIOBUTTON, self.onSourceObjButton)
 			boxsizer.Add(wx.RadioButton(self, label="Partition"), flag=wx.LEFT|wx.TOP, border=5)
+			self.rb_set_manually.Bind(wx.EVT_RADIOBUTTON, self.onSourceObjButton)
 			boxsizer.Add(wx.RadioButton(self, label="Sub-Partition"), flag=wx.LEFT|wx.TOP, border=5)
+			self.rb_set_manually.Bind(wx.EVT_RADIOBUTTON, self.onSourceObjButton)
 			if 0:
 				rb=wx.RadioButton(self, label="FTP")
 				boxsizer.Add(rb, flag=wx.LEFT|wx.TOP, border=5)
