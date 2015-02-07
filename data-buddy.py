@@ -2981,7 +2981,7 @@ class NewSessionDialog(wx.Dialog):
 		#from os.path import isfile, join
 		apifiles = { f for f in os.listdir(to_home) if os.path.isfile(os.path.join(to_home,f)) and 'default' not in f }
 		
-		for f in apifiles:
+		for f in apifiles: 
 			print f
 			(t_from,t_to,_) = f.split('.')
 			if not self.tmpl.has_key(t_from): self.tmpl[t_from]=[]
@@ -3441,10 +3441,16 @@ class DataBuddy(wx.Frame):
 		sizer.Add(button3, pos=(9, 0), flag=wx.LEFT, border=10)
 		button3.Enable(False)
 
-		btn_open = wx.Button(panel, label="Open")
+		btn_open = wx.Button(panel, label='Show in Folder')
+		btn_open.Bind(wx.EVT_BUTTON, self.OnButtonShowInFolder)
+		sizer.Add(btn_open, pos=(9, 2),flag=wx.BOTTOM|wx.ALIGN_RIGHT)
+
+
+		btn_open = wx.Button(panel, label='Run')
 		btn_open.Bind(wx.EVT_BUTTON, self.OnButtonOpen)
 		sizer.Add(btn_open, pos=(9, 3),flag=wx.BOTTOM|wx.ALIGN_RIGHT)
-		#self.Bind(wx.EVT_BUTTON, self.onAboutHtmlDlg, btn_open)
+
+		
 		button5 = wx.Button(panel, ID_EXIT, label="Cancel")
 		#self.Bind(wx.EVT_BUTTON, self.onAboutHtmlDlg, aboutBtn)
 		sizer.Add(button5, pos=(9, 4), span=(1, 1), flag=wx.BOTTOM|wx.RIGHT, border=5)
