@@ -28,7 +28,7 @@ import wx.lib.agw.hyperlink as hl
 from tc_lib import sub, send
 import common_utils as cu
 import images
-import os, sys
+import os, sys, time 
 from pprint import pprint
 import webbrowser
 import wx.html 
@@ -59,7 +59,7 @@ except ImportError: # if it's not there locally, try the wxPython lib.
 e=sys.exit
 blog=cu.blog
 home=os.path.dirname(os.path.abspath(__file__))
-
+aa_dir='args_api'
 ID_EXIT = wx.NewId()
 ID_CREATE = wx.NewId()
 ID_ABOUT = wx.NewId()
@@ -2847,7 +2847,7 @@ class NewSessionDialog(wx.Dialog):
 			self.b_vector = wx.Button(self, label=lbl,size=(100,25))
 			#b_vector.Enable(True)
 			vboxsizer.Add(self.b_vector, flag=wx.LEFT|wx.TOP, border=0)
-			self.b_vector.Bind(wx.EVT_BUTTON, self.OnButtonClicked)
+			self.b_vector.Bind(wx.EVT_BUTTON, self.OnCVClicked)
 			#sizer.Add(boxsizer, pos=(2, 2),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
 			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))
 		optsizer = wx.BoxSizer(wx.HORIZONTAL)	
@@ -2972,7 +2972,7 @@ class NewSessionDialog(wx.Dialog):
 	def refresh_src_list(self):
 		assert self.copy_vector, 'copy_vector is not set.'
 		from_to = self.copy_vector
-		api_home=os.path.join(home,'args_api')
+		api_home=os.path.join(home,aa_dir)
 		from_home=os.path.join(api_home,from_to[0])
 		to_home=os.path.join(from_home,from_to[1])
 		assert os.path.isdir(from_home), '"From" args_api %s does not exists in %s' % (from_to[0],api_home)
@@ -3044,7 +3044,7 @@ class NewSessionDialog(wx.Dialog):
 			self.Warn('Enter session name.')
 			self.tc_sname.SetFocus()	
 		else:
-			send("create_new_session", (self.tc_sname.GetValue()) )
+			send("create_new_session", (self.tc_sname.GetValue(),self.copy_vector) )
 			self.Close(True)
 	def Warn(self, message, caption = 'Warning!'):
 		dlg = wx.MessageDialog(self, message, caption, wx.OK | wx.ICON_WARNING)
@@ -3053,7 +3053,7 @@ class NewSessionDialog(wx.Dialog):
   
 
 	
-	def OnButtonClicked(self, event):
+	def OnCVClicked(self, event):
 
 		# Demonstrate using the wxFlatMenu without a menu bar
 		btn = event.GetEventObject()
@@ -3092,11 +3092,18 @@ class NewSessionDialog(wx.Dialog):
 
 
 
-			
+			apidir= os.path.join(home,aa_dir)
+			api_from = { f[:2] for f in os.listdir(apidir) if os.path.isdir(os.path.join(apidir,f)) and 'CSV' not in f }
+			dbf={'DB':'DB2', 'EX':'Exadata', 'IN', 'MA', 'MY', 'OR', 'PG', 'SL', 'SS', 'SY', 'TT'}
+			pprint(api_from)
 			subMenu = FM.FlatMenu()
 			# Add sub-menu to main menu
-			menuItem = FM.FlatMenuItem(self._popUpMenu, 20001, "From Oracle", "", wx.ITEM_NORMAL, subMenu)
-			self._popUpMenu.AppendItem(menuItem)
+			i=0
+			for m in api_from:
+				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+i, "From %s" % m, "", wx.ITEM_NORMAL, subMenu)
+				self._popUpMenu.AppendItem(menuItem)
+				i +=1
+			
 			self.set_submenu(subMenu,0)
 
 
@@ -3153,7 +3160,8 @@ class NewSessionDialog(wx.Dialog):
 			self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(pmenu,'CSV'))
 			subSubMenu.AppendItem(menuItem)
 	def gen_bind(self, type, instance, handler, *args, **kwargs):
-		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)		
+		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)
+
 ###################################################################################################
 
 class default_args(wx.Panel):
@@ -3292,6 +3300,27 @@ class default_args(wx.Panel):
 		args_vbox.Add(args_hbox,0,flag=wx.ALL|wx.EXPAND|wx.GROW)
 		self.SetSizer(args_vbox)
 		self.Fit()
+	def get_cmd(self,transport):
+	
+		return r"""%s ^
+-w ora2ora ^
+-o 1 ^
+-r 1 ^
+-t "|" ^
+-c SCOTT.Date_test_from ^
+-f SCOTT/tiger2@orcl ^
+-e "YYYY-MM-DD HH24.MI.SS" ^
+-m "YYYY-MM-DD HH24.MI.SS.FF2" ^
+-O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" ^
+-z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" ^
+-g SCOTT/tiger2@orcl ^
+-a SCOTT.Partitioned_test_to ^
+-G part_15 ^
+-e "YYYY-MM-DD HH24.MI.SS" ^
+-m "YYYY-MM-DD HH24.MI.SS.FF2" ^
+-O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" ^
+-Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN"
+""" % transport
 		
 ###################################################################################################
 class DataBuddy(wx.Frame):
@@ -3313,33 +3342,17 @@ class DataBuddy(wx.Frame):
 		panel=self.panel
 		sizer = wx.GridBagSizer(5, 5)
 		self.home=home
-		
+		self.copy_vector=None
 		self.transport=os.path.join(self.home,r'dm32\dm32.exe')
-		self.cmd=r"""%s ^
--w ora2ora ^
--o 1 ^
--r 1 ^
--t "|" ^
--c SCOTT.Date_test_from ^
--f SCOTT/tiger2@orcl ^
--e "YYYY-MM-DD HH24.MI.SS" ^
--m "YYYY-MM-DD HH24.MI.SS.FF2" ^
--O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" ^
--z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" ^
--g SCOTT/tiger2@orcl ^
--a SCOTT.Partitioned_test_to ^
--G part_15 ^
--e "YYYY-MM-DD HH24.MI.SS" ^
--m "YYYY-MM-DD HH24.MI.SS.FF2" ^
--O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" ^
--Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN"
-""" % self.transport
+		self.args_panel = default_args(self,style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+		
+		self.cmd=self.args_panel.get_cmd(self.transport)
 		if 1:
-			text1 = wx.StaticText(panel, label="Session name:")
-			sizer.Add(text1, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
-			tc0 = wx.TextCtrl(panel,value='my_test_session')
-			tc0.Enable(False)
-			sizer.Add(tc0, pos=(0, 1), span=(1, 3), flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=10)
+			self.st_session_name = wx.StaticText(panel, label="Session name:")
+			sizer.Add(self.st_session_name, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
+			self.tc_session_name = wx.TextCtrl(panel,value='n/a')
+			self.tc_session_name.Enable(False)
+			sizer.Add(self.tc_session_name, pos=(0, 1), span=(1, 3), flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=10)
 			icon = wx.StaticBitmap(panel, bitmap=wx.Bitmap('exec.png'))
 			sizer.Add(icon, pos=(0, 4), flag=wx.TOP|wx.RIGHT|wx.ALIGN_RIGHT,border=6)
 
@@ -3403,8 +3416,8 @@ class DataBuddy(wx.Frame):
 		if 1:
 			from editor import TacoTextEditor
 			nb = fnb.FlatNotebook(panel, -1, agwStyle=fnb.FNB_COLOURFUL_TABS|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_NO_X_BUTTON|fnb.FNB_NO_NAV_BUTTONS|fnb.FNB_NODRAG) #|fnb.FNB_DCLICK_CLOSES_TABS|fnb.FNB_X_ON_TAB|fnb.FNB_X|fnb.FNB_TAB_X|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_BTN_NONE|fnb.FNB_BTN_PRESSED|fnb.FNB_COLOURFUL_TABS|fnb.FNB_BOTTOM|fnb.FNB_SMART_TABS|fnb.FNB_DROPDOWN_TABS_LIST|fnb.FNB_DROP_DOWN_ARROW|fnb.FNB_BTN_HOVER|fnb.FNB_NO_X_BUTTON) #|fnb.FNB_HIDE_ON_SINGLE_TAB)
-			args_panel = default_args(self,style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
-			nb.AddPage(args_panel, 'Arguments')
+			
+			nb.AddPage(self.args_panel, 'Arguments')
 			editor = TacoTextEditor(panel)
 			editor.AppendText(self.cmd)
 			nb.AddPage(editor, 'Command')
@@ -3511,8 +3524,10 @@ class DataBuddy(wx.Frame):
 		self.Center()
 		self.Show(True)
 	def onNewSession(self, data, extra1, extra2=None):		
-		(sname) = data
+		(sname,copy_vector) = data
 		print sname
+		self.copy_vector=copy_vector
+		self.tc_session_name.SetValue(sname)
 		#self.txt_transport.SetLabel(tloc[0])
 
 	def OnNewButton(self, event):
@@ -3526,11 +3541,27 @@ class DataBuddy(wx.Frame):
 		val = dlg.ShowModal()
 		print val
 
-		dlg.Destroy()
+	def OnButtonShowInFolder(self, event):
+		# 
+		btn = event.GetEventObject()
+		#create bat file
+		ts=time.strftime('%Y%m%d_%H%M%S')
+		dirname=os.path.join(home,'run')
+		fname = os.path.join(dirname, '%s_%s.py' % (self.tc_session_name.GetValue(),ts))
+		if not os.path.isdir(dirname):
+			os.makedirs(dirname)
+		f=open(fname,'w')
+		f.write(self.cmd)
+		f.close()
+			
 		
-	def OnButtonOpen(self, event):
+	
+		EXPLORER = 'C:\\windows\\explorer.exe' 
+		os.spawnl(os.P_NOWAIT, EXPLORER, '.', '/n,/e,/select,"%s"'%fname)
 
-		# Demonstrate using the wxFlatMenu without a menu bar
+
+	def OnButtonOpen(self, event):
+		# 
 		btn = event.GetEventObject()
 		print btn.GetLabel()
 		from subprocess import Popen,PIPE
