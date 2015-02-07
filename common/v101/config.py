@@ -10,7 +10,7 @@ abspath=home
 from pprint import pprint
 import argparse
 dbs={	'SYASE':'SAP Sybase ASE', 'SYANY':'Sybase SQL Anywhere','SYIQ':'Sybase IQ',
-		'ORA11G':'Oracle', 'ORAXE':'Oracle XE', 'ORAEXA':'Exadata',
+		'ORA11G':'Oracle 11G', 'ORAXE':'Oracle XE', 'ORAEXA':'Exadata',
 		'TTEN':'TimesTen', 
 		'SLITE':'SQL Lite',
 		'SSEXP':'SQL Server Express','SSENT':'SQL Server Enterprise',

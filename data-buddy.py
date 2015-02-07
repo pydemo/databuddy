@@ -3121,54 +3121,43 @@ class NewSessionDialog(wx.Dialog):
 				i +=1
 				
 				for sm in api_menu[k]:
-					Menu2 = FM.FlatMenu()
-					menuItem = FM.FlatMenuItem(Menu1, 20000+i, "From %s" % conf.dbs[sm] , "", wx.ITEM_NORMAL, Menu2)
-					Menu1.AppendItem(menuItem)
-					#self.set_sub_submenu(subSubMenu,1, 'CSV')
-					i +=1
-					for k2 in api2:
-						Menu3 = FM.FlatMenu()
-						menuItem = FM.FlatMenuItem(Menu2, 20000+i, "To %s" % dbf[k2], "", wx.ITEM_NORMAL, Menu3)
-						Menu2.AppendItem(menuItem)
-						i +=1
-						for sm2 in api_menu[k2]:
-							#Menu4 = FM.FlatMenu()
-							menuItem = FM.FlatMenuItem(Menu3, 20000+i, "To %s" % conf.dbs[sm2] , "", wx.ITEM_NORMAL)
-							Menu3.AppendItem(menuItem)
-							#self.set_sub_submenu(subSubMenu,1, 'CSV')
-							i +=1
-					
-					
-			if 0:
-				self.set_submenu(subMenu,0)
+					if len(api_menu[k])>1:
+						self.create_Menu2(Menu1,sm,i,api_menu,api2,dbf)
+					else:
+						for k2 in api2:
+							if len(api_menu[k2])>1:
+								self.create_Menu3(Menu1,k2,i,api_menu,dbf)
+							else:
+								self.create_Menu4(Menu1,api_menu[k2][0],i)
+								
 
+	def create_Menu2(self,Menu1,sm,i,api_menu,api2,dbf):
+		
+		Menu2 = FM.FlatMenu()
+		menuItem = FM.FlatMenuItem(Menu1, 20000+i, "From %s" % conf.dbs[sm] , "", wx.ITEM_NORMAL, Menu2)
+		Menu1.AppendItem(menuItem)
+		#self.set_sub_submenu(subSubMenu,1, 'CSV')
+		i +=1
+		for k2 in api2:
+			if len(api_menu[k2])>1:
+				self.create_Menu3(Menu2,k2,i,api_menu,dbf)
+			else:
+				self.create_Menu4(Menu2,api_menu[k2][0],i)
+	def create_Menu3(self,Menu2,k2,i,api_menu,dbf):
+		Menu3 = FM.FlatMenu()
+		menuItem = FM.FlatMenuItem(Menu2, 20000+i, "To %s" % dbf[k2], "", wx.ITEM_NORMAL, Menu3)
+		Menu2.AppendItem(menuItem)
+		i +=1
+		for sm2 in api_menu[k2]:
+			self.create_Menu4(Menu3,sm2,i)	
 
-				self._popUpMenu.AppendSeparator()
-				
-				subMenu = FM.FlatMenu()
-				##############################################################################
-				menuItem = FM.FlatMenuItem(self._popUpMenu, 20002, "From CSV", "", wx.ITEM_NORMAL, subMenu)
-				self._popUpMenu.AppendItem(menuItem)
-				if 1:
-					#subMenu = FM.FlatMenu()
-					# Create the submenu items and add them 
-					subSubMenu = FM.FlatMenu()
-					menuItem = FM.FlatMenuItem(subMenu, 21000, "To &Oracle", "", wx.ITEM_NORMAL, subSubMenu)
-					subMenu.AppendItem(menuItem)
-					#self.set_sub_submenu(subSubMenu,1, 'CSV')
-					#i=0
-					
-					for k,m in self.mitems.items():							
-						menuItem = FM.FlatMenuItem(subSubMenu, 20000+i, 'To %s' % m , "", wx.ITEM_NORMAL)
-						self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(pmenu,k))
-						subSubMenu.AppendItem(menuItem)
-						i +=1
-					if pmenu not in ('CSV'):
-						subSubMenu.AppendSeparator()
-						menuItem = FM.FlatMenuItem(subSubMenu, 20000+pid*1000+i, 'To CSV' , "", wx.ITEM_NORMAL)
-						self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(pmenu,'CSV'))
-						subSubMenu.AppendItem(menuItem)
-			
+	def create_Menu4(self,Menu3,sm2,i):
+		#Menu4 = FM.FlatMenu()
+		menuItem = FM.FlatMenuItem(Menu3, 20000+i, "To %s" % conf.dbs[sm2] , "", wx.ITEM_NORMAL)
+		Menu3.AppendItem(menuItem)
+		#self.set_sub_submenu(subSubMenu,1, 'CSV')
+		i +=1	
+
 	def set_vector_btn(self,a,b):	
 		print a,b
 		lbl='%s->%s' % (a,b)
