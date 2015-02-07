@@ -34,6 +34,7 @@ import webbrowser
 import wx.html 
 from tc_lib import sub, send
 from collections import OrderedDict
+
 import __builtin__
 __builtin__.copy_vector = None
 __builtin__.cvarg = None
@@ -3093,33 +3094,81 @@ class NewSessionDialog(wx.Dialog):
 
 
 			apidir= os.path.join(home,aa_dir)
-			api_from = { f[:2] for f in os.listdir(apidir) if os.path.isdir(os.path.join(apidir,f)) and 'CSV' not in f }
-			dbf={'DB':'DB2', 'EX':'Exadata', 'IN', 'MA', 'MY', 'OR', 'PG', 'SL', 'SS', 'SY', 'TT'}
-			pprint(api_from)
-			subMenu = FM.FlatMenu()
+			api_from = [ f for f in os.listdir(apidir) if os.path.isdir(os.path.join(apidir,f)) and 'CSV' not in f ]
+			print api_from
+			api2= list({ f[:2] for f in api_from})
+			api2.sort()
+			api_menu={}
+			for m in api_from:
+				print m
+				if not api_menu.has_key(m[:2]):
+					api_menu[m[:2]]=[]
+				api_menu[m[:2]].append(m)
+			print api_menu
+			#e(0)
+			
+			#dbf={'DB':'DB2', 'EX':'Exadata', 'IN', 'MA', 'MY', 'OR', 'PG', 'SL', 'SS', 'SY', 'TT'}
+			dbf={'OR':'Oracle', 'SS':'SQLServer', 'MA':'MariaDB', 'MY': 'MySQL', 'PG':'PostgreSQL', 'DB':'DB2', 'TT':'TimesTen', 'SL':'SQLite', 'IN':'Informix', 'SY':'Sybase'}
+			
+			#pprint(api_from)
+			
 			# Add sub-menu to main menu
 			i=0
-			for m in api_from:
-				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+i, "From %s" % m, "", wx.ITEM_NORMAL, subMenu)
+			for k in api2:
+				Menu1 = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+i, "From %s" % dbf[k], "", wx.ITEM_NORMAL, Menu1)
 				self._popUpMenu.AppendItem(menuItem)
 				i +=1
-			
-			self.set_submenu(subMenu,0)
+				
+				for sm in api_menu[k]:
+					Menu2 = FM.FlatMenu()
+					menuItem = FM.FlatMenuItem(Menu1, 20000+i, "From %s" % conf.dbs[sm] , "", wx.ITEM_NORMAL, Menu2)
+					Menu1.AppendItem(menuItem)
+					#self.set_sub_submenu(subSubMenu,1, 'CSV')
+					i +=1
+					for k2 in api2:
+						Menu3 = FM.FlatMenu()
+						menuItem = FM.FlatMenuItem(Menu2, 20000+i, "To %s" % dbf[k2], "", wx.ITEM_NORMAL, Menu3)
+						Menu2.AppendItem(menuItem)
+						i +=1
+						for sm2 in api_menu[k2]:
+							#Menu4 = FM.FlatMenu()
+							menuItem = FM.FlatMenuItem(Menu3, 20000+i, "To %s" % conf.dbs[sm2] , "", wx.ITEM_NORMAL)
+							Menu3.AppendItem(menuItem)
+							#self.set_sub_submenu(subSubMenu,1, 'CSV')
+							i +=1
+					
+					
+			if 0:
+				self.set_submenu(subMenu,0)
 
 
-			self._popUpMenu.AppendSeparator()
+				self._popUpMenu.AppendSeparator()
+				
+				subMenu = FM.FlatMenu()
+				##############################################################################
+				menuItem = FM.FlatMenuItem(self._popUpMenu, 20002, "From CSV", "", wx.ITEM_NORMAL, subMenu)
+				self._popUpMenu.AppendItem(menuItem)
+				if 1:
+					#subMenu = FM.FlatMenu()
+					# Create the submenu items and add them 
+					subSubMenu = FM.FlatMenu()
+					menuItem = FM.FlatMenuItem(subMenu, 21000, "To &Oracle", "", wx.ITEM_NORMAL, subSubMenu)
+					subMenu.AppendItem(menuItem)
+					#self.set_sub_submenu(subSubMenu,1, 'CSV')
+					#i=0
+					
+					for k,m in self.mitems.items():							
+						menuItem = FM.FlatMenuItem(subSubMenu, 20000+i, 'To %s' % m , "", wx.ITEM_NORMAL)
+						self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(pmenu,k))
+						subSubMenu.AppendItem(menuItem)
+						i +=1
+					if pmenu not in ('CSV'):
+						subSubMenu.AppendSeparator()
+						menuItem = FM.FlatMenuItem(subSubMenu, 20000+pid*1000+i, 'To CSV' , "", wx.ITEM_NORMAL)
+						self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(pmenu,'CSV'))
+						subSubMenu.AppendItem(menuItem)
 			
-			subMenu = FM.FlatMenu()
-			##############################################################################
-			menuItem = FM.FlatMenuItem(self._popUpMenu, 20002, "From CSV", "", wx.ITEM_NORMAL, subMenu)
-			self._popUpMenu.AppendItem(menuItem)
-			if 1:
-				#subMenu = FM.FlatMenu()
-				# Create the submenu items and add them 
-				subSubMenu = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(subMenu, 21000, "To &Oracle", "", wx.ITEM_NORMAL, subSubMenu)
-				subMenu.AppendItem(menuItem)
-				self.set_sub_submenu(subSubMenu,1, 'CSV')
 	def set_vector_btn(self,a,b):	
 		print a,b
 		lbl='%s->%s' % (a,b)
