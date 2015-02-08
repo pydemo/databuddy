@@ -2952,6 +2952,19 @@ class NewSessionDialog(wx.Dialog):
 		self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnSrcTmplSelected, self.listCtrl)
 		self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnTargTmplSelected, self.targlistCtrl)
 		self.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.OnTargTmplDeselected, self.targlistCtrl)
+		if 1:
+			apidir= os.path.join(home,aa_dir)
+			self.api_from = [ f for f in os.listdir(apidir) if os.path.isdir(os.path.join(apidir,f)) and 'CSV' not in f ]
+			#print api_from
+			self.api2= list({ f[:2] for f in self.api_from})
+			self.api2.sort()
+			self.api_menu={}
+			for m in self.api_from:
+				#print m
+				if not self.api_menu.has_key(m[:2]):
+					self.api_menu[m[:2]]=[]
+				self.api_menu[m[:2]].append(m)
+			#print api_menu		
 		
 	def onSourceObjButton(self, event): 
 		""" 
@@ -3114,18 +3127,7 @@ class NewSessionDialog(wx.Dialog):
 
 
 
-			apidir= os.path.join(home,aa_dir)
-			api_from = [ f for f in os.listdir(apidir) if os.path.isdir(os.path.join(apidir,f)) and 'CSV' not in f ]
-			print api_from
-			api2= list({ f[:2] for f in api_from})
-			api2.sort()
-			api_menu={}
-			for m in api_from:
-				print m
-				if not api_menu.has_key(m[:2]):
-					api_menu[m[:2]]=[]
-				api_menu[m[:2]].append(m)
-			print api_menu
+
 			#e(0)
 			
 			#dbf={'DB':'DB2', 'EX':'Exadata', 'IN', 'MA', 'MY', 'OR', 'PG', 'SL', 'SS', 'SY', 'TT'}
@@ -3135,7 +3137,7 @@ class NewSessionDialog(wx.Dialog):
 			
 			# Add sub-menu to main menu
 			self.i=0
-			print '-'*20, self.recent
+			#print '-'*20, self.recent
 			if 1: #len(self.recent):
 				self.i +=1
 				self.recentMenu = FM.FlatMenu()
@@ -3145,41 +3147,41 @@ class NewSessionDialog(wx.Dialog):
 					(a,b)=r
 					self.i +=1
 					#Menu1 = FM.FlatMenu()
-					menuItem = FM.FlatMenuItem(self.recentMenu, 20000+self.i, "From %s to %s" % (conf.dbs[a],conf.dbs[b]), "", wx.ITEM_NORMAL)
+					menuItem = FM.FlatMenuItem(self.recentMenu, 20000+self.i, "%s --> %s" % (conf.dbs[a],conf.dbs[b]), "", wx.ITEM_NORMAL)
 					self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(a,b))
 					self.recentMenu.AppendItem(menuItem)
 				self._popUpMenu.AppendSeparator()	
-			for k in api2:
+			for k in self.api2:
 				self.i +=1
 				Menu1 = FM.FlatMenu()
 				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, "From %s" % dbf[k], "", wx.ITEM_NORMAL, Menu1)
 				self._popUpMenu.AppendItem(menuItem)
 				
 				
-				for sm in api_menu[k]:
-					if len(api_menu[k])>1:
+				for sm in self.api_menu[k]:
+					if len(self.api_menu)>1:
 						self.i +=1
-						self.create_Menu2(Menu1,sm,api_menu,api2,dbf)
+						self.create_Menu2(Menu1,sm,dbf)
 						
 					else:
-						for k2 in api2:
+						for k2 in self.api2:
 							self.i +=1
-							if len(api_menu[k2])>1:
-								self.create_Menu3(Menu1,k2,api_menu,dbf,from_db=sm)
+							if len(self.api_menu[k2])>1:
+								self.create_Menu3(Menu1,k2,dbf,from_db=sm)
 							else:
-								self.create_Menu4(Menu1,api_menu[k2][0],from_db=sm)
+								self.create_Menu4(Menu1,self.api_menu[k2][0],from_db=sm)
 			self._popUpMenu.AppendSeparator()	
 			for sm in conf.ff:
 				self.i +=1
 				Menu1 = FM.FlatMenu()
 				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, "From %s" % sm, "", wx.ITEM_NORMAL, Menu1)
 				self._popUpMenu.AppendItem(menuItem)	
-				for k2 in api2:
+				for k2 in self.api2:
 					self.i +=1
-					if len(api_menu[k2])>1:
-						self.create_Menu3(Menu1,k2,api_menu,dbf,from_db=sm)
+					if len(self.api_menu[k2])>1:
+						self.create_Menu3(Menu1,k2,dbf,from_db=sm)
 					else:
-						self.create_Menu4(Menu1,api_menu[k2][0],from_db=sm)
+						self.create_Menu4(Menu1,self.api_menu[k2][0],from_db=sm)
 				
 		else:
 			#pprint(dir(self.recentMenu))
@@ -3188,31 +3190,31 @@ class NewSessionDialog(wx.Dialog):
 				(a,b)=r
 				self.i +=1
 				#Menu1 = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(self.recentMenu, 20000+self.i, "From %s to %s" % (conf.dbs[a],conf.dbs[b]), "", wx.ITEM_NORMAL)
+				menuItem = FM.FlatMenuItem(self.recentMenu, 20000+self.i, "%s --> %s" % (conf.dbs[a],conf.dbs[b]), "", wx.ITEM_NORMAL)
 				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(a,b))
 				self.recentMenu.AppendItem(menuItem)
 
-	def create_Menu2(self,Menu1,sm,api_menu,api2,dbf):
+	def create_Menu2(self,Menu1,sm,dbf):
 		self.i +=1
 		Menu2 = FM.FlatMenu()
 		menuItem = FM.FlatMenuItem(Menu1, 20000+self.i, "From %s" % conf.dbs[sm] , "", wx.ITEM_NORMAL, Menu2)
 		Menu1.AppendItem(menuItem)
 		#self.set_sub_submenu(subSubMenu,1, 'CSV')
 		
-		for k2 in api2:
+		for k2 in self.api2:
 			self.i +=1
-			if len(api_menu[k2])>1:
-				self.create_Menu3(Menu2,k2,api_menu,dbf,from_db=sm)
+			if len(self.api_menu[k2])>1:
+				self.create_Menu3(Menu2,k2,dbf,from_db=sm)
 			else:
-				self.create_Menu4(Menu2,api_menu[k2][0],from_db=sm)
+				self.create_Menu4(Menu2,self.api_menu[k2][0],from_db=sm)
 			
-	def create_Menu3(self,Menu2,k2,api_menu,dbf,from_db):
+	def create_Menu3(self,Menu2,k2,dbf,from_db):
 		self.i +=1
 		Menu3 = FM.FlatMenu()
 		menuItem = FM.FlatMenuItem(Menu2, 20000+self.i, "To %s" % dbf[k2], "", wx.ITEM_NORMAL, Menu3)
 		Menu2.AppendItem(menuItem)
 		
-		for sm2 in api_menu[k2]:
+		for sm2 in self.api_menu[k2]:
 			self.i +=1
 			self.create_Menu4(Menu3,sm2,from_db)	
 			
