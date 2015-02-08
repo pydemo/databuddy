@@ -2952,6 +2952,7 @@ class NewSessionDialog(wx.Dialog):
 		self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnSrcTmplSelected, self.listCtrl)
 		self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnTargTmplSelected, self.targlistCtrl)
 		self.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.OnTargTmplDeselected, self.targlistCtrl)
+		self.api_args=None
 		if 1:
 			apidir= os.path.join(home,aa_dir)
 			self.api_from = [ f for f in os.listdir(apidir) if os.path.isdir(os.path.join(apidir,f)) and 'CSV' not in f ]
@@ -3012,7 +3013,8 @@ class NewSessionDialog(wx.Dialog):
 		#from os.path import isfile, join
 		#apifiles = { f for f in os.listdir(to_home) if os.path.isfile(os.path.join(to_home,f)) and 'default' not in f }
 		apimod=import_module(api_file)
-		for f in apimod.aa: 
+		self.api_args=apimod.aa
+		for f in self.api_args: 
 			print f
 			if f not in ('default'):
 				(t_from,t_to) = f.split('.')
@@ -3040,6 +3042,10 @@ class NewSessionDialog(wx.Dialog):
 			self.targlistCtrl.InsertStringItem(0, t)
 		self.create_btn.Enable(False)
 		event.Skip()
+	def get_template(self):
+		src_tmpl=self.listCtrl.GetItemText(self.listCtrl.GetFirstSelected())
+		trg_tmpl=self.targlistCtrl.GetItemText(self.targlistCtrl.GetFirstSelected())
+		return '%s.%s' % (src_tmpl, trg_tmpl)
 	def OnTargTmplSelected(self,event):
 		print str(self.__class__) + " - OnItemSelected"
 		self.create_btn.Enable(True)
@@ -3079,7 +3085,9 @@ class NewSessionDialog(wx.Dialog):
 			self.Warn('Enter session name.')
 			self.tc_sname.SetFocus()	
 		else:
-			send("create_new_session", (self.tc_sname.GetValue(),self.copy_vector) )
+			tmpl=self.get_template()
+			api_args=self.api_args[tmpl]
+			send("create_new_session", (self.tc_sname.GetValue(),self.copy_vector, tmpl,api_args) )
 			self.Close(True)
 	def Warn(self, message, caption = 'Warning!'):
 		dlg = wx.MessageDialog(self, message, caption, wx.OK | wx.ICON_WARNING)
@@ -3263,73 +3271,74 @@ class default_args(wx.Panel):
 		ID_RUN_AT = wx.NewId()
 		#self.SetSizer(sizer)
 		#sizer.Fit(self)
-		args_vbox = wx.BoxSizer(wx.VERTICAL)
+		self.args_vbox = wx.BoxSizer(wx.VERTICAL)
 		args_hbox = wx.BoxSizer(wx.HORIZONTAL)
 		
 		if 1: #Common
 			
-			panel_from = wx.Panel(self)
+			self.core_args_panel = wx.Panel(self)
 			hbox = wx.BoxSizer(wx.HORIZONTAL)
-			fgs = wx.GridBagSizer(4, 4)
+			self.fgs = wx.GridBagSizer(4, 4)
 			#sizer.Add(text1, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
 			#sizer.Add(tc0, pos=(0, 1), span=(1, 3), flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=10)
 			#fgs = wx.FlexGridSizer(3, 4, 9, 20)
 			ttl=['Copy vector','Pool size','Num of shards','Field terminator','Truncate target']
 			#pprint(dir(fgs))
 			
-			txt, txt_ctrl= (wx.StaticText(panel_from, label='Copy vector:'), wx.TextCtrl(panel_from,value='ora11g2ora11g'))
+			txt, txt_ctrl= (wx.StaticText(self.core_args_panel, label='Copy vector:'), wx.TextCtrl(self.core_args_panel,value='ora11g2ora11g'))
 			#txt_ctrl.Value=
 			txt_ctrl.Enable(False)
-			fgs.Add(txt, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-			fgs.Add(txt_ctrl, pos=(0, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-			txt, txt_ctrl= (wx.StaticText(panel_from, label='Field terminator:'), wx.TextCtrl(panel_from, size=(20,-1), value='|'))
-			fgs.Add(txt, pos=(1, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-			fgs.Add(txt_ctrl, pos=(1, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-			txt, txt_ctrl= (wx.StaticText(panel_from, label='Pool size:'), wx.TextCtrl(panel_from, size=(20,-1), value='1'))
-			fgs.Add(txt, pos=(2, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-			fgs.Add(txt_ctrl, pos=(2, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-			txt, txt_ctrl= (wx.StaticText(panel_from, label='Num of shards:'), wx.TextCtrl(panel_from, size=(20,-1), value='1'))
-			fgs.Add(txt, pos=(3, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-			fgs.Add(txt_ctrl, pos=(3, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+			self.fgs.Add(txt, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+			self.fgs.Add(txt_ctrl, pos=(0, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+			txt, txt_ctrl= (wx.StaticText(self.core_args_panel, label='Field terminator:'), wx.TextCtrl(self.core_args_panel, size=(20,-1), value='|'))
+			self.fgs.Add(txt, pos=(1, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+			self.fgs.Add(txt_ctrl, pos=(1, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+			txt, txt_ctrl= (wx.StaticText(self.core_args_panel, label='Pool size:'), wx.TextCtrl(self.core_args_panel, size=(20,-1), value='1'))
+			self.fgs.Add(txt, pos=(2, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+			self.fgs.Add(txt_ctrl, pos=(2, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+			txt, txt_ctrl= (wx.StaticText(self.core_args_panel, label='Num of shards:'), wx.TextCtrl(self.core_args_panel, size=(20,-1), value='1'))
+			self.fgs.Add(txt, pos=(3, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+			self.fgs.Add(txt_ctrl, pos=(3, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 
 			#sb = wx.StaticBox(panel_from, label="Truncate Target:")
-			txt=wx.StaticText(panel_from, label='Truncate target:')
+			txt=wx.StaticText(self.core_args_panel, label='Truncate target:')
 			ynbox =  wx.BoxSizer( wx.HORIZONTAL)
-			ynbox.Add(wx.RadioButton(panel_from, label="Yes",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=0)
-			ynbox.Add(wx.RadioButton(panel_from, label="No"), flag=wx.LEFT|wx.TOP, border=0)
-			fgs.Add(txt, pos=(0, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=5)
-			fgs.Add(ynbox, pos=(0, 3), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=5)
+			ynbox.Add(wx.RadioButton(self.core_args_panel, label="Yes",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=0)
+			ynbox.Add(wx.RadioButton(self.core_args_panel, label="No"), flag=wx.LEFT|wx.TOP, border=0)
+			self.fgs.Add(txt, pos=(0, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=5)
+			self.fgs.Add(ynbox, pos=(0, 3), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=5)
 			if 0:
-				fgs.AddMany([(txt, 0, wx.EXPAND, 5), (txt_ctrl)])
-				txt, txt_ctrl= (wx.StaticText(panel_from, label='Field terminator:'), wx.TextCtrl(panel_from, size=(20,-1), value='|'))
-				fgs.AddMany([(txt, 0, wx.EXPAND, 5), (txt_ctrl)])
-				txt, txt_ctrl= (wx.StaticText(panel_from, label='Pool size:'), wx.TextCtrl(panel_from, size=(20,-1), value='1'))
-				fgs.AddMany([(txt, 0, wx.EXPAND, 5), (txt_ctrl)])
+				self.fgs.AddMany([(txt, 0, wx.EXPAND, 5), (txt_ctrl)])
+				txt, txt_ctrl= (wx.StaticText(self.core_args_panel, label='Field terminator:'), wx.TextCtrl(self.core_args_panel, size=(20,-1), value='|'))
+				self.fgs.AddMany([(txt, 0, wx.EXPAND, 5), (txt_ctrl)])
+				txt, txt_ctrl= (wx.StaticText(self.core_args_panel, label='Pool size:'), wx.TextCtrl(self.core_args_panel, size=(20,-1), value='1'))
+				self.fgs.AddMany([(txt, 0, wx.EXPAND, 5), (txt_ctrl)])
 				
-				sb = wx.StaticBox(panel_from, label="Truncate Target")
+				sb = wx.StaticBox(self.core_args_panel, label="Truncate Target")
 			
 				ynbox =  wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-				ynbox.Add(wx.RadioButton(panel_from, label="Yes",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=0)
-				ynbox.Add(wx.RadioButton(panel_from, label="No"), flag=wx.LEFT|wx.TOP, border=0)
+				ynbox.Add(wx.RadioButton(self.core_args_panel, label="Yes",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=0)
+				ynbox.Add(wx.RadioButton(self.core_args_panel, label="No"), flag=wx.LEFT|wx.TOP, border=0)
 				
 			
 				txt_ctrl= ( ynbox)
-				fgs.AddMany([(txt_ctrl, 0, wx.EXPAND, 5)])
-				txt, txt_ctrl= (wx.StaticText(panel_from, label='Num of shards:'), wx.TextCtrl(panel_from, size=(20,-1), value='1'))
-				fgs.AddMany([(txt, 0, wx.EXPAND, 5), (txt_ctrl)])
+				self.fgs.AddMany([(txt_ctrl, 0, wx.EXPAND, 5)])
+				txt, txt_ctrl= (wx.StaticText(self.core_args_panel, label='Num of shards:'), wx.TextCtrl(self.core_args_panel, size=(20,-1), value='1'))
+				self.fgs.AddMany([(txt, 0, wx.EXPAND, 5), (txt_ctrl)])
 			
 			
 			
 			
 			
-			hbox.Add(fgs, 1, flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=5)	
-			panel_from.SetSizer(hbox)
-			sb_from = wx.StaticBox(self, label="Common")
-			boxsizer = wx.StaticBoxSizer(sb_from, wx.VERTICAL)
-			boxsizer.Add(panel_from, flag=wx.LEFT|wx.TOP, border=5)
+			hbox.Add(self.fgs, 1, flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=5)	
+			self.core_args_panel.SetSizer(hbox)
+			
+			self.sb_common = wx.StaticBox(self, label="Common")
+			boxsizer = wx.StaticBoxSizer(self.sb_common, wx.VERTICAL)
+			boxsizer.Add(self.core_args_panel, flag=wx.LEFT|wx.TOP, border=5)
 			#sizer.Add(boxsizer, pos=(3, 0), span=(1, 3), flag=wx.TOP|wx.EXPAND, border=5)
 			
-			args_vbox.Add(boxsizer,1, flag=wx.ALL|wx.EXPAND, border=5)
+			self.args_vbox.Add(boxsizer,1, flag=wx.ALL|wx.EXPAND, border=5)
 		if 1: #Source
 			
 			panel_from = wx.Panel(self)
@@ -3387,9 +3396,80 @@ class default_args(wx.Panel):
 			boxsizer.Add(panel_from, flag=wx.LEFT|wx.TOP)
 			#sizer.Add(boxsizer, pos=(3, 3),  flag=wx.TOP|wx.EXPAND, border=5)
 			args_hbox.Add(boxsizer, 1, flag=wx.ALL|wx.EXPAND, border=5)
-		args_vbox.Add(args_hbox,0,flag=wx.ALL|wx.EXPAND|wx.GROW)
-		self.SetSizer(args_vbox)
+		self.args_vbox.Add(args_hbox,0,flag=wx.ALL|wx.EXPAND|wx.GROW)
+		self.SetSizer(self.args_vbox)
 		self.Fit()
+	def create_cargs(self, cargs):
+		print 'recreate cargs'
+		pprint(cargs)
+		if 1:
+			self.args_vbox = wx.BoxSizer(wx.VERTICAL)
+			self.core_args_panel = wx.Panel(self)
+			hbox = wx.BoxSizer(wx.HORIZONTAL)
+			self.fgs = wx.GridBagSizer(4, 4)
+			#sizer.Add(text1, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
+			#sizer.Add(tc0, pos=(0, 1), span=(1, 3), flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=10)
+			#fgs = wx.FlexGridSizer(3, 4, 9, 20)
+			ttl=['Copy vector','Pool size','Num of shards','Field terminator','Truncate target']
+			#pprint(dir(fgs))
+			
+			txt, txt_ctrl= (wx.StaticText(self.core_args_panel, label='Copy vector11:'), wx.TextCtrl(self.core_args_panel,value='ora11g2ora11g'))
+			#txt_ctrl.Value=
+			txt_ctrl.Enable(False)
+			self.fgs.Add(txt, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+			self.fgs.Add(txt_ctrl, pos=(0, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+			txt, txt_ctrl= (wx.StaticText(self.core_args_panel, label='Field terminator:'), wx.TextCtrl(self.core_args_panel, size=(20,-1), value='|'))
+			self.fgs.Add(txt, pos=(1, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+			self.fgs.Add(txt_ctrl, pos=(1, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+			txt, txt_ctrl= (wx.StaticText(self.core_args_panel, label='Pool size:'), wx.TextCtrl(self.core_args_panel, size=(20,-1), value='1'))
+			self.fgs.Add(txt, pos=(2, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+			self.fgs.Add(txt_ctrl, pos=(2, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+			txt, txt_ctrl= (wx.StaticText(self.core_args_panel, label='Num of shards:'), wx.TextCtrl(self.core_args_panel, size=(20,-1), value='1'))
+			self.fgs.Add(txt, pos=(3, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+			self.fgs.Add(txt_ctrl, pos=(3, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+
+			#sb = wx.StaticBox(panel_from, label="Truncate Target:")
+			txt=wx.StaticText(self.core_args_panel, label='Truncate target:')
+			ynbox =  wx.BoxSizer( wx.HORIZONTAL)
+			ynbox.Add(wx.RadioButton(self.core_args_panel, label="Yes",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=0)
+			ynbox.Add(wx.RadioButton(self.core_args_panel, label="No"), flag=wx.LEFT|wx.TOP, border=0)
+			self.fgs.Add(txt, pos=(0, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=5)
+			self.fgs.Add(ynbox, pos=(0, 3), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=5)
+			if 0:
+				self.fgs.AddMany([(txt, 0, wx.EXPAND, 5), (txt_ctrl)])
+				txt, txt_ctrl= (wx.StaticText(self.core_args_panel, label='Field terminator:'), wx.TextCtrl(self.core_args_panel, size=(20,-1), value='|'))
+				self.fgs.AddMany([(txt, 0, wx.EXPAND, 5), (txt_ctrl)])
+				txt, txt_ctrl= (wx.StaticText(self.core_args_panel, label='Pool size:'), wx.TextCtrl(self.core_args_panel, size=(20,-1), value='1'))
+				self.fgs.AddMany([(txt, 0, wx.EXPAND, 5), (txt_ctrl)])
+				
+				sb = wx.StaticBox(self.core_args_panel, label="Truncate Target")
+			
+				ynbox =  wx.StaticBoxSizer(sb, wx.HORIZONTAL)
+				ynbox.Add(wx.RadioButton(self.core_args_panel, label="Yes",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=0)
+				ynbox.Add(wx.RadioButton(self.core_args_panel, label="No"), flag=wx.LEFT|wx.TOP, border=0)
+				
+			
+				txt_ctrl= ( ynbox)
+				self.fgs.AddMany([(txt_ctrl, 0, wx.EXPAND, 5)])
+				txt, txt_ctrl= (wx.StaticText(self.core_args_panel, label='Num of shards:'), wx.TextCtrl(self.core_args_panel, size=(20,-1), value='1'))
+				self.fgs.AddMany([(txt, 0, wx.EXPAND, 5), (txt_ctrl)])
+			
+			
+			
+			
+			
+			hbox.Add(self.fgs, 1, flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=5)	
+			self.core_args_panel.SetSizer(hbox)
+			
+			self.sb_common = wx.StaticBox(self, label="Common")
+			boxsizer = wx.StaticBoxSizer(self.sb_common, wx.VERTICAL)
+			boxsizer.Add(self.core_args_panel, flag=wx.LEFT|wx.TOP, border=5)
+			#sizer.Add(boxsizer, pos=(3, 0), span=(1, 3), flag=wx.TOP|wx.EXPAND, border=5)
+			
+			self.args_vbox.Add(boxsizer,1, flag=wx.ALL|wx.EXPAND, border=5)
+			#self.args_vbox=None
+			self.SetSizer(self.args_vbox)
+			self.Fit()
 	def get_cmd(self,transport):
 	
 		return r"""%s ^
@@ -3613,24 +3693,82 @@ class DataBuddy(wx.Frame):
 		self.Refresh()
 		self.Center()
 		self.Show(True)
+		(self.cargs,self.fargs,self.targs)=(None, None, None)
 	def onNewSession(self, data, extra1, extra2=None):		
-		(sname,copy_vector) = data
-		print sname
+		(sname,copy_vector,tmpl,api_args) = data
+		print sname,copy_vector,tmpl
+		pprint(api_args)
 		self.copy_vector=copy_vector
 		self.tc_session_name.SetValue(sname)
 		#self.txt_transport.SetLabel(tloc[0])
 
 	def OnNewButton(self, event):
-		dlg = NewSessionDialog(self, -1, "Defaults for new session.", size=(250, 250),
-						 #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
-						 style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
-						 useMetal=False, plist=None
-						 )
-		#dlg.CenterOnScreen()
-		# this does not return until the dialog is closed.
-		val = dlg.ShowModal()
-		print val
+		if 0:
+			dlg = NewSessionDialog(self, -1, "Defaults for new session.", size=(250, 250),
+							 #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
+							 style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
+							 useMetal=False, plist=None
+							 )
+			#dlg.CenterOnScreen()
+			# this does not return until the dialog is closed.
+			val = dlg.ShowModal()
+			print val
+		else:
+			(sname,copy_vector,tmpl) = ('dsfdsfdsf', ['SLITE', 'INFOR'], 'SLITE_ParallelQueryDir.INFOR_Table') 
+			print sname,copy_vector,tmpl
+			api_args=[{'copy_vector': ('-w',
+                  '--copy_vector',
+                  'dbtde2maria',
+                  'Data copy direction.'),
+  'field_term': ('-t', '--field_term', '"|"', 'Field terminator.'),
+  'num_of_shards': ('-r', '--num_of_shards', 3, 'Number of shards.'),
+  'pool_size': ('-o', '--pool_size', 3, 'Pool size.')},
+ {'from_db_name': ('-b',
+                   '--from_db_name',
+                   '"SAMPLE"',
+                   'DB2 Developer Edition source database.'),
+  'from_db_server': ('-n',
+                     '--from_db_server',
+                     '"DB2"',
+                     'DB2 Developer Edition source instance name.'),
+  'from_passwd': ('-x',
+                  '--from_passwd',
+                  '"198Morgan"',
+                  'DB2 Developer Edition source user password.'),
+  'from_table': ('-c', '--from_table', 'Timestamp_test_from', 'From table.'),
+  'from_user': ('-j',
+                '--from_user',
+                '"ALEX_BUZ"',
+                'DB2 Developer Edition source user.'),
+  'source_client_home': ('-z',
+                         '--source_client_home',
+                         '"C:\\Program Files (x86)\\IBM\\SQLLIB_01\\BIN"',
+                         'Path to DB2 Developer Edition client home.')},
+ {'target_client_home': ('-Z',
+                         '--target_client_home',
+                         '"C:\\Program Files\\MariaDB 10.0\\bin"',
+                         'Path to mysql client home.'),
+  'to_db_name': ('-d', '--to_db_name', '"test"', 'Target database.'),
+  'to_db_server': ('-s',
+                   '--to_db_server',
+                   '"localhost"',
+                   'Target db instance name.'),
+  'to_passwd': ('-p',
+                '--to_passwd',
+                '"maria_pwd"',
+                'Target db user password.'),
+  'to_table': ('-a', '--to_table', 'Timestamp_test_to', 'Target table.'),
+  'to_user': ('-u', '--to_user', '"root"', 'Target MariaDB db user.')}]
+		(self.cargs,self.fargs,self.targs)= api_args
+		
+		print len(self.cargs)
+		print len(self.fargs)
+		print len(self.targs)
+		self.args_panel.create_cargs(self.cargs)
+		
 
+			
+  
 	def OnButtonShowInFolder(self, event):
 		# 
 		btn = event.GetEventObject()
