@@ -37,7 +37,7 @@ rel_date=rel.ts
 citi=False
 if_hg=False #hourglass
 
-ff=('CSV') #file v.s. db 
+ff=('CSV',) #file v.s. db 
 
 def getRegSize():
 	return rel.bin

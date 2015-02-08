@@ -34,6 +34,7 @@ import webbrowser
 import wx.html 
 from tc_lib import sub, send
 from collections import OrderedDict
+import imp
 
 import __builtin__
 __builtin__.copy_vector = None
@@ -67,7 +68,18 @@ ID_ABOUT = wx.NewId()
 LOAD_FILE_ID = wx.NewId()
 update_cache=True
 dBtn='N/A'
+def import_module(filepath):
+	class_inst = None
+	#expected_class = 'MyClass'
 
+	mod_name,file_ext = os.path.splitext(os.path.split(filepath)[-1])
+	assert os.path.isfile(filepath), 'File %s does not exists.' % filepath
+	if file_ext.lower() == '.py':
+		py_mod = imp.load_source(mod_name, filepath)
+
+	elif file_ext.lower() == '.pyc':
+		py_mod = imp.load_compiled(mod_name, filepath)
+	return py_mod
 class UltListCtrl(ULC.UltimateListCtrl):
 
 	def __init__(self, parent, log):
@@ -524,6 +536,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		self._histMenu=None
 		self._favMenu=None
 		self._popUpMenu = {}
+		self._recentMenu = {}
 		(self.row, self.col) =pos
 		self.pos=pos
 		self.panel_pos=panel_pos
@@ -954,7 +967,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 
 	def CreatePopupMenu(self,loc):
 
-		if 1 or not self._popUpMenu.has_key(loc):
+		if self._popUpMenu.has_key(loc):
 			#print self.list.data[loc]
 			pmenu=FM.FlatMenu()
 			self._popUpMenu[loc] = pmenu
@@ -2724,6 +2737,7 @@ class NewSessionDialog(wx.Dialog):
 		self.parent=parent
 		self.plist=plist
 		self._popUpMenu = None
+		self.recent=[]
 		pre = wx.PreDialog()
 		pre.SetExtraStyle(wx.DIALOG_EX_CONTEXTHELP)
 		pre.Create(parent, ID, title, pos, size, style)
@@ -2926,14 +2940,7 @@ class NewSessionDialog(wx.Dialog):
 		#self.Bind(wx.EVT_BUTTON, self.OnTrial, id=ID_TRIAL)
 		sizer.Add(btnsizer, 0, wx.EXPAND|wx.ALL, 5)
 
-		self.mitems=OrderedDict()
-		self.mitems['ORA11G']='Oracle 11G'
-		self.mitems['ORA10G']='Oracle 10G'
-		self.mitems['ORA9I']='Oracle 9i'
-		self.mitems['ORA8I']='Oracle 8i'
-		self.mitems['ORA73']='Oracle 7.3'
-		self.mitems['ORAXE']='OracleXE'
-		self.mitems['EXAD']='Exadata'
+
 		self.SetSizer(sizer)
 		#sizer.Fit(self)
 		#self.SetSize((600,400))
@@ -2941,9 +2948,11 @@ class NewSessionDialog(wx.Dialog):
 		(l,w) =self.parent.GetClientSizeTuple()
 		dl,dw= 600,400
 		self.SetDimensions(x+(l-dl)/2, y+(w-dw)/2, dl,dw)
+		self.i=0 #menu counter
 		self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnSrcTmplSelected, self.listCtrl)
 		self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnTargTmplSelected, self.targlistCtrl)
 		self.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.OnTargTmplDeselected, self.targlistCtrl)
+		
 	def onSourceObjButton(self, event): 
 		""" 
 		Source object filter
@@ -2972,28 +2981,37 @@ class NewSessionDialog(wx.Dialog):
 			
 	def refresh_src_list(self):
 		assert self.copy_vector, 'copy_vector is not set.'
+		self.listCtrl.ClearAll()
+		self.listCtrl.InsertColumn(0, 'Source Template')
+		self.listCtrl.SetColumnWidth(0, 320)
+		self.targlistCtrl.ClearAll()
+		self.targlistCtrl.InsertColumn(0, 'Target Template')	
+		self.targlistCtrl.SetColumnWidth(0, 320)	
+		self.tmpl={}
 		from_to = self.copy_vector
 		api_home=os.path.join(home,aa_dir)
 		from_home=os.path.join(api_home,from_to[0])
-		to_home=os.path.join(from_home,from_to[1])
+		#to_home=os.path.join(from_home,from_to[1])
 		assert os.path.isdir(from_home), '"From" args_api %s does not exists in %s' % (from_to[0],api_home)
-		assert os.path.isdir(to_home), '"To" args_api %s does not exists in %s' % (from_to[1], from_home)
+		api_file=os.path.join(from_home,'%s-%s.py' % tuple(from_to))
+		assert os.path.isfile(api_file), 'api_file %s does not exists.' % (api_file)
 		#from os import listdir
 		#from os.path import isfile, join
-		apifiles = { f for f in os.listdir(to_home) if os.path.isfile(os.path.join(to_home,f)) and 'default' not in f }
-		
-		for f in apifiles: 
+		#apifiles = { f for f in os.listdir(to_home) if os.path.isfile(os.path.join(to_home,f)) and 'default' not in f }
+		apimod=import_module(api_file)
+		for f in apimod.aa: 
 			print f
-			(t_from,t_to,_) = f.split('.')
-			if not self.tmpl.has_key(t_from): self.tmpl[t_from]=[]
-			self.tmpl[t_from].append(t_to)
+			if f not in ('default'):
+				(t_from,t_to) = f.split('.')
+				if not self.tmpl.has_key(t_from): self.tmpl[t_from]=[]
+				self.tmpl[t_from].append(t_to)
 		#pprint(tmpl)
 		#self.plist={'ORA_QueryFile':('Copy','Oracle 11G','Table','Yes','Yes','Yes','Yes'),}
+		
 		for t in self.tmpl.keys():
 			self.listCtrl.InsertStringItem(0, t)
-			if 0:
-				for i in range(len(self.tmpl.keys())):
-					self.listCtrl.SetStringItem(0, i+1, t)
+		self.create_btn.Enable(False)
+
 	def OnSrcTmplSelected(self,event):
 		print str(self.__class__) + " - OnItemSelected"
 		currentItem = event.m_itemIndex
@@ -3003,8 +3021,11 @@ class NewSessionDialog(wx.Dialog):
         #    print item
 		self.targlistCtrl.InsertColumn(0, 'Target Template')	
 		self.targlistCtrl.SetColumnWidth(0, 320)
+		print src_val
+		#print self.tmpl[src_val]
 		for t in self.tmpl[src_val]:
 			self.targlistCtrl.InsertStringItem(0, t)
+		self.create_btn.Enable(False)
 		event.Skip()
 	def OnTargTmplSelected(self,event):
 		print str(self.__class__) + " - OnItemSelected"
@@ -3089,7 +3110,7 @@ class NewSessionDialog(wx.Dialog):
 
 			# First we create the sub-menu item
 			
-			subSubMenu = FM.FlatMenu()
+			#subSubMenu = FM.FlatMenu()
 
 
 
@@ -3113,50 +3134,99 @@ class NewSessionDialog(wx.Dialog):
 			#pprint(api_from)
 			
 			# Add sub-menu to main menu
-			i=0
+			self.i=0
+			print '-'*20, self.recent
+			if 1: #len(self.recent):
+				self.i +=1
+				self.recentMenu = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, "Recent", "", wx.ITEM_NORMAL, self.recentMenu)
+				self._popUpMenu.AppendItem(menuItem)				
+				for r in self.recent:
+					(a,b)=r
+					self.i +=1
+					#Menu1 = FM.FlatMenu()
+					menuItem = FM.FlatMenuItem(self.recentMenu, 20000+self.i, "From %s to %s" % (conf.dbs[a],conf.dbs[b]), "", wx.ITEM_NORMAL)
+					self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(a,b))
+					self.recentMenu.AppendItem(menuItem)
+				self._popUpMenu.AppendSeparator()	
 			for k in api2:
+				self.i +=1
 				Menu1 = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+i, "From %s" % dbf[k], "", wx.ITEM_NORMAL, Menu1)
+				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, "From %s" % dbf[k], "", wx.ITEM_NORMAL, Menu1)
 				self._popUpMenu.AppendItem(menuItem)
-				i +=1
+				
 				
 				for sm in api_menu[k]:
 					if len(api_menu[k])>1:
-						self.create_Menu2(Menu1,sm,i,api_menu,api2,dbf)
+						self.i +=1
+						self.create_Menu2(Menu1,sm,api_menu,api2,dbf)
+						
 					else:
 						for k2 in api2:
+							self.i +=1
 							if len(api_menu[k2])>1:
-								self.create_Menu3(Menu1,k2,i,api_menu,dbf)
+								self.create_Menu3(Menu1,k2,api_menu,dbf,from_db=sm)
 							else:
-								self.create_Menu4(Menu1,api_menu[k2][0],i)
-								
+								self.create_Menu4(Menu1,api_menu[k2][0],from_db=sm)
+			self._popUpMenu.AppendSeparator()	
+			for sm in conf.ff:
+				self.i +=1
+				Menu1 = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, "From %s" % sm, "", wx.ITEM_NORMAL, Menu1)
+				self._popUpMenu.AppendItem(menuItem)	
+				for k2 in api2:
+					self.i +=1
+					if len(api_menu[k2])>1:
+						self.create_Menu3(Menu1,k2,api_menu,dbf,from_db=sm)
+					else:
+						self.create_Menu4(Menu1,api_menu[k2][0],from_db=sm)
+				
+		else:
+			#pprint(dir(self.recentMenu))
+			self.recentMenu.Clear()
+			for r in reversed(self.recent):
+				(a,b)=r
+				self.i +=1
+				#Menu1 = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(self.recentMenu, 20000+self.i, "From %s to %s" % (conf.dbs[a],conf.dbs[b]), "", wx.ITEM_NORMAL)
+				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(a,b))
+				self.recentMenu.AppendItem(menuItem)
 
-	def create_Menu2(self,Menu1,sm,i,api_menu,api2,dbf):
-		
+	def create_Menu2(self,Menu1,sm,api_menu,api2,dbf):
+		self.i +=1
 		Menu2 = FM.FlatMenu()
-		menuItem = FM.FlatMenuItem(Menu1, 20000+i, "From %s" % conf.dbs[sm] , "", wx.ITEM_NORMAL, Menu2)
+		menuItem = FM.FlatMenuItem(Menu1, 20000+self.i, "From %s" % conf.dbs[sm] , "", wx.ITEM_NORMAL, Menu2)
 		Menu1.AppendItem(menuItem)
 		#self.set_sub_submenu(subSubMenu,1, 'CSV')
-		i +=1
+		
 		for k2 in api2:
+			self.i +=1
 			if len(api_menu[k2])>1:
-				self.create_Menu3(Menu2,k2,i,api_menu,dbf)
+				self.create_Menu3(Menu2,k2,api_menu,dbf,from_db=sm)
 			else:
-				self.create_Menu4(Menu2,api_menu[k2][0],i)
-	def create_Menu3(self,Menu2,k2,i,api_menu,dbf):
+				self.create_Menu4(Menu2,api_menu[k2][0],from_db=sm)
+			
+	def create_Menu3(self,Menu2,k2,api_menu,dbf,from_db):
+		self.i +=1
 		Menu3 = FM.FlatMenu()
-		menuItem = FM.FlatMenuItem(Menu2, 20000+i, "To %s" % dbf[k2], "", wx.ITEM_NORMAL, Menu3)
+		menuItem = FM.FlatMenuItem(Menu2, 20000+self.i, "To %s" % dbf[k2], "", wx.ITEM_NORMAL, Menu3)
 		Menu2.AppendItem(menuItem)
-		i +=1
+		
 		for sm2 in api_menu[k2]:
-			self.create_Menu4(Menu3,sm2,i)	
+			self.i +=1
+			self.create_Menu4(Menu3,sm2,from_db)	
+			
 
-	def create_Menu4(self,Menu3,sm2,i):
+	def create_Menu4(self,Menu3,sm2,from_db):
 		#Menu4 = FM.FlatMenu()
-		menuItem = FM.FlatMenuItem(Menu3, 20000+i, "To %s" % conf.dbs[sm2] , "", wx.ITEM_NORMAL)
+		self.i +=1
+		
+		menuItem = FM.FlatMenuItem(Menu3, 20000+self.i, "To %s" % conf.dbs[sm2] , "", wx.ITEM_NORMAL)
+		#print from_db,sm2
+		self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(from_db,sm2))
 		Menu3.AppendItem(menuItem)
 		#self.set_sub_submenu(subSubMenu,1, 'CSV')
-		i +=1	
+			
 
 	def set_vector_btn(self,a,b):	
 		print a,b
@@ -3167,36 +3237,16 @@ class NewSessionDialog(wx.Dialog):
 
 	def OnMenu(self, event, params):
 		(a,b) = params
-		self.set_vector_btn(a,b)				
-
-	def set_submenu(self,subMenu,pid):
+		if (a,b) not in self.recent:
+			self.recent.append((a,b))
+		print '###########', self.recent
+		self.set_vector_btn(a,b)
+		self.create_btn.Enable(False)
 		
 		
-		#print items
-		i=0
-		for k,m in self.mitems.items():
-			#m=items[items.keys()[i]]
-			print k,m 
-			subSubMenu = FM.FlatMenu()
-			menuItem = FM.FlatMenuItem(subMenu, 20000+pid*100+i, "From %s" % m, "", wx.ITEM_NORMAL, subSubMenu)
-			subMenu.AppendItem(menuItem)
-			self.set_sub_submenu(subSubMenu,i,k)
-			i +=1
+		
 
-				
-	def set_sub_submenu(self,subSubMenu,pid, pmenu):
-		# Create the submenu items and add them 
-		i=0
-		for k,m in self.mitems.items():			
-			menuItem = FM.FlatMenuItem(subSubMenu, 20000+pid*1000+i, 'To %s' % m , "", wx.ITEM_NORMAL)
-			self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(pmenu,k))
-			subSubMenu.AppendItem(menuItem)
-			i +=1
-		if pmenu not in ('CSV'):
-			subSubMenu.AppendSeparator()
-			menuItem = FM.FlatMenuItem(subSubMenu, 20000+pid*1000+i, 'To CSV' , "", wx.ITEM_NORMAL)
-			self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(pmenu,'CSV'))
-			subSubMenu.AppendItem(menuItem)
+
 	def gen_bind(self, type, instance, handler, *args, **kwargs):
 		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)
 
