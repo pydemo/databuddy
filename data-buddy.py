@@ -8,7 +8,7 @@ __author__ = "Alex Buzunov"
 __copyright__ = "Copyright 2015, SequelWorks Inc."
 __credits__ = []
 __license__ = "GPL"
-__title__ = "data-buddy"
+__title__ = "CSV*Loader"
 __version__ = "1.0.1"
 __maintainer__ = "Alex Buzunov"
 __email__ = "alexbuzunov@gmail.com"
@@ -2606,7 +2606,7 @@ class SessionListCtrlPanelManager(wx.Panel):
 		#self.nb.AddPage(tmpl,'Templates')
 		
 		self.nb.SetSelection(0)
-		
+		self.nb.EnableTab(0,False)
 		self.sizer = wx.BoxSizer(wx.VERTICAL)
 		self.sizer.Add(self.nb, 1, wx.GROW|wx.EXPAND|wx.ALL, 0)
 		self.SetSizer(self.sizer)
@@ -3909,7 +3909,7 @@ class DataBuddy(wx.Frame):
 		sizer.Add(self.btn_show, pos=(9, 2),flag=wx.BOTTOM|wx.ALIGN_RIGHT)
 		self.btn_show.Enable(False)
 
-		self.btn_run = wx.Button(panel, label='Run')
+		self.btn_run = wx.Button(panel, label='Load')
 		self.btn_run.Bind(wx.EVT_BUTTON, self.OnButtonRun)
 		sizer.Add(self.btn_run, pos=(9, 3),flag=wx.BOTTOM|wx.ALIGN_RIGHT)
 		self.btn_run.Enable(False)
@@ -3987,8 +3987,9 @@ class DataBuddy(wx.Frame):
 		self.btn_copy_vector.SetLabel('%s -> %s' % (conf.dbs[cv[0]], conf.dbs[cv[1]]))
 	def setTemplates(self,tmpl):
 		a,b=tmpl.split('.')
-		self.btn_targett.SetLabel(a)
-		self.btn_sourcet.SetLabel(b)
+		self.btn_sourcet.SetLabel(a)
+		self.btn_targett.SetLabel(b)
+		
 	def OnNewButton(self, event):
 		if 0:
 			dlg = NewSessionDialog(self, -1, "Defaults for new session.", size=(250, 250),
@@ -4293,11 +4294,12 @@ class DataBuddy(wx.Frame):
 		
 		from wx.lib.wordwrap import wordwrap
 		info = wx.AboutDialogInfo()
-		info.Name = "data-buddy"
+		info.Name = "CSV*Loader"
 		info.Version = "0.0.1 Beta"
 		info.Copyright = "(C) 2015 SequelWorks Inc."
 		info.Description = wordwrap(
-			'This is session manager for  <b><a href="https://github.com/DataMigrator/DataMigrator-for-Oracle">DataMigrator</a></b>.</p>',
+			#'This is session manager for  <b><a href="https://github.com/DataMigrator/DataMigrator-for-Oracle">DataMigrator</a></b>.</p>',
+			'<p>Loads CSV dir file''s data into Oracle table .</p>',
 			350, wx.ClientDC(self.panel))
 		info.WebSite = ("https://github.com/alexbuz", "My Github")
 		info.Developers = ["Alex Buzunov"]
@@ -4315,14 +4317,17 @@ class AboutDlg(wx.Frame):
 	def __init__(self, parent):
 		wx.Frame.__init__(self, parent, wx.ID_ANY, title="About", size=(400,400))
 		html = wxHTML(self)
+		page="""
+<h2>About %s</h2>						
+<p>Created in Jan. 2015 by %s.</p>
+<p>Loads multiple CSV files' data into Oracle 11G table</p>
+<p><b>Software used in making this tool:</h3></p>
+<p><b><a href="http://www.python.org">Python 2.7</a></b></p>
+<p><b><a href="http://www.wxpython.org">wxPython 2.8</a></b></p>
+		""" % (__title__, __author__)
+		
 		html.SetPage(
-			''
-			"<h2>About data-buddy</h2>"
-			'<p>Session manager for <b><a href="https://github.com/DataMigrator/DataMigrator-for-Oracle">DataMigrator</a></b>.</p>'
-			'<p>Created in Jan. 2015 by Alex Buzunov.</p>'
-			"<p><b>Software used in making this tool:</h3></p>"
-			'<p><b><a href="http://www.python.org">Python 2.7</a></b></p>'
-			'<p><b><a href="http://www.wxpython.org">wxPython 2.8</a></b></p>'
+			page
 			)
 		self.Center()
 		self.SetSize((300,300))
