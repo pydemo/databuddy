@@ -3806,7 +3806,7 @@ class DataBuddy(wx.Frame):
 		if 1: #Type
 			sb = wx.StaticBox(panel, label="Type")
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			text1 = wx.StaticText(panel, label="n/a			")
+			text1 = wx.StaticText(panel, label="CSV_Dir->Table")
 			boxsizer.Add(text1, flag=wx.LEFT|wx.TOP, border=5)
 						
 			sizer.Add(boxsizer, pos=(2, 0),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=1)	
@@ -4118,11 +4118,19 @@ class DataBuddy(wx.Frame):
 		#create bat file
 		ts=time.strftime('%Y%m%d_%H%M%S')
 		dirname=os.path.join(home,'run')
-		fname = os.path.join(dirname, '%s_%s.py' % (self.tc_session_name.GetValue(),ts))
+		fname = os.path.join(dirname, '%s_%s.bat' % (self.tc_session_name.GetValue(),ts))
 		if not os.path.isdir(dirname):
 			os.makedirs(dirname)
 		f=open(fname,'w')
-		f.write(self.cmd)
+		cmd=self.args_panel.get_cmd(self.transport)
+		cmd=cmd.replace('csv2ora11g','csv2ora')
+		
+		#print cmd
+		if_yes=self.send_yes.GetValue()
+		yes=''
+		if if_yes:
+			yes='echo y|'		
+		f.write('%s%s' % (yes,cmd))
 		f.close()
 			
 		
