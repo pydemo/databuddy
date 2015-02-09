@@ -2881,39 +2881,43 @@ class NewSessionDialog(wx.Dialog):
 		if 1:
 			sb = wx.StaticBox(self, label="Source Object")
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			
-			self.rb_so_query=wx.RadioButton(self, label="Query",style=wx.RB_GROUP)
-			boxsizer.Add(self.rb_so_query, flag=wx.LEFT|wx.TOP, border=5)
-			self.rb_so_query.Bind(wx.EVT_RADIOBUTTON, self.onSourceObjButton)
-			
-			self.rb_so_table=wx.RadioButton(self, label="Table")
-			boxsizer.Add(self.rb_so_table, flag=wx.LEFT|wx.TOP, border=5)
-			self.rb_so_table.Bind(wx.EVT_RADIOBUTTON, self.onSourceObjButton)
-			
-			self.rb_so_part=wx.RadioButton(self, label="Partition")
-			boxsizer.Add(self.rb_so_part, flag=wx.LEFT|wx.TOP, border=5)
-			self.rb_so_part.Bind(wx.EVT_RADIOBUTTON, self.onSourceObjButton)
-			
-			self.rb_so_spart=wx.RadioButton(self, label="Sub-Partition")
-			boxsizer.Add(self.rb_so_spart, flag=wx.LEFT|wx.TOP, border=5)
-			self.rb_so_spart.Bind(wx.EVT_RADIOBUTTON, self.onSourceObjButton)
-			
-			if 0:
-				rb=wx.RadioButton(self, label="FTP")
-				boxsizer.Add(rb, flag=wx.LEFT|wx.TOP, border=5)
-				rb.Enable(False)
-				rb=wx.RadioButton(self, label="Pipe")
-				boxsizer.Add(rb, flag=wx.LEFT|wx.TOP, border=5)
-				rb.Enable(False)			
-			#sizer.Add(boxsizer, pos=(2, 0), span=(1, 2), flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)
+			so=['Query', 'Table', 'Partition', 'Sub-Partition']
+			s_rb={}
+			style=0
+			for i in range(len(so)):
+				rbname=so[i]
+				if not i:
+					style=wx.RB_GROUP
+				else:
+					style=0
+				s_rb[rbname]=wx.RadioButton(self, label=rbname,style=style)
+				boxsizer.Add(s_rb[rbname], flag=wx.LEFT|wx.TOP, border=5)
+				s_rb[rbname].Bind(wx.EVT_RADIOBUTTON, self.onSourceObjButton)
+
+
 			optsizer.Add(boxsizer, 0 , wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT)	
 		if 1:
 			sb = wx.StaticBox(self, label="Target Object")
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
 			#boxsizer.Add(wx.RadioButton(self, label="Query",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=5)
-			boxsizer.Add(wx.RadioButton(self, label="Table",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=5)
-			boxsizer.Add(wx.RadioButton(self, label="Partition"), flag=wx.LEFT|wx.TOP, border=5)
-			boxsizer.Add(wx.RadioButton(self, label="Sub-Partition"), flag=wx.LEFT|wx.TOP, border=5)
+			#boxsizer.Add(wx.RadioButton(self, label="Table",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=5)
+			#boxsizer.Add(wx.RadioButton(self, label="Partition"), flag=wx.LEFT|wx.TOP, border=5)
+			#boxsizer.Add(wx.RadioButton(self, label="Sub-Partition"), flag=wx.LEFT|wx.TOP, border=5)
+			
+			so=['Table', 'Partition', 'Sub-Partition']
+			t_rb={}
+			style=0
+			for i in range(len(so)):
+				rbname=so[i]
+				if not i:
+					style=wx.RB_GROUP
+				else:
+					style=0
+				t_rb[rbname]=wx.RadioButton(self, label=rbname,style=style)
+				boxsizer.Add(t_rb[rbname], flag=wx.LEFT|wx.TOP, border=5)
+				t_rb[rbname].Bind(wx.EVT_RADIOBUTTON, self.onTargetObjButton)
+
+				
 			optsizer.Add(boxsizer, 0 , wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT)	
 		btnsizer = wx.BoxSizer(wx.HORIZONTAL)
 		if 1:
@@ -2974,7 +2978,14 @@ class NewSessionDialog(wx.Dialog):
 		"""
 		btn = event.GetEventObject()
 		label = btn.GetLabel()
-
+		print label
+	def onTargetObjButton(self, event): 
+		""" 
+		Target object filter
+		"""
+		btn = event.GetEventObject()
+		label = btn.GetLabel()
+		print label
 		
 	def onUseRbButton(self, event): 
 		""" 
@@ -3781,22 +3792,23 @@ class DataBuddy(wx.Frame):
 		if 1: #Type
 			sb = wx.StaticBox(panel, label="Type")
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			text1 = wx.StaticText(panel, label="Table Copy")
+			text1 = wx.StaticText(panel, label="n/a			")
 			boxsizer.Add(text1, flag=wx.LEFT|wx.TOP, border=5)
 						
 			sizer.Add(boxsizer, pos=(2, 0),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
 		if 1: #Vector
 			sb = wx.StaticBox(panel, label='Vector')
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			self.btn_copy_vector = wx.StaticText(panel, label="Oracle 11G -> Oracle 11G")
+			self.btn_copy_vector = wx.StaticText(panel, label="n/a                                          ")
 			boxsizer.Add(self.btn_copy_vector, flag=wx.LEFT|wx.TOP, border=5)
 			
 			sizer.Add(boxsizer, pos=(2, 1),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
 			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))
+			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))
 		if 1: #Vector
 			sb = wx.StaticBox(panel, label='Source template')
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			self.btn_sourcet = wx.StaticText(panel, label="ORA_QueryFile_withHeader")
+			self.btn_sourcet = wx.StaticText(panel, label="n/a                                          ")
 			boxsizer.Add(self.btn_sourcet, flag=wx.LEFT|wx.TOP, border=5)
 			
 			sizer.Add(boxsizer, pos=(2, 2),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
@@ -3804,7 +3816,7 @@ class DataBuddy(wx.Frame):
 		if 1: #Vector
 			sb = wx.StaticBox(panel, label='Target template')
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			self.btn_targett = wx.StaticText(panel, label="ORA_Partition")
+			self.btn_targett = wx.StaticText(panel, label="n/a                                          ")
 			boxsizer.Add(self.btn_targett, flag=wx.LEFT|wx.TOP, border=5)
 			
 			sizer.Add(boxsizer, pos=(2, 3),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
@@ -3851,7 +3863,9 @@ class DataBuddy(wx.Frame):
 			#p=[wx.TextCtrl(panel_from), wx.TextCtrl(panel_from), wx.TextCtrl(panel_from)]
 			#pprint(dir(fgs))
 			new_btn=wx.Button(panel, label="New")
-			fgs.AddMany([(new_btn, 1, wx.EXPAND),(wx.Button(panel, label="Delete"), 1, wx.EXPAND),wx.StaticText(panel, label=' '),(wx.Button(panel, label="Clear All"), 1, wx.EXPAND)])
+			self.btn_delete=(wx.Button(panel, label="Delete")
+			self.btn_delete.Enable(False)
+			fgs.AddMany([(new_btn, 1, wx.EXPAND),self.btn_delete, 1, wx.EXPAND),wx.StaticText(panel, label=' '),(wx.Button(panel, label="Clear All"), 1, wx.EXPAND)])
 			new_btn.Bind(wx.EVT_BUTTON, self.OnNewButton)	
 			#button1 = wx.Button(panel, label="New")
 			#sizer.Add(button1, pos=(3, 5), flag=wx.TOP|wx.RIGHT, border=5)
@@ -3873,15 +3887,15 @@ class DataBuddy(wx.Frame):
 		sizer.Add(button3, pos=(9, 0), flag=wx.LEFT, border=10)
 		button3.Enable(False)
 
-		btn_open = wx.Button(panel, label='Show in Folder')
-		btn_open.Bind(wx.EVT_BUTTON, self.OnButtonShowInFolder)
-		sizer.Add(btn_open, pos=(9, 2),flag=wx.BOTTOM|wx.ALIGN_RIGHT)
+		self.btn_show = wx.Button(panel, label='Show in Folder')
+		self.btn_show.Bind(wx.EVT_BUTTON, self.OnButtonShowInFolder)
+		sizer.Add(self.btn_show, pos=(9, 2),flag=wx.BOTTOM|wx.ALIGN_RIGHT)
+		self.btn_show.Enable(False)
 
-
-		btn_open = wx.Button(panel, label='Run')
-		btn_open.Bind(wx.EVT_BUTTON, self.OnButtonOpen)
-		sizer.Add(btn_open, pos=(9, 3),flag=wx.BOTTOM|wx.ALIGN_RIGHT)
-
+		self.btn_run = wx.Button(panel, label='Run')
+		self.btn_run.Bind(wx.EVT_BUTTON, self.OnButtonOpen)
+		sizer.Add(self.btn_run, pos=(9, 3),flag=wx.BOTTOM|wx.ALIGN_RIGHT)
+		self.btn_run.Enable(False)
 		
 		button5 = wx.Button(panel, ID_EXIT, label="Cancel")
 		#self.Bind(wx.EVT_BUTTON, self.onAboutHtmlDlg, aboutBtn)
@@ -3944,22 +3958,20 @@ class DataBuddy(wx.Frame):
 		self.Show(True)
 		(self.cargs,self.fargs,self.targs)=(None, None, None)
 	def onNewSession(self, data, extra1, extra2=None):		
-		(sname,copy_vector,tmpl,api_args) = data
-		print sname,copy_vector,tmpl
-		#pprint(api_args)
-		self.setCopyVector(copy_vector)
-		self.setSessionName(sname)
-		#self.txt_transport.SetLabel(tloc[0])
+		#(sname,copy_vector,tmpl,api_args) = data
+		self.set_new_session(data)
 	def setSessionName(self, sn):
 		self.tc_session_name.SetValue(sn)
+		self.tc_session_name.Enable(True)
 	def setCopyVector(self, cv):
 		self.copy_vector=cv	
 		self.btn_copy_vector.SetLabel('%s -> %s' % (conf.dbs[cv[0]], conf.dbs[cv[1]]))
-	def setTemplates(self):
-		self.btn_targett
-		self.btn_sourcet
+	def setTemplates(self,tmpl):
+		a,b=tmpl.split('.')
+		self.btn_targett.SetLabel(a)
+		self.btn_sourcet.SetLabel(b)
 	def OnNewButton(self, event):
-		if 0:
+		if 1:
 			dlg = NewSessionDialog(self, -1, "Defaults for new session.", size=(250, 250),
 							 #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
 							 style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
@@ -3970,11 +3982,8 @@ class DataBuddy(wx.Frame):
 			val = dlg.ShowModal()
 			print val
 		else:
-			(sname,copy_vector,tmpl) = ('dsfdsfdsf', ['SLITE', 'INFOR'], 'SLITE_ParallelQueryDir.INFOR_Table') 
-			self.setSessionName('dsfdsfdsf')
-			self.setCopyVector(copy_vector)
-			print sname,copy_vector,tmpl
-			api_args=[{'copy_vector': ('-w',
+			
+			args=[{'copy_vector': ('-w',
                   '--copy_vector',
                   'dbtde2maria',
                   'Data copy direction.'),
@@ -4017,23 +4026,30 @@ class DataBuddy(wx.Frame):
                 'Target db user password.'),
   'to_table': ('-a', '--to_table', 'Timestamp_test_to', 'Target table.'),
   'to_user': ('-u', '--to_user', '"root"', 'Target MariaDB db user.')}]
-		(self.cargs,self.fargs,self.targs)= api_args
-		
-		print len(self.cargs)
-		print len(self.fargs)
-		print len(self.targs)
-		#self.args_panel.Hide()
-		#self.args_panel.create_cargs(self.cargs)
-		#self.args_panel.Destroy()
-		self.args_panel2= pnl_args(self,api_args,style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
-		self.nb.DeletePage(0)
-		self.nb.DeletePage(0)
-		#self.args_panel.Destroy()
-		self.nb.AddPage(self.args_panel2, 'Arguments')
-		editor = TacoTextEditor(self.args_panel2)
-		editor.AppendText(self.args_panel2.get_cmd(self.transport))
-		self.nb.AddPage(editor, 'Command')
-		self.nb.SetSelection(0)
+			data=['dsfdsfdsf', ['SLITE', 'INFOR'], 'SLITE_ParallelQueryDir.INFOR_Table',args]
+			self.set_new_session(data)
+	def set_new_session(self,data):
+			(sname,copy_vector,tmpl,api_args) = data
+			self.setSessionName(sname)
+			self.setCopyVector(copy_vector)
+			#print sname,copy_vector,tmpl
+			self.setTemplates(tmpl)
+			(self.cargs,self.fargs,self.targs)=api_args
+			print len(self.cargs)
+			print len(self.fargs)
+			print len(self.targs)
+			#self.args_panel.Hide()
+			#self.args_panel.create_cargs(self.cargs)
+			#self.args_panel.Destroy()
+			self.args_panel2= pnl_args(self,api_args,style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+			self.nb.DeletePage(0)
+			self.nb.DeletePage(0)
+			#self.args_panel.Destroy()
+			self.nb.AddPage(self.args_panel2, 'Arguments')
+			editor = TacoTextEditor(self.args_panel2)
+			editor.AppendText(self.args_panel2.get_cmd(self.transport))
+			self.nb.AddPage(editor, 'Command')
+			self.nb.SetSelection(0)
 
   
 	def OnButtonShowInFolder(self, event):
