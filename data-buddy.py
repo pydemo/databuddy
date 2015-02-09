@@ -3240,7 +3240,7 @@ class NewSessionDialog(wx.Dialog):
 			
 
 	def set_vector_btn(self,a,b):	
-		print a,b
+		#print a,b
 		lbl='%s->%s' % (a,b)
 		self.b_vector.SetLabel(lbl.lower())
 		self.copy_vector=[a,b]
@@ -3262,6 +3262,148 @@ class NewSessionDialog(wx.Dialog):
 		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)
 
 ###################################################################################################
+
+
+class dummy_args(wx.Panel):
+	"""Arguments"""
+	def __init__(self, parent, style):
+		wx.Panel.__init__(self, parent, -1, style=style)
+		#self.frame=frame
+		ID_TC_MODE = wx.NewId()
+		ID_RUN_AT = wx.NewId()
+		#self.SetSizer(sizer)
+		#sizer.Fit(self)
+		self.args_vbox = wx.BoxSizer(wx.VERTICAL)
+		self.args_hbox = wx.BoxSizer(wx.HORIZONTAL)
+		self.obj={}
+		self.api_args=[{'copy_vector': ('-w',
+						  '--copy_vector',
+						  'dbtde2maria',
+						  'Data copy direction.'),
+		  'field_term': ('-t', '--field_term', '"|"', 'Field terminator.'),
+		  'num_of_shards': ('-r', '--num_of_shards', 3, 'Number of shards.'),
+		  'pool_size': ('-o', '--pool_size', 3, 'Pool size.')},
+		 {'from_db_name': ('-b',
+						   '--from_db_name',
+						   '"SAMPLE"',
+						   'DB2 Developer Edition source database.'),
+		  'from_db_server': ('-n',
+							 '--from_db_server',
+							 '"DB2"',
+							 'DB2 Developer Edition source instance name.'),
+		  'from_passwd': ('-x',
+						  '--from_passwd',
+						  '"198Morgan"',
+						  'DB2 Developer Edition source user password.'),
+		  'from_table': ('-c', '--from_table', 'Timestamp_test_from', 'From table.'),
+		  'from_user': ('-j',
+						'--from_user',
+						'"ALEX_BUZ"',
+						'DB2 Developer Edition source user.'),
+		  'source_client_home': ('-z',
+								 '--source_client_home',
+								 '"C:\\Program Files (x86)\\IBM\\SQLLIB_01\\BIN"',
+								 'Path to DB2 Developer Edition client home.')},
+		 {'target_client_home': ('-Z',
+								 '--target_client_home',
+								 '"C:\\Program Files\\MariaDB 10.0\\bin"',
+								 'Path to mysql client home.'),
+		  'to_db_name': ('-d', '--to_db_name', '"test"', 'Target database.'),
+		  'to_db_server': ('-s',
+						   '--to_db_server',
+						   '"localhost"',
+						   'Target db instance name.'),
+		  'to_passwd': ('-p',
+						'--to_passwd',
+						'"maria_pwd"',
+						'Target db user password.'),
+		  'to_table': ('-a', '--to_table', 'Timestamp_test_to', 'Target table.'),
+		  'to_user': ('-u', '--to_user', '"root"', 'Target MariaDB db user.')}]
+		(self.cargs,self.fargs,self.targs)= self.api_args		
+		if 1: #Common
+			
+			self.core_args_panel = wx.Panel(self)
+			hbox = wx.BoxSizer(wx.HORIZONTAL)
+			self.fgs = wx.GridBagSizer(4, 10)
+			#sizer.Add(text1, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
+			#sizer.Add(tc0, pos=(0, 1), span=(1, 3), flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=10)
+			#fgs = wx.FlexGridSizer(3, 4, 9, 20)
+			ttl=['Copy vector','Pool size','Num of shards','Field terminator','Truncate target']
+			#pprint(dir(fgs))
+			disable=['copy_vector']
+			i=0
+			for k,v in self.cargs.items()	:
+				print k,v
+				short,long,val,desc=v
+				self.obj[k]= (wx.StaticText(self.core_args_panel, label=k), wx.TextCtrl(self.core_args_panel,value="", size=(140,22)))
+				self.fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				self.fgs.Add(self.obj[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				#if k in disable:
+				self.obj[k][1].Enable(False)
+				i+=1
+
+		
+			hbox.Add(self.fgs, 1, flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=5)	
+			self.core_args_panel.SetSizer(hbox)
+			
+			self.sb_common = wx.StaticBox(self, label="Common")
+			boxsizer = wx.StaticBoxSizer(self.sb_common, wx.VERTICAL)
+			boxsizer.Add(self.core_args_panel, flag=wx.LEFT|wx.TOP, border=5)
+			#sizer.Add(boxsizer, pos=(3, 0), span=(1, 3), flag=wx.TOP|wx.EXPAND, border=5)
+			
+			self.args_vbox.Add(boxsizer,1, flag=wx.ALL|wx.EXPAND, border=5)
+		if 1:
+			from_args_panel = wx.Panel(self)
+			hbox = wx.BoxSizer(wx.HORIZONTAL)
+			fgs = wx.GridBagSizer(4, 10)
+			i=0
+			for k,v in self.fargs.items()	:
+				print k,v
+				print i
+				short,long,val,desc=v
+				self.obj[k]= (wx.StaticText(from_args_panel, label=k), wx.TextCtrl(from_args_panel,value="", size=(135,22)))
+				fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				fgs.Add(self.obj[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				self.obj[k][1].Enable(False)
+				i+=1
+			hbox.Add(fgs, 1, flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=5)	
+			from_args_panel.SetSizer(hbox)
+			
+			sb_from = wx.StaticBox(self, label="Source")
+			boxsizer = wx.StaticBoxSizer(sb_from, wx.VERTICAL)
+			boxsizer.Add(from_args_panel, flag=wx.LEFT|wx.TOP, border=5)
+			self.args_hbox.Add(boxsizer, 1, flag=wx.ALL|wx.EXPAND, border=5)
+		if 1:
+			to_args_panel = wx.Panel(self)
+			hbox = wx.BoxSizer(wx.HORIZONTAL)
+			fgs = wx.GridBagSizer(4, 10)
+			i=0
+			for k,v in self.targs.items()	:
+				print k,v
+				print i
+				short,long,val,desc=v
+				self.obj[k]= (wx.StaticText(to_args_panel, label=k), wx.TextCtrl(to_args_panel,value="", size=(135,22)))
+				fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				fgs.Add(self.obj[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				self.obj[k][1].Enable(False)
+				i+=1
+			hbox.Add(fgs, 1, flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=5)	
+			to_args_panel.SetSizer(hbox)
+			
+			sb_from = wx.StaticBox(self, label="Target")
+			boxsizer = wx.StaticBoxSizer(sb_from, wx.VERTICAL)
+			boxsizer.Add(to_args_panel, flag=wx.LEFT|wx.TOP, border=5)
+			self.args_hbox.Add(boxsizer, 1, flag=wx.ALL|wx.EXPAND, border=5)
+			
+
+		self.args_vbox.Add(self.args_hbox,0,flag=wx.ALL|wx.EXPAND|wx.GROW)
+		self.SetSizer(self.args_vbox)
+		self.Fit()
+
+
+		
+###################################################################################################
+
 
 class default_args(wx.Panel):
 	"""Arguments"""
@@ -3619,9 +3761,9 @@ class DataBuddy(wx.Frame):
 		self.home=home
 		self.copy_vector=None
 		self.transport=os.path.join(self.home,r'dm32\dm32.exe')
-		self.args_panel = default_args(self,style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
-		
-		self.cmd=self.args_panel.get_cmd(self.transport)
+		self.args_panel = dummy_args(self,style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+		self.cmd=''
+		#self.cmd=self.args_panel.get_cmd(self.transport)
 		if 1:
 			self.st_session_name = wx.StaticText(panel, label="Session name:")
 			sizer.Add(self.st_session_name, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
@@ -3646,24 +3788,24 @@ class DataBuddy(wx.Frame):
 		if 1: #Vector
 			sb = wx.StaticBox(panel, label='Vector')
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			text1 = wx.StaticText(panel, label="Oracle 11G -> Oracle 11G")
-			boxsizer.Add(text1, flag=wx.LEFT|wx.TOP, border=5)
+			self.btn_copy_vector = wx.StaticText(panel, label="Oracle 11G -> Oracle 11G")
+			boxsizer.Add(self.btn_copy_vector, flag=wx.LEFT|wx.TOP, border=5)
 			
 			sizer.Add(boxsizer, pos=(2, 1),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
 			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))
 		if 1: #Vector
 			sb = wx.StaticBox(panel, label='Source template')
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			text1 = wx.StaticText(panel, label="ORA_QueryFile_withHeader")
-			boxsizer.Add(text1, flag=wx.LEFT|wx.TOP, border=5)
+			self.btn_sourcet = wx.StaticText(panel, label="ORA_QueryFile_withHeader")
+			boxsizer.Add(self.btn_sourcet, flag=wx.LEFT|wx.TOP, border=5)
 			
 			sizer.Add(boxsizer, pos=(2, 2),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
 			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))	
 		if 1: #Vector
 			sb = wx.StaticBox(panel, label='Target template')
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			text1 = wx.StaticText(panel, label="ORA_Partition")
-			boxsizer.Add(text1, flag=wx.LEFT|wx.TOP, border=5)
+			self.btn_targett = wx.StaticText(panel, label="ORA_Partition")
+			boxsizer.Add(self.btn_targett, flag=wx.LEFT|wx.TOP, border=5)
 			
 			sizer.Add(boxsizer, pos=(2, 3),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
 			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))				
@@ -3697,6 +3839,8 @@ class DataBuddy(wx.Frame):
 			editor.AppendText(self.cmd)
 			self.nb.AddPage(editor, 'Command')
 			self.nb.SetSelection(0)
+			self.nb.EnableTab(0,False)
+			self.nb.EnableTab(1,False)
 				
 			sizer.Add(self.nb, pos=(3, 0), span=(4, 4), flag=wx.GROW|wx.EXPAND|wx.ALL, border=0)
 		if 1:
@@ -3803,10 +3947,17 @@ class DataBuddy(wx.Frame):
 		(sname,copy_vector,tmpl,api_args) = data
 		print sname,copy_vector,tmpl
 		#pprint(api_args)
-		self.copy_vector=copy_vector
-		self.tc_session_name.SetValue(sname)
+		self.setCopyVector(copy_vector)
+		self.setSessionName(sname)
 		#self.txt_transport.SetLabel(tloc[0])
-
+	def setSessionName(self, sn):
+		self.tc_session_name.SetValue(sn)
+	def setCopyVector(self, cv):
+		self.copy_vector=cv	
+		self.btn_copy_vector.SetLabel('%s -> %s' % (conf.dbs[cv[0]], conf.dbs[cv[1]]))
+	def setTemplates(self):
+		self.btn_targett
+		self.btn_sourcet
 	def OnNewButton(self, event):
 		if 0:
 			dlg = NewSessionDialog(self, -1, "Defaults for new session.", size=(250, 250),
@@ -3820,6 +3971,8 @@ class DataBuddy(wx.Frame):
 			print val
 		else:
 			(sname,copy_vector,tmpl) = ('dsfdsfdsf', ['SLITE', 'INFOR'], 'SLITE_ParallelQueryDir.INFOR_Table') 
+			self.setSessionName('dsfdsfdsf')
+			self.setCopyVector(copy_vector)
 			print sname,copy_vector,tmpl
 			api_args=[{'copy_vector': ('-w',
                   '--copy_vector',
