@@ -3748,7 +3748,21 @@ class pnl_args(wx.Panel):
 			short,long,val,tesc=v
 			cmd='%s\n%s "%s" ^' % (cmd, short,self.obj[k][1].GetValue())			
 		return cmd
-
+	def get_cmd_line(self,transport):
+		cmd='%s' % transport
+		for k, v in self.cargs.items():
+			print k,v
+			short,long,val,desc=v
+			cmd='%s %s "%s"' % (cmd, short,self.obj[k][1].GetValue())
+		for k, v in self.fargs.items():
+			print k,v
+			short,long,val,desc=v
+			cmd='%s %s "%s"' % (cmd, short,self.obj[k][1].GetValue())
+		for k, v in self.targs.items():
+			print k,v
+			short,long,val,tesc=v
+			cmd='%s %s "%s"' % (cmd, short,self.obj[k][1].GetValue())			
+		return cmd
 		
 ###################################################################################################
 class DataBuddy(wx.Frame):
@@ -3795,14 +3809,14 @@ class DataBuddy(wx.Frame):
 			text1 = wx.StaticText(panel, label="n/a			")
 			boxsizer.Add(text1, flag=wx.LEFT|wx.TOP, border=5)
 						
-			sizer.Add(boxsizer, pos=(2, 0),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
+			sizer.Add(boxsizer, pos=(2, 0),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=1)	
 		if 1: #Vector
 			sb = wx.StaticBox(panel, label='Vector')
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
 			self.btn_copy_vector = wx.StaticText(panel, label="n/a                                          ")
 			boxsizer.Add(self.btn_copy_vector, flag=wx.LEFT|wx.TOP, border=5)
 			
-			sizer.Add(boxsizer, pos=(2, 1),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
+			sizer.Add(boxsizer, pos=(2, 1),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=1)	
 			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))
 			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))
 		if 1: #Vector
@@ -3811,7 +3825,7 @@ class DataBuddy(wx.Frame):
 			self.btn_sourcet = wx.StaticText(panel, label="n/a                                          ")
 			boxsizer.Add(self.btn_sourcet, flag=wx.LEFT|wx.TOP, border=5)
 			
-			sizer.Add(boxsizer, pos=(2, 2),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
+			sizer.Add(boxsizer, pos=(2, 2),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=1)	
 			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))	
 		if 1: #Vector
 			sb = wx.StaticBox(panel, label='Target template')
@@ -3819,7 +3833,7 @@ class DataBuddy(wx.Frame):
 			self.btn_targett = wx.StaticText(panel, label="n/a                                          ")
 			boxsizer.Add(self.btn_targett, flag=wx.LEFT|wx.TOP, border=5)
 			
-			sizer.Add(boxsizer, pos=(2, 3),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
+			sizer.Add(boxsizer, pos=(2, 3),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=1)	
 			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))				
 		if 0: #Transport
 			sb = wx.StaticBox(panel, label="DataMigrator")
@@ -3863,9 +3877,12 @@ class DataBuddy(wx.Frame):
 			#p=[wx.TextCtrl(panel_from), wx.TextCtrl(panel_from), wx.TextCtrl(panel_from)]
 			#pprint(dir(fgs))
 			new_btn=wx.Button(panel, label="New")
-			self.btn_delete=(wx.Button(panel, label="Delete")
+			new_btn.Enable(True)
+			self.btn_delete=wx.Button(panel, label="Delete")
 			self.btn_delete.Enable(False)
-			fgs.AddMany([(new_btn, 1, wx.EXPAND),self.btn_delete, 1, wx.EXPAND),wx.StaticText(panel, label=' '),(wx.Button(panel, label="Clear All"), 1, wx.EXPAND)])
+			self.btn_clearall=wx.Button(panel, label="Clear All")
+			self.btn_clearall.Enable(False)
+			fgs.AddMany([(new_btn, 1, wx.EXPAND),(self.btn_delete, 1, wx.EXPAND),wx.StaticText(panel, label=' '),(self.btn_clearall, 1, wx.EXPAND)])
 			new_btn.Bind(wx.EVT_BUTTON, self.OnNewButton)	
 			#button1 = wx.Button(panel, label="New")
 			#sizer.Add(button1, pos=(3, 5), flag=wx.TOP|wx.RIGHT, border=5)
@@ -3876,9 +3893,9 @@ class DataBuddy(wx.Frame):
 		sb = wx.StaticBox(panel, label="Optional")
 
 		boxsizer = wx.StaticBoxSizer(sb, wx.VERTICAL)
-		cb=wx.CheckBox(panel, label="Send 'y'")
-		boxsizer.Add(cb, flag=wx.LEFT|wx.TOP, border=5)
-		cb.SetValue(True)
+		self.send_yes=wx.CheckBox(panel, label="Send 'y'")
+		boxsizer.Add(self.send_yes, flag=wx.LEFT|wx.TOP, border=5)
+		self.send_yes.SetValue(True)
 		#print(dir(cb))
 		sizer.Add(boxsizer, pos=(8, 0), span=(1, 5), 
 			flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=10)
@@ -3893,7 +3910,7 @@ class DataBuddy(wx.Frame):
 		self.btn_show.Enable(False)
 
 		self.btn_run = wx.Button(panel, label='Run')
-		self.btn_run.Bind(wx.EVT_BUTTON, self.OnButtonOpen)
+		self.btn_run.Bind(wx.EVT_BUTTON, self.OnButtonRun)
 		sizer.Add(self.btn_run, pos=(9, 3),flag=wx.BOTTOM|wx.ALIGN_RIGHT)
 		self.btn_run.Enable(False)
 		
@@ -3958,7 +3975,9 @@ class DataBuddy(wx.Frame):
 		self.Show(True)
 		(self.cargs,self.fargs,self.targs)=(None, None, None)
 	def onNewSession(self, data, extra1, extra2=None):		
-		#(sname,copy_vector,tmpl,api_args) = data
+		(sname,copy_vector,tmpl,api_args) = data
+		print sname,copy_vector,tmpl,
+		pprint (api_args)
 		self.set_new_session(data)
 	def setSessionName(self, sn):
 		self.tc_session_name.SetValue(sn)
@@ -3971,7 +3990,7 @@ class DataBuddy(wx.Frame):
 		self.btn_targett.SetLabel(a)
 		self.btn_sourcet.SetLabel(b)
 	def OnNewButton(self, event):
-		if 1:
+		if 0:
 			dlg = NewSessionDialog(self, -1, "Defaults for new session.", size=(250, 250),
 							 #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
 							 style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
@@ -4027,6 +4046,44 @@ class DataBuddy(wx.Frame):
   'to_table': ('-a', '--to_table', 'Timestamp_test_to', 'Target table.'),
   'to_user': ('-u', '--to_user', '"root"', 'Target MariaDB db user.')}]
 			data=['dsfdsfdsf', ['SLITE', 'INFOR'], 'SLITE_ParallelQueryDir.INFOR_Table',args]
+			################################################# CSV
+			args=[{'copy_vector': ('-w',
+                  '--copy_vector',
+                  'csv2ora11g',
+                  'Data copy direction.'),
+  'field_term': ('-t', '--field_term', '"|"', 'Field terminator.'),
+  'num_of_shards': ('-r', '--num_of_shards', 1, 'Number of shards.'),
+  'pool_size': ('-o', '--pool_size', 1, 'Pool size.')},
+ {'input_dir': ('-I',
+                '--input_dir',
+                'c:\\Python27\\data_migrator_1239\\test\\v101\\data\\ora_data_dir',
+                'Input CSV directory.'),
+  'shard_size_kb': ('-y',
+                    '--shard_size_kb',
+                    1000,
+                    'Shard size in KBytes (to partition file and to estimate number of lines in input CSV file).')},
+ {'nls_date_format': ('-e',
+                      '--nls_date_format',
+                      '"YYYY-MM-DD HH24.MI.SS"',
+                      'nls_date_format for target.'),
+  'nls_timestamp_format': ('-m',
+                           '--nls_timestamp_format',
+                           '"YYYY-MM-DD HH24.MI.SS.FF2"',
+                           'nls_timestamp_format for target.'),
+  'nls_timestamp_tz_format': ('-O',
+                              '--nls_timestamp_tz_format',
+                              '"YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM"',
+                              'nls_timestamp_tz_format for target.'),
+  'target_client_home': ('-Z',
+                         '--target_client_home',
+                         '"C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN"',
+                         'Path to Oracle client home bin dir.'),
+  'to_db': ('-g', '--to_db', 'SCOTT/tiger2@orcl', 'To Oracle database.'),
+  'to_table': ('-a',
+               '--to_table',
+               'SCOTT.Timestamp_test_to',
+               'To Oracle table.')}]
+			data=['csv_dir_to_table', ['CSV', 'ORA11G'], 'CSV_Dir.ORA11G_Table',args]
 			self.set_new_session(data)
 	def set_new_session(self,data):
 			(sname,copy_vector,tmpl,api_args) = data
@@ -4041,15 +4098,17 @@ class DataBuddy(wx.Frame):
 			#self.args_panel.Hide()
 			#self.args_panel.create_cargs(self.cargs)
 			#self.args_panel.Destroy()
-			self.args_panel2= pnl_args(self,api_args,style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+			self.args_panel= pnl_args(self,api_args,style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			self.nb.DeletePage(0)
 			self.nb.DeletePage(0)
 			#self.args_panel.Destroy()
-			self.nb.AddPage(self.args_panel2, 'Arguments')
-			editor = TacoTextEditor(self.args_panel2)
-			editor.AppendText(self.args_panel2.get_cmd(self.transport))
+			self.nb.AddPage(self.args_panel, 'Arguments')
+			editor = TacoTextEditor(self.args_panel)
+			editor.AppendText(self.args_panel.get_cmd(self.transport))
 			self.nb.AddPage(editor, 'Command')
 			self.nb.SetSelection(0)
+			self.btn_show.Enable(True)
+			self.btn_run.Enable(True)
 
   
 	def OnButtonShowInFolder(self, event):
@@ -4071,7 +4130,7 @@ class DataBuddy(wx.Frame):
 		os.spawnl(os.P_NOWAIT, EXPLORER, '.', '/n,/e,/select,"%s"'%fname)
 
 
-	def OnButtonOpen(self, event):
+	def OnButtonRun(self, event):
 		# 
 		btn = event.GetEventObject()
 		print btn.GetLabel()
@@ -4105,9 +4164,23 @@ class DataBuddy(wx.Frame):
 			p.close()
 		#os.system("mode 45, 20");
 		#os.system(r'start "ora2ora" cmd /k echo y^|C:\Users\alex_buz\Documents\GitHub\DataBuddy\dm32\dm32.exe -w ora2ora -o 1 -r 1 -t "|" -c SCOTT.Date_test_from -f SCOTT/tiger2@orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -g SCOTT/tiger2@orcl -a SCOTT.Partitioned_test_to -G part_15 -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN"')
-		os.system(r'start "test" cmd.exe  /k "mode 100,45 && echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\dm32\dm32.exe -w ora2ora -o 1 -r 1 -t "^|" -c SCOTT.Date_test_from -f SCOTT/tiger2@orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -g SCOTT/tiger2@orcl -a SCOTT.Partitioned_test_to -G part_15 -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN""')
-
 		
+		cmd=self.args_panel.get_cmd_line(self.transport)
+		#self.args_panel
+		#e(0)
+		cmd=cmd.replace('|','^|')
+		cmd=cmd.replace('csv2ora11g','csv2ora')
+		
+		print cmd
+		if_yes=self.send_yes.GetValue()
+		yes=''
+		if if_yes:
+			yes='echo y|'
+		if 0:
+			os.system(r'start "test" cmd.exe  /k "mode 100,45 && echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\dm32\dm32.exe -w ora2ora -o 1 -r 1 -t "^|" -c SCOTT.Date_test_from -f SCOTT/tiger2@orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -g SCOTT/tiger2@orcl -a SCOTT.Partitioned_test_to -G part_15 -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN""')
+		else:
+			os.system(r'start "test" cmd.exe  /k "%s%s"' % (yes,cmd))
+			#u'C:\\Users\\alex_buz\\Documents\\GitHub\\DataBuddy\\dm32\\dm32.exe -t "|" -w "csv2ora11g" -r "1" -o "1" -I "c:\\Python27\\data_migrator_1239\\test\\v101\\data\\ora_data_dir" -y "1000" -g "SCOTT/tiger2@orcl" -m "YYYY-MM-DD HH24.MI.SS.FF2" -e "YYYY-MM-DD HH24.MI.SS" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -a "SCOTT.Timestamp_test_to" -Z "C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN"'		
 	def OnVectorButton(self, event,params):
 		(loc)=params
 		print (loc)
