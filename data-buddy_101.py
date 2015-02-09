@@ -8,7 +8,7 @@ __author__ = "Alex Buzunov"
 __copyright__ = "Copyright 2015, SequelWorks Inc."
 __credits__ = []
 __license__ = "GPL"
-__title__ = "data-buddy"
+__title__ = "CSV*Loader"
 __version__ = "1.0.1"
 __maintainer__ = "Alex Buzunov"
 __email__ = "alexbuzunov@gmail.com"
@@ -3785,7 +3785,7 @@ class DataBuddy(wx.Frame):
 		sizer = wx.GridBagSizer(5, 5)
 		self.home=home
 		self.copy_vector=None
-		self.transport=os.path.join(self.home,r'qc32\qc32.exe')
+		self.transport=os.path.join(self.home,r'dm32\dm32.exe')
 		self.args_panel = dummy_args(self,style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 		self.cmd=''
 		#self.cmd=self.args_panel.get_cmd(self.transport)
@@ -3870,7 +3870,7 @@ class DataBuddy(wx.Frame):
 				
 			sizer.Add(self.nb, pos=(3, 0), span=(4, 4), flag=wx.GROW|wx.EXPAND|wx.ALL, border=0)
 		if 1:
-			fgs = wx.FlexGridSizer(10, 1, 9, 25)
+			fgs = wx.FlexGridSizer(2, 1, 9, 25)
 
 			#l=[wx.StaticText(panel_from, label="Title"), wx.StaticText(panel_from, label="Author"),wx.StaticText(panel_from, label="Review")]
 
@@ -3969,7 +3969,6 @@ class DataBuddy(wx.Frame):
 		sub(self.onTransportLoc, "set_transport_location")
 		sub(self.onNewSession, "create_new_session")
 		#self.SetSizeHints(250,300,500,400)
-		self.Layout()
 		self.Fit()
 		self.Refresh()
 		self.Center()
@@ -3980,9 +3979,6 @@ class DataBuddy(wx.Frame):
 		print sname,copy_vector,tmpl,
 		pprint (api_args)
 		self.set_new_session(data)
-		self.Layout()
-		self.Fit()
-		self.Refresh()
 	def setSessionName(self, sn):
 		self.tc_session_name.SetValue(sn)
 		self.tc_session_name.Enable(True)
@@ -4140,8 +4136,6 @@ class DataBuddy(wx.Frame):
 		
 	
 		EXPLORER = 'C:\\windows\\explorer.exe' 
-		if not os.path.isfile(EXPLORER):
-			EXPLORER = 'C:\\WINNT\\explorer.exe' 
 		os.spawnl(os.P_NOWAIT, EXPLORER, '.', '/n,/e,/select,"%s"'%fname)
 
 
@@ -4184,7 +4178,7 @@ class DataBuddy(wx.Frame):
 		#self.args_panel
 		#e(0)
 		cmd=cmd.replace('|','^|')
-		#cmd=cmd.replace('csv2ora11g','csv2ora')
+		cmd=cmd.replace('csv2ora11g','csv2ora')
 		
 		print cmd
 		if_yes=self.send_yes.GetValue()
@@ -4273,7 +4267,7 @@ class DataBuddy(wx.Frame):
 		label = btn.GetLabel()
 		#print label
 		#print self.txt_transport.GetLabel()
-		self.txt_transport.SetLabel('.\qc32\qc%s.exe' % label[:2])
+		self.txt_transport.SetLabel('.\dm32\dm%s.exe' % label[:2])
 		if 0:
 			message = "You just selected %s" % label
 			dlg = wx.MessageDialog(None, message, 'Message', 
@@ -4329,12 +4323,12 @@ class DataBuddy(wx.Frame):
 		self.Destroy()
 class AboutDlg(wx.Frame): 
 	def __init__(self, parent):
-		wx.Frame.__init__(self, parent, wx.ID_ANY, title="About %s" % __title__, size=(400,400))
+		wx.Frame.__init__(self, parent, wx.ID_ANY, title="About", size=(400,400))
 		html = wxHTML(self)
 		page="""
-<h2>%s</h2>						
-<p>Loads multiple CSV files' data into Oracle 11G table.</p>
-<p>Created in Feb. 2015 by %s.</p>
+<h2>About %s</h2>						
+<p>Created in Jan. 2015 by %s.</p>
+<p>Loads multiple CSV files' data into Oracle 11G table</p>
 <p><b>Software used in making this tool:</h3></p>
 <p><b><a href="http://www.python.org">Python 2.7</a></b></p>
 <p><b><a href="http://www.wxpython.org">wxPython 2.8</a></b></p>
