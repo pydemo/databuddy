@@ -3753,14 +3753,29 @@ class pnl_args(wx.Panel):
 		[dir] = params
 		print dir
 		#id=LOAD_FILE_ID
+		import wx.lib.agw.multidirdialog as MDD
+		if 0:
+			dlg = wx.DirDialog(self, "Choose a CVS input directory:", dir, style=wx.DD_DEFAULT_STYLE | wx.DD_NEW_DIR_BUTTON)
+			dir =None
+			if dlg.ShowModal() == wx.ID_OK:
+				dir= 'You selected: %s\n' % dlg.GetPath()
+				#self.SetStatusText('You selected: %s\n' % dlg.GetPath())
+			
+			dlg.Destroy()
+		dlg = MDD.MultiDirDialog(None, title="Choose a CVS input directory:", defaultPath=os.getcwd(),
+						 agwStyle=MDD.DD_MULTIPLE|MDD.DD_DIR_MUST_EXIST)
 
-		dlg = wx.DirDialog(self, "Choose a CVS input directory:", dir, style=wx.DD_DEFAULT_STYLE | wx.DD_NEW_DIR_BUTTON)
-		dir =None
-		if dlg.ShowModal() == wx.ID_OK:
-			dir= 'You selected: %s\n' % dlg.GetPath()
-			#self.SetStatusText('You selected: %s\n' % dlg.GetPath())
-		
+		if dlg.ShowModal() != wx.ID_OK:
+			print("You Cancelled The Dialog!")
+			dlg.Destroy()
+			return
+
+		paths = dlg.GetPaths()
+		for indx, path in enumerate(paths):
+			print("Path %d: %s"%(indx+1, path))
+
 		dlg.Destroy()
+
 		print dir
 	def gen_bind(self, type, instance, handler, *args, **kwargs):
 		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)			
