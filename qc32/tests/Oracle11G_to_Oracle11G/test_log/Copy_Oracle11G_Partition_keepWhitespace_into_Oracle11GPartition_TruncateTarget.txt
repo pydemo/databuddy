@@ -1,0 +1,55 @@
+
+C:\Python27\data_migrator_1239>python -c "print 'y\ny'"   | C:\Python27\qc_dist_32\20150209_104450\qc32\qc32.exe -w ora11g2ora11g -o 1 -r 1 -t "|" -U 1 -c SCOTT.Partitioned_test_from -P part_15 -f SCOTT/tiger2@orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -g SCOTT/tiger2@orcl -a SCOTT.Partitioned_test_to -G part_15 -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" 
+----------------------------------------------------------------------
+QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/09 10:44:50) [32bit]
+Copyright (c): 2014 Alex Buzunov, All rights reserved.
+Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
+----------------------------------------------------------------------
+ora11g2ora11g
+ORA11G
+####################
+Performing data copy.
+		
+From Oracle 11G:	
+	from db: SCOTT@orcl
+	table: SCOTT.Partitioned_test_from
+	partition: part_15
+	shards:	1
+		
+		
+	To Oracle:	
+		to db: SCOTT@orcl
+		to table: SCOTT.Partitioned_test_to
+		
+    TTTTTT  RRRRR   UU  UU  NN  NN   CCCCC    AA    TTTTTT  EEEEEE
+      TT    RR  RR  UU  UU  NNN NN  CC       AAAA     TT    EE
+      TT    RRRR    UU  UU  NN NNN  CC      AA  AA    TT    EEEE
+      TT    RR  RR  UU  UU  NN  NN  CC      AAAAAA    TT    EE
+      TT    RR  RR   UUUU   NN  NN   CCCCC  AA  AA    TT    EEEEEE
+####################
+Are you sure you want to proceed?(y/n): 
+
+
+Thread-0 (0, 14104L, 43)
+############################################################
+Copy stats (1 threads, 1 shards):
+############################################################
+2015-02-09 10:48:15,996 - ora11g2ora11g - WARNING - Source is partition.
+2015-02-09 10:48:15,996 - ora11g2ora11g - WARNING - Target is partition.
+2015-02-09 10:48:15,996 - ora11g2ora11g - WARNING - Truncating partiton part_15
+2015-02-09 10:48:16,088 - ora11g2ora11g - INFO - Table truncated.
+2015-02-09 10:48:16,088 - ora11g2ora11g - INFO - Starting Thread-0
+2015-02-09 10:48:16,089 - ora11g2ora11g - INFO - Thread-0 processing Shard-0
+2015-02-09 10:48:16,089 - ora11g2ora11g - INFO - Extracting data...
+2015-02-09 10:48:16,243 - ora11g2ora11g - INFO - Done
+2015-02-09 10:48:16,479 - ora11g2ora11g - INFO - Loading data...
+2015-02-09 10:48:16,719 - ora11g2ora11g - INFO - SQL*Loader status =0
+2015-02-09 10:48:16,719 - ora11g2ora11g - INFO - Done
+2015-02-09 10:48:16,720 - ora11g2ora11g - INFO - spool file deleted.
+2015-02-09 10:48:16,720 - ora11g2ora11g - INFO - Thread-0 exit status 0
+2015-02-09 10:48:16,720 - ora11g2ora11g - INFO - Exiting Thread-0
+2015-02-09 10:48:16,720 - ora11g2ora11g - INFO - Shard-0/0:          43 rows
+2015-02-09 10:48:16,720 - ora11g2ora11g - INFO - TOTAL Bytes:       14104 Bytes
+2015-02-09 10:48:16,720 - ora11g2ora11g - INFO - TOTAL Rows:           43 Rows
+2015-02-09 10:48:16,720 - ora11g2ora11g - INFO - Done.
+2015-02-09 10:48:16,720 - ora11g2ora11g - INFO - Elapsed: 00:00:00

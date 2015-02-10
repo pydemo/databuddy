@@ -1,0 +1,13 @@
+
+C:\Python27\data_migrator_1239>echo y  | C:\Python27\qc_dist_32\20150209_104450\qc32\qc32.exe -w ora11g2csv -o 1 -r 1 -t "|" -Q C:\Python27\data_migrator_1239\test\v101\query\query_dir_ora -f SCOTT/tiger2@orcl -e "YYYY/MM/DD" -m "YYYY-MM-DD-HH24.MI.SS.FF" -O "YYYY-MM-DD-HH24:MI:SS.FF" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -g C:\Python27\data_migrator_1239\CSV_OUT\testORA11G_QueryDir_keepWhitespace.data 
+----------------------------------------------------------------------
+QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/09 10:44:50) [32bit]
+Copyright (c): 2014 Alex Buzunov, All rights reserved.
+Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
+----------------------------------------------------------------------
+ora11g2csv
+2015-02-09 10:45:20,855 - ora11g2csv - WARNING - Overriding num_of_shards (1) to be equal number of queries (3).
+Traceback (most recent call last):
+  File "<string>", line 195, in <module>
+AssertionError: Cannot export to file if num_of_shards>1
+ Use "-D" (-to_dir) instead 

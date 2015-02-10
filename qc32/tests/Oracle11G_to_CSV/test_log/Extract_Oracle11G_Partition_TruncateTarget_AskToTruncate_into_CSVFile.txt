@@ -1,0 +1,27 @@
+
+C:\Python27\data_migrator_1239>python -c "print 'y\ny'"   | C:\Python27\qc_dist_32\20150209_104450\qc32\qc32.exe -w ora11g2csv -o 1 -r 1 -t "|" -U 1 -E 1 -c SCOTT.Partitioned_test_from -P part_15 -f SCOTT/tiger2@orcl -e "YYYY/MM/DD" -m "YYYY-MM-DD-HH24.MI.SS.FF" -O "YYYY-MM-DD-HH24:MI:SS.FF" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -g C:\Python27\data_migrator_1239\CSV_OUT\testORA11G_Partition_TruncateTarget_AskToTruncate.data 
+----------------------------------------------------------------------
+QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/09 10:44:50) [32bit]
+Copyright (c): 2014 Alex Buzunov, All rights reserved.
+Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
+----------------------------------------------------------------------
+ora11g2csv
+CSV
+####################
+Performing data extraction.
+		
+From Oracle 11G:	
+	from db: SCOTT@orcl
+	table: SCOTT.Partitioned_test_from
+	partition: part_15
+	shards:	1
+		
+		
+To CSV:
+	C:\Python27\data_migrator_1239\CSV_OUT\testORA11G_Partition_TruncateTarget_AskToTruncate.data
+
+####################
+Are you sure you want to proceed?(y/n): 
+Traceback (most recent call last):
+  File "<string>", line 247, in <module>
+AttributeError: 'spool_to_csv' object has no attribute 'truncate_target'

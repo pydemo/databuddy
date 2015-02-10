@@ -1,0 +1,39 @@
+
+C:\Python27\data_migrator_1239>echo y  | C:\Python27\qc_dist_32\20150209_104450\qc32\qc32.exe -w ora11g2csv -o 1 -r 1 -t "|" -c SCOTT.Partitioned_test_from -P part_15 -f SCOTT/tiger2@'(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=orcl)))' -e "YYYY/MM/DD" -m "YYYY-MM-DD-HH24.MI.SS.FF" -O "YYYY-MM-DD-HH24:MI:SS.FF" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -g C:\Python27\data_migrator_1239\CSV_OUT\testORA11G_Partition_NoClient.data 
+----------------------------------------------------------------------
+QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/09 10:44:50) [32bit]
+Copyright (c): 2014 Alex Buzunov, All rights reserved.
+Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
+----------------------------------------------------------------------
+ora11g2csv
+CSV
+####################
+Performing data extraction.
+		
+From Oracle 11G:	
+	from db: SCOTT@'(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=orcl)))'
+	table: SCOTT.Partitioned_test_from
+	partition: part_15
+	shards:	1
+		
+		
+To CSV:
+	C:\Python27\data_migrator_1239\CSV_OUT\testORA11G_Partition_NoClient.data
+
+####################
+Are you sure you want to proceed?(y/n): 
+Thread-0 (0, 14276L, 43)
+############################################################
+Copy stats (1 threads, 1 shards):
+############################################################
+2015-02-09 10:45:17,415 - ora11g2csv - INFO - Starting Thread-0
+2015-02-09 10:45:17,417 - ora11g2csv - INFO - Thread-0 processing Shard-0
+2015-02-09 10:45:17,417 - ora11g2csv - INFO - Extracting data...
+2015-02-09 10:45:17,819 - ora11g2csv - INFO - Done.
+2015-02-09 10:45:17,819 - ora11g2csv - INFO - Thread-0 exit status 0
+2015-02-09 10:45:17,819 - ora11g2csv - INFO - Exiting Thread-0
+2015-02-09 10:45:17,819 - ora11g2csv - INFO - Shard-0/0:          43 rows
+2015-02-09 10:45:17,819 - ora11g2csv - INFO - TOTAL Bytes:       14276 Bytes
+2015-02-09 10:45:17,819 - ora11g2csv - INFO - TOTAL Rows:           43 Rows
+2015-02-09 10:45:17,821 - ora11g2csv - INFO - Done.
+2015-02-09 10:45:17,821 - ora11g2csv - INFO - Elapsed: 00:00:00

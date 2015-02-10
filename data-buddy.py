@@ -69,6 +69,7 @@ ID_ABOUT = wx.NewId()
 LOAD_FILE_ID = wx.NewId()
 update_cache=True
 dBtn='N/A'
+tr='qc'
 def import_module(filepath):
 	class_inst = None
 	#expected_class = 'MyClass'
@@ -3580,6 +3581,7 @@ class default_args(wx.Panel):
 
 class pnl_args(wx.Panel):
 	"""Arguments"""
+	
 	def __init__(self, parent, args_api,style):
 		wx.Panel.__init__(self, parent, -1, style=style)
 		#self.frame=frame
@@ -3641,9 +3643,23 @@ class pnl_args(wx.Panel):
 				print k,v
 				print i
 				short,long,val,desc=v
-				self.obj[k]= (wx.StaticText(from_args_panel, label=k), wx.TextCtrl(from_args_panel,value=str(val).strip('"'), size=(135,22)))
+				sval=str(val).strip('"')
+				self.obj[k]= (wx.StaticText(from_args_panel, label=k), wx.TextCtrl(from_args_panel,value=sval, size=(135,22)))
 				fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				fgs.Add(self.obj[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				if k in ['input_dir']:
+					imageFile = "bmp_source/refresh_icon_16_grey2.png"
+					image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+					self.btn_dir=wx.BitmapButton(from_args_panel, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6))
+					fgs.Add(self.btn_dir, pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	
+					global home
+					dir =home
+					#print sval
+					if os.path.isdir(sval):
+						dir=sval
+					self.gen_bind(wx.EVT_BUTTON,self.btn_dir, self.OnInputDir,[dir])
+					#self.btn_dir.Bind(wx.EVT_BUTTON, self.OnInputDir)					
+					#self.Bind(wx.EVT_BUTTON, self.OnInputDir, self.btn_dir)
 				i+=1
 			hbox.Add(fgs, 1, flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=5)	
 			from_args_panel.SetSizer(hbox)
@@ -3733,6 +3749,22 @@ class pnl_args(wx.Panel):
 		self.args_vbox.Add(self.args_hbox,0,flag=wx.ALL|wx.EXPAND|wx.GROW)
 		self.SetSizer(self.args_vbox)
 		self.Fit()
+	def OnInputDir(self, evt,params):
+		[dir] = params
+		print dir
+		#id=LOAD_FILE_ID
+
+		dlg = wx.DirDialog(self, "Choose a CVS input directory:", dir, style=wx.DD_DEFAULT_STYLE | wx.DD_NEW_DIR_BUTTON)
+		dir =None
+		if dlg.ShowModal() == wx.ID_OK:
+			dir= 'You selected: %s\n' % dlg.GetPath()
+			#self.SetStatusText('You selected: %s\n' % dlg.GetPath())
+		
+		dlg.Destroy()
+		print dir
+	def gen_bind(self, type, instance, handler, *args, **kwargs):
+		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)			
+		
 	def get_cmd(self,transport):
 		cmd='%s ^' % transport
 		for k, v in self.cargs.items():
@@ -3767,6 +3799,7 @@ class pnl_args(wx.Panel):
 ###################################################################################################
 class DataBuddy(wx.Frame):
 	def __init__(self, parent, id, title):
+		global tr
 		#wx.Frame.__init__(self, parent, -1, title)
 		#super(DataBuddy, self).__init__(parent, title=title , size=(900, 565))
 		global app_title, home
@@ -3785,7 +3818,8 @@ class DataBuddy(wx.Frame):
 		sizer = wx.GridBagSizer(5, 5)
 		self.home=home
 		self.copy_vector=None
-		self.transport=os.path.join(self.home,r'qc32\qc32.exe')
+		
+		self.transport=os.path.join(self.home,r'%s32\%s32.exe' % (tr,tr))
 		self.args_panel = dummy_args(self,style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 		self.cmd=''
 		#self.cmd=self.args_panel.get_cmd(self.transport)
