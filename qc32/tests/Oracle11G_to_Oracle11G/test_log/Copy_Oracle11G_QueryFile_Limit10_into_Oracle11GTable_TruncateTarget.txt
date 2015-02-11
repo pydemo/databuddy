@@ -1,7 +1,7 @@
 
-C:\Python27\data_migrator_1239>python -c "print 'y\ny'"   | C:\Python27\qc_dist_32\20150209_104450\qc32\qc32.exe -w ora11g2ora11g -o 1 -r 1 -t "|" -l 10 -U 1 -q C:\Python27\data_migrator_1239\test\v101\query\oracle_query.sql -f SCOTT/tiger2@orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -g SCOTT/tiger2@orcl -a SCOTT.Timestamp_test_to -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" 
+c:\Python27\data_migrator_1239>python -c "print 'y\ny'"   | c:\Python27\qc_dist_32\20150211_114734\qc32\qc32.exe -w ora11g2ora11g -o 1 -r 1 -t "|" -l 10 -U 1 -q c:\Python27\data_migrator_1239\test\v101\query\oracle_query.sql -j SCOTT -x tiger2 -b orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -u SCOTT -p tiger2 -d orcl -a SCOTT.Timestamp_test_to -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" 
 ----------------------------------------------------------------------
-QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/09 10:44:50) [32bit]
+QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/11 11:47:34) [32bit]
 Copyright (c): 2014 Alex Buzunov, All rights reserved.
 Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
 ----------------------------------------------------------------------
@@ -12,7 +12,7 @@ Performing data copy.
 		
 From Oracle 11G:	
 	from db: SCOTT@orcl
-	query: C:\Python27\data_migrator_1239\test\v101\query\oracle_query.sql
+	query: c:\Python27\data_migrator_1239\test\v101\query\oracle_query.sql
 	shards:	1
 		
 		
@@ -33,22 +33,22 @@ Thread-0 (0, 3280L, 10)
 ############################################################
 Copy stats (1 threads, 1 shards):
 ############################################################
-2015-02-09 10:47:50,773 - ora11g2ora11g - WARNING - Source is query file.
-2015-02-09 10:47:50,773 - ora11g2ora11g - WARNING - Target is table.
-2015-02-09 10:47:50,773 - ora11g2ora11g - WARNING - Truncating table SCOTT.Timestamp_test_to
-2015-02-09 10:47:50,855 - ora11g2ora11g - INFO - Table truncated.
-2015-02-09 10:47:50,857 - ora11g2ora11g - INFO - Starting Thread-0
-2015-02-09 10:47:50,857 - ora11g2ora11g - INFO - Thread-0 processing Shard-0
-2015-02-09 10:47:50,857 - ora11g2ora11g - INFO - Extracting data...
-2015-02-09 10:47:51,019 - ora11g2ora11g - INFO - Done
-2015-02-09 10:47:51,295 - ora11g2ora11g - INFO - Loading data...
-2015-02-09 10:47:51,410 - ora11g2ora11g - INFO - SQL*Loader status =0
-2015-02-09 10:47:51,411 - ora11g2ora11g - INFO - Done
-2015-02-09 10:47:51,411 - ora11g2ora11g - INFO - spool file deleted.
-2015-02-09 10:47:51,411 - ora11g2ora11g - INFO - Thread-0 exit status 0
-2015-02-09 10:47:51,411 - ora11g2ora11g - INFO - Exiting Thread-0
-2015-02-09 10:47:51,411 - ora11g2ora11g - INFO - Shard-0/0:          10 rows
-2015-02-09 10:47:51,411 - ora11g2ora11g - INFO - TOTAL Bytes:        3280 Bytes
-2015-02-09 10:47:51,411 - ora11g2ora11g - INFO - TOTAL Rows:           10 Rows
-2015-02-09 10:47:51,411 - ora11g2ora11g - INFO - Done.
-2015-02-09 10:47:51,411 - ora11g2ora11g - INFO - Elapsed: 00:00:00
+2015-02-11 11:50:54,038 - ora11g2ora11g - WARNING - Source is query file.
+2015-02-11 11:50:54,038 - ora11g2ora11g - WARNING - Target is table.
+2015-02-11 11:50:54,038 - ora11g2ora11g - WARNING - Truncating table SCOTT.Timestamp_test_to
+2015-02-11 11:50:54,184 - ora11g2ora11g - INFO - Table truncated.
+2015-02-11 11:50:54,186 - ora11g2ora11g - INFO - Starting Thread-0
+2015-02-11 11:50:54,186 - ora11g2ora11g - INFO - Thread-0 processing Shard-0
+2015-02-11 11:50:54,186 - ora11g2ora11g - INFO - Extracting data...
+2015-02-11 11:50:54,424 - ora11g2ora11g - INFO - Done
+2015-02-11 11:50:54,568 - ora11g2ora11g - INFO - Loading data...
+2015-02-11 11:50:54,647 - ora11g2ora11g - INFO - SQL*Loader status =0
+2015-02-11 11:50:54,648 - ora11g2ora11g - INFO - Done
+2015-02-11 11:50:54,648 - ora11g2ora11g - INFO - spool file deleted.
+2015-02-11 11:50:54,648 - ora11g2ora11g - INFO - Thread-0 exit status 0
+2015-02-11 11:50:54,648 - ora11g2ora11g - INFO - Exiting Thread-0
+2015-02-11 11:50:54,648 - ora11g2ora11g - INFO - Shard-0/0:          10 rows
+2015-02-11 11:50:54,648 - ora11g2ora11g - INFO - TOTAL Bytes:        3280 Bytes
+2015-02-11 11:50:54,648 - ora11g2ora11g - INFO - TOTAL Rows:           10 Rows
+2015-02-11 11:50:54,648 - ora11g2ora11g - INFO - Done.
+2015-02-11 11:50:54,648 - ora11g2ora11g - INFO - Elapsed: 00:00:00

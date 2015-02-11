@@ -3598,7 +3598,7 @@ class pnl_args(wx.Panel):
 			
 			self.core_args_panel = wx.Panel(self)
 			hbox = wx.BoxSizer(wx.HORIZONTAL)
-			self.fgs = wx.GridBagSizer(4, 10)
+			self.fgs = wx.GridBagSizer(6, 2)
 			#sizer.Add(text1, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
 			#sizer.Add(tc0, pos=(0, 1), span=(1, 3), flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=10)
 			#fgs = wx.FlexGridSizer(3, 4, 9, 20)
@@ -3609,9 +3609,12 @@ class pnl_args(wx.Panel):
 			for k,v in self.cargs.items()	:
 				print k,v
 				short,long,val,desc=v
-				self.obj[k]= (wx.StaticText(self.core_args_panel, label=k), wx.TextCtrl(self.core_args_panel,value=str(val).strip('"'), size=(140,22)))
-				self.fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-				self.fgs.Add(self.obj[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				row=i%4
+				col=(i-i%2)
+				print 'row',row, 'col', col
+				self.obj[k]= (wx.StaticText(self.core_args_panel, label=k), wx.TextCtrl(self.core_args_panel,value=str(val).strip('"'), size=(100,22)))
+				self.fgs.Add(self.obj[k][0], pos=(i%2, col), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				self.fgs.Add(self.obj[k][1], pos=(i%2, col+1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				if k in disable:
 					self.obj[k][1].Enable(False)
 				i+=1
@@ -3647,7 +3650,7 @@ class pnl_args(wx.Panel):
 				self.obj[k]= (wx.StaticText(from_args_panel, label=k), wx.TextCtrl(from_args_panel,value=sval, size=(135,22)))
 				fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				fgs.Add(self.obj[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-				if k in ['input_dir']:
+				if k in ['input_dirs']:
 					imageFile = "bmp_source/refresh_icon_16_grey2.png"
 					image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
 					self.btn_dir=wx.BitmapButton(from_args_panel, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6))
@@ -3677,7 +3680,10 @@ class pnl_args(wx.Panel):
 				print k,v
 				print i
 				short,long,val,desc=v
-				self.obj[k]= (wx.StaticText(to_args_panel, label=k), wx.TextCtrl(to_args_panel,value=str(val).strip('"'), size=(135,22)))
+				style=0
+				if k in ['to_passwd']:
+					style=wx.TE_PASSWORD
+				self.obj[k]= (wx.StaticText(to_args_panel, label=k), wx.TextCtrl(to_args_panel,value=str(val).strip('"'), style=style, size=(135,22)))
 				fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				fgs.Add(self.obj[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				i+=1
@@ -3753,6 +3759,7 @@ class pnl_args(wx.Panel):
 		[dir] = params
 		print dir
 		#id=LOAD_FILE_ID
+		#os.getcwd()
 		import wx.lib.agw.multidirdialog as MDD
 		if 0:
 			dlg = wx.DirDialog(self, "Choose a CVS input directory:", dir, style=wx.DD_DEFAULT_STYLE | wx.DD_NEW_DIR_BUTTON)
@@ -3762,7 +3769,7 @@ class pnl_args(wx.Panel):
 				#self.SetStatusText('You selected: %s\n' % dlg.GetPath())
 			
 			dlg.Destroy()
-		dlg = MDD.MultiDirDialog(None, title="Choose a CVS input directory:", defaultPath=os.getcwd(),
+		dlg = MDD.MultiDirDialog(None, title="Choose a CVS input directory:", defaultPath=dir,
 						 agwStyle=MDD.DD_MULTIPLE|MDD.DD_DIR_MUST_EXIST)
 
 		if dlg.ShowModal() != wx.ID_OK:
@@ -3773,10 +3780,20 @@ class pnl_args(wx.Panel):
 		paths = dlg.GetPaths()
 		for indx, path in enumerate(paths):
 			print("Path %d: %s"%(indx+1, path))
-
+		
 		dlg.Destroy()
-
-		print dir
+		self.set_dirs(paths)
+		#print dir
+	def set_dirs(self, dirs):
+		path=[]
+		#clean-up
+		for dir in dirs:
+			if dir.startswith('OS '):
+				path.append(dir.strip('OS ').replace('(','').replace(')',''))
+			else:
+				path.append(dir)
+		
+		self.obj['input_dirs'][1].SetValue(';'.join(path))
 	def gen_bind(self, type, instance, handler, *args, **kwargs):
 		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)			
 		
@@ -3796,7 +3813,7 @@ class pnl_args(wx.Panel):
 			cmd='%s\n%s "%s" ^' % (cmd, short,self.obj[k][1].GetValue())			
 		return cmd
 	def get_cmd_line(self,transport):
-		cmd='%s' % transport
+		cmd='%s' % transport #'python  C:\Python27\data_migrator_1239\datamule.py' #
 		for k, v in self.cargs.items():
 			print k,v
 			short,long,val,desc=v
@@ -3855,7 +3872,7 @@ class DataBuddy(wx.Frame):
 		if 1: #Type
 			sb = wx.StaticBox(panel, label="Type")
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			text1 = wx.StaticText(panel, label="CSV_Dir->Table")
+			text1 = wx.StaticText(panel, label="CSV_Dirs->Table")
 			boxsizer.Add(text1, flag=wx.LEFT|wx.TOP, border=5)
 						
 			sizer.Add(boxsizer, pos=(2, 0),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=1)	
@@ -4056,90 +4073,23 @@ class DataBuddy(wx.Frame):
 			print val
 		else:
 			
-			args=[{'copy_vector': ('-w',
-                  '--copy_vector',
-                  'dbtde2maria',
-                  'Data copy direction.'),
-  'field_term': ('-t', '--field_term', '"|"', 'Field terminator.'),
-  'num_of_shards': ('-r', '--num_of_shards', 3, 'Number of shards.'),
-  'pool_size': ('-o', '--pool_size', 3, 'Pool size.')},
- {'from_db_name': ('-b',
-                   '--from_db_name',
-                   '"SAMPLE"',
-                   'DB2 Developer Edition source database.'),
-  'from_db_server': ('-n',
-                     '--from_db_server',
-                     '"DB2"',
-                     'DB2 Developer Edition source instance name.'),
-  'from_passwd': ('-x',
-                  '--from_passwd',
-                  '"198Morgan"',
-                  'DB2 Developer Edition source user password.'),
-  'from_table': ('-c', '--from_table', 'Timestamp_test_from', 'From table.'),
-  'from_user': ('-j',
-                '--from_user',
-                '"ALEX_BUZ"',
-                'DB2 Developer Edition source user.'),
-  'source_client_home': ('-z',
-                         '--source_client_home',
-                         '"C:\\Program Files (x86)\\IBM\\SQLLIB_01\\BIN"',
-                         'Path to DB2 Developer Edition client home.')},
- {'target_client_home': ('-Z',
-                         '--target_client_home',
-                         '"C:\\Program Files\\MariaDB 10.0\\bin"',
-                         'Path to mysql client home.'),
-  'to_db_name': ('-d', '--to_db_name', '"test"', 'Target database.'),
-  'to_db_server': ('-s',
-                   '--to_db_server',
-                   '"localhost"',
-                   'Target db instance name.'),
-  'to_passwd': ('-p',
-                '--to_passwd',
-                '"maria_pwd"',
-                'Target db user password.'),
-  'to_table': ('-a', '--to_table', 'Timestamp_test_to', 'Target table.'),
-  'to_user': ('-u', '--to_user', '"root"', 'Target MariaDB db user.')}]
-			data=['dsfdsfdsf', ['SLITE', 'INFOR'], 'SLITE_ParallelQueryDir.INFOR_Table',args]
-			################################################# CSV
-			args=[{'copy_vector': ('-w',
-                  '--copy_vector',
-                  'csv2ora11g',
-                  'Data copy direction.'),
-  'field_term': ('-t', '--field_term', '"|"', 'Field terminator.'),
-  'num_of_shards': ('-r', '--num_of_shards', 1, 'Number of shards.'),
-  'pool_size': ('-o', '--pool_size', 1, 'Pool size.')},
- {'input_dir': ('-I',
-                '--input_dir',
-                'c:\\Python27\\data_migrator_1239\\test\\v101\\data\\ora_data_dir',
-                'Input CSV directory.'),
-  'shard_size_kb': ('-y',
-                    '--shard_size_kb',
-                    1000,
-                    'Shard size in KBytes (to partition file and to estimate number of lines in input CSV file).')},
- {'nls_date_format': ('-e',
-                      '--nls_date_format',
-                      '"YYYY-MM-DD HH24.MI.SS"',
-                      'nls_date_format for target.'),
-  'nls_timestamp_format': ('-m',
-                           '--nls_timestamp_format',
-                           '"YYYY-MM-DD HH24.MI.SS.FF2"',
-                           'nls_timestamp_format for target.'),
-  'nls_timestamp_tz_format': ('-O',
-                              '--nls_timestamp_tz_format',
-                              '"YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM"',
-                              'nls_timestamp_tz_format for target.'),
-  'target_client_home': ('-Z',
-                         '--target_client_home',
-                         '"C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN"',
-                         'Path to Oracle client home bin dir.'),
-  'to_db': ('-g', '--to_db', 'SCOTT/tiger2@orcl', 'To Oracle database.'),
-  'to_table': ('-a',
-               '--to_table',
-               'SCOTT.Timestamp_test_to',
-               'To Oracle table.')}]
-			data=['csv_dir_to_table', ['CSV', 'ORA11G'], 'CSV_Dir.ORA11G_Table',args]
-			self.set_new_session(data)
+			#data=['dsfdsfdsf', ['SLITE', 'INFOR'], 'SLITE_ParallelQueryDir.INFOR_Table']		
+			data=['csv_dirs_to_table', ['CSV', 'ORA11G'], 'CSV_Dirs.ORA11G_Table'] #_Partition_TruncateTarget
+			self.set_new_session(data+[self.get_api_args(data)])
+	def get_api_args(self,data):
+		api_file= os.path.join(home,aa_dir,data[1][0],'%s-%s.py' % tuple(data[1]))
+		
+		assert os.path.isfile(api_file), 'api_file %s does not exists.' % (api_file)
+		apimod=import_module(api_file)
+		self.api_args=apimod.aa
+		tmpl=data[2]
+		print self.api_args[tmpl]
+		return self.api_args[tmpl]
+
+		
+		return 
 	def set_new_session(self,data):
+			print len(data)
 			(sname,copy_vector,tmpl,api_args) = data
 			self.setSessionName(sname)
 			self.setCopyVector(copy_vector)
@@ -4176,7 +4126,7 @@ class DataBuddy(wx.Frame):
 			os.makedirs(dirname)
 		f=open(fname,'w')
 		cmd=self.args_panel.get_cmd(self.transport)
-		cmd=cmd.replace('csv2ora11g','csv2ora')
+		#cmd=cmd.replace('csv2ora11g','csv2ora')
 		
 		#print cmd
 		if_yes=self.send_yes.GetValue()
@@ -4243,6 +4193,9 @@ class DataBuddy(wx.Frame):
 		if 0:
 			os.system(r'start "test" cmd.exe  /k "mode 100,45 && echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\dm32\dm32.exe -w ora2ora -o 1 -r 1 -t "^|" -c SCOTT.Date_test_from -f SCOTT/tiger2@orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -g SCOTT/tiger2@orcl -a SCOTT.Partitioned_test_to -G part_15 -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN""')
 		else:
+			#os.system(r'start "test" cmd.exe  /k "echo y|python  C:\Python27\data_migrator_1239\datamule.py  -t "^|" -w "csv2ora11g" -r "1" -o "1" -I "c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_1;c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_2" -y "1000" -d "orcl" -e "YYYY-MM-DD HH24.MI.SS" -u "SCOTT" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -p "tiger2" -a "SCOTT.Timestamp_test_to" -m "YYYY-MM-DD HH24.MI.SS.FF2"')
+			#print r'start "test" cmd.exe  /k "echo y|python  C:\Python27\data_migrator_1239\datamule.py  -t "^|" -w "csv2ora11g" -r "1" -o "1" -I "c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_1;c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_2" -y "1000" -d "orcl" -e "YYYY-MM-DD HH24.MI.SS" -u "SCOTT" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -p "tiger2" -a "SCOTT.Timestamp_test_to" -m "YYYY-MM-DD HH24.MI.SS.FF2"'
+			#print r'start "test" cmd.exe  /k "%s%s"' % (yes,cmd)
 			os.system(r'start "test" cmd.exe  /k "%s%s"' % (yes,cmd))
 			#u'C:\\Users\\alex_buz\\Documents\\GitHub\\DataBuddy\\dm32\\dm32.exe -t "|" -w "csv2ora11g" -r "1" -o "1" -I "c:\\Python27\\data_migrator_1239\\test\\v101\\data\\ora_data_dir" -y "1000" -g "SCOTT/tiger2@orcl" -m "YYYY-MM-DD HH24.MI.SS.FF2" -e "YYYY-MM-DD HH24.MI.SS" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -a "SCOTT.Timestamp_test_to" -Z "C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN"'		
 	def OnVectorButton(self, event,params):

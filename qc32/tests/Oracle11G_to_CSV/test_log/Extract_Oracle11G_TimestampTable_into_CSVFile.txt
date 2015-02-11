@@ -1,7 +1,7 @@
 
-C:\Python27\data_migrator_1239>echo y  | C:\Python27\qc_dist_32\20150209_104450\qc32\qc32.exe -w ora11g2csv -o 1 -r 1 -t "|" -c SCOTT.Timestamp_test_from -f SCOTT/tiger2@orcl -e "YYYY/MM/DD" -m "YYYY-MM-DD-HH24.MI.SS.FF" -O "YYYY-MM-DD-HH24:MI:SS.FF" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -g C:\Python27\data_migrator_1239\CSV_OUT\testORA11G_TimestampTable.data 
+c:\Python27\data_migrator_1239>echo y  | c:\Python27\qc_dist_32\20150211_114734\qc32\qc32.exe -w ora11g2csv -o 1 -r 1 -t "|" -c SCOTT.Timestamp_test_from -j SCOTT -x tiger2 -b orcl -e "YYYY/MM/DD" -m "YYYY-MM-DD-HH24.MI.SS.FF" -O "YYYY-MM-DD-HH24:MI:SS.FF" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -g c:\Python27\data_migrator_1239\CSV_OUT\testORA11G_TimestampTable.data 
 ----------------------------------------------------------------------
-QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/09 10:44:50) [32bit]
+QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/11 11:47:34) [32bit]
 Copyright (c): 2014 Alex Buzunov, All rights reserved.
 Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
 ----------------------------------------------------------------------
@@ -17,7 +17,7 @@ From Oracle 11G:
 		
 		
 To CSV:
-	C:\Python27\data_migrator_1239\CSV_OUT\testORA11G_TimestampTable.data
+	c:\Python27\data_migrator_1239\CSV_OUT\testORA11G_TimestampTable.data
 
 ####################
 Are you sure you want to proceed?(y/n): 
@@ -25,14 +25,14 @@ Thread-0 (0, 14608L, 44)
 ############################################################
 Copy stats (1 threads, 1 shards):
 ############################################################
-2015-02-09 10:45:34,224 - ora11g2csv - INFO - Starting Thread-0
-2015-02-09 10:45:34,224 - ora11g2csv - INFO - Thread-0 processing Shard-0
-2015-02-09 10:45:34,224 - ora11g2csv - INFO - Extracting data...
-2015-02-09 10:45:34,460 - ora11g2csv - INFO - Done.
-2015-02-09 10:45:34,460 - ora11g2csv - INFO - Thread-0 exit status 0
-2015-02-09 10:45:34,460 - ora11g2csv - INFO - Exiting Thread-0
-2015-02-09 10:45:34,460 - ora11g2csv - INFO - Shard-0/0:          44 rows
-2015-02-09 10:45:34,460 - ora11g2csv - INFO - TOTAL Bytes:       14608 Bytes
-2015-02-09 10:45:34,460 - ora11g2csv - INFO - TOTAL Rows:           44 Rows
-2015-02-09 10:45:34,460 - ora11g2csv - INFO - Done.
-2015-02-09 10:45:34,460 - ora11g2csv - INFO - Elapsed: 00:00:00
+2015-02-11 11:48:29,312 - ora11g2csv - INFO - Starting Thread-0
+2015-02-11 11:48:29,312 - ora11g2csv - INFO - Thread-0 processing Shard-0
+2015-02-11 11:48:29,312 - ora11g2csv - INFO - Extracting data...
+2015-02-11 11:48:29,512 - ora11g2csv - INFO - Done.
+2015-02-11 11:48:29,512 - ora11g2csv - INFO - Thread-0 exit status 0
+2015-02-11 11:48:29,513 - ora11g2csv - INFO - Exiting Thread-0
+2015-02-11 11:48:29,513 - ora11g2csv - INFO - Shard-0/0:          44 rows
+2015-02-11 11:48:29,513 - ora11g2csv - INFO - TOTAL Bytes:       14608 Bytes
+2015-02-11 11:48:29,513 - ora11g2csv - INFO - TOTAL Rows:           44 Rows
+2015-02-11 11:48:29,513 - ora11g2csv - INFO - Done.
+2015-02-11 11:48:29,513 - ora11g2csv - INFO - Elapsed: 00:00:00

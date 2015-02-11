@@ -2,7 +2,7 @@
 ##qc32.exe -h USE 
 ##
 ----------------------------------------------------------------------
-QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/09 10:44:50) [32bit]
+QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/11 11:47:34) [32bit]
 Copyright (c): 2014 Alex Buzunov, All rights reserved.
 Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
 ----------------------------------------------------------------------
@@ -17,30 +17,30 @@ Copy direction: CSV->Oracle11G
   6. qc32.exe -h USE:CSV_DateFile_to_ORA11G_Table_NoClient
   7. qc32.exe -h USE:CSV_DateFile_to_ORA11G_Table_TruncateTarget
   8. qc32.exe -h USE:CSV_DateFile_to_ORA11G_Table_TruncateTarget_NoClient
-  9. qc32.exe -h USE:CSV_DirSkip1_to_ORA11G_Partition
-  10. qc32.exe -h USE:CSV_DirSkip1_to_ORA11G_Partition_TruncateTarget
-  11. qc32.exe -h USE:CSV_DirSkip1_to_ORA11G_Subpartition
-  12. qc32.exe -h USE:CSV_DirSkip1_to_ORA11G_Subpartition_TruncateTarget
-  13. qc32.exe -h USE:CSV_DirSkip1_to_ORA11G_Table
-  14. qc32.exe -h USE:CSV_DirSkip1_to_ORA11G_Table_NoClient
-  15. qc32.exe -h USE:CSV_DirSkip1_to_ORA11G_Table_TruncateTarget
-  16. qc32.exe -h USE:CSV_DirSkip1_to_ORA11G_Table_TruncateTarget_NoClient
-  17. qc32.exe -h USE:CSV_Dir_Limit10_to_ORA11G_Partition
-  18. qc32.exe -h USE:CSV_Dir_Limit10_to_ORA11G_Partition_TruncateTarget
-  19. qc32.exe -h USE:CSV_Dir_Limit10_to_ORA11G_Subpartition
-  20. qc32.exe -h USE:CSV_Dir_Limit10_to_ORA11G_Subpartition_TruncateTarget
-  21. qc32.exe -h USE:CSV_Dir_Limit10_to_ORA11G_Table
-  22. qc32.exe -h USE:CSV_Dir_Limit10_to_ORA11G_Table_NoClient
-  23. qc32.exe -h USE:CSV_Dir_Limit10_to_ORA11G_Table_TruncateTarget
-  24. qc32.exe -h USE:CSV_Dir_Limit10_to_ORA11G_Table_TruncateTarget_NoClient
-  25. qc32.exe -h USE:CSV_Dir_to_ORA11G_Partition
-  26. qc32.exe -h USE:CSV_Dir_to_ORA11G_Partition_TruncateTarget
-  27. qc32.exe -h USE:CSV_Dir_to_ORA11G_Subpartition
-  28. qc32.exe -h USE:CSV_Dir_to_ORA11G_Subpartition_TruncateTarget
-  29. qc32.exe -h USE:CSV_Dir_to_ORA11G_Table
-  30. qc32.exe -h USE:CSV_Dir_to_ORA11G_Table_NoClient
-  31. qc32.exe -h USE:CSV_Dir_to_ORA11G_Table_TruncateTarget
-  32. qc32.exe -h USE:CSV_Dir_to_ORA11G_Table_TruncateTarget_NoClient
+  9. qc32.exe -h USE:CSV_DirsSkip1_to_ORA11G_Partition
+  10. qc32.exe -h USE:CSV_DirsSkip1_to_ORA11G_Partition_TruncateTarget
+  11. qc32.exe -h USE:CSV_DirsSkip1_to_ORA11G_Subpartition
+  12. qc32.exe -h USE:CSV_DirsSkip1_to_ORA11G_Subpartition_TruncateTarget
+  13. qc32.exe -h USE:CSV_DirsSkip1_to_ORA11G_Table
+  14. qc32.exe -h USE:CSV_DirsSkip1_to_ORA11G_Table_NoClient
+  15. qc32.exe -h USE:CSV_DirsSkip1_to_ORA11G_Table_TruncateTarget
+  16. qc32.exe -h USE:CSV_DirsSkip1_to_ORA11G_Table_TruncateTarget_NoClient
+  17. qc32.exe -h USE:CSV_Dirs_Limit10_to_ORA11G_Partition
+  18. qc32.exe -h USE:CSV_Dirs_Limit10_to_ORA11G_Partition_TruncateTarget
+  19. qc32.exe -h USE:CSV_Dirs_Limit10_to_ORA11G_Subpartition
+  20. qc32.exe -h USE:CSV_Dirs_Limit10_to_ORA11G_Subpartition_TruncateTarget
+  21. qc32.exe -h USE:CSV_Dirs_Limit10_to_ORA11G_Table
+  22. qc32.exe -h USE:CSV_Dirs_Limit10_to_ORA11G_Table_NoClient
+  23. qc32.exe -h USE:CSV_Dirs_Limit10_to_ORA11G_Table_TruncateTarget
+  24. qc32.exe -h USE:CSV_Dirs_Limit10_to_ORA11G_Table_TruncateTarget_NoClient
+  25. qc32.exe -h USE:CSV_Dirs_to_ORA11G_Partition
+  26. qc32.exe -h USE:CSV_Dirs_to_ORA11G_Partition_TruncateTarget
+  27. qc32.exe -h USE:CSV_Dirs_to_ORA11G_Subpartition
+  28. qc32.exe -h USE:CSV_Dirs_to_ORA11G_Subpartition_TruncateTarget
+  29. qc32.exe -h USE:CSV_Dirs_to_ORA11G_Table
+  30. qc32.exe -h USE:CSV_Dirs_to_ORA11G_Table_NoClient
+  31. qc32.exe -h USE:CSV_Dirs_to_ORA11G_Table_TruncateTarget
+  32. qc32.exe -h USE:CSV_Dirs_to_ORA11G_Table_TruncateTarget_NoClient
   33. qc32.exe -h USE:CSV_FileSkip1_to_ORA11G_Partition
   34. qc32.exe -h USE:CSV_FileSkip1_to_ORA11G_Partition_TruncateTarget
   35. qc32.exe -h USE:CSV_FileSkip1_to_ORA11G_Subpartition

@@ -1,7 +1,7 @@
 
-C:\Python27\data_migrator_1239>python -c "print 'y\ny'"   | C:\Python27\qc_dist_32\20150209_104450\qc32\qc32.exe -w ora11g2ora11g -o 1 -r 1 -t "|" -U 1 -Q C:\Python27\data_migrator_1239\test\v101\query\query_dir_ora -f SCOTT/tiger2@orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -W 1 -g SCOTT/tiger2@orcl -a SCOTT.Partitioned_test_to -G part_15 -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" 
+c:\Python27\data_migrator_1239>python -c "print 'y\ny'"   | c:\Python27\qc_dist_32\20150211_114734\qc32\qc32.exe -w ora11g2ora11g -o 1 -r 1 -t "|" -U 1 -Q c:\Python27\data_migrator_1239\test\v101\query\query_dir_ora -j SCOTT -x tiger2 -b orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -W 1 -u SCOTT -p tiger2 -d orcl -a SCOTT.Partitioned_test_to -G part_15 -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" 
 ----------------------------------------------------------------------
-QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/09 10:44:50) [32bit]
+QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/11 11:47:34) [32bit]
 Copyright (c): 2014 Alex Buzunov, All rights reserved.
 Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
 ----------------------------------------------------------------------
@@ -12,7 +12,7 @@ Performing data copy.
 		
 From Oracle 11G:	
 	from db: SCOTT@orcl
-	query: C:\Python27\data_migrator_1239\test\v101\query\query_dir_ora
+	query: c:\Python27\data_migrator_1239\test\v101\query\query_dir_ora
 	shards:	3
 		
 		
@@ -37,47 +37,47 @@ Thread-0 (0, 5304L, 44)
 ############################################################
 Copy stats (1 threads, 3 shards):
 ############################################################
-2015-02-09 10:46:46,500 - ora11g2ora11g - WARNING - Overriding num_of_shards (1) to be equal number of queries (3).
-2015-02-09 10:46:46,506 - ora11g2ora11g - INFO - Fetching column info...
-2015-02-09 10:46:46,661 - ora11g2ora11g - INFO - Done.
-2015-02-09 10:46:46,664 - ora11g2ora11g - INFO - Fetching column info...
-2015-02-09 10:46:46,786 - ora11g2ora11g - INFO - Done.
-2015-02-09 10:46:46,845 - ora11g2ora11g - INFO - Fetching column info...
-2015-02-09 10:46:46,997 - ora11g2ora11g - INFO - Done.
-2015-02-09 10:46:47,042 - ora11g2ora11g - WARNING - Source is query dir.
-2015-02-09 10:46:47,042 - ora11g2ora11g - WARNING - Target is partition.
-2015-02-09 10:46:47,042 - ora11g2ora11g - WARNING - Truncating partiton part_15
-2015-02-09 10:46:48,096 - ora11g2ora11g - INFO - Table truncated.
-2015-02-09 10:46:48,096 - ora11g2ora11g - INFO - Starting Thread-0
-2015-02-09 10:46:48,098 - ora11g2ora11g - INFO - Thread-0 processing Shard-0
-2015-02-09 10:46:48,098 - ora11g2ora11g - INFO - Extracting data...
-2015-02-09 10:46:48,282 - ora11g2ora11g - INFO - Done
-2015-02-09 10:46:48,440 - ora11g2ora11g - INFO - Loading data...
-2015-02-09 10:46:48,628 - ora11g2ora11g - INFO - SQL*Loader status =0
-2015-02-09 10:46:48,628 - ora11g2ora11g - INFO - Done
-2015-02-09 10:46:48,630 - ora11g2ora11g - INFO - spool file deleted.
-2015-02-09 10:46:48,630 - ora11g2ora11g - INFO - Thread-0 exit status 0
-2015-02-09 10:46:48,630 - ora11g2ora11g - INFO - Thread-0 processing Shard-1
-2015-02-09 10:46:48,631 - ora11g2ora11g - INFO - Extracting data...
-2015-02-09 10:46:48,790 - ora11g2ora11g - INFO - Done
-2015-02-09 10:46:48,834 - ora11g2ora11g - INFO - Loading data...
-2015-02-09 10:46:49,714 - ora11g2ora11g - INFO - SQL*Loader status =0
-2015-02-09 10:46:49,716 - ora11g2ora11g - INFO - Done
-2015-02-09 10:46:49,716 - ora11g2ora11g - INFO - spool file deleted.
-2015-02-09 10:46:49,717 - ora11g2ora11g - INFO - Thread-0 exit status 0
-2015-02-09 10:46:49,717 - ora11g2ora11g - INFO - Thread-0 processing Shard-2
-2015-02-09 10:46:49,717 - ora11g2ora11g - INFO - Extracting data...
-2015-02-09 10:46:49,944 - ora11g2ora11g - INFO - Done
-2015-02-09 10:46:49,944 - ora11g2ora11g - INFO - Loading data...
-2015-02-09 10:46:50,101 - ora11g2ora11g - INFO - SQL*Loader status =0
-2015-02-09 10:46:50,101 - ora11g2ora11g - INFO - Done
-2015-02-09 10:46:50,102 - ora11g2ora11g - INFO - spool file deleted.
-2015-02-09 10:46:50,102 - ora11g2ora11g - INFO - Thread-0 exit status 0
-2015-02-09 10:46:50,102 - ora11g2ora11g - INFO - Exiting Thread-0
-2015-02-09 10:46:50,102 - ora11g2ora11g - INFO - Shard-0/0:          44 rows
-2015-02-09 10:46:50,102 - ora11g2ora11g - INFO - Shard-1/0:          44 rows
-2015-02-09 10:46:50,102 - ora11g2ora11g - INFO - Shard-2/0:          44 rows
-2015-02-09 10:46:50,102 - ora11g2ora11g - INFO - TOTAL Bytes:       15912 Bytes
-2015-02-09 10:46:50,102 - ora11g2ora11g - INFO - TOTAL Rows:          132 Rows
-2015-02-09 10:46:50,102 - ora11g2ora11g - INFO - Done.
-2015-02-09 10:46:50,102 - ora11g2ora11g - INFO - Elapsed: 00:00:03
+2015-02-11 11:49:39,059 - ora11g2ora11g - WARNING - Overriding num_of_shards (1) to be equal number of queries (3).
+2015-02-11 11:49:39,065 - ora11g2ora11g - INFO - Fetching column info...
+2015-02-11 11:49:39,418 - ora11g2ora11g - INFO - Done.
+2015-02-11 11:49:39,421 - ora11g2ora11g - INFO - Fetching column info...
+2015-02-11 11:49:39,528 - ora11g2ora11g - INFO - Done.
+2015-02-11 11:49:39,588 - ora11g2ora11g - INFO - Fetching column info...
+2015-02-11 11:49:39,663 - ora11g2ora11g - INFO - Done.
+2015-02-11 11:49:39,703 - ora11g2ora11g - WARNING - Source is query dir.
+2015-02-11 11:49:39,704 - ora11g2ora11g - WARNING - Target is partition.
+2015-02-11 11:49:39,704 - ora11g2ora11g - WARNING - Truncating partiton part_15
+2015-02-11 11:49:39,808 - ora11g2ora11g - INFO - Table truncated.
+2015-02-11 11:49:39,809 - ora11g2ora11g - INFO - Starting Thread-0
+2015-02-11 11:49:39,809 - ora11g2ora11g - INFO - Thread-0 processing Shard-0
+2015-02-11 11:49:39,809 - ora11g2ora11g - INFO - Extracting data...
+2015-02-11 11:49:40,068 - ora11g2ora11g - INFO - Done
+2015-02-11 11:49:40,141 - ora11g2ora11g - INFO - Loading data...
+2015-02-11 11:49:40,233 - ora11g2ora11g - INFO - SQL*Loader status =0
+2015-02-11 11:49:40,233 - ora11g2ora11g - INFO - Done
+2015-02-11 11:49:40,233 - ora11g2ora11g - INFO - spool file deleted.
+2015-02-11 11:49:40,234 - ora11g2ora11g - INFO - Thread-0 exit status 0
+2015-02-11 11:49:40,234 - ora11g2ora11g - INFO - Thread-0 processing Shard-1
+2015-02-11 11:49:40,234 - ora11g2ora11g - INFO - Extracting data...
+2015-02-11 11:49:40,441 - ora11g2ora11g - INFO - Done
+2015-02-11 11:49:40,487 - ora11g2ora11g - INFO - Loading data...
+2015-02-11 11:49:40,559 - ora11g2ora11g - INFO - SQL*Loader status =0
+2015-02-11 11:49:40,559 - ora11g2ora11g - INFO - Done
+2015-02-11 11:49:40,559 - ora11g2ora11g - INFO - spool file deleted.
+2015-02-11 11:49:40,561 - ora11g2ora11g - INFO - Thread-0 exit status 0
+2015-02-11 11:49:40,561 - ora11g2ora11g - INFO - Thread-0 processing Shard-2
+2015-02-11 11:49:40,561 - ora11g2ora11g - INFO - Extracting data...
+2015-02-11 11:49:40,742 - ora11g2ora11g - INFO - Done
+2015-02-11 11:49:40,743 - ora11g2ora11g - INFO - Loading data...
+2015-02-11 11:49:40,970 - ora11g2ora11g - INFO - SQL*Loader status =0
+2015-02-11 11:49:40,971 - ora11g2ora11g - INFO - Done
+2015-02-11 11:49:40,971 - ora11g2ora11g - INFO - spool file deleted.
+2015-02-11 11:49:40,971 - ora11g2ora11g - INFO - Thread-0 exit status 0
+2015-02-11 11:49:40,971 - ora11g2ora11g - INFO - Exiting Thread-0
+2015-02-11 11:49:40,971 - ora11g2ora11g - INFO - Shard-0/0:          44 rows
+2015-02-11 11:49:40,973 - ora11g2ora11g - INFO - Shard-1/0:          44 rows
+2015-02-11 11:49:40,973 - ora11g2ora11g - INFO - Shard-2/0:          44 rows
+2015-02-11 11:49:40,973 - ora11g2ora11g - INFO - TOTAL Bytes:       15912 Bytes
+2015-02-11 11:49:40,973 - ora11g2ora11g - INFO - TOTAL Rows:          132 Rows
+2015-02-11 11:49:40,973 - ora11g2ora11g - INFO - Done.
+2015-02-11 11:49:40,973 - ora11g2ora11g - INFO - Elapsed: 00:00:01
