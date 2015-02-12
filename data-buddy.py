@@ -3587,6 +3587,7 @@ class pnl_args(wx.Panel):
 		#self.frame=frame
 		ID_TC_MODE = wx.NewId()
 		ID_RUN_AT = wx.NewId()
+		self.parent=parent
 		#self.SetSizer(sizer)
 		#sizer.Fit(self)
 		self.args_vbox = wx.BoxSizer(wx.VERTICAL)
@@ -3615,8 +3616,10 @@ class pnl_args(wx.Panel):
 				col=(i-i%2)
 				print 'row',row, 'col', col
 				self.obj[k]= (wx.StaticText(self.core_args_panel, label=k), wx.TextCtrl(self.core_args_panel,value=str(val).strip('"'), size=(100,22)))
+				self.obj[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
 				self.fgs.Add(self.obj[k][0], pos=(i%2, col), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				self.fgs.Add(self.obj[k][1], pos=(i%2, col+1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				
 				if k in disable:
 					self.obj[k][1].Enable(False)
 				i+=1
@@ -3652,6 +3655,7 @@ class pnl_args(wx.Panel):
 				self.obj[k]= (wx.StaticText(from_args_panel, label=k), wx.TextCtrl(from_args_panel,value=sval, size=(135,22)))
 				fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				fgs.Add(self.obj[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				self.obj[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
 				if k in ['input_dirs']:
 					imageFile = "bmp_source/refresh_icon_16_grey2.png"
 					image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
@@ -3688,6 +3692,7 @@ class pnl_args(wx.Panel):
 				self.obj[k]= (wx.StaticText(to_args_panel, label=k), wx.TextCtrl(to_args_panel,value=str(val).strip('"'), style=style, size=(135,22)))
 				fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				fgs.Add(self.obj[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				self.obj[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
 				i+=1
 			hbox.Add(fgs, 1, flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=5)	
 			to_args_panel.SetSizer(hbox)
@@ -3757,6 +3762,14 @@ class pnl_args(wx.Panel):
 		self.args_vbox.Add(self.args_hbox,0,flag=wx.ALL|wx.EXPAND|wx.GROW)
 		self.SetSizer(self.args_vbox)
 		self.Fit()
+	def onKeyPress(self, event):
+		#print 'changed'
+		
+		kc = event.GetKeyCode()
+		if not (kc == wx.WXK_TAB or kc == wx.WXK_RETURN):
+			self.parent.btn_save.Enable(True)
+		event.Skip()
+		return
 	def ClearAll(self):
 		for k in self.obj:
 			if k not in ['copy_vector']:
@@ -3775,7 +3788,7 @@ class pnl_args(wx.Panel):
 			val=self.obj[k][1].GetValue()
 			self.fargs[k]=list(self.fargs[k])
 			if k in ['from_passwd']:
-				
+				#base64.b64decode("cGFzc3dvcmQ=")
 				self.targs[k][2]=base64.b64encode(val)
 			else:			
 				if str(self.fargs[k][2]).strip('"') not in [val]:
@@ -3898,6 +3911,7 @@ class DataBuddy(wx.Frame):
 			self.st_session_name = wx.StaticText(panel, label="Session name:")
 			sizer.Add(self.st_session_name, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
 			self.tc_session_name = wx.TextCtrl(panel,value='n/a')
+			self.tc_session_name.Bind(wx.EVT_CHAR, self.onKeyPress)
 			self.tc_session_name.Enable(False)
 			sizer.Add(self.tc_session_name, pos=(0, 1), span=(1, 3), flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=10)
 			icon = wx.StaticBitmap(panel, bitmap=wx.Bitmap('exec.png'))
@@ -4081,6 +4095,7 @@ class DataBuddy(wx.Frame):
 		panel.SetSizer(sizer)
 		sub(self.onTransportLoc, "set_transport_location")
 		sub(self.onNewSession, "create_new_session")
+		sub(self.onValueChanged, "value_changed")
 		#self.SetSizeHints(250,300,500,400)
 		self.Layout()
 		self.Fit()
@@ -4088,6 +4103,16 @@ class DataBuddy(wx.Frame):
 		self.Center()
 		self.Show(True)
 		(self.cargs,self.fargs,self.targs)=(None, None, None)
+	def onKeyPress(self, event):
+		#print 'changed'
+		
+		kc = event.GetKeyCode()
+		if not (kc == wx.WXK_TAB or kc == wx.WXK_RETURN):
+			self.btn_save.Enable(True)
+		event.Skip()
+		return
+		
+		
 	def onNewSession(self, data, extra1, extra2=None):		
 		(sname,copy_vector,tmpl,api_args) = data
 		print sname,copy_vector,tmpl,
@@ -4097,6 +4122,9 @@ class DataBuddy(wx.Frame):
 		self.Layout()
 		self.Fit()
 		self.Refresh()
+	def onValueChanged(self, data, extra1, extra2=None):		
+		self.btn_save.Enable(True)
+		
 	def setSessionName(self, sn):
 		self.tc_session_name.SetValue(sn)
 		self.tc_session_name.Enable(True)
