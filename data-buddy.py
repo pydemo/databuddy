@@ -3948,7 +3948,9 @@ class DataBuddy(wx.Frame):
 			self.btn_delete.Enable(False)
 			self.btn_clearall=wx.Button(panel, label="Clear All")
 			self.btn_clearall.Enable(False)
-			fgs.AddMany([(new_btn, 1, wx.EXPAND),(self.btn_delete, 1, wx.EXPAND),wx.StaticText(panel, label=' '),(self.btn_clearall, 1, wx.EXPAND)])
+			self.btn_save=wx.Button(panel, label="Save")
+			self.btn_save.Enable(False)			
+			fgs.AddMany([(new_btn, 1, wx.EXPAND),(self.btn_delete, 1, wx.EXPAND),wx.StaticText(panel, label=' '),(self.btn_clearall, 1, wx.EXPAND),wx.StaticText(panel, label=' \n'),(self.btn_save, 1, wx.EXPAND)])
 			new_btn.Bind(wx.EVT_BUTTON, self.OnNewButton)	
 			#button1 = wx.Button(panel, label="New")
 			#sizer.Add(button1, pos=(3, 5), flag=wx.TOP|wx.RIGHT, border=5)
@@ -3958,10 +3960,14 @@ class DataBuddy(wx.Frame):
 			sizer.Add(fgs, pos=(3, 4), flag=wx.TOP|wx.RIGHT, border=5)
 		sb = wx.StaticBox(panel, label="Optional")
 
-		boxsizer = wx.StaticBoxSizer(sb, wx.VERTICAL)
+		boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
 		self.send_yes=wx.CheckBox(panel, label="Send 'y'")
 		boxsizer.Add(self.send_yes, flag=wx.LEFT|wx.TOP, border=5)
 		self.send_yes.SetValue(True)
+		self.auto_save=wx.CheckBox(panel, label="Auto-save")
+		boxsizer.Add(self.auto_save, flag=wx.LEFT|wx.TOP, border=5)
+		self.auto_save.SetValue(True)
+		
 		#print(dir(cb))
 		sizer.Add(boxsizer, pos=(8, 0), span=(1, 5), 
 			flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=10)
@@ -4046,6 +4052,7 @@ class DataBuddy(wx.Frame):
 		print sname,copy_vector,tmpl,
 		pprint (api_args)
 		self.set_new_session(data)
+		self.btn_save.Enable(Enable)	
 		self.Layout()
 		self.Fit()
 		self.Refresh()
