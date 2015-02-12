@@ -3761,15 +3761,36 @@ class pnl_args(wx.Panel):
 				self.obj[k][1].SetValue('')
 	def SaveArgs(self):
 		for k in self.cargs:
-			assert self.obj.has_key(k), '"%s" is not set' % k
+			assert self.obj.has_key(k), 'cargs "%s" is not set' % k
 			val=self.obj[k][1].GetValue()
 			self.cargs[k]=list(self.cargs[k])
 			if str(self.cargs[k][2]).strip('"') not in [val]:
-				print '"%s" value changed' % k, str(self.cargs[k][2]),'-->' ,val
+				print 'cargs "%s" value changed' % k, str(self.cargs[k][2]),'-->' ,val
 				self.cargs[k][2]=val
 			#,self.fargs,self.targs=self.args
-		
-		
+		for k in self.fargs:
+			assert self.obj.has_key(k), 'fargs "%s" is not set' % k
+			val=self.obj[k][1].GetValue()
+			self.fargs[k]=list(self.fargs[k])
+			if str(self.fargs[k][2]).strip('"') not in [val]:
+				print 'fargs "%s" value changed' % k, str(self.fargs[k][2]),'-->' ,val
+				self.fargs[k][2]=val		
+		for k in self.targs:
+			assert self.obj.has_key(k), 'targs "%s" is not set' % k
+			val=self.obj[k][1].GetValue()
+			self.targs[k]=list(self.targs[k])
+			if str(self.targs[k][2]).strip('"') not in [val]:
+				print 'targs "%s" value changed' % k, str(self.targs[k][2]),'-->' ,val
+				self.targs[k][2]=val
+		#save to file
+		userhome = os.path.expanduser('~')
+		save_to_dir=os.path.join(userhome,'sessions')
+		if not os.path.isdir(save_to_dir):
+			os.makedir(save_to_dir)
+		sname=self.getSessionName()
+		save_to_file=os.path.join(save_to_dir, '%s;%s;%s.p' % sname)
+		import pickle
+		pickle.dump( favorite_color, open( "save.p", "wb" ) )
 	def OnInputDir(self, evt,params):
 		[dir] = params
 		print dir
@@ -4076,6 +4097,8 @@ class DataBuddy(wx.Frame):
 	def setSessionName(self, sn):
 		self.tc_session_name.SetValue(sn)
 		self.tc_session_name.Enable(True)
+	def getSessionName(self):
+		return self.tc_session_name.GetValue()
 	def setCopyVector(self, cv):
 		self.copy_vector=cv	
 		self.btn_copy_vector.SetLabel('%s -> %s' % (conf.dbs[cv[0]], conf.dbs[cv[1]]))
