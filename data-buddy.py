@@ -36,7 +36,7 @@ from tc_lib import sub, send
 from collections import OrderedDict
 import imp
 from editor import TacoTextEditor
-
+import base64
 import __builtin__
 __builtin__.copy_vector = None
 __builtin__.cvarg = None
@@ -3582,7 +3582,7 @@ class default_args(wx.Panel):
 class pnl_args(wx.Panel):
 	"""Arguments"""
 	
-	def __init__(self, parent, args_api,style):
+	def __init__(self, parent, copy_vector,tmpl,args_api,style):
 		wx.Panel.__init__(self, parent, -1, style=style)
 		#self.frame=frame
 		ID_TC_MODE = wx.NewId()
@@ -3593,6 +3593,8 @@ class pnl_args(wx.Panel):
 		self.args_hbox = wx.BoxSizer(wx.HORIZONTAL)
 		self.args=args_api
 		self.cargs,self.fargs,self.targs=self.args
+		self.copy_vector=copy_vector
+		self.tmpl=tmpl
 		self.obj={}
 		if 1: #Common
 			
@@ -3759,7 +3761,7 @@ class pnl_args(wx.Panel):
 		for k in self.obj:
 			if k not in ['copy_vector']:
 				self.obj[k][1].SetValue('')
-	def SaveArgs(self):
+	def getArgs(self):
 		for k in self.cargs:
 			assert self.obj.has_key(k), 'cargs "%s" is not set' % k
 			val=self.obj[k][1].GetValue()
@@ -3772,25 +3774,26 @@ class pnl_args(wx.Panel):
 			assert self.obj.has_key(k), 'fargs "%s" is not set' % k
 			val=self.obj[k][1].GetValue()
 			self.fargs[k]=list(self.fargs[k])
-			if str(self.fargs[k][2]).strip('"') not in [val]:
-				print 'fargs "%s" value changed' % k, str(self.fargs[k][2]),'-->' ,val
-				self.fargs[k][2]=val		
+			if k in ['from_passwd']:
+				
+				self.targs[k][2]=base64.b64encode(val)
+			else:			
+				if str(self.fargs[k][2]).strip('"') not in [val]:
+					print 'fargs "%s" value changed' % k, str(self.fargs[k][2]),'-->' ,val
+					self.fargs[k][2]=val		
 		for k in self.targs:
 			assert self.obj.has_key(k), 'targs "%s" is not set' % k
 			val=self.obj[k][1].GetValue()
 			self.targs[k]=list(self.targs[k])
-			if str(self.targs[k][2]).strip('"') not in [val]:
-				print 'targs "%s" value changed' % k, str(self.targs[k][2]),'-->' ,val
-				self.targs[k][2]=val
+			if k in ['to_passwd']:
+				#import base64
+				self.targs[k][2]=base64.b64encode(val)
+			else:			
+				if str(self.targs[k][2]).strip('"') not in [val]:
+					print 'targs "%s" value changed' % k, str(self.targs[k][2]),'-->' ,val
+					self.targs[k][2]=val
 		#save to file
-		userhome = os.path.expanduser('~')
-		save_to_dir=os.path.join(userhome,'sessions')
-		if not os.path.isdir(save_to_dir):
-			os.makedir(save_to_dir)
-		sname=self.getSessionName()
-		save_to_file=os.path.join(save_to_dir, '%s;%s;%s.p' % sname)
-		import pickle
-		pickle.dump( favorite_color, open( "save.p", "wb" ) )
+		return [self.cargs, self.fargs, self.targs]
 	def OnInputDir(self, evt,params):
 		[dir] = params
 		print dir
@@ -4106,10 +4109,25 @@ class DataBuddy(wx.Frame):
 		a,b=tmpl.split('.')
 		self.btn_sourcet.SetLabel(a)
 		self.btn_targett.SetLabel(b)
+	def getTemplates(self):
+		return (self.btn_sourcet.GetLabel(),self.btn_targett.GetLabel())
 	def OnClearAllButton(self, event):
 		self.args_panel.ClearAll()
 	def OnSaveButton(self, event):
-		self.args_panel.SaveArgs()
+		args=self.args_panel.getArgs()
+		userhome = os.path.expanduser('~')
+		save_to_dir=os.path.join(userhome,'sessions')
+		if not os.path.isdir(save_to_dir):
+			os.makedirs(save_to_dir)
+		sname=self.getSessionName()
+		print self.tmpl
+		print self.copy_vector
+		print sname
+		#e(0)
+		save_to_file=os.path.join(save_to_dir, '%s;%s;%s.p' % ('.'.join(self.copy_vector), self.tmpl,sname))
+		print save_to_file
+		import pickle
+		pickle.dump( [sname,self.copy_vector, self.tmpl, args], open( save_to_file, "wb" ) )
 		self.btn_save.Enable(False)
 	def OnNewButton(self, event):
 		if 0:
@@ -4126,6 +4144,7 @@ class DataBuddy(wx.Frame):
 			
 			#data=['dsfdsfdsf', ['SLITE', 'INFOR'], 'SLITE_ParallelQueryDir.INFOR_Table']		
 			data=['csv_dirs_to_table', ['CSV', 'ORA11G'], 'CSV_Dirs.ORA11G_Table'] #_Partition_TruncateTarget
+			self.session_name,self.copy_vector, self.tmpl=data
 			self.set_new_session(data+[self.get_api_args(data)])
 	def get_api_args(self,data):
 		api_file= os.path.join(home,aa_dir,data[1][0],'%s-%s.py' % tuple(data[1]))
@@ -4153,7 +4172,7 @@ class DataBuddy(wx.Frame):
 			#self.args_panel.Hide()
 			#self.args_panel.create_cargs(self.cargs)
 			#self.args_panel.Destroy()
-			self.args_panel= pnl_args(self,api_args,style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+			self.args_panel= pnl_args(self,copy_vector,tmpl,api_args,style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			self.nb.DeletePage(0)
 			self.nb.DeletePage(0)
 			#self.args_panel.Destroy()
