@@ -3755,6 +3755,21 @@ class pnl_args(wx.Panel):
 		self.args_vbox.Add(self.args_hbox,0,flag=wx.ALL|wx.EXPAND|wx.GROW)
 		self.SetSizer(self.args_vbox)
 		self.Fit()
+	def ClearAll(self):
+		for k in self.obj:
+			if k not in ['copy_vector']:
+				self.obj[k][1].SetValue('')
+	def SaveArgs(self):
+		for k in self.cargs:
+			assert self.obj.has_key(k), '"%s" is not set' % k
+			val=self.obj[k][1].GetValue()
+			self.cargs[k]=list(self.cargs[k])
+			if str(self.cargs[k][2]).strip('"') not in [val]:
+				print '"%s" value changed' % k, str(self.cargs[k][2]),'-->' ,val
+				self.cargs[k][2]=val
+			#,self.fargs,self.targs=self.args
+		
+		
 	def OnInputDir(self, evt,params):
 		[dir] = params
 		print dir
@@ -3952,6 +3967,8 @@ class DataBuddy(wx.Frame):
 			self.btn_save.Enable(False)			
 			fgs.AddMany([(new_btn, 1, wx.EXPAND),(self.btn_delete, 1, wx.EXPAND),wx.StaticText(panel, label=' '),(self.btn_clearall, 1, wx.EXPAND),wx.StaticText(panel, label=' \n'),(self.btn_save, 1, wx.EXPAND)])
 			new_btn.Bind(wx.EVT_BUTTON, self.OnNewButton)	
+			self.btn_clearall.Bind(wx.EVT_BUTTON, self.OnClearAllButton)	
+			self.btn_save.Bind(wx.EVT_BUTTON, self.OnSaveButton)
 			#button1 = wx.Button(panel, label="New")
 			#sizer.Add(button1, pos=(3, 5), flag=wx.TOP|wx.RIGHT, border=5)
 
@@ -4052,7 +4069,7 @@ class DataBuddy(wx.Frame):
 		print sname,copy_vector,tmpl,
 		pprint (api_args)
 		self.set_new_session(data)
-		self.btn_save.Enable(Enable)	
+	
 		self.Layout()
 		self.Fit()
 		self.Refresh()
@@ -4066,7 +4083,11 @@ class DataBuddy(wx.Frame):
 		a,b=tmpl.split('.')
 		self.btn_sourcet.SetLabel(a)
 		self.btn_targett.SetLabel(b)
-		
+	def OnClearAllButton(self, event):
+		self.args_panel.ClearAll()
+	def OnSaveButton(self, event):
+		self.args_panel.SaveArgs()
+		self.btn_save.Enable(False)
 	def OnNewButton(self, event):
 		if 0:
 			dlg = NewSessionDialog(self, -1, "Defaults for new session.", size=(250, 250),
@@ -4120,7 +4141,8 @@ class DataBuddy(wx.Frame):
 			self.nb.SetSelection(0)
 			self.btn_show.Enable(True)
 			self.btn_run.Enable(True)
-
+			self.btn_save.Enable(True)	
+			self.btn_clearall.Enable(True)
   
 	def OnButtonShowInFolder(self, event):
 		# 

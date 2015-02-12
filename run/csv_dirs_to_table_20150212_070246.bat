@@ -1,0 +1,15 @@
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\qc32\qc32.exe ^
+-t "" ^
+-w "csv2ora11g" ^
+-r "" ^
+-o "" ^
+-I "" ^
+-y "" ^
+-d "" ^
+-e "" ^
+-u "" ^
+-Z "" ^
+-O "" ^
+-p "" ^
+-a "" ^
+-m "" ^
