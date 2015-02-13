@@ -1,0 +1,15 @@
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\qc32\qc32.exe ^
+-t "|" ^
+-w "csv2ora11g" ^
+-r "1" ^
+-o "1" ^
+-I "c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_1;c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_2" ^
+-y "1000" ^
+-d "orcl" ^
+-e "YYYY-MM-DD HH24.MI.SS" ^
+-u "SCOTT" ^
+-Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" ^
+-O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" ^
+-p "tiger2" ^
+-a "SCOTT.Timestamp_test_to" ^
+-m "YYYY-MM-DD HH24.MI.SS.FF2" ^

@@ -239,7 +239,7 @@ class UltListCtrl(ULC.UltimateListCtrl):
 ######################################################################################################
 		
 class SessionList(wx.ListCtrl):
-	def __init__(self, splitter, parent,  id,pos):
+	def __init__(self, splitter, parent, frame, id,pos):
 		wx.ListCtrl.__init__(self, splitter, id, style=
 										wx.LC_REPORT
 										)
@@ -264,6 +264,7 @@ class SessionList(wx.ListCtrl):
 		self.current_list=None
 		self.connect_type=None
 		self.pos=pos
+		self.save_to_dir=frame.save_to_dir
 		#self.db= OracleDb(self,pos)
 		#EVT_SIGNAL(self, self.relaySignal)
 		#self.file= FileDir(pos)
@@ -354,13 +355,17 @@ class SessionList(wx.ListCtrl):
 		#e(0)
 		#print config_file
 		self.InsertColumn(0, 'Name')
-		self.InsertColumn(1, 'Type')
-		self.InsertColumn(2, 'Vector')
+		self.InsertColumn(1, 'From')
+		self.InsertColumn(2, 'To')
+		self.InsertColumn(3, 'Type')
+		self.InsertColumn(4, 'Template')
 		#self.InsertColumn(4, 'Desription')
 
-		self.SetColumnWidth(0, 120)
+		self.SetColumnWidth(0, 175)
 		self.SetColumnWidth(1, 60)
-		self.SetColumnWidth(2, 100)
+		self.SetColumnWidth(2, 60)
+		self.SetColumnWidth(3, 60)
+		self.SetColumnWidth(4, 180)
 
 		#self.SetColumnWidth(4, 420)
 		self.img_col = 1
@@ -370,49 +375,32 @@ class SessionList(wx.ListCtrl):
 		j = 0
 		#self.idx_first=self.InsertStringItem(0, '[..]')
 		#self.SetItemImage(0, self._imgstart+3)
-		
-		self.data[self.current_list]={0: (u'TestCopy1', u'Copy', u'ora2ora'),
- 1: (u'Extract1', u'Extract', 'ora2csv'),
- 2: (u'QA_copy_0', u'Copy', 'ora2db2'),
- 3: (u'Daily_qc', u'Load', 'csv2ora',)}
+		flist={}
+		i=0
+		for f in os.listdir(self.save_to_dir):
+			cv, tmpl,name= f.split(';')
+			name=name.split('.')[0]
+			type='Copy'
+			if tmpl.startswith('CSV'):
+				type='Load'
+			if '.CSV_' in tmpl:
+				type='Spool'
+			flist[i] = [name,cv.split('.')[0],cv.split('.')[1],type,tmpl]
+			i +=1
+		#pprint(files)
+		#e(0)
+		if 0:
+			self.data[self.current_list]={0: (u'TestCopy1', u'Copy', u'ora2ora'),
+	 1: (u'Extract1', u'Extract', 'ora2csv'),
+	 2: (u'QA_copy_0', u'Copy', 'ora2db2'),
+	 3: (u'Daily_qc', u'Load', 'csv2ora',)}
+		self.data[self.current_list]=flist
 		#print dbs
 		#sys.exit(1)
 		print self.parent
 		self.parent.RecreateList(None,(self.parent.list,self.parent.filter))
 		#self.parent.list.Thaw()
-		if 0:
-			for  key,i in self.data[self.current_list].items():
-				#print i
-				#sys.exit(1)
-				if  1:
-					index=self.InsertStringItem(sys.maxint, str(i[0]))
-					self.SetStringItem(index, 1, str(i[1]))
-					self.SetStringItem(index, 2, str(i[2]))
-					self.SetStringItem(index, 3, str(i[3]))
-					self.SetItemData(index, key)
 
-					if i[1] == 'DEV':
-						self.img[key]=self._imgstart+11
-						self.SetItemImage(index, self.img[key])					
-					else:
-						self.img[key]=self._imgstart+11
-						self.SetItemImage(index, self.img[key])	
-
-					if i[1] == 'PROD':
-						self.img[key]=self._imgstart+10
-						self.SetItemImage(index, self.img[key])	
-					if i[1] == 'UAT':
-						self.img[key]=self._imgstart+12
-						self.SetItemImage(index, self.img[key])	
-					if i[1] == 'QA':
-						self.img[key]=self._imgstart+13
-						self.SetItemImage(index, self.img[key])	
-						
-					if (j % 2) == 0:
-						self._bg='#e6f1f5'
-						self.SetItemBackgroundColour(j, self._bg)
-					j += 1		
-					#sys.exit(1)
 					
 	def setTableList(self, vars):
 		self.ClearAll()
@@ -523,7 +511,7 @@ class UltSessionLogger(wx.Panel):
 ########################################################################
 		
 class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
-	def __init__(self, parent, pos, panel_pos # log
+	def __init__(self, parent, frame, pos, panel_pos # log
 	):
 		self.ID=wx.NewId()
 		wx.Panel.__init__(self, parent, self.ID, style=wx.WANTS_CHARS)
@@ -573,7 +561,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			self.sm_up = self.il.Add(images.SmallUpArrow.GetBitmap())
 			self.sm_dn = self.il.Add(images.SmallDnArrow.GetBitmap())
 
-			self.list = SessionList(self.listsplit, self, -1,self.pos)
+			self.list = SessionList(self.listsplit, self, frame, -1,self.pos)
 			
 
 			self.filter =self.getFilter(self,self.list)
@@ -2598,7 +2586,7 @@ class SessionListCtrlPanelManager(wx.Panel):
 		self.parent=parent
 		self.frame=frame
 		self.nb = fnb.FlatNotebook(self, -1, agwStyle=fnb.FNB_COLOURFUL_TABS|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_SMART_TABS|fnb.FNB_NO_X_BUTTON|fnb.FNB_NO_NAV_BUTTONS) #|fnb.FNB_DCLICK_CLOSES_TABS|fnb.FNB_X_ON_TAB|fnb.FNB_X|fnb.FNB_TAB_X|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_BTN_NONE|fnb.FNB_BTN_PRESSED|fnb.FNB_COLOURFUL_TABS|fnb.FNB_BOTTOM|fnb.FNB_SMART_TABS|fnb.FNB_DROPDOWN_TABS_LIST|fnb.FNB_DROP_DOWN_ARROW|fnb.FNB_BTN_HOVER|fnb.FNB_NO_X_BUTTON) #|fnb.FNB_HIDE_ON_SINGLE_TAB)
-		start=SessionListCtrlPanel(self,pos,self.panel_pos)
+		start=SessionListCtrlPanel(self,frame, pos,self.panel_pos)
 		self.start=start
 		self.list=start.list
 		self.nb.AddPage(start,'')
@@ -2607,7 +2595,7 @@ class SessionListCtrlPanelManager(wx.Panel):
 		#self.nb.AddPage(tmpl,'Templates')
 		
 		self.nb.SetSelection(0)
-		self.nb.EnableTab(0,False)
+		#self.nb.EnableTab(0,False)
 		self.sizer = wx.BoxSizer(wx.VERTICAL)
 		self.sizer.Add(self.nb, 1, wx.GROW|wx.EXPAND|wx.ALL, 0)
 		self.SetSizer(self.sizer)
@@ -3882,12 +3870,12 @@ class pnl_args(wx.Panel):
 		
 ###################################################################################################
 class DataBuddy(wx.Frame):
-	def __init__(self, parent, id, title):
+	def __init__(self, parent, id, title, size):
 		global tr
 		#wx.Frame.__init__(self, parent, -1, title)
 		#super(DataBuddy, self).__init__(parent, title=title , size=(900, 565))
 		global app_title, home
-		wx.Frame.__init__(self, None, wx.ID_ANY, title=app_title)
+		wx.Frame.__init__(self, None, wx.ID_ANY, title=app_title, size=size)
 		self._vectMenu=None
 		self._popUpMenu = None
 		#self.splitter = wx.SplitterWindow(self, ID_SPLITTER, style=wx.SP_BORDER)
@@ -3902,7 +3890,8 @@ class DataBuddy(wx.Frame):
 		sizer = wx.GridBagSizer(5, 5)
 		self.home=home
 		self.copy_vector=None
-		
+		userhome = os.path.expanduser('~')
+		self.save_to_dir=os.path.join(userhome,'sessions')
 		self.transport=os.path.join(self.home,r'%s32\%s32.exe' % (tr,tr))
 		self.args_panel = dummy_args(self,style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 		self.cmd=''
@@ -4056,7 +4045,7 @@ class DataBuddy(wx.Frame):
 			#if 1:
 				#self.splitter.SetOrientation(wx.VERTICAL)
 				
-			sm=SessionListCtrlPanelManager(panel2,panel2,(0,0),self.panel_pos)
+			sm=SessionListCtrlPanelManager(panel2,self,(0,0),self.panel_pos)
 				
 			self.hsizer = wx.BoxSizer(wx.HORIZONTAL)
 			vsizer.Add(sm,1,wx.EXPAND|wx.TOP|wx.BOTTOM|wx.LEFT|wx.RIGHT, border=5)
@@ -4097,12 +4086,17 @@ class DataBuddy(wx.Frame):
 		sub(self.onNewSession, "create_new_session")
 		sub(self.onValueChanged, "value_changed")
 		#self.SetSizeHints(250,300,500,400)
+		
 		self.Layout()
 		self.Fit()
-		self.Refresh()
+		#self.Refresh()
 		self.Center()
+		x,y=self.GetSize()
+		self.SetSize((x+100,y))
+		self.Refresh()
 		self.Show(True)
 		(self.cargs,self.fargs,self.targs)=(None, None, None)
+		#print self.GetSize()
 	def onKeyPress(self, event):
 		#print 'changed'
 		
@@ -4143,16 +4137,16 @@ class DataBuddy(wx.Frame):
 		self.args_panel.ClearAll()
 	def OnSaveButton(self, event):
 		args=self.args_panel.getArgs()
-		userhome = os.path.expanduser('~')
-		save_to_dir=os.path.join(userhome,'sessions')
-		if not os.path.isdir(save_to_dir):
-			os.makedirs(save_to_dir)
+		
+		
+		if not os.path.isdir(self.save_to_dir):
+			os.makedirs(self.save_to_dir)
 		sname=self.getSessionName()
 		print self.tmpl
 		print self.copy_vector
 		print sname
 		#e(0)
-		save_to_file=os.path.join(save_to_dir, '%s;%s;%s.p' % ('.'.join(self.copy_vector), self.tmpl,sname))
+		save_to_file=os.path.join(self.save_to_dir, '%s;%s;%s.p' % ('.'.join(self.copy_vector), self.tmpl,sname))
 		print save_to_file
 		import pickle
 		pickle.dump( [sname,self.copy_vector, self.tmpl, args], open( save_to_file, "wb" ) )
@@ -4445,7 +4439,7 @@ class AboutDlg(wx.Frame):
 			page
 			)
 		self.Center()
-		self.SetSize((300,300))
+		#self.SetSize((300,300))
 		#self.Fit()
 		self.Refresh()
 
@@ -4463,7 +4457,7 @@ if __name__ == '__main__':
 			global imgs
 			imgs = i
 			self.Init()
-			self.frame = DataBuddy(None, -1,title=app_title)
+			self.frame = DataBuddy(None, -1,title=app_title, size=(700,400))
 			self.frame.Show(True)
 			self.SetTopWindow(self.frame)
 			return True
