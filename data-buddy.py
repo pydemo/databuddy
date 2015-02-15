@@ -385,7 +385,7 @@ class SessionList(wx.ListCtrl):
 				type='Load'
 			if '.CSV_' in tmpl:
 				type='Spool'
-			flist[i] = [name,cv.split('.')[0],cv.split('.')[1],type,tmpl]
+			flist[i] = [name,cv.split('.')[0],cv.split('.')[1],type,tmpl,self.save_to_dir,f]
 			i +=1
 		#pprint(files)
 		#e(0)
@@ -400,7 +400,8 @@ class SessionList(wx.ListCtrl):
 		print self.parent
 		self.parent.RecreateList(None,(self.parent.list,self.parent.filter))
 		#self.parent.list.Thaw()
-
+	def getList(self):
+		return self.data[self.current_list]
 					
 	def setTableList(self, vars):
 		self.ClearAll()
@@ -576,23 +577,6 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 
 			imageFile = "bmp_source/arrow_back_dgrey_16x2.png"
 			image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
-			if 0:
-				self.btn_back=wx.BitmapButton(self, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6))
-				imageFile = "bmp_source/arrow_back_grey_16x2.png"
-				image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
-				self.btn_back.SetBitmapDisabled(image1)
-				self.btn_back.Disable()
-			if 0:
-				imageFile = "bmp_source/arrow_forward_dgrey_16x2.png"
-				image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
-				self.btn_fwd=wx.BitmapButton(self, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6))
-				imageFile = "bmp_source/arrow_forward_grey_16x2.png"
-				image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
-				self.btn_fwd.SetBitmapDisabled(image1)
-				self.Bind(wx.EVT_BUTTON, self.OnBackButton, self.btn_back)
-				self.Bind(wx.EVT_BUTTON, self.OnForwardButton, self.btn_fwd)
-				self.btn_fwd.Bind(wx.EVT_RIGHT_DOWN, self.OnForwardButtonRightUp)
-				self.btn_fwd.Disable()
 				
 			self.btnFav = wx.Button(self, -1, "Fav", style=wx.BU_EXACTFIT, size=(30,20))
 			#self.btnHist = wx.Button(self, -1, "Hist", style=wx.BU_EXACTFIT, size=(30,20))	
@@ -627,36 +611,6 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			if 1:
 				
 				self.p_pos=[(0,0)]
-				#self.statusbar.SetSize((-1, 23))
-				#self.statusbar.SetFieldsCount(4)
-				#self.SetStatusBar(self.statusbar)        
-				#self.statusbar.SetStatusWidths([  250, 120, 140])
-				if 0:
-					bmp = wx.ArtProvider_GetBitmap(wx.ART_ERROR,
-												   wx.ART_TOOLBAR, (16,16))
-					
-					upbmp = wx.StaticBitmap(self.statusbar, -1, bmp)
-
-					bmp = wx.ArtProvider_GetBitmap(wx.ART_HELP,
-												   wx.ART_TOOLBAR, (16,16))
-					
-					downbmp = wx.StaticBitmap(self.statusbar, -1, bmp)
-					btnmio = wx.Button(self.statusbar, -1, "Push Me!")
-				
-				if 0:
-					choice = wx.Choice(self.statusbar, -1, size=(100,-1),
-									   choices=['Hello', 'World!', 'What', 'A', 'Beautiful', 'Class!'])
-					ticker = Ticker(self.statusbar, -1)
-					ticker.SetText("Hello World!")
-					ticker.SetBackgroundColour(wx.BLUE)
-					ticker.SetForegroundColour(wx.NamedColour("YELLOW"))
-					ticker.SetFont(wx.Font(9, wx.SWISS, wx.NORMAL, wx.BOLD, False))
-					statictext = wx.StaticText(self.statusbar, -1, "Welcome To %s!" % prog)
-					
-					self.ticker = ticker
-				#bmp = wx.ArtProvider.GetBitmap(wx.ART_INFORMATION, wx.ART_OTHER, (16, 16))
-				#titleIco = wx.StaticBitmap(self.panel, wx.ID_ANY, bmp)
-
 				self.timer={}
 				self.timer_xref={}
 				if 1:
@@ -670,53 +624,6 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 						
 				#items=[]
 				#self.sPanel = wx.Panel(self, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN) # ,size=(300, 30)
-				if 0:
-					self.statusbar = wx.BoxSizer(wx.HORIZONTAL)
-					#self.sPanel.status = wx.BoxSizer(wx.HORIZONTAL)
-					gauge={}
-					self.gauge=gauge
-					#self.gauge=gauge
-					for pos in self.p_pos:
-						self.gauge[pos] = wx.Gauge(self, -1, size=(-1, 12),	style=wx.GA_HORIZONTAL|wx.GA_SMOOTH)
-						#self.sPanel.statusbar.Add(self.gauge[pos], 0, wx.EXPAND,0)	
-						#self.gauge[pos].SetPosition((1,1))
-						#self.gauge[pos].Hide()	
-						#items.append(self.gauge[pos])
-					#self.gauge = gauge
-
-					#self.Bind(wx.EVT_TIMER, self.TimerHandler0)
-					#self.gen_bind(wx.EVT_TIMER,self, self.TimerHandler_pos,(self.panel_pos[0]))
-					btn_stop={}
-				
-					self.btn_stop=btn_stop
-					#self.btn_stop=btn_stop
-					for pos in self.p_pos:
-						self.btn_stop[pos] = wx.Button(self, -1, "Stop", size=(30,15)) 
-						#self.sPanel.statusbar.Add([self.gauge[pos],self.btn_stop[pos]], 1, wx.EXPAND,1)
-						#self.btn_stop[pos].Hide()
-						self.btn_stop[pos].SetPosition((self.gauge[pos].GetSize()[0],1))
-						self.gen_bind(wx.EVT_BUTTON,self.btn_stop[pos], self.OnStopDbRequest,(pos))
-						#self.btn_stop[pos].Hide()
-						#items.append(self.btn_stop[pos])
-				
-
-					if 0:
-						self.cb_c = wx.CheckBox(self, wx.ID_ANY, "cache")
-						self.Bind(wx.EVT_CHECKBOX, self.OnUseCache, self.cb_c)
-						self.cb_c.SetValue(False)
-						self.cb_c.Enable(False)
-						self.statusbar.Add((10,5))
-
-					self.statusbar.Add(self.gauge[self.pos], 1,wx.ALL|wx.GROW|wx.EXPAND,1)
-					self.statusbar.Add((1,1))
-					self.statusbar.Add(self.btn_stop[self.pos], 0,wx.RIGHT,1)
-
-				
-
-
-			
-
-
 
 
 		self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected, self.list)
@@ -724,66 +631,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 
 		self.list.Populate()
 		if 1:
-			if 0:
-				from wx.lib.agw import ultimatelistctrl as ULC
-
-
-				self.url_combo_list = ULC.UltimateListCtrl(self.ulocPanel, wx.ID_ANY, agwStyle=wx.LC_REPORT|wx.LC_VRULES|wx.LC_HRULES|wx.LC_SINGLE_SEL|ULC.ULC_HAS_VARIABLE_ROW_HEIGHT)
-
-				self.url_combo_list.InsertColumn(0, "Column 1")
-				self.url_combo_list.InsertColumn(1, "Column 2")
-
-				index = self.url_combo_list.InsertStringItem(sys.maxint, "Item 1")
-				self.url_combo_list.SetStringItem(index, 1, "Sub-item 1")
-
-				index = self.url_combo_list.InsertStringItem(sys.maxint, "Item 2")
-				self.url_combo_list.SetStringItem(index, 1, "Sub-item 2")
-
-				choice = wx.Choice(self.url_combo_list, -1, choices=["one", "two"])
-				index = self.url_combo_list.InsertStringItem(sys.maxint, "A widget")
-
-				self.url_combo_list.SetItemWindow(index, 1, choice, expand=True,)
-			if 0:
-				self.cc = wx.combo.ComboCtrl(self, style=wx.combo.CC_BUTTON_OUTSIDE_BORDER, size=(30,-1))
-				self.cc.SetPopupExtents(-1,100)
-				self.cc.SetPopupMaxHeight(50)
-				# Create a Popup
-				self.popup = ListCtrlComboPopup()
-
-				# Associate them with each other.  This also triggers the
-				# creation of the ListCtrl.
-				self.cc.SetPopupControl(self.popup)
-				for x in range(75):
-					self.popup.AddItem("Item-%02d" % x)
-
-			
-			#self.popup.Create(wx.PreListCtrl())
-			# Add some items to the listctrl.
-			
-			if 0:
-				self.url_combo_list = wx.ListCtrl(self, -1,  size=(-1,100),
-				style=wx.LC_REPORT
-							 |wx.BORDER_SUNKEN
-							 )
-							 
-				self.url_combo_list.InsertColumn(0, 'Subject')
-
-				self.url_combo_list.InsertColumn(1, 'Due')
-
-				self.url_combo_list.InsertColumn(2, 'Location', width=125)
-				self.url_combo_list.InsertStringItem(0, '1')
-				self.url_combo_list.SetStringItem(0, 1, "01/19/2010")
-				self.url_combo_list.SetStringItem(0, 2, "USA")
-
-
-			#self.url_combo_list.Hide()
-			#print dir(self.ulocPanel)
-			#self.createUrlLocator()
-			if 0:
-				upsizer = wx.BoxSizer(wx.HORIZONTAL)
-				upsizer.Add((5,15), 0, wx.EXPAND)
-				upsizer.Add(self.ulocPanel, 1, wx.EXPAND|wx.ALL)
-			
+		
 			sizer = wx.BoxSizer(wx.VERTICAL)
 			#sizer.Add(self.locator, 0, wx.EXPAND)
 			sizer.Add((2,2), 0, wx.EXPAND)
@@ -812,6 +660,10 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			self.SetAutoLayout(True)
 
 		self.list.setEnvironmentList(('configDirLoc','ConfigList',))
+		sub(self.onRefreshList, "refresh_list")
+	def onRefreshList(self, data, extra1, extra2=None):
+		print 'onRefreshList'
+		self.RecreateList(None,(self.list,self.filter))
 	def OnUseCache(self, event):
 		print 'use cache', self.pos
 		event.Skip()		
@@ -825,107 +677,6 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			#Publisher().sendMessage( "stop_db_request", (pos) )
 			send("stop_db_request", (pos) )
 		event.Skip()
-	def setUrlLocator_del(self):
-		#print '--setUrlLocator---'
-		#self.url_locator={}
-		print  self.url_locator
-		nav_keys=self.list.nav_list.keys()
-		if len(self.url_locator)<len(nav_keys)-1:
-			print len(self.url_locator),len(nav_keys)
-			self.createUrlLocator()
-		
-		for loc_id in range(len(nav_keys)): #self.list.loc_url:
-			loc=nav_keys[loc_id]
-			if 1 and loc!='vars':
-				print 'hiding', loc 
-				if self.url_locator.has_key(loc):
-					self.url_locator[loc].Hide()
-					self.find_in_btn[loc].Hide()
-				
-		#print  self.list.nav_list.keys()
-		#print self.list.loc_url
-		offset=0
-		prev_loc=None
-		print  nav_keys
-		print self.list.nav_list['vars'].keys()
-		var_keys=self.list.nav_list['vars'].keys()[1:]
-		print var_keys
-		if not var_keys:
-			#self.clearUrlLocator()
-			pass
-		else:
-			for loc_id in range(len(var_keys)): #self.list.loc_url:
-				loc=var_keys[loc_id]
-				print 'location url',  loc
-				if 1 or self.list.nav_list['vars'].has_key(loc):
-					if 1 or loc!='vars' and loc_id>0:
-						#print '???????',loc , self.list.nav_list['vars'].has_key(loc)
-						#print self.list.nav_list['vars']
-						#self.url_locator[loc].Show()
-						if 0:
-							if loc_id>1:
-								offset +=self.url_locator[loc].GetSize()[0] +12 #+self.find_in_btn[prev_loc].GetSize()[0]
-								#print 'offset', offset
-								#print self.url_locator[prev_loc].GetSize()[0]
-								#print self.find_in_btn[prev_loc].GetSize()[0]
-							else:
-								if loc_id==1:
-									offset +=self.find_in_btn[loc].GetSize()[0] 
-									self.find_in_btn[loc].SetPosition((0,0))
-									self.find_in_btn[loc].Show()
-						self.find_in_btn[loc].SetPosition((offset,0))
-							
-						
-						offset +=self.find_in_btn[loc].GetSize()[0]		
-						if 0:
-							if self.list.nav_list['vars'].has_key(loc) :					
-								#print '000has key00', loc,self.list.current_list
-
-								
-								url_label = self.list.nav_list['vars'][loc]
-								self.url_locator[loc].SetLabel(url_label)						
-								self.url_locator[loc].SetPosition((offset,0))
-								self.url_locator[loc].Show()
-								
-
-								offset +=self.url_locator[loc].GetSize()[0]
-								self.find_in_btn[loc].Show()
-
-								#self.url_locator[loc].Refresh()
-								#if self.list.current_list==loc:
-								#	break;
-							else:
-								pass
-						if loc_id==(len(var_keys)-1):
-							#self.find_in_btn[loc].SetPosition((0,0))
-							#self.find_in_btn[loc].Show()						
-							#print '000has key00', loc,self.list.current_list
-							
-							url_label = self.list.nav_list['vars'][loc]
-							print 'last url', loc,self.list.current_list, url_label
-							self.no_url_loc.SetLabel(url_label)
-							self.no_url_loc.SetPosition((offset,0))
-							self.no_url_loc.Show()
-
-							self.find_in_btn[loc].Show()
-							break
-						else:
-							url_label = self.list.nav_list['vars'][loc]
-							print 'mid url', loc,self.list.current_list,url_label
-							self.url_locator[loc].SetLabel(url_label)						
-							self.url_locator[loc].SetPosition((offset,0))
-							self.url_locator[loc].Show()
-							
-
-							offset +=self.url_locator[loc].GetSize()[0]
-							self.find_in_btn[loc].Show()
-
-							#self.url_locator[loc].Refresh()
-							#if self.list.current_list==loc:
-							#	break;
-
-								
-					prev_loc=loc
 
 	def OnFindInButton(self, event,params):
 		(loc_id,loc)=params
@@ -1104,16 +855,17 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		
 	def OnItemSelected(self, event):
 		##print event.GetItem().GetTextColour()
-		self.currentItem = event.m_itemIndex
-		#print self.list.GetItemText(self.currentItem)
-		msg='%s %s ' % (self.list.current_list[:-4], self.list.GetItemText(self.currentItem).strip('[]'))
-		self.Status(msg)		
-		#print 'selected'
-		#print(self)
-		#btns=self.list.nav_list[self.list.current_list]['hot_keys']
-		#print btns
-		#Publisher().sendMessage( "enable_buttons", (self.pos,btns) )			
+		cnt=self.list.GetSelectedItemCount()
+		if cnt==1:
+			self.currentItem = event.m_itemIndex
+			print self.currentItem
+			session= self.list.getList()[self.currentItem]
+			print session
+			send('open_session',(session))
+		else:
+			send('disable_all_for_delete',(cnt))
 		event.Skip()		
+	
 		
 	def gen_bind(self, type, instance, handler, *args, **kwargs):
 		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)			
@@ -2831,7 +2583,7 @@ class NewSessionDialog(wx.Dialog):
 		#self.listCtrl.Select(0)
 		#button4 = wx.Button(self, ID_EXIT, "Test")
 		if 0:
-			sb = wx.StaticBox(self, label="Type")
+			sb = wx.StaticBox(self, label='Type')
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
 			boxsizer.Add(wx.RadioButton(self, label="Copy",style=wx.RB_GROUP), flag=wx.LEFT|wx.TOP, border=5)
 			boxsizer.Add(wx.RadioButton(self, label="Extract"), flag=wx.LEFT|wx.TOP, border=5)
@@ -2960,7 +2712,10 @@ class NewSessionDialog(wx.Dialog):
 					self.api_menu[m[:2]]=[]
 				self.api_menu[m[:2]].append(m)
 			#print api_menu		
-		
+	def getConfig(self):
+		return [self.getSessionName(), self.copy_vector, self.tmpl, self.api_args]
+	def getSessionName(self):
+		return self.tc_sname.GetValue()
 	def onSourceObjButton(self, event): 
 		""" 
 		Source object filter
@@ -3088,6 +2843,7 @@ class NewSessionDialog(wx.Dialog):
 		else:
 			tmpl=self.get_template()
 			api_args=self.api_args[tmpl]
+			print '-----',self.tc_sname.GetValue(),self.copy_vector, tmpl
 			send("create_new_session", (self.tc_sname.GetValue(),self.copy_vector, tmpl,api_args) )
 			self.Close(True)
 	def Warn(self, message, caption = 'Warning!'):
@@ -3428,7 +3184,7 @@ class default_args(wx.Panel):
 			ttl=['Copy vector','Pool size','Num of shards','Field terminator','Truncate target']
 			#pprint(dir(fgs))
 			
-			txt, txt_ctrl= (wx.StaticText(self.core_args_panel, label='Copy vector:'), wx.TextCtrl(self.core_args_panel,value='ora11g2ora11g'))
+			txt, txt_ctrl= (wx.StaticText(self.core_args_panel, label='Copy vector:'), wx.TextCtrl(self.core_args_panel,value=''))
 			#txt_ctrl.Value=
 			txt_ctrl.Enable(False)
 			self.fgs.Add(txt, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
@@ -3762,6 +3518,12 @@ class pnl_args(wx.Panel):
 		for k in self.obj:
 			if k not in ['copy_vector']:
 				self.obj[k][1].SetValue('')
+	def DisableAll(self):
+		for k in self.obj:
+			if k not in ['copy_vector']:
+				self.obj[k][0].Enable(False)
+				self.obj[k][1].Enable(False)
+		
 	def getArgs(self):
 		for k in self.cargs:
 			assert self.obj.has_key(k), 'cargs "%s" is not set' % k
@@ -3912,17 +3674,17 @@ class DataBuddy(wx.Frame):
 				flag=wx.EXPAND|wx.BOTTOM, border=0)
 
 		if 1: #Type
-			sb = wx.StaticBox(panel, label="Type")
+			sb = wx.StaticBox(panel, label='Type')
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			text1 = wx.StaticText(panel, label="CSV_Dirs->Table")
-			boxsizer.Add(text1, flag=wx.LEFT|wx.TOP, border=5)
+			self.st_type = wx.StaticText(panel, label="n/a")
+			boxsizer.Add(self.st_type, flag=wx.LEFT|wx.TOP, border=5)
 						
 			sizer.Add(boxsizer, pos=(2, 0),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=1)	
 		if 1: #Vector
 			sb = wx.StaticBox(panel, label='Vector')
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			self.btn_copy_vector = wx.StaticText(panel, label="n/a                                          ")
-			boxsizer.Add(self.btn_copy_vector, flag=wx.LEFT|wx.TOP, border=5)
+			self.st_copy_vector = wx.StaticText(panel, label='{:35s}'.format('n/a'))
+			boxsizer.Add(self.st_copy_vector, flag=wx.LEFT|wx.TOP, border=5)
 			
 			sizer.Add(boxsizer, pos=(2, 1),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=1)	
 			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))
@@ -3930,16 +3692,16 @@ class DataBuddy(wx.Frame):
 		if 1: #Vector
 			sb = wx.StaticBox(panel, label='Source template')
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			self.btn_sourcet = wx.StaticText(panel, label="n/a                                          ")
-			boxsizer.Add(self.btn_sourcet, flag=wx.LEFT|wx.TOP, border=5)
+			self.st_sourcet = wx.StaticText(panel, label='{:35s}'.format('n/a'))
+			boxsizer.Add(self.st_sourcet, flag=wx.LEFT|wx.TOP, border=5)
 			
 			sizer.Add(boxsizer, pos=(2, 2),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=1)	
 			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))	
 		if 1: #Vector
 			sb = wx.StaticBox(panel, label='Target template')
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			self.btn_targett = wx.StaticText(panel, label="n/a                                          ")
-			boxsizer.Add(self.btn_targett, flag=wx.LEFT|wx.TOP, border=5)
+			self.st_targett = wx.StaticText(panel, label='{:35s}'.format('n/a'))
+			boxsizer.Add(self.st_targett, flag=wx.LEFT|wx.TOP, border=5)
 			
 			sizer.Add(boxsizer, pos=(2, 3),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=1)	
 			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))				
@@ -3984,16 +3746,17 @@ class DataBuddy(wx.Frame):
 
 			#p=[wx.TextCtrl(panel_from), wx.TextCtrl(panel_from), wx.TextCtrl(panel_from)]
 			#pprint(dir(fgs))
-			new_btn=wx.Button(panel, label="New")
-			new_btn.Enable(True)
+			self.btn_new=wx.Button(panel, label="New")
+			self.btn_new.Enable(True)
 			self.btn_delete=wx.Button(panel, label="Delete")
 			self.btn_delete.Enable(False)
 			self.btn_clearall=wx.Button(panel, label="Clear All")
 			self.btn_clearall.Enable(False)
 			self.btn_save=wx.Button(panel, label="Save")
 			self.btn_save.Enable(False)			
-			fgs.AddMany([(new_btn, 1, wx.EXPAND),(self.btn_delete, 1, wx.EXPAND),wx.StaticText(panel, label=' '),(self.btn_clearall, 1, wx.EXPAND),wx.StaticText(panel, label=' \n'),(self.btn_save, 1, wx.EXPAND)])
-			new_btn.Bind(wx.EVT_BUTTON, self.OnNewButton)	
+			fgs.AddMany([(self.btn_new, 1, wx.EXPAND),(self.btn_delete, 1, wx.EXPAND),wx.StaticText(panel, label=' '),(self.btn_clearall, 1, wx.EXPAND),wx.StaticText(panel, label=' \n'),(self.btn_save, 1, wx.EXPAND)])
+			self.btn_new.Bind(wx.EVT_BUTTON, self.OnNewButton)	
+			self.btn_delete.Bind(wx.EVT_BUTTON, self.OnDeleteButton)	
 			self.btn_clearall.Bind(wx.EVT_BUTTON, self.OnClearAllButton)	
 			self.btn_save.Bind(wx.EVT_BUTTON, self.OnSaveButton)
 			#button1 = wx.Button(panel, label="New")
@@ -4002,7 +3765,7 @@ class DataBuddy(wx.Frame):
 			#button2 = wx.Button(panel, label="Delete")
 			#sizer.Add(button2, pos=(3, 4), flag=wx.TOP|wx.RIGHT, border=5)
 			sizer.Add(fgs, pos=(3, 4), flag=wx.TOP|wx.RIGHT, border=5)
-		sb = wx.StaticBox(panel, label="Optional")
+		sb = wx.StaticBox(panel, label='Optional')
 
 		boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
 		self.send_yes=wx.CheckBox(panel, label="Send 'y'")
@@ -4084,7 +3847,10 @@ class DataBuddy(wx.Frame):
 		panel.SetSizer(sizer)
 		sub(self.onTransportLoc, "set_transport_location")
 		sub(self.onNewSession, "create_new_session")
+		sub(self.onOpenSession, "open_session")
 		sub(self.onValueChanged, "value_changed")
+		sub(self.onDisableAllForDelete, "disable_all_for_delete")
+		
 		#self.SetSizeHints(250,300,500,400)
 		
 		self.Layout()
@@ -4097,6 +3863,27 @@ class DataBuddy(wx.Frame):
 		self.Show(True)
 		(self.cargs,self.fargs,self.targs)=(None, None, None)
 		#print self.GetSize()
+	def onDisableAllForDelete(self, data, extra1, extra2=None):	
+		print 'onDisableAllForDelete'	
+		#self.args_panel.DisableAll()
+		self.btn_delete.Enable(True)
+		self.btn_new.Enable(False)
+		self.btn_clearall.Enable(False)
+		self.btn_save.Enable(False)
+		self.btn_run.Enable(False)
+		self.btn_show.Enable(False)
+		
+		self.st_session_name.Enable(False)
+		self.tc_session_name.Enable(False)
+		self.send_yes.Enable(False)
+		self.auto_save.Enable(False)
+		self.st_type.Enable(False)
+		self.st_copy_vector.Enable(False)
+		self.st_sourcet.Enable(False)
+		self.st_targett.Enable(False)
+		self.nb.EnableTab(0,False)
+		self.nb.EnableTab(1,False)
+		
 	def onKeyPress(self, event):
 		#print 'changed'
 		
@@ -4105,17 +3892,34 @@ class DataBuddy(wx.Frame):
 			self.btn_save.Enable(True)
 		event.Skip()
 		return
+	def onOpenSession(self, data, extra1, extra2=None):
 		
+		(sname,cv_from,cv_to,type,tmpl,sdir, fname) = data
+		print sname
 		
-	def onNewSession(self, data, extra1, extra2=None):		
-		(sname,copy_vector,tmpl,api_args) = data
-		print sname,copy_vector,tmpl,
-		pprint (api_args)
-		self.set_new_session(data)
-	
+		self.open_session([sname,[cv_from,cv_to],type,tmpl,sdir,fname])
+		self.btn_delete.Enable(True)
 		self.Layout()
-		self.Fit()
-		self.Refresh()
+		#self.Fit()
+		#self.Refresh()		
+		
+	def onNewSession(self, data, extra1, extra2=None):	
+		print 'onNewSession'
+		if 1:
+			(sname,self.copy_vector,self.tmpl,self.args) = data
+			#print sname
+			#e(0)
+			#self.setSessionName(sname)
+			#print sname,copy_vector,tmpl,
+			#pprint (api_args)
+			#self.set_new_session(data)
+			self.saveSession(data)
+			#refresh session list
+			send('refresh_list',())
+			#self.parent.RecreateList(None,(self.parent.list,self.parent.filter))
+			#self.Layout()
+			#self.Fit()
+			#self.Refresh()
 	def onValueChanged(self, data, extra1, extra2=None):		
 		self.btn_save.Enable(True)
 		
@@ -4124,35 +3928,42 @@ class DataBuddy(wx.Frame):
 		self.tc_session_name.Enable(True)
 	def getSessionName(self):
 		return self.tc_session_name.GetValue()
+	def getCopyVector(self):
+		return self.copy_vector		
 	def setCopyVector(self, cv):
 		self.copy_vector=cv	
-		self.btn_copy_vector.SetLabel('%s -> %s' % (conf.dbs[cv[0]], conf.dbs[cv[1]]))
+		self.st_copy_vector.SetLabel('{:s} -> {:20s}'.format(conf.dbs[cv[0]], conf.dbs[cv[1]]))
 	def setTemplates(self,tmpl):
 		a,b=tmpl.split('.')
-		self.btn_sourcet.SetLabel(a)
-		self.btn_targett.SetLabel(b)
+		self.st_sourcet.SetLabel('{:35s}'.format(a))
+		self.st_targett.SetLabel('{:35s}'.format(b))
 	def getTemplates(self):
-		return (self.btn_sourcet.GetLabel(),self.btn_targett.GetLabel())
+		return (self.st_sourcet.GetLabel().strip(),self.st_targett.GetLabel().strip())
 	def OnClearAllButton(self, event):
 		self.args_panel.ClearAll()
 	def OnSaveButton(self, event):
 		args=self.args_panel.getArgs()
+		data=[self.getSessionName(), self.getCopyVector(), '.'.join(self.getTemplates()), args]
+		print self.getSessionName(), self.getCopyVector()
+		self.saveSession(data)
 		
-		
+
+	def saveSession(self, data):
+		(sname,copy_vector,tmpl,args) = data
 		if not os.path.isdir(self.save_to_dir):
 			os.makedirs(self.save_to_dir)
-		sname=self.getSessionName()
-		print self.tmpl
-		print self.copy_vector
+		#sname=self.getSessionName()
+		#print self.tmpl
+		#print self.copy_vector
 		print sname
 		#e(0)
-		save_to_file=os.path.join(self.save_to_dir, '%s;%s;%s.p' % ('.'.join(self.copy_vector), self.tmpl,sname))
+		save_to_file=os.path.join(self.save_to_dir, '%s;%s;%s.p' % ('.'.join(copy_vector), tmpl,sname))
 		print save_to_file
 		import pickle
-		pickle.dump( [sname,self.copy_vector, self.tmpl, args], open( save_to_file, "wb" ) )
-		self.btn_save.Enable(False)
+		pickle.dump( [sname,copy_vector, tmpl, args], open( save_to_file, "wb" ) )
+		self.btn_save.Enable(False)	
 	def OnNewButton(self, event):
-		if 0:
+		if 1:
 			dlg = NewSessionDialog(self, -1, "Defaults for new session.", size=(250, 250),
 							 #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
 							 style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
@@ -4161,25 +3972,81 @@ class DataBuddy(wx.Frame):
 			#dlg.CenterOnScreen()
 			# this does not return until the dialog is closed.
 			val = dlg.ShowModal()
-			print val
+			dlg.Destroy()
+			#[self.sname, self.copy_vector, self.tmpl, self.args]=dlg.getConfig()
+			#print conf
+			#print val
+			#self.saveSession(self.args)
+			#self.set_new_session([self.sname, self.copy_vector, self.tmpl]+[self.get_api_args(data[1], data[2])])
+			#e(0)
 		else:
-			
-			#data=['dsfdsfdsf', ['SLITE', 'INFOR'], 'SLITE_ParallelQueryDir.INFOR_Table']		
-			data=['csv_dirs_to_table', ['CSV', 'ORA11G'], 'CSV_Dirs.ORA11G_Table'] #_Partition_TruncateTarget
-			self.session_name,self.copy_vector, self.tmpl=data
-			self.set_new_session(data+[self.get_api_args(data)])
-	def get_api_args(self,data):
-		api_file= os.path.join(home,aa_dir,data[1][0],'%s-%s.py' % tuple(data[1]))
+			if 0:
+				#data=['dsfdsfdsf', ['SLITE', 'INFOR'], 'SLITE_ParallelQueryDir.INFOR_Table']		
+				data=['csv_dirs_to_table', ['CSV', 'ORA11G'], 'CSV_Dirs.ORA11G_Table'] #_Partition_TruncateTarget
+				self.session_name,self.copy_vector, self.tmpl=data
+				self.set_new_session(data+[self.get_api_args(data[1], data[2])])
+	def OnDeleteButton(self, event):
+		print 'OnDeleteButton'
+	def get_api_args(self,cv,tmpl):
+		api_file= os.path.join(home,aa_dir,cv[0],'%s-%s.py' % tuple(cv))
 		
 		assert os.path.isfile(api_file), 'api_file %s does not exists.' % (api_file)
 		apimod=import_module(api_file)
 		self.api_args=apimod.aa
-		tmpl=data[2]
+		#tmpl=data[2]
 		print self.api_args[tmpl]
 		return self.api_args[tmpl]
-
 		
-		return 
+	def get_session_args(self,fname):
+		session_api_file = fname
+		
+		assert os.path.isfile(session_api_file), 'session_api_file %s does not exists.' % (session_api_file)
+		#unpickle
+		import pickle
+		print self.sname,self.copy_vector, self.tmpl
+		(self.sname,self.copy_vector, self.tmpl, self.session_args) = pickle.load( open( session_api_file, "rb" ) )
+		print self.sname,self.copy_vector, self.tmpl
+		#self.session_args
+		#apimod=import_module(session_api_file)
+		#self.api_args=apimod.aa
+		#tmpl=data[2]
+		#print self.api_args[tmpl]
+		return self.session_args
+		
+	def open_session(self,data):
+			print len(data)
+			(self.sname,self.copy_vector,self.type, self.tmpl,self.sdir,self.fname) = data
+			self.setSessionName(self.sname)
+			self.setCopyVector(self.copy_vector)
+			print self.tmpl
+			#print sname,copy_vector,tmpl
+			self.setTemplates(self.tmpl)
+			(self.cargs,self.fargs,self.targs)=self.get_session_args(os.path.join(self.sdir,self.fname))
+			if 'to_passwd' in self.targs.keys():
+				print self.targs['to_passwd']
+				self.targs['to_passwd']=list(self.targs['to_passwd'])
+				self.targs['to_passwd'][2]=base64.b64decode(self.targs['to_passwd'][2])
+			#print len(self.cargs)
+			##print len(self.fargs)
+			#print len(self.targs)
+			#self.args_panel.Hide()
+			#self.args_panel.create_cargs(self.cargs)
+			#self.args_panel.Destroy()
+			self.args_panel= pnl_args(self,self.copy_vector,self.tmpl,(self.cargs,self.fargs,self.targs),style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+			self.nb.DeletePage(0)
+			self.nb.DeletePage(0)
+			#self.args_panel.Destroy()
+			self.nb.AddPage(self.args_panel, 'Arguments')
+			editor = TacoTextEditor(self.args_panel)
+			editor.AppendText(self.args_panel.get_cmd(self.transport))
+			self.nb.AddPage(editor, 'Command')
+			self.nb.SetSelection(0)
+			self.btn_show.Enable(True)
+			self.btn_run.Enable(True)
+			self.btn_save.Enable(True)	
+			self.btn_clearall.Enable(True)
+  
+  
 	def set_new_session(self,data):
 			print len(data)
 			(sname,copy_vector,tmpl,api_args) = data
