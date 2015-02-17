@@ -8,11 +8,11 @@ __author__ = "Alex Buzunov"
 __copyright__ = "Copyright 2015, SequelWorks Inc."
 __credits__ = []
 __license__ = "GPL"
-__title__ = "data-buddy"
-__version__ = "1.0.1"
+__title__ = "QueryCopy"
+__version__ = "1.23.9"
 __maintainer__ = "Alex Buzunov"
 __email__ = "alexbuzunov@gmail.com"
-__status__ = "Development"
+__status__ = "Development" 	
 
 
 import wx.lib.inspection
@@ -41,6 +41,7 @@ import __builtin__
 __builtin__.copy_vector = None
 __builtin__.cvarg = None
 import common.v101.config as conf
+import argparse
 
 try:
     from agw import ultimatelistctrl as ULC
@@ -70,6 +71,8 @@ LOAD_FILE_ID = wx.NewId()
 update_cache=True
 dBtn='N/A'
 tr='qc'
+
+
 def import_module(filepath):
 	class_inst = None
 	#expected_class = 'MyClass'
@@ -676,6 +679,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		#print 
 		for i in items.keys():
 			self.list.DeleteItem(i)
+		self.list.set_data()
 		
 	def delete_seleted_items_remove(self):
 		print 'OnDeleteButton'
@@ -695,7 +699,11 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		session=[sname,cv[0],cv[1],'Copy',tmpl,dname,fname]
 		#add
 		idx= self.addSession(session)
-		
+		#deselect
+		index = self.list.GetFirstSelected()
+		while index != -1:
+			self.list.SetItemState(index, 0, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED)
+			index = self.list.GetNextSelected(index)
 		#select
 		#print 'selecting %s' % idx
 		self.list.SetItemState(idx, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED) 
@@ -903,8 +911,8 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			#print session
 			send('open_session',(session))
 			
-		else:
-			send('disable_all_for_delete',(cnt))
+		#else:
+		#	send('disable_all_for_delete',(cnt))
 		event.Skip()		
 	
 		
@@ -1377,9 +1385,10 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 							list.img[key]=img_id
 							list.SetItemImage(index, list.img[key])
 							#print 'SetItemImage',index,key,list.img[key]
-							if (j % 2) == 0:
-								list._bg='#e6f1f5'
-								list.SetItemBackgroundColour(index, list._bg)
+							if 0:
+								if (j % 2) == 0:
+									list._bg='#e6f1f5'
+									list.SetItemBackgroundColour(index, list._bg)
 							j += 1				
 					if 0:
 						child = list.AppendItem(self.root, category, image=count)
@@ -2374,10 +2383,10 @@ class SessionListCtrlPanelManager(wx.Panel):
 		self.parent=parent
 		self.frame=frame
 		self.nb = fnb.FlatNotebook(self, -1, agwStyle=fnb.FNB_COLOURFUL_TABS|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_SMART_TABS|fnb.FNB_NO_X_BUTTON|fnb.FNB_NO_NAV_BUTTONS) #|fnb.FNB_DCLICK_CLOSES_TABS|fnb.FNB_X_ON_TAB|fnb.FNB_X|fnb.FNB_TAB_X|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_BTN_NONE|fnb.FNB_BTN_PRESSED|fnb.FNB_COLOURFUL_TABS|fnb.FNB_BOTTOM|fnb.FNB_SMART_TABS|fnb.FNB_DROPDOWN_TABS_LIST|fnb.FNB_DROP_DOWN_ARROW|fnb.FNB_BTN_HOVER|fnb.FNB_NO_X_BUTTON) #|fnb.FNB_HIDE_ON_SINGLE_TAB)
-		start=SessionListCtrlPanel(self,frame, pos,self.panel_pos)
-		self.start=start
-		self.list=start.list
-		self.nb.AddPage(start,'')
+		slp=SessionListCtrlPanel(self,frame, pos,self.panel_pos)
+		self.slp=slp
+		self.list=slp.list
+		self.nb.AddPage(slp,'')
 		self.nb.SetPageText(0, 'My Sessions')
 		#tmpl=SessionListCtrlPanel(self,pos,self.panel_pos)
 		#self.nb.AddPage(tmpl,'Templates')
@@ -2887,17 +2896,17 @@ class NewSessionDialog(wx.Dialog):
 		self.writeRecent()
 		e.Skip()
 	def writeRecent(self):
-		print 'writeRecent'
-		print self.recent
+		#print 'writeRecent'
+		#print self.recent
 		if self.recent:
 			import pickle
 			
 			pickle.dump(self.recent, open( self.recent_fname, "wb" ) )
 	def readRecent(self):
-		print 'readRecent'
+		#print 'readRecent'
 		import pickle
 		self.recent = pickle.load( open( self.recent_fname, "rb" ) )
-		print self.recent
+		#print self.recent
 		if not self.recent:
 			self.recent=[]
 		return self.recent
@@ -3024,17 +3033,7 @@ class NewSessionDialog(wx.Dialog):
 						self.create_Menu3(Menu1,k2,dbf,from_db=sm)
 					else:
 						self.create_Menu4(Menu1,self.api_menu[k2][0],from_db=sm)
-			for sm in conf.ff:
-				self.i +=1
-				Menu1 = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, 'To %s' % sm, '', wx.ITEM_NORMAL, Menu1)
-				self._popUpMenu.AppendItem(menuItem)	
-				for k2 in self.api2:
-					self.i +=1
-					if len(self.api_menu[k2])>1:
-						self.create_Menu3(Menu1,k2,dbf,from_db=sm, from_to='From')
-					else:
-						self.create_Menu4(Menu1,self.api_menu[k2][0],from_db=sm, from_to='From')						
+						
 				
 		else:
 			#pprint(dir(self.recentMenu))
@@ -3061,7 +3060,15 @@ class NewSessionDialog(wx.Dialog):
 				self.create_Menu3(Menu2,k2,dbf,from_db=sm)
 			else:
 				self.create_Menu4(Menu2,self.api_menu[k2][0],from_db=sm)
-			
+		#append to_csv
+		Menu2.AppendSeparator()
+		for s in conf.ff:
+			self.i +=1
+			#Menu1 = FM.FlatMenu()
+			menuItem = FM.FlatMenuItem(Menu2, 20000+self.i, 'To %s' % s, '', wx.ITEM_NORMAL)
+			self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(sm,s))
+			Menu2.AppendItem(menuItem)	
+	
 	def create_Menu3(self,Menu2,k2,dbf,from_db, from_to='To'):
 		self.i +=1
 		Menu3 = FM.FlatMenu()
@@ -3171,7 +3178,7 @@ class dummy_args(wx.Panel):
 		(self.cargs,self.fargs,self.targs)= self.api_args		
 		if 1: #Common
 			
-			self.core_args_panel = wx.Panel(self)
+			self.core_args_panel = wx.Panel(self, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			hbox = wx.BoxSizer(wx.HORIZONTAL)
 			self.fgs = wx.GridBagSizer(4, 10)
 			#sizer.Add(text1, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
@@ -3197,10 +3204,10 @@ class dummy_args(wx.Panel):
 			
 			self.sb_common = wx.StaticBox(self, label="Common")
 			boxsizer = wx.StaticBoxSizer(self.sb_common, wx.VERTICAL)
-			boxsizer.Add(self.core_args_panel, flag=wx.LEFT|wx.TOP, border=5)
+			boxsizer.Add(self.core_args_panel,1, flag=wx.LEFT|wx.TOP|wx.GROW|wx.EXPAND, border=5)
 			#sizer.Add(boxsizer, pos=(3, 0), span=(1, 3), flag=wx.TOP|wx.EXPAND, border=5)
 			
-			self.args_vbox.Add(boxsizer,1, flag=wx.ALL|wx.EXPAND, border=5)
+			self.args_vbox.Add(boxsizer,1, flag=wx.ALL|wx.EXPAND|wx.GROW|wx.EXPAND, border=5)
 		if 1:
 			from_args_panel = wx.Panel(self, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			hbox = wx.BoxSizer(wx.HORIZONTAL)
@@ -3245,7 +3252,7 @@ class dummy_args(wx.Panel):
 			self.args_hbox.Add(boxsizer, 1, flag=wx.ALL|wx.EXPAND, border=5)
 			
 
-		self.args_vbox.Add(self.args_hbox,0,flag=wx.ALL|wx.EXPAND|wx.GROW)
+		self.args_vbox.Add(self.args_hbox,1,flag=wx.ALL|wx.EXPAND|wx.GROW)
 		self.SetSizer(self.args_vbox)
 		self.Fit()
 
@@ -3758,6 +3765,8 @@ class DataBuddy(wx.Frame):
 		self.transport=os.path.join(self.home,r'%s32\%s32.exe' % (tr,tr))
 		self.args_panel = dummy_args(self,style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 		self.cmd=''
+		self.default_session=None
+		
 		#self.cmd=self.args_panel.get_cmd(self.transport)
 		if 1:
 			self.st_session_name = wx.StaticText(panel, label="Session name:")
@@ -3971,7 +3980,9 @@ class DataBuddy(wx.Frame):
 		(self.cargs,self.fargs,self.targs)=(None, None, None)
 		#print self.GetSize()
 		sub(self.onDeleteSessions, "delete_sessions")
-
+	def openDefault(self, sname):
+		print sname
+		
 	def onDeleteSessions(self,  data, extra1, extra2=None):
 		(items)=data
 		for k,v in items.items():
@@ -4058,6 +4069,7 @@ class DataBuddy(wx.Frame):
 			key = ii[1] #pprint  (data[i])
 			names.append(self.sm.list.GetItemText(i))
 			items[key]=os.path.join(data[i][-2],data[i][-1])
+			del data[i]
 		#pprint (names)		 
 		if self.if_yes('Delete these sessions?\n%s' % '\\n'.join(names)):
 			send('delete_sessions', (items))
@@ -4083,7 +4095,7 @@ class DataBuddy(wx.Frame):
 			#self.set_new_session(data)
 			#pprint (data)
 			#e(0)
-			(dname,fname)=self.saveSession(data)
+			(sname,cv,tmpl,dname,fname)=self.saveSession(data)
 			#refresh session list
 			#self.save_to_dir,f
 			send('add_session',(sname,cv,tmpl,dname,fname))
@@ -4109,18 +4121,34 @@ class DataBuddy(wx.Frame):
 		a,b=tmpl.split('.')
 		self.st_sourcet.SetLabel('{:s}'.format(a))
 		self.st_targett.SetLabel('{:s}'.format(b))
+	def setType(self,tmpl):
+		a,b=tmpl.split('.')
+		type='Copy'
+		if a.startswith('CSV'):
+			type='Load'
+		elif b.startswith('CSV'):
+			type='Extract'
+		self.st_type.SetLabel('{:s}'.format(type))
+		
 	def getTemplates(self):
 		return (self.st_sourcet.GetLabel().strip(),self.st_targett.GetLabel().strip())
 	def OnClearAllButton(self, event):
 		self.args_panel.ClearAll()
 	def OnSaveButton(self, event):
 		sname=self.tc_session_name.GetValue()
-		
-		if self.session_name!=sname and self.if_duplicate_name(sname):
+		save_as=self.session_name!=sname 
+		if save_as and self.if_duplicate_name(sname):
 			self.Warn('Duplicate session name.')
 			self.tc_session_name.SetFocus()
 		else:
-			(dname,fname)=self.saveSession()
+			(sname,cv,tmpl,dname,fname)=self.saveSession()
+			#set focus
+			#(sname,cv,tmpl,dname,fname) = data		
+			if save_as:
+				session=[sname,cv[0],cv[1],'Copy',tmpl,dname,fname]
+				idx=self.sm.slp.addSession(session)			
+				self.sm.list.SetItemState(idx, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED) 
+				self.sm.list.EnsureVisible(idx)
 		
 	def Warn(self, message, caption = 'Warning!'):
 		dlg = wx.MessageDialog(self, message, caption, wx.OK | wx.ICON_WARNING)
@@ -4162,7 +4190,7 @@ class DataBuddy(wx.Frame):
 		import pickle
 		pickle.dump( [sname,copy_vector, tmpl, args], open( save_to_file, "wb" ) )
 		self.btn_save.Enable(False)	
-		return (self.save_to_dir, fname)
+		return (sname,copy_vector, tmpl,self.save_to_dir, fname)
 	def obfuscate(self, data):
 		#pprint(data)
 		for k in data[1]:
@@ -4262,6 +4290,7 @@ class DataBuddy(wx.Frame):
 			#print self.tmpl
 			#print sname,copy_vector,tmpl
 			self.setTemplates(self.tmpl)
+			self.setType(self.tmpl)
 			sess=self.get_session_args(os.path.join(self.sdir,self.fname))
 			#pprint(sess.keys())
 			(self.cargs,self.fargs,self.targs)=sess
@@ -4297,6 +4326,7 @@ class DataBuddy(wx.Frame):
 			self.setCopyVector(copy_vector)
 			#print sname,copy_vector,tmpl
 			self.setTemplates(tmpl)
+			self.setType(self.tmpl)
 			(self.cargs,self.fargs,self.targs)=api_args
 			#print len(self.cargs)
 			#print len(self.fargs)
@@ -4324,7 +4354,7 @@ class DataBuddy(wx.Frame):
 		#save changes
 		if_save=self.auto_save.GetValue() 
 		if if_save:
-			(dname,fname)=self.saveSession()
+			(sname,cv,tmpl,dname,fname)=self.saveSession()
 		#create bat file
 		ts=time.strftime('%Y%m%d_%H%M%S')
 		dirname=os.path.join(home,'run')
@@ -4394,7 +4424,7 @@ class DataBuddy(wx.Frame):
 		#save
 		if_save=self.auto_save.GetValue() 
 		if if_save:
-			(dname,fname)=self.saveSession()
+			(sname,cv,tmpl,dname,fname)=self.saveSession()
 			
 		if_yes=self.send_yes.GetValue()
 		yes=''
@@ -4568,6 +4598,14 @@ class wxHTML(wx.html.HtmlWindow):
 if __name__ == '__main__':
 	freeze_support()	
 	app_title='%s %s' % (__title__,__version__)
+	parser = argparse.ArgumentParser(description=app_title)
+	parser.add_argument('-s','--session',default='',type=str,  help='Session file to open')
+	args = parser.parse_args()
+	default_session=None
+	if hasattr(args, 'session') and args.session:
+		default_session=args.session
+	#pprint(args)
+	#e(0)
 	class MyApp(wx.App, wx.lib.mixins.inspection.InspectionMixin):
 		def OnInit(self):
 			import images as i
@@ -4575,8 +4613,11 @@ if __name__ == '__main__':
 			imgs = i
 			self.Init()
 			self.frame = DataBuddy(None, -1,title=app_title, size=(700,400))
+			if default_session:
+				self.frame.openDefault(default_session)
 			self.frame.Show(True)
 			self.SetTopWindow(self.frame)
+			
 			return True
 
 	app = MyApp(redirect=False) #=True,filename="applogfile.txt")

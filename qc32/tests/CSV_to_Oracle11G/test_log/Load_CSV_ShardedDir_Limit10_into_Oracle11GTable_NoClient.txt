@@ -1,7 +1,7 @@
 
-c:\Python27\data_migrator_1239>echo y  | c:\Python27\qc_dist_32\20150211_114734\qc32\qc32.exe -w csv2ora11g -o 3 -r 3 -t "|" -l 10 -I c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_1;c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_2 -y 50 -u SCOTT -p tiger2 -d '(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=orcl)))' -a SCOTT.Timestamp_test_to -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" 
+c:\Python27\data_migrator_1239>echo y  | c:\Python27\qc_dist_32\20150217_122525\qc32\qc32.exe -w csv2ora11g -o 3 -r 3 -t "|" -l 10 -I c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_1;c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_2 -y 50 -u SCOTT -p tiger2 -d '(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=orcl)))' -a SCOTT.Timestamp_test_to -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" 
 ----------------------------------------------------------------------
-QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/11 11:47:34) [32bit]
+QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/17 12:25:25) [32bit]
 Copyright (c): 2014 Alex Buzunov, All rights reserved.
 Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
 ----------------------------------------------------------------------
@@ -28,10 +28,10 @@ Are you sure you want to proceed?(y/n):
 
 
 
-Thread-1 (0, 5304L, 10)Thread-2
-(0, 5304L, 10)
-
+Thread-2 (0, 5304L, 10)
 Thread-0 (0, 5304L, 10)
+
+Thread-1 (0, 5304L, 10)
 
 
 Thread-2 (0, 5304L, 10)
@@ -41,68 +41,68 @@ Thread-1 (0, 5304L, 10)
 ############################################################
 Copy stats (3 threads, 6 shards):
 ############################################################
-2015-02-11 11:54:43,569 - csv2ora11g - INFO - Counting lines in input file...
-2015-02-11 11:54:43,571 - csv2ora11g - INFO - Done.
-2015-02-11 11:54:43,571 - csv2ora11g - INFO - Estimated line count: 44
-2015-02-11 11:54:43,571 - csv2ora11g - INFO - Counting lines in input file...
-2015-02-11 11:54:43,571 - csv2ora11g - INFO - Done.
-2015-02-11 11:54:43,571 - csv2ora11g - INFO - Estimated line count: 44
-2015-02-11 11:54:43,571 - csv2ora11g - INFO - Counting lines in input file...
-2015-02-11 11:54:43,571 - csv2ora11g - INFO - Done.
-2015-02-11 11:54:43,571 - csv2ora11g - INFO - Estimated line count: 44
-2015-02-11 11:54:43,571 - csv2ora11g - INFO - Counting lines in input file...
-2015-02-11 11:54:43,572 - csv2ora11g - INFO - Done.
-2015-02-11 11:54:43,572 - csv2ora11g - INFO - Estimated line count: 44
-2015-02-11 11:54:43,572 - csv2ora11g - INFO - Counting lines in input file...
-2015-02-11 11:54:43,572 - csv2ora11g - INFO - Done.
-2015-02-11 11:54:43,572 - csv2ora11g - INFO - Estimated line count: 44
-2015-02-11 11:54:43,572 - csv2ora11g - INFO - Counting lines in input file...
-2015-02-11 11:54:43,572 - csv2ora11g - INFO - Done.
-2015-02-11 11:54:43,572 - csv2ora11g - INFO - Estimated line count: 44
-2015-02-11 11:54:43,572 - csv2ora11g - WARNING - Overriding num_of_shards 3->6.
-2015-02-11 11:54:43,584 - csv2ora11g - INFO - Starting Thread-0
-2015-02-11 11:54:43,584 - csv2ora11g - INFO - Starting Thread-1
-2015-02-11 11:54:43,585 - csv2ora11g - INFO - Starting Thread-2
-2015-02-11 11:54:43,585 - csv2ora11g - INFO - Thread-0 processing Shard-0
-2015-02-11 11:54:43,585 - csv2ora11g - INFO - Thread-1 processing Shard-1
-2015-02-11 11:54:43,585 - csv2ora11g - INFO - Thread-2 processing Shard-2
-2015-02-11 11:54:43,890 - csv2ora11g - INFO - Loading data...
-2015-02-11 11:54:43,890 - csv2ora11g - INFO - Loading data...
-2015-02-11 11:54:43,890 - csv2ora11g - INFO - Loading data...
-2015-02-11 11:54:45,017 - csv2ora11g - INFO - SQL*Loader status =0
-2015-02-11 11:54:45,017 - csv2ora11g - INFO - SQL*Loader status =0
-2015-02-11 11:54:45,019 - csv2ora11g - INFO - Done.
-2015-02-11 11:54:45,019 - csv2ora11g - INFO - Done.
-2015-02-11 11:54:45,020 - csv2ora11g - INFO - Thread-1 exit status 0
-2015-02-11 11:54:45,020 - csv2ora11g - INFO - Thread-2 exit status 0
-2015-02-11 11:54:45,020 - csv2ora11g - INFO - Thread-1 processing Shard-3
-2015-02-11 11:54:45,020 - csv2ora11g - INFO - SQL*Loader status =0
-2015-02-11 11:54:45,020 - csv2ora11g - INFO - Thread-2 processing Shard-4
-2015-02-11 11:54:45,022 - csv2ora11g - INFO - Loading data...
-2015-02-11 11:54:45,022 - csv2ora11g - INFO - Loading data...
-2015-02-11 11:54:45,022 - csv2ora11g - INFO - Done.
-2015-02-11 11:54:45,023 - csv2ora11g - INFO - Thread-0 exit status 0
-2015-02-11 11:54:45,023 - csv2ora11g - INFO - Thread-0 processing Shard-5
-2015-02-11 11:54:45,023 - csv2ora11g - INFO - Loading data...
-2015-02-11 11:54:45,720 - csv2ora11g - INFO - SQL*Loader status =0
-2015-02-11 11:54:45,720 - csv2ora11g - INFO - SQL*Loader status =0
-2015-02-11 11:54:45,720 - csv2ora11g - INFO - Done.
-2015-02-11 11:54:45,720 - csv2ora11g - INFO - Done.
-2015-02-11 11:54:45,720 - csv2ora11g - INFO - Thread-2 exit status 0
-2015-02-11 11:54:45,720 - csv2ora11g - INFO - Thread-0 exit status 0
-2015-02-11 11:54:45,720 - csv2ora11g - INFO - Exiting Thread-2
-2015-02-11 11:54:45,720 - csv2ora11g - INFO - Exiting Thread-0
-2015-02-11 11:54:45,721 - csv2ora11g - INFO - SQL*Loader status =0
-2015-02-11 11:54:45,721 - csv2ora11g - INFO - Done.
-2015-02-11 11:54:45,721 - csv2ora11g - INFO - Thread-1 exit status 0
-2015-02-11 11:54:45,721 - csv2ora11g - INFO - Exiting Thread-1
-2015-02-11 11:54:45,721 - csv2ora11g - INFO - Shard-0/0:          10 rows
-2015-02-11 11:54:45,721 - csv2ora11g - INFO - Shard-1/0:          10 rows
-2015-02-11 11:54:45,721 - csv2ora11g - INFO - Shard-2/0:          10 rows
-2015-02-11 11:54:45,721 - csv2ora11g - INFO - Shard-3/0:          10 rows
-2015-02-11 11:54:45,721 - csv2ora11g - INFO - Shard-4/0:          10 rows
-2015-02-11 11:54:45,723 - csv2ora11g - INFO - Shard-5/0:          10 rows
-2015-02-11 11:54:45,723 - csv2ora11g - INFO - TOTAL Bytes:       31824 Bytes
-2015-02-11 11:54:45,723 - csv2ora11g - INFO - TOTAL Rows:           60 Rows
-2015-02-11 11:54:45,723 - csv2ora11g - INFO - Done.
-2015-02-11 11:54:45,723 - csv2ora11g - INFO - Elapsed: 00:00:02
+2015-02-17 12:35:35,484 - csv2ora11g - INFO - Counting lines in input file...
+2015-02-17 12:35:35,484 - csv2ora11g - INFO - Done.
+2015-02-17 12:35:35,484 - csv2ora11g - INFO - Estimated line count: 44
+2015-02-17 12:35:35,484 - csv2ora11g - INFO - Counting lines in input file...
+2015-02-17 12:35:35,484 - csv2ora11g - INFO - Done.
+2015-02-17 12:35:35,484 - csv2ora11g - INFO - Estimated line count: 44
+2015-02-17 12:35:35,484 - csv2ora11g - INFO - Counting lines in input file...
+2015-02-17 12:35:35,486 - csv2ora11g - INFO - Done.
+2015-02-17 12:35:35,486 - csv2ora11g - INFO - Estimated line count: 44
+2015-02-17 12:35:35,486 - csv2ora11g - INFO - Counting lines in input file...
+2015-02-17 12:35:35,486 - csv2ora11g - INFO - Done.
+2015-02-17 12:35:35,486 - csv2ora11g - INFO - Estimated line count: 44
+2015-02-17 12:35:35,486 - csv2ora11g - INFO - Counting lines in input file...
+2015-02-17 12:35:35,486 - csv2ora11g - INFO - Done.
+2015-02-17 12:35:35,486 - csv2ora11g - INFO - Estimated line count: 44
+2015-02-17 12:35:35,486 - csv2ora11g - INFO - Counting lines in input file...
+2015-02-17 12:35:35,486 - csv2ora11g - INFO - Done.
+2015-02-17 12:35:35,486 - csv2ora11g - INFO - Estimated line count: 44
+2015-02-17 12:35:35,486 - csv2ora11g - WARNING - Overriding num_of_shards 3->6.
+2015-02-17 12:35:35,487 - csv2ora11g - INFO - Starting Thread-0
+2015-02-17 12:35:35,489 - csv2ora11g - INFO - Starting Thread-1
+2015-02-17 12:35:35,489 - csv2ora11g - INFO - Starting Thread-2
+2015-02-17 12:35:35,489 - csv2ora11g - INFO - Thread-0 processing Shard-0
+2015-02-17 12:35:35,489 - csv2ora11g - INFO - Thread-1 processing Shard-1
+2015-02-17 12:35:35,490 - csv2ora11g - INFO - Thread-2 processing Shard-2
+2015-02-17 12:35:35,983 - csv2ora11g - INFO - Loading data...
+2015-02-17 12:35:35,983 - csv2ora11g - INFO - Loading data...
+2015-02-17 12:35:35,983 - csv2ora11g - INFO - Loading data...
+2015-02-17 12:35:37,864 - csv2ora11g - INFO - SQL*Loader status =0
+2015-02-17 12:35:37,864 - csv2ora11g - INFO - SQL*Loader status =0
+2015-02-17 12:35:37,865 - csv2ora11g - INFO - Done.
+2015-02-17 12:35:37,865 - csv2ora11g - INFO - Done.
+2015-02-17 12:35:37,865 - csv2ora11g - INFO - Thread-2 exit status 0
+2015-02-17 12:35:37,865 - csv2ora11g - INFO - SQL*Loader status =0
+2015-02-17 12:35:37,867 - csv2ora11g - INFO - Thread-0 exit status 0
+2015-02-17 12:35:37,867 - csv2ora11g - INFO - Thread-2 processing Shard-3
+2015-02-17 12:35:37,867 - csv2ora11g - INFO - Done.
+2015-02-17 12:35:37,867 - csv2ora11g - INFO - Thread-0 processing Shard-4
+2015-02-17 12:35:37,868 - csv2ora11g - INFO - Thread-1 exit status 0
+2015-02-17 12:35:37,868 - csv2ora11g - INFO - Loading data...
+2015-02-17 12:35:37,868 - csv2ora11g - INFO - Loading data...
+2015-02-17 12:35:37,868 - csv2ora11g - INFO - Thread-1 processing Shard-5
+2015-02-17 12:35:37,868 - csv2ora11g - INFO - Loading data...
+2015-02-17 12:35:38,596 - csv2ora11g - INFO - SQL*Loader status =0
+2015-02-17 12:35:38,596 - csv2ora11g - INFO - SQL*Loader status =0
+2015-02-17 12:35:38,598 - csv2ora11g - INFO - Done.
+2015-02-17 12:35:38,598 - csv2ora11g - INFO - Done.
+2015-02-17 12:35:38,598 - csv2ora11g - INFO - Thread-2 exit status 0
+2015-02-17 12:35:38,598 - csv2ora11g - INFO - Thread-0 exit status 0
+2015-02-17 12:35:38,598 - csv2ora11g - INFO - Exiting Thread-2
+2015-02-17 12:35:38,598 - csv2ora11g - INFO - Exiting Thread-0
+2015-02-17 12:35:38,598 - csv2ora11g - INFO - SQL*Loader status =0
+2015-02-17 12:35:38,598 - csv2ora11g - INFO - Done.
+2015-02-17 12:35:38,598 - csv2ora11g - INFO - Thread-1 exit status 0
+2015-02-17 12:35:38,598 - csv2ora11g - INFO - Exiting Thread-1
+2015-02-17 12:35:38,599 - csv2ora11g - INFO - Shard-0/0:          10 rows
+2015-02-17 12:35:38,599 - csv2ora11g - INFO - Shard-1/0:          10 rows
+2015-02-17 12:35:38,599 - csv2ora11g - INFO - Shard-2/0:          10 rows
+2015-02-17 12:35:38,599 - csv2ora11g - INFO - Shard-3/0:          10 rows
+2015-02-17 12:35:38,599 - csv2ora11g - INFO - Shard-4/0:          10 rows
+2015-02-17 12:35:38,599 - csv2ora11g - INFO - Shard-5/0:          10 rows
+2015-02-17 12:35:38,599 - csv2ora11g - INFO - TOTAL Bytes:       31824 Bytes
+2015-02-17 12:35:38,599 - csv2ora11g - INFO - TOTAL Rows:           60 Rows
+2015-02-17 12:35:38,599 - csv2ora11g - INFO - Done.
+2015-02-17 12:35:38,599 - csv2ora11g - INFO - Elapsed: 00:00:03

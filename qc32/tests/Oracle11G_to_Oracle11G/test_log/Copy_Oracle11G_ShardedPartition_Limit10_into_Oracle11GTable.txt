@@ -1,7 +1,7 @@
 
-c:\Python27\data_migrator_1239>echo y  | c:\Python27\qc_dist_32\20150211_114734\qc32\qc32.exe -w ora11g2ora11g -o 3 -r 3 -t "|" -l 10 -c SCOTT.Partitioned_test_from -P part_15 -j SCOTT -x tiger2 -b orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -u SCOTT -p tiger2 -d orcl -a SCOTT.Timestamp_test_to -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" 
+c:\Python27\data_migrator_1239>echo y  | c:\Python27\qc_dist_32\20150217_133056\qc32\qc32.exe -w ora11g2ora11g -o 3 -r 3 -t "|" -l 10 -c SCOTT.Partitioned_test_from -P part_15 -j SCOTT -x tiger2 -b orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -u SCOTT -p tiger2 -d orcl -a SCOTT.Timestamp_test_to -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" 
 ----------------------------------------------------------------------
-QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/11 11:47:34) [32bit]
+QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/17 13:30:56) [32bit]
 Copyright (c): 2014 Alex Buzunov, All rights reserved.
 Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
 ----------------------------------------------------------------------
@@ -28,22 +28,22 @@ Thread-0 (0, 3280L, 10)
 ############################################################
 Copy stats (3 threads, 3 shards):
 ############################################################
-2015-02-11 11:49:17,144 - ora11g2ora11g - INFO - Starting Thread-0
-2015-02-11 11:49:17,145 - ora11g2ora11g - INFO - Starting Thread-1
-2015-02-11 11:49:17,147 - ora11g2ora11g - INFO - Starting Thread-2
-2015-02-11 11:49:17,147 - ora11g2ora11g - INFO - Thread-0 processing Shard-0
-2015-02-11 11:49:17,147 - ora11g2ora11g - INFO - Exiting Thread-1
-2015-02-11 11:49:17,147 - ora11g2ora11g - INFO - Exiting Thread-2
-2015-02-11 11:49:17,147 - ora11g2ora11g - INFO - Extracting data...
-2015-02-11 11:49:17,213 - ora11g2ora11g - INFO - Done
-2015-02-11 11:49:17,467 - ora11g2ora11g - INFO - Loading data...
-2015-02-11 11:49:17,553 - ora11g2ora11g - INFO - SQL*Loader status =0
-2015-02-11 11:49:17,553 - ora11g2ora11g - INFO - Done
-2015-02-11 11:49:17,555 - ora11g2ora11g - INFO - spool file deleted.
-2015-02-11 11:49:17,555 - ora11g2ora11g - INFO - Thread-0 exit status 0
-2015-02-11 11:49:17,555 - ora11g2ora11g - INFO - Exiting Thread-0
-2015-02-11 11:49:17,555 - ora11g2ora11g - INFO - Shard-0/0:          10 rows
-2015-02-11 11:49:17,555 - ora11g2ora11g - INFO - TOTAL Bytes:        3280 Bytes
-2015-02-11 11:49:17,555 - ora11g2ora11g - INFO - TOTAL Rows:           10 Rows
-2015-02-11 11:49:17,555 - ora11g2ora11g - INFO - Done.
-2015-02-11 11:49:17,555 - ora11g2ora11g - INFO - Elapsed: 00:00:00
+2015-02-17 13:32:01,927 - ora11g2ora11g - INFO - Starting Thread-0
+2015-02-17 13:32:01,928 - ora11g2ora11g - INFO - Starting Thread-1
+2015-02-17 13:32:01,930 - ora11g2ora11g - INFO - Starting Thread-2
+2015-02-17 13:32:01,930 - ora11g2ora11g - INFO - Thread-0 processing Shard-0
+2015-02-17 13:32:01,930 - ora11g2ora11g - INFO - Exiting Thread-1
+2015-02-17 13:32:01,930 - ora11g2ora11g - INFO - Exiting Thread-2
+2015-02-17 13:32:01,930 - ora11g2ora11g - INFO - Extracting data...
+2015-02-17 13:32:01,990 - ora11g2ora11g - INFO - Done
+2015-02-17 13:32:02,167 - ora11g2ora11g - INFO - Loading data...
+2015-02-17 13:32:02,313 - ora11g2ora11g - INFO - SQL*Loader status =0
+2015-02-17 13:32:02,315 - ora11g2ora11g - INFO - Done
+2015-02-17 13:32:02,315 - ora11g2ora11g - INFO - spool file deleted.
+2015-02-17 13:32:02,315 - ora11g2ora11g - INFO - Thread-0 exit status 0
+2015-02-17 13:32:02,315 - ora11g2ora11g - INFO - Exiting Thread-0
+2015-02-17 13:32:02,315 - ora11g2ora11g - INFO - Shard-0/0:          10 rows
+2015-02-17 13:32:02,315 - ora11g2ora11g - INFO - TOTAL Bytes:        3280 Bytes
+2015-02-17 13:32:02,315 - ora11g2ora11g - INFO - TOTAL Rows:           10 Rows
+2015-02-17 13:32:02,315 - ora11g2ora11g - INFO - Done.
+2015-02-17 13:32:02,315 - ora11g2ora11g - INFO - Elapsed: 00:00:00

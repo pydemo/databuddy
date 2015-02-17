@@ -16,7 +16,7 @@ Arguments:
   -z[--source_client_home] is "Path to Oracle 11G client home."
   -A[--header] is "Include header to Oracle 11G extract."	
 Example: 
-  echo y|c:\Python27\qc_dist_32\20150211_114734\qc32\qc32.exe ^
+  echo y|c:\Python27\qc_dist_32\20150217_122525\qc32\qc32.exe ^
   -w ora11g2csv ^
   -o 1 ^
   -r 1 ^

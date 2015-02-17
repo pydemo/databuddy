@@ -229,7 +229,7 @@ class XmlSTC(stc.StyledTextCtrl):
 			event.Skip()
 	def OnChangeText(self, evt):
 		# status on text thange
-		print 'OnChangeText', self.changed, self.ignore_change
+		#print 'OnChangeText', self.changed, self.ignore_change
 		if not self.changed:
 			if not self.ignore_change:
 				self.changed=True		

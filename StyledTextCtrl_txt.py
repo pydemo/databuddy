@@ -67,7 +67,7 @@ class TxtSTC(stc.StyledTextCtrl):
 		self.changed=False
 		self.ignore_change=ignore_change #ignore change on opening existing files
 		self.ID=ID
-		print 'SqlSTC intit parent=', parent
+		#print 'SqlSTC intit parent=', parent
 		self.SetViewWhiteSpace(False)
 		#self.SetBufferedDraw(False)
 		#self.SetViewEOL(True)
@@ -233,7 +233,7 @@ class TxtSTC(stc.StyledTextCtrl):
 			event.Skip()
 	def OnChangeText(self, evt):
 		# status on text thange
-		print 'OnChangeText', self.changed, self.ignore_change
+		#print 'OnChangeText', self.changed, self.ignore_change
 		if not self.changed:
 			if not self.ignore_change:
 				self.changed=True		

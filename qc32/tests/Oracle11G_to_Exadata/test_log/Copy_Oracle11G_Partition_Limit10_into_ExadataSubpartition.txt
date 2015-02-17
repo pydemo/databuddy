@@ -1,0 +1,45 @@
+
+c:\Python27\data_migrator_1239>echo y  | c:\Python27\qc_dist_32\20150217_122525\qc32\qc32.exe -w ora11g2oraexa -o 1 -r 1 -t "|" -l 10 -c SCOTT.Partitioned_test_from -P part_15 -j SCOTT -x tiger2 -b orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -u SCOTT -p tiger2 -d orcl -a SCOTT.Timestamp_test_to -N part_15_sp1 -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" 
+----------------------------------------------------------------------
+QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/17 12:25:25) [32bit]
+Copyright (c): 2014 Alex Buzunov, All rights reserved.
+Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
+----------------------------------------------------------------------
+ora11g2oraexa
+ORAEXA
+####################
+Performing data copy.
+		
+From Oracle 11G:	
+	from db: SCOTT@orcl
+	table: SCOTT.Partitioned_test_from
+	partition: part_15
+	shards:	1
+		
+		
+	To Oracle:	
+		to db: SCOTT@orcl
+		to table: SCOTT.Timestamp_test_to
+		
+####################
+Are you sure you want to proceed?(y/n): 
+
+Thread-0 (0, 3280L, 10)
+############################################################
+Copy stats (1 threads, 1 shards):
+############################################################
+2015-02-17 12:44:22,785 - ora11g2oraexa - INFO - Starting Thread-0
+2015-02-17 12:44:22,786 - ora11g2oraexa - INFO - Thread-0 processing Shard-0
+2015-02-17 12:44:22,786 - ora11g2oraexa - INFO - Extracting data...
+2015-02-17 12:44:22,947 - ora11g2oraexa - INFO - Done
+2015-02-17 12:44:23,381 - ora11g2oraexa - INFO - Loading data...
+2015-02-17 12:44:23,595 - ora11g2oraexa - INFO - SQL*Loader status =0
+2015-02-17 12:44:23,596 - ora11g2oraexa - INFO - Done
+2015-02-17 12:44:23,596 - ora11g2oraexa - INFO - spool file deleted.
+2015-02-17 12:44:23,596 - ora11g2oraexa - INFO - Thread-0 exit status 0
+2015-02-17 12:44:23,596 - ora11g2oraexa - INFO - Exiting Thread-0
+2015-02-17 12:44:23,598 - ora11g2oraexa - INFO - Shard-0/0:          10 rows
+2015-02-17 12:44:23,598 - ora11g2oraexa - INFO - TOTAL Bytes:        3280 Bytes
+2015-02-17 12:44:23,598 - ora11g2oraexa - INFO - TOTAL Rows:           10 Rows
+2015-02-17 12:44:23,598 - ora11g2oraexa - INFO - Done.
+2015-02-17 12:44:23,598 - ora11g2oraexa - INFO - Elapsed: 00:00:00

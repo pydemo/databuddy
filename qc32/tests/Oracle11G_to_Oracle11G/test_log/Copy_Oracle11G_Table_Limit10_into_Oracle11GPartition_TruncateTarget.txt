@@ -1,7 +1,7 @@
 
-c:\Python27\data_migrator_1239>python -c "print 'y\ny'"   | c:\Python27\qc_dist_32\20150211_114734\qc32\qc32.exe -w ora11g2ora11g -o 1 -r 1 -t "|" -l 10 -U 1 -c SCOTT.Timestamp_test_from -j SCOTT -x tiger2 -b orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -u SCOTT -p tiger2 -d orcl -a SCOTT.Partitioned_test_to -G part_15 -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" 
+c:\Python27\data_migrator_1239>python -c "print 'y\ny'"   | c:\Python27\qc_dist_32\20150217_133056\qc32\qc32.exe -w ora11g2ora11g -o 1 -r 1 -t "|" -l 10 -U 1 -c SCOTT.Timestamp_test_from -j SCOTT -x tiger2 -b orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -u SCOTT -p tiger2 -d orcl -a SCOTT.Partitioned_test_to -G part_15 -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" 
 ----------------------------------------------------------------------
-QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/11 11:47:34) [32bit]
+QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/17 13:30:56) [32bit]
 Copyright (c): 2014 Alex Buzunov, All rights reserved.
 Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
 ----------------------------------------------------------------------
@@ -33,22 +33,22 @@ Thread-0 (0, 3280L, 10)
 ############################################################
 Copy stats (1 threads, 1 shards):
 ############################################################
-2015-02-11 11:49:08,092 - ora11g2ora11g - WARNING - Source is table.
-2015-02-11 11:49:08,092 - ora11g2ora11g - WARNING - Target is partition.
-2015-02-11 11:49:08,092 - ora11g2ora11g - WARNING - Truncating partiton part_15
-2015-02-11 11:49:08,328 - ora11g2ora11g - INFO - Table truncated.
-2015-02-11 11:49:08,328 - ora11g2ora11g - INFO - Starting Thread-0
-2015-02-11 11:49:08,328 - ora11g2ora11g - INFO - Thread-0 processing Shard-0
-2015-02-11 11:49:08,329 - ora11g2ora11g - INFO - Extracting data...
-2015-02-11 11:49:08,390 - ora11g2ora11g - INFO - Done
-2015-02-11 11:49:08,523 - ora11g2ora11g - INFO - Loading data...
-2015-02-11 11:49:09,052 - ora11g2ora11g - INFO - SQL*Loader status =0
-2015-02-11 11:49:09,052 - ora11g2ora11g - INFO - Done
-2015-02-11 11:49:09,052 - ora11g2ora11g - INFO - spool file deleted.
-2015-02-11 11:49:09,052 - ora11g2ora11g - INFO - Thread-0 exit status 0
-2015-02-11 11:49:09,052 - ora11g2ora11g - INFO - Exiting Thread-0
-2015-02-11 11:49:09,052 - ora11g2ora11g - INFO - Shard-0/0:          10 rows
-2015-02-11 11:49:09,052 - ora11g2ora11g - INFO - TOTAL Bytes:        3280 Bytes
-2015-02-11 11:49:09,052 - ora11g2ora11g - INFO - TOTAL Rows:           10 Rows
-2015-02-11 11:49:09,052 - ora11g2ora11g - INFO - Done.
-2015-02-11 11:49:09,053 - ora11g2ora11g - INFO - Elapsed: 00:00:00
+2015-02-17 13:31:51,211 - ora11g2ora11g - WARNING - Source is table.
+2015-02-17 13:31:51,213 - ora11g2ora11g - WARNING - Target is partition.
+2015-02-17 13:31:51,213 - ora11g2ora11g - WARNING - Truncating partiton part_15
+2015-02-17 13:31:51,289 - ora11g2ora11g - INFO - Table truncated.
+2015-02-17 13:31:51,289 - ora11g2ora11g - INFO - Starting Thread-0
+2015-02-17 13:31:51,289 - ora11g2ora11g - INFO - Thread-0 processing Shard-0
+2015-02-17 13:31:51,290 - ora11g2ora11g - INFO - Extracting data...
+2015-02-17 13:31:51,374 - ora11g2ora11g - INFO - Done
+2015-02-17 13:31:51,507 - ora11g2ora11g - INFO - Loading data...
+2015-02-17 13:31:51,816 - ora11g2ora11g - INFO - SQL*Loader status =0
+2015-02-17 13:31:51,818 - ora11g2ora11g - INFO - Done
+2015-02-17 13:31:51,818 - ora11g2ora11g - INFO - spool file deleted.
+2015-02-17 13:31:51,819 - ora11g2ora11g - INFO - Thread-0 exit status 0
+2015-02-17 13:31:51,819 - ora11g2ora11g - INFO - Exiting Thread-0
+2015-02-17 13:31:51,819 - ora11g2ora11g - INFO - Shard-0/0:          10 rows
+2015-02-17 13:31:51,819 - ora11g2ora11g - INFO - TOTAL Bytes:        3280 Bytes
+2015-02-17 13:31:51,819 - ora11g2ora11g - INFO - TOTAL Rows:           10 Rows
+2015-02-17 13:31:51,819 - ora11g2ora11g - INFO - Done.
+2015-02-17 13:31:51,819 - ora11g2ora11g - INFO - Elapsed: 00:00:00

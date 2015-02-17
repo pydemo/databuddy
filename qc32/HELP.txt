@@ -2,12 +2,14 @@
 ##qc32.exe -h 
 ##
 ----------------------------------------------------------------------
-QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/11 11:47:34) [32bit]
+QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/17 12:25:25) [32bit]
 Copyright (c): 2014 Alex Buzunov, All rights reserved.
 Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
 ----------------------------------------------------------------------
-Databases suported (1):
+Databases suported (3):
 1. Oracle 11G
+2. Oracle XE
+3. Exadata
 
 Data formats suported (1):
 1. CSV
@@ -17,9 +19,13 @@ For detailed help use one of the options:
 From Oracle 11G:
 
 	To Oracle 11G          : qc32.exe -h ora11g2ora11g
+	To Oracle XE           : qc32.exe -h ora11g2oraxe
+	To Exadata             : qc32.exe -h ora11g2oraexa
 	To CSV                 : qc32.exe -h ora11g2csv
 
 To Oracle 11G:
 
+	From Oracle XE         : qc32.exe -h oraxe2ora11g
+	From Exadata           : qc32.exe -h oraexa2ora11g
 	From CSV               : qc32.exe -h csv2ora11g
 

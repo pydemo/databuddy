@@ -2,10 +2,14 @@
 ##qc32.exe -h FEAT 
 ##
 ----------------------------------------------------------------------
-QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/11 11:47:34) [32bit]
+QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/17 12:25:25) [32bit]
 Copyright (c): 2014 Alex Buzunov, All rights reserved.
 Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
 ----------------------------------------------------------------------
-	1. Copy data from "Oracle 11G" to "Oracle 11G"
-	2. Extract data from "Oracle 11G" to "CSV file"
-	3. Load data from "CSV file" to "Oracle 11G"
+	1. Copy data from "Exadata" to "Oracle 11G"
+	2. Copy data from "Oracle 11G" to "Exadata"
+	3. Copy data from "Oracle 11G" to "Oracle 11G"
+	4. Copy data from "Oracle 11G" to "Oracle XE"
+	5. Copy data from "Oracle XE" to "Oracle 11G"
+	6. Extract data from "Oracle 11G" to "CSV file"
+	7. Load data from "CSV file" to "Oracle 11G"

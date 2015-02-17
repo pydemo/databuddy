@@ -1,13 +1,13 @@
 
-c:\Python27\data_migrator_1239>python -c "print 'y\ny'"   | c:\Python27\qc_dist_32\20150211_114734\qc32\qc32.exe -w ora11g2csv -o 1 -r 1 -t "|" -U 1 -E 1 -c SCOTT.Partitioned_test_from -P part_15 -j SCOTT -x tiger2 -b orcl -e "YYYY/MM/DD" -m "YYYY-MM-DD-HH24.MI.SS.FF" -O "YYYY-MM-DD-HH24:MI:SS.FF" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" 
+c:\Python27\data_migrator_1239>python -c "print 'y\ny'"   | c:\Python27\qc_dist_32\20150217_122525\qc32\qc32.exe -w ora11g2csv -o 1 -r 1 -t "|" -U 1 -E 1 -c SCOTT.Partitioned_test_from -P part_15 -j SCOTT -x tiger2 -b orcl -e "YYYY/MM/DD" -m "YYYY-MM-DD-HH24.MI.SS.FF" -O "YYYY-MM-DD-HH24:MI:SS.FF" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" 
 ----------------------------------------------------------------------
-QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/11 11:47:34) [32bit]
+QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/17 12:25:25) [32bit]
 Copyright (c): 2014 Alex Buzunov, All rights reserved.
 Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
 ----------------------------------------------------------------------
 ora11g2csv
 CSV
-C:\tmp\dm_out\20150211_114810_703000\SCOTT.Partitioned_test_from_part_15.20150211_114810_703000.data
+C:\tmp\dm_out\20150217_123321_130000\SCOTT.Partitioned_test_from_part_15.20150217_123321_130000.data
 ####################
 Performing data extraction.
 		
@@ -19,10 +19,10 @@ From Oracle 11G:
 		
 		
 To CSV:
-	C:\tmp\dm_out\20150211_114810_703000\SCOTT.Partitioned_test_from_part_15.20150211_114810_703000.data
+	C:\tmp\dm_out\20150217_123321_130000\SCOTT.Partitioned_test_from_part_15.20150217_123321_130000.data
 
 ####################
 Are you sure you want to proceed?(y/n): 
 Traceback (most recent call last):
-  File "<string>", line 247, in <module>
+  File "<string>", line 251, in <module>
 AttributeError: 'spool_to_csv' object has no attribute 'truncate_target'
