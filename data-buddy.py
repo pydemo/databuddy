@@ -2542,6 +2542,7 @@ class NewSessionDialog(wx.Dialog):
 		self.recent=[]
 		if os.path.isfile(self.recent_fname):
 			self.recent=self.readRecent()
+
 		if 1:
 			#namesizer = wx.BoxSizer(wx.HORIZONTAL)
 			namesizer = wx.GridBagSizer(1, 4)			
@@ -2887,12 +2888,18 @@ class NewSessionDialog(wx.Dialog):
 	def writeRecent(self):
 		print 'writeRecent'
 		print self.recent
-		import pickle
-		
-		pickle.dump(self.recent, open( self.recent_fname, "wb" ) )
+		if self.recent:
+			import pickle
+			
+			pickle.dump(self.recent, open( self.recent_fname, "wb" ) )
 	def readRecent(self):
+		print 'readRecent'
 		import pickle
 		self.recent = pickle.load( open( self.recent_fname, "rb" ) )
+		print self.recent
+		if not self.recent:
+			self.recent=[]
+		return self.recent
 	def OnCreate(self,e):
 		print 'OnCreate'
 		if not self.tc_sname.GetValue():
@@ -2911,7 +2918,8 @@ class NewSessionDialog(wx.Dialog):
 
 	
 	def OnCVClicked(self, event):
-
+		#print self.recent
+		#e(0)
 		# Demonstrate using the wxFlatMenu without a menu bar
 		btn = event.GetEventObject()
 
@@ -3079,6 +3087,7 @@ class NewSessionDialog(wx.Dialog):
 
 	def OnMenu(self, event, params):
 		(a,b) = params
+		
 		if (a,b) not in self.recent:
 			self.recent.append((a,b))
 		#print '###########', self.recent
