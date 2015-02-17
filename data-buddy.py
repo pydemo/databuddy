@@ -2503,9 +2503,9 @@ class ConfigTree(wx.Frame):
 
 class NewSessionDialog(wx.Dialog):
 	def __init__(
-			self, parent, ID, title, size,plist, pos=wx.DefaultPosition, 
+			self, parent, ID, title, size,data, pos=wx.DefaultPosition, 
 			style=wx.DEFAULT_DIALOG_STYLE,
-			useMetal=False, 
+			useMetal=False 
 			):
 
 		# Instead of calling wx.Dialog.__init__ we precreate the dialog
@@ -2513,7 +2513,8 @@ class NewSessionDialog(wx.Dialog):
 		# creation, and then we create the GUI object using the Create
 		# method.
 		self.parent=parent
-		self.plist=plist
+		self.data=data
+		#pprint(data)
 		self._popUpMenu = None
 		#self.recent=[]
 		pre = wx.PreDialog()
@@ -2902,10 +2903,16 @@ class NewSessionDialog(wx.Dialog):
 		return self.recent
 	def OnCreate(self,e):
 		print 'OnCreate'
-		if not self.tc_sname.GetValue():
+		sname=self.tc_sname.GetValue()
+		if not sname:
 			self.Warn('Enter session name.')
 			self.tc_sname.SetFocus()
+		elif self.if_duplicate_name(sname):
+			self.Warn('Duplicate session name.')
+			self.tc_sname.SetFocus()
+
 		else:
+		
 			self.writeRecent()
 			e.Skip()
 		#self.Close(True)
@@ -2913,10 +2920,12 @@ class NewSessionDialog(wx.Dialog):
 	def Warn(self, message, caption = 'Warning!'):
 		dlg = wx.MessageDialog(self, message, caption, wx.OK | wx.ICON_WARNING)
 		dlg.ShowModal()
-		dlg.Destroy()
-  
-
-	
+		dlg.Destroy()	
+	def if_duplicate_name(self,name):
+		for k,v in self.data.items():
+			if name == v[0]:
+				return True
+		return False
 	def OnCVClicked(self, event):
 		#print self.recent
 		#e(0)
@@ -3753,7 +3762,9 @@ class DataBuddy(wx.Frame):
 		if 1:
 			self.st_session_name = wx.StaticText(panel, label="Session name:")
 			sizer.Add(self.st_session_name, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
+			self.session_name=None
 			self.tc_session_name = wx.TextCtrl(panel,value='n/a')
+			
 			self.tc_session_name.Bind(wx.EVT_CHAR, self.onKeyPress)
 			self.tc_session_name.Enable(False)
 			sizer.Add(self.tc_session_name, pos=(0, 1), span=(1, 3), flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=10)
@@ -3904,7 +3915,7 @@ class DataBuddy(wx.Frame):
 				
 			self.hsizer = wx.BoxSizer(wx.HORIZONTAL)
 			vsizer.Add(self.sm,1,wx.EXPAND|wx.TOP|wx.BOTTOM|wx.LEFT|wx.RIGHT, border=5)
-				
+			self.data =self.sm.list.data[self.sm.list.current_list]
 
 			#self.vsizer.Add(self.sizer,pos=(0,1),flag=wx.EXPAND)
 			aboutBtn = wx.Button(panel2, ID_ABOUT, "About", style=wx.BU_EXACTFIT) #, size=(30,20)
@@ -4076,6 +4087,7 @@ class DataBuddy(wx.Frame):
 	def setSessionName(self, sn):
 		self.tc_session_name.SetValue(sn)
 		self.tc_session_name.Enable(True)
+		self.session_name=sn
 	def getSessionName(self):
 		return self.tc_session_name.GetValue()
 	def getCopyVector(self):
@@ -4092,10 +4104,27 @@ class DataBuddy(wx.Frame):
 	def OnClearAllButton(self, event):
 		self.args_panel.ClearAll()
 	def OnSaveButton(self, event):
-		#print self.getSessionName(), self.getCopyVector()
-		(dname,fname)=self.saveSession()
+		sname=self.tc_session_name.GetValue()
 		
-
+		if self.session_name!=sname and self.if_duplicate_name(sname):
+			self.Warn('Duplicate session name.')
+			self.tc_session_name.SetFocus()
+		else:
+			(dname,fname)=self.saveSession()
+		
+	def Warn(self, message, caption = 'Warning!'):
+		dlg = wx.MessageDialog(self, message, caption, wx.OK | wx.ICON_WARNING)
+		dlg.ShowModal()
+		dlg.Destroy()	
+	def if_duplicate_name(self,name):
+		for k,v in self.data.items():
+			if name == v[0]:
+				return True
+		return False
+	def if_sname_changed(self):
+		print 'if_sname_changed'
+		print self.tc_session_name.GetItemData()
+		
 	def saveSession(self, data=None):
 		
 		if data:
@@ -4104,6 +4133,7 @@ class DataBuddy(wx.Frame):
 			(sname,copy_vector,tmpl,args)=[self.getSessionName(), self.getCopyVector(), '.'.join(self.getTemplates()), self.args_panel.getArgs()]
 		if not os.path.isdir(self.save_to_dir):
 			os.makedirs(self.save_to_dir)
+		self.session_name=sname
 		#sname=self.getSessionName()
 		#print self.tmpl
 		#print self.copy_vector
@@ -4138,10 +4168,10 @@ class DataBuddy(wx.Frame):
 		return data	
 	def OnNewButton(self, event):
 		if 1:
-			dlg = NewSessionDialog(self, -1, "Defaults for new session.", size=(250, 250),
+			dlg = NewSessionDialog(self, -1, "Defaults for new session.", size=(250, 250),				
 							 #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
 							 style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
-							 useMetal=False, plist=None
+							 useMetal=False, data=self.data
 							 )
 			#dlg.CenterOnScreen()
 			# this does not return until the dialog is closed.
