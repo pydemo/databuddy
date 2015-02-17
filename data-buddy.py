@@ -175,8 +175,8 @@ class UltListCtrl(ULC.UltimateListCtrl):
 		#self.EnsureVisible(items)
 		self._mainWin.MoveToItem(self.GetItemCount()-1)
 	def appendList(self, items,now,charge, if_error=False):
-		print 'UltListCtrl.appendList'
-		pprint(charge)
+		#print 'UltListCtrl.appendList'
+		#pprint(charge)
 		if len(charge)>1:
 			for m in charge:
 				idx=self.InsertStringItem(items, "%02d:%02d:%02d.%02d" % (now.hour,now.minute,now.second,now.microsecond/100))
@@ -190,12 +190,12 @@ class UltListCtrl(ULC.UltimateListCtrl):
 				items +=1
 		else:
 			idx=self.InsertStringItem(items, "%02d:%02d:%02d.%02d" % (now.hour,now.minute,now.second,now.microsecond/100))
-			print 'idx=self.InsertStringItem', idx
+			#print 'idx=self.InsertStringItem', idx
 			msg =charge[0].strip()
-			print 'msg =charge[0].strip()', msg
+			#print 'msg =charge[0].strip()', msg
 			if msg:
 				s=self.SetStringItem(idx, 1, charge[0].strip())
-				print 's=self.SetStringItem(idx, 1, charge[0].strip())',s
+				#print 's=self.SetStringItem(idx, 1, charge[0].strip())',s
 				if if_error:
 					item = self.GetItem(idx,1)
 					item.SetMask(ULC.ULC_MASK_BACKCOLOUR)
@@ -206,7 +206,7 @@ class UltListCtrl(ULC.UltimateListCtrl):
 	def appendList_(self, items,now,charge, if_error=False):
 		if len(charge)==1 and type(charge)==types.ListType and '\n' in charge[0]:
 			charge=charge[0].split('\n')
-		pprint(charge)
+		#pprint(charge)
 		
 		if len(charge)>1:
 			for m in charge:
@@ -222,7 +222,7 @@ class UltListCtrl(ULC.UltimateListCtrl):
 		else:
 			self.InsertStringItem(items, "%02d:%02d:%02d.%02d" % (now.hour,now.minute,now.second,now.microsecond/100))
 			msg =charge[0].strip('\n')
-			pprint (msg)
+			#pprint (msg)
 			if msg:
 				self.SetStringItem(items, 1, msg)
 				if if_error:
@@ -274,7 +274,7 @@ class SessionList(wx.ListCtrl):
 		for i in range(len(self.images)):
 			
 			img=self.images[i]
-			print img
+			#print img
 			self.il.Add(wx.Bitmap(img))
 			self.image_refs[img]=i
 		self.SetImageList(self.il, wx.IMAGE_LIST_SMALL)	
@@ -323,7 +323,7 @@ class SessionList(wx.ListCtrl):
 		self.parent.filter.SetValue(value)
 	def _onSelect(self, event):
 		#self.startIndex=event.m_itemIndex
-		print 'Selected!',event.m_itemIndex
+		#print 'Selected!',event.m_itemIndex
 		event.Skip()		
 
 		
@@ -360,9 +360,9 @@ class SessionList(wx.ListCtrl):
 
 	def setEnvironmentList(self, vars):
 		ConfigList='ORACLE.xml'
-		print configDirLoc,ConfigList
+		#print configDirLoc,ConfigList
 		config_file= '%s.xml' % os.path.join(configDirLoc,ConfigList )
-		print config_file
+		#print config_file
 		#sys.exit(1)
 		#e(0)
 		#print config_file
@@ -390,7 +390,7 @@ class SessionList(wx.ListCtrl):
 		self.set_data()
 		#print dbs
 		#sys.exit(1)
-		print self.parent
+		#print self.parent
 		self.parent.RecreateList(None,(self.parent.list,self.parent.filter))
 		#self.parent.list.Thaw()
 	def set_data(self):
@@ -477,7 +477,7 @@ class UltSessionLogger(wx.Panel):
 
 		self.SetSizer(self.sizer)
 		#self.sizer.Fit(self)
-		print self.logList._mainWin
+		#print self.logList._mainWin
 		#Publisher().subscribe(self.OnAppendBLog, "append_browser_log")
 		#Publisher().subscribe(self.OnAppendBErr, "append_browser_err")
 		#sub(self.__OnAppendBLog, "append_browser_log")
@@ -649,7 +649,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			#self.log = UltSessionLogger(self.listsplit,self.pos,self.ID)  #EmptyPanel(self.listsplit)
 			(width,height) = wx.DisplaySize()
 			#print wx.GetApp().GetSize()
-			print (width,height)
+			#print (width,height)
 			#sys.exit(1)
 			self.listsplit.AppendWindow(self.list,height*0.7 )				
 			#self.listsplit.AppendWindow(self.log)	
@@ -679,7 +679,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		
 	def delete_seleted_items_remove(self):
 		print 'OnDeleteButton'
-		print self.list.GetSelectedItemCount()
+		#print self.list.GetSelectedItemCount()
 		#print 
 		for i in self.list.GetSelectedItems():
 			self.list.DeleteItem(i)
@@ -697,14 +697,14 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		idx= self.addSession(session)
 		
 		#select
-		print 'selecting %s' % idx
+		#print 'selecting %s' % idx
 		self.list.SetItemState(idx, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED) 
 		self.list.EnsureVisible(idx) 
 		
 		#self.SetItemState(idx, 0, wxLIST_STATE_SELECTED)
 
 	def OnUseCache(self, event):
-		print 'use cache', self.pos
+		#print 'use cache', self.pos
 		event.Skip()		
 	def Status(self, msg):
 		pass
@@ -719,7 +719,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 
 	def OnFindInButton(self, event,params):
 		(loc_id,loc)=params
-		print (loc_id,loc)
+		#print (loc_id,loc)
 		#print dir(event)
 		#btn=event.GetEventObject()
 		#print btn.GetPosition()
@@ -729,7 +729,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		#import flat_menu2
 		# Create the popup menu
 		#self.CreateLongPopupMenu()
-		print 'creating PopupMenu((((((((((((', loc
+		#print 'creating PopupMenu((((((((((((', loc
 		self.CreatePopupMenu(loc)
 
 		# Postion the menu:
@@ -760,13 +760,13 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			#subSubMenu = FM.FlatMenu()
 			id=wx.ID_ANY
 			# Create the menu items
-			print self.pos
-			print loc
-			print self.list.data.keys()
+			#print self.pos
+			#print loc
+			#print self.list.data.keys()
 			if loc in self.list.data.keys():
 				for key, item in self.list.data[loc].items():
 					menuItem = FM.FlatMenuItem(pmenu, 20001+key, '%s' % item[0], "", wx.ITEM_RADIO)
-					print item[0], self.list.nav_list['vars'][loc],  item[0]==self.list.nav_list['vars'][loc]
+					#print item[0], self.list.nav_list['vars'][loc],  item[0]==self.list.nav_list['vars'][loc]
 					pmenu.AppendItem(menuItem)				
 					if item[0]==self.list.nav_list['vars'][loc]:
 						#pprint(dir(menuItem))
@@ -789,10 +789,10 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		#print event.GetEventObject()
 		#print(dir(event.GetEventObject()))
 		item_id=event.GetId()-20001
-		print item_id
+		#print item_id
 		#self.list.nav_list['vars'][loc]=
 		#print self.list., self.list.data[loc][item_id]
-		print  params
+		#print  params
 		self.list.nav_list['vars'][loc]=item
 		self.list.execList(self.list.current_list)
 		self._popUpMenu.pop(loc)
@@ -897,10 +897,10 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		cnt=self.list.GetSelectedItemCount()
 		if cnt==1:
 			self.currentItem = event.m_itemIndex
-			print self.currentItem
+			#print self.currentItem
 			ii=self.list.GetItemData(self.currentItem)
 			session= self.list.getList()[ii]
-			print session
+			#print session
 			send('open_session',(session))
 			
 		else:
@@ -913,24 +913,24 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 	def __onGaugeStop(self,data, extra1, extra2=None):
 		( pos) = data
 		if pos==self.pos:		
-			print 'onGaugeStop', pos
+			#print 'onGaugeStop', pos
 			self.gaugeStop(pos)	
 			#self.gauge[pos].Hide()
 			#self.btn_stop[pos].Hide()			
 	def __onGaugeStart(self,data, extra1, extra2=None):
 		( pos) = data
-		print '=============================onGaugeStart',pos,self.pos
+		#print '=============================onGaugeStart',pos,self.pos
 		if pos==self.pos:		
 			#self.sPanel.SetSizer(self.sPanel.statusbar)
-			print 'onGaugeStart',pos
+			#print 'onGaugeStart',pos
 			self.gaugeStart(pos)
 			#self.gauge[pos].Show()
 			#self.btn_stop[pos].Show()			
 		
 	def gaugeStart(self,pos):
-		print pos
-		print self.gauge
-		print  'gaugeStart'
+		#print pos
+		#print self.gauge
+		#print  'gaugeStart'
 		if pos==self.pos:		
 			#self.stt.Hide()
 			#self.gauge[pos].Show()
@@ -988,7 +988,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			self.count[pos] = 0
 		#print self.count
 		#self.gauge.Show()
-		print '||||||||||||||||| setting count', self.count[pos]
+		#print '||||||||||||||||| setting count', self.count[pos]
 		self.gauge[pos].SetValue(self.count[pos])
 		#self.gauge.Pulse()
 		
@@ -996,7 +996,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		if 0:
 			self.progress_bar.Show()
 			self.progress_bar.SetRange(10)
-			print 'in ShowProgress'
+			#print 'in ShowProgress'
 			self.progress_bar.SetValue(5)
 			#print (dir(self.progress_bar))
 		self.gauge.Show()
@@ -1007,7 +1007,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 
 	def OnSize1(self, event):
 		size = self.GetSize()
-		print 'Size event'
+		#print 'Size event'
 		#self.splitter.SetSashPosition(size.x / 2)
 		#self.sb.SetStatusText(os.getcwd())
 		event.Skip()
@@ -1069,10 +1069,10 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 
 		
 	def onFileDirEvent(self, evt):
-		print 'onFileDirEvent'
+		#print 'onFileDirEvent'
 		(st, pos,cache,result) = evt.data
-		print '--onFileDirEvent', st
-		print self.pos,'==',pos
+		#print '--onFileDirEvent', st
+		#print self.pos,'==',pos
 		if st=='done':
 			if self.pos==pos:
 				#(status, err, rowcount,headers, out) = result
@@ -1092,19 +1092,19 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 				self.itemDataMap=self.list.data[self.list.current_list]
 				self.RecreateList(None,(self.list,self.filter))	
 		if st=='aborted':
-			print '-----------request aborted',self.pos,pos
+			#print '-----------request aborted',self.pos,pos
 			if self.pos==pos:
-				print 'request aborted',pos
+				#print 'request aborted',pos
 				self.gaugeStop(self.pos)	
 				self.list.Thaw()
 		#if self.pos==pos:
 		#	updateCache(cache,self.list.data)
 		
 	def onRefreshListEvent(self, evt):
-		print 'onRefreshListEvent'
+		#print 'onRefreshListEvent'
 		(st, pos,cache,result) = evt.data
-		print 'onRefreshListEvent', st
-		print self.pos,'==',pos
+		#print 'onRefreshListEvent', st
+		#print self.pos,'==',pos
 		if st=='xml_list':
 			if self.pos==pos:
 				self.list.data[self.list.current_list]=result
@@ -1126,7 +1126,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 	def onForceSearch(self, evt):
 		(position, fltr)=evt.data
 		if position!=self.pos:
-			print '----------------onForceSearch', position, fltr
+			#print '----------------onForceSearch', position, fltr
 			self.filter.SetValue(fltr)
 		
 
@@ -1183,7 +1183,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		fltr=filter.GetValue()
 		if 1:
 			if fullSearch:
-				print 'OnSearchMenu/fullSearch'
+				#print 'OnSearchMenu/fullSearch'
 				#Publisher().sendMessage( "force_search", (self.pos,fltr) )
 				send("force_search", (self.pos,fltr) )
 				self.OnSearch(None,tparams)
@@ -1197,7 +1197,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		
 		(list, filter) = tf
 		fltr = filter.GetValue()
-		print 'OnSearch',fltr, self.searchItems
+		#print 'OnSearch',fltr, self.searchItems
 		self.filter_history[list.current_list]=fltr
 		searchItems=self.searchItems
 		if not fltr:
@@ -1257,12 +1257,12 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 	def RecreateList(self, evt=None, tf=None):
 		# Catch the search type (name or content)
 		cl =self.list.current_list
-		print '############# in RecreateList', self.pos,'cl:', cl
+		#print '############# in RecreateList', self.pos,'cl:', cl
 		(list, filter) = tf
 		fltr = filter.GetValue()
 		favs={}
-		print fltr
-		print self.list.current_list, 1
+		#print fltr
+		#print self.list.current_list, 1
 		#btns=self.list.nav_list[self.list.current_list]['hot_keys']
 		#Publisher().sendMessage( "set_buttons", (self.list.pos,btns) )
 		if 1:
@@ -1271,7 +1271,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			searchItems=self.searchItems
 			if evt:
 				if fullSearch:
-					print 'RecreateList/fullSearch'
+					#print 'RecreateList/fullSearch'
 					#Publisher().sendMessage( "force_search", (self.pos,fltr) )
 					send("force_search", (self.pos,fltr))
 					# Do not`scan all the demo files for every char
@@ -1331,7 +1331,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 						keys = [key for key,item in list.data[list.current_list].items() if fltr.lower() in str(item[0]).lower()]
 				else:
 					keys = [key for key,item in list.data[list.current_list].items()]
-				print keys
+				#print keys
 				if keys:
 					#print keys
 					j=0
@@ -1398,9 +1398,9 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 							
 						
 
-			print 'list.Thaw()'
+			#print 'list.Thaw()'
 			#print (dir(list))
-			print list.pos
+			#print list.pos
 
 			searchItems = {}		
 			listmix.ColumnSorterMixin.__init__(self, self.list.GetColumnCount())
@@ -1469,7 +1469,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		#print  params
 		#self.list.nav_list['vars'][loc]=item
 		#list_to=
-		print (loc_to,path)
+		#print (loc_to,path)
 		self.curr_hist_id=id
 		self.list.initVarsFromPath(path,'/')
 		#self.list.clearListVars(loc_to)
@@ -1500,10 +1500,10 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			relative_path=self.getVarsToPath()
 			for id in range(len(self.nav_hist)):
 				if id>self.curr_hist_id:
-					print id, self.curr_hist_id
+					#print id, self.curr_hist_id
 					tup=self.nav_hist[id]
 					(loc_to, path)=tup
-					print id, self.curr_hist_id
+					#print id, self.curr_hist_id
 					itype=wx.ITEM_NORMAL
 					if id==self.curr_hist_id:
 
@@ -1536,7 +1536,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		#self.list.nav_list['vars'][loc]=item
 		#list_to=
 		self.curr_hist_id=id
-		print (loc_to,path)
+		#print (loc_to,path)
 		self.list.initVarsFromPath(path,'/')
 		#self.list.clearListVars(loc_to)
 		#print '11111111111111111 cleared to ',loc_to
@@ -1549,7 +1549,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 	
 	def OnFavButton(self, event,params):
 		(loc)=params
-		print (loc)
+		#print (loc)
 		#print dir(event)
 		#btn=event.GetEventObject()
 		#print btn.GetPosition()
@@ -1591,11 +1591,11 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			# Create the menu items
 			gsuffix='gfavs%d%d' % self.pos
 			gfavs=readFromCache('', gsuffix)	
-			print 'gfavs:', gfavs
+			#print 'gfavs:', gfavs
 			gkeys=gfavs.keys()
 			#gkeys=sorted(gkeys,key=lambda path: len(path.split('/'))) #reverse=True
 			gkeys.sort()
-			pprint(gkeys)
+			#pprint(gkeys)
 			#sys.exit(1)
 			first=True
 			for path in gkeys:	
@@ -1611,7 +1611,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 				ikeys.sort()
 				for ikey in ikeys:
 					val=items[ikey]
-					print '--item--',ikey, val
+					#print '--item--',ikey, val
 					itype=wx.ITEM_NORMAL
 					menuItem = FM.FlatMenuItem(pmenu, wx.ID_ANY, '%s %s' % (ikey, p), "", itype)
 					pmenu.AppendItem(menuItem)
@@ -1621,15 +1621,15 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 	def OnHistMenu(self, event, params):
 		(loc_to,path) = params
 
-		print (loc_to,path)
+		#print (loc_to,path)
 		vars=self.list.getVarsFromPath(path,'/')[1:]
 		self.list.setNavlist()
 		if len(vars)>2:
 			conn=self.list.getConnectType(path)
-			print conn
-			print 'before',self.list.nav_list.keys()
+			#print conn
+			#print 'before',self.list.nav_list.keys()
 			self.list.extendNavlist(conn)
-			print 'after',self.list.nav_list.keys()
+			#print 'after',self.list.nav_list.keys()
 				
 		self.list.initVarsFromPath(path,'/')
 		self.list.setCurrListName(loc_to, 'reset')		
@@ -1638,7 +1638,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 	def OnFavMenu0(self, event, params):
 		(loc_to,path) = params
 		if 1:
-			print (loc_to,path)
+			#print (loc_to,path)
 			self.list.initVarsFromPath(path,'/')
 			self.list.setCurrListName(loc_to, 'reset')		
 			self.list.execList(loc_to)
@@ -1646,17 +1646,17 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 	def OnFavMenu(self, event, params):
 		(loc_id,path) = params
 		if 1:
-			print (loc_id,path)
+			#print (loc_id,path)
 			vars=self.list.getVarsFromPath(path,'/')[1:]
-			print 'new vars:'
-			print vars
+			#print 'new vars:'
+			#print vars
 			self.list.setNavlist()
 			if len(vars)>2:
 				conn=self.list.getConnectType(path)
-				print conn
-				print 'before',self.list.nav_list.keys()
+				#print conn
+				#print 'before',self.list.nav_list.keys()
 				self.list.extendNavlist(conn)
-				print 'after',self.list.nav_list.keys()
+				#print 'after',self.list.nav_list.keys()
 			self.list.initVarsFromPath(path,'/')
 			loc_to=self.list.getListFromId(int(loc_id))
 			self.list.setCurrListName(loc_to, 'reset')	
@@ -1779,7 +1779,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 
 	def OnItemDeselected1(self, evt):
 		item = evt.GetItem()
-		print "OnItemDeselected: %d" % evt.m_itemIndex
+		#print "OnItemDeselected: %d" % evt.m_itemIndex
 		#self.log.WriteText("OnItemDeselected: %d" % evt.m_itemIndex)
 
 		# Show how to reselect something we don't want deselected
@@ -1799,11 +1799,11 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		event.Allow()
 
 	def OnItemDelete(self, event):
-		print "OnItemDelete\n"
+		print "OnItemDelete"
 		#self.log.WriteText("OnItemDelete\n")
 
 	def OnColClick(self, event):
-		print "OnColClick: %d\n" % event.GetColumn()
+		#print "OnColClick: %d\n" % event.GetColumn()
 		#self.log.WriteText("OnColClick: %d\n" % event.GetColumn())
 		#print(dir(self.list))
 		#if self.list.idx_first != None:
@@ -1828,13 +1828,13 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 
 	def OnColRightClick(self, event):
 		item = self.list.GetColumn(event.GetColumn())
-		print "OnColRightClick: %d %s\n" % (event.GetColumn(), (item.GetText(), item.GetAlign(), item.GetWidth(), item.GetImage()))
+		#print "OnColRightClick: %d %s\n" % (event.GetColumn(), (item.GetText(), item.GetAlign(), item.GetWidth(), item.GetImage()))
 		#self.log.WriteText("OnColRightClick: %d %s\n" %
 		#                   (event.GetColumn(), (item.GetText(), item.GetAlign(),
 		#                                        item.GetWidth(), item.GetImage())))
 
 	def OnColBeginDrag(self, event):
-		print "OnColBeginDrag\n"
+		print "OnColBeginDrag"
 		#self.log.WriteText("OnColBeginDrag\n")
 		## Show how to not allow a column to be resized
 		#if event.GetColumn() == 0:
@@ -1842,15 +1842,15 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 
 
 	def OnColDragging(self, event):
-		print "OnColDragging\n"
+		print "OnColDragging"
 		#self.log.WriteText("OnColDragging\n")
 
 	def OnColEndDrag(self, event):
-		print "OnColEndDrag\n"
+		print "OnColEndDrag"
 		#self.log.WriteText("OnColEndDrag\n")
 
 	def OnDoubleClick(self, event):
-		print "OnDoubleClick item %s\n" % self.list.GetItemText(self.currentItem)
+		#print "OnDoubleClick item %s\n" % self.list.GetItemText(self.currentItem)
 		#self.log.WriteText("OnDoubleClick item %s\n" % self.list.GetItemText(self.currentItem))
 		event.Skip()
 	def getSide(self,pos):
@@ -1860,7 +1860,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			side=self.sides[id]
 		return side
 	def OnRightClick(self, event):
-		print "OnRightClick %s\n" % self.list.GetItemText(self.currentItem),self.list.GetSelectedItemCount()
+		#print "OnRightClick %s\n" % self.list.GetItemText(self.currentItem),self.list.GetSelectedItemCount()
 		#self.log.WriteText("OnRightClick %s\n" % self.list.GetItemText(self.currentItem))
 		#print(dir(self.list))
 		#print GetSelectedItemCount
@@ -1875,7 +1875,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 				self.add_to_favorites = wx.NewId()
 				self.remove_from_favorites = wx.NewId()
 				for sid in ['%d%d' % pos for pos in self.panel_pos if pos!=self.pos ]:
-					print '---ii--',sid, 20100+int(sid)
+					#print '---ii--',sid, 20100+int(sid)
 					self.show_in[sid]=20100+int(sid)
 				self.Bind(wx.EVT_MENU, self.OnAddToFavorites, id=self.add_to_favorites)
 				self.Bind(wx.EVT_MENU, self.OnRemoveFromFavorites, id=self.remove_from_favorites)
@@ -1938,7 +1938,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			for pos in [ pos for pos in self.panel_pos if pos!=self.pos and pos !=self.frame.designer_pos ]:
 				side= self.getSide(pos)
 				sid= '%d%d' % pos 
-				print sid, side, self.panel_pos
+				#print sid, side, self.panel_pos
 				if side:
 					menu.Append(self.show_in[sid], "Mirror in %s" % side)
 					list=self.getListFromPos(pos)
@@ -1976,7 +1976,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			if idx == -1:
 				break
 			self.delete_conn.append(list.getItemInfo(idx))
-		print self.delete_conn		
+		#print self.delete_conn		
 		dlg = DeleteConnectDialog(self, -1, "Delete Oracle connect.", size=(250, 250),
 						 #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
 						 style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
@@ -2010,10 +2010,10 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			if idx == -1:
 				break
 			self.delete_conn.append(list.getItemInfo(idx))
-		print self.delete_conn
+		#print self.delete_conn
 		conn_alias=self.delete_conn[0][2].strip('[').strip(']')
 		login=(user,db,pwd,host,port) = self.getConnectInfo(conn_alias)
-		print login
+		#print login
 		#sys.exit(1)
 		#self.list.Freeze()
 		dlg = EditOracleConnectDialog(self, -1, "Edit Oracle connect.", size=(450, 450),login=login,
@@ -2060,7 +2060,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			if idx == -1:
 				break
 			self.delete_conn.append(list.getItemInfo(idx))
-		print self.delete_conn		
+		#print self.delete_conn		
 		dlg = ClearPasswordDialog(self, -1, "Clear Oracle passwords.", size=(250, 250),
 						 #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
 						 style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
@@ -2095,7 +2095,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 				if idx == -1:
 					break
 				conf_list.append(list.getItemInfo(idx))
-			print conf_list
+			#print conf_list
 			#sys.exit(1)
 		cons={}
 		if self.list.current_list in ('ConfigList'):
@@ -2109,14 +2109,14 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 				if idx == -1:
 					break
 				conf_list.append(list.getItemInfo(idx))
-			print conf_list	
+			#print conf_list	
 			for crow in conf_list:			
 				cfile =crow[2].strip('[').strip(']')		
 				config_file= '%s.xml' % os.path.join(configDirLoc, '%s' % cfile)
-				print config_file		
+				#print config_file		
 				#get env connects
 				env_list = self.list.db.getEnvironments(config_file)
-				print env_list
+				#print env_list
 				#sys.exit(1)
 				
 				cons[cfile]={}
@@ -2143,11 +2143,11 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 				if idx == -1:
 					break
 				env_list.append(list.getItemInfo(idx))
-			print env_list
+			#print env_list
 		
 			cfile =self.list._ConfigList
 			config_file= '%s.xml' % os.path.join(configDirLoc, '%s' % cfile)
-			print config_file		
+			#print config_file		
 			#get env connects
 			
 			cons[cfile]={}
@@ -2164,7 +2164,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 				#print con.items()
 				#print cons.items()+con.items()
 				cons[cfile][_EnvironmentList]=cons[cfile][_EnvironmentList] +con
-		pprint(cons)
+		#pprint(cons)
 		#sys.exit(1)
 		if 0:
 			while True: # find all the selected items and put them in a list
@@ -2193,7 +2193,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		dlg.Destroy()
 		
 	def OnAddNewConnection(self, event):
-		print 'OnAddNewConnection'
+		print str(self.__class__) + ' - OnAddNewConnection'
 		index = -1 
 		selected_items = [] 
 		
@@ -2236,7 +2236,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			self.addToFavorites(selected_items)
 		
 	def OnShowIn(self, event):
-		print 'OnShowIn'
+		print str(self.__class__) + ' - OnShowIn'
 		#print event.GetEventObject().GetLabel(event.GetId())
 		#print event.GetId()
 		#sys.exit(1)
@@ -2248,43 +2248,10 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		#Publisher().sendMessage( "mirror_list", (self.list.current_list, self.getVarsToPath(), pos_to, self.getSide(self.pos)) )
 		send("mirror_list", (self.list.current_list, self.getVarsToPath(), pos_to, self.getSide(self.pos)))
 		
-	def OnRightClick_00(self, event):
-		print "OnRightClick %s\n" % self.list.GetItemText(self.currentItem)
-		#self.log.WriteText("OnRightClick %s\n" % self.list.GetItemText(self.currentItem))
 
-		# only do this part the first time so the events are only bound once
-		if not hasattr(self, "popupID1"):
-			self.popupID1 = wx.NewId()
-			self.popupID2 = wx.NewId()
-			self.popupID3 = wx.NewId()
-			self.popupID4 = wx.NewId()
-			self.popupID5 = wx.NewId()
-			self.popupID6 = wx.NewId()
-
-			self.Bind(wx.EVT_MENU, self.OnPopupOne, id=self.popupID1)
-			self.Bind(wx.EVT_MENU, self.OnPopupTwo, id=self.popupID2)
-			self.Bind(wx.EVT_MENU, self.OnPopupThree, id=self.popupID3)
-			self.Bind(wx.EVT_MENU, self.OnPopupFour, id=self.popupID4)
-			self.Bind(wx.EVT_MENU, self.OnPopupFive, id=self.popupID5)
-			self.Bind(wx.EVT_MENU, self.OnPopupSix, id=self.popupID6)
-
-		# make a menu
-		menu = wx.Menu()
-		# add some items
-		menu.Append(self.popupID1, "FindItem tests")
-		menu.Append(self.popupID2, "Iterate Selected")
-		menu.Append(self.popupID3, "ClearAll and repopulate")
-		menu.Append(self.popupID4, "DeleteAllItems")
-		menu.Append(self.popupID5, "GetItem")
-		menu.Append(self.popupID6, "Edit")
-
-		# Popup the menu.  If an item is selected then its handler
-		# will be called before PopupMenu returns.
-		self.PopupMenu(menu)
-		menu.Destroy()
 
 	def OnAddToFavorites(self, event):
-		print 'OnAddToFavorites'
+		print str(self.__class__) + ' - OnAddToFavorites'
 		index = -1 
 		selected_items = [] 
 		while 1: 
@@ -2299,11 +2266,11 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			# This does the trick:
 			self.list.SetItem(item)
 
-		print 'si',selected_items
+		#print 'si',selected_items
 		self.addToFavorites(selected_items)
 
 	def OnRemoveFromFavorites(self, event):
-		print 'OnRemoveFromFavorites'
+		print str(self.__class__) + ' - OnRemoveFromFavorites'
 		index = -1 
 		selected_items = [] 
 		while 1: 
@@ -2318,7 +2285,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			# This does the trick:
 			self.list.SetItem(item)
 
-		print 'si',selected_items
+		#print 'si',selected_items
 		self.removeFromFavorites(selected_items)
 
 		
@@ -2336,7 +2303,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			#pprint (self.list.data)
 			#print 'old favs:', favs
 			for id in ids:
-				print 'removing:', self.list.data[self.list.current_list][id][0]
+				#print 'removing:', self.list.data[self.list.current_list][id][0]
 				if favs.has_key(self.list.data[self.list.current_list][id][0]):
 					favs.pop(self.list.data[self.list.current_list][id][0])
 			#print favs
@@ -2369,12 +2336,12 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		index = self.list.GetFirstSelected()
 
 		while index != -1:
-			print "      %s: %s\n" % (self.list.GetItemText(index), self.getColumnText(index, 1))
+			#print "      %s: %s\n" % (self.list.GetItemText(index), self.getColumnText(index, 1))
 			#self.log.WriteText("      %s: %s\n" % (self.list.GetItemText(index), self.getColumnText(index, 1)))
 			index = self.list.GetNextSelected(index)
 
 	def OnPopupThree(self, event):
-		print "Popup three\n"
+		#print "Popup three\n"
 		#self.log.WriteText("Popup three\n")
 		self.list.ClearAll()
 		wx.CallAfter(self.PopulateList)
@@ -2384,7 +2351,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 
 	def OnPopupFive(self, event):
 		item = self.list.GetItem(self.currentItem)
-		print item.m_text, item.m_itemId, self.list.GetItemData(self.currentItem)
+		#print item.m_text, item.m_itemId, self.list.GetItemData(self.currentItem)
 
 	def OnPopupSix(self, event):
 		self.list.EditLabel(self.currentItem)	
@@ -2455,7 +2422,7 @@ class SessionListCtrlPanelManager(wx.Panel):
 				elif eventid == MENU_SELECT_GRADIENT_COLOR_TO:
 					self.nb.SetGradientColourTo(dlg.GetColourData().GetColour())
 				elif eventid == MENU_SET_ACTIVE_TEXT_COLOR:
-					print 'colour----------------------------',dlg.GetColourData().GetColour()
+					#print 'colour----------------------------',dlg.GetColourData().GetColour()
 					self.nb.SetActiveTabTextColour(dlg.GetColourData().GetColour())
 				elif eventid == MENU_SELECT_NONACTIVE_TEXT_COLOR:
 					self.nb.SetNonActiveTabTextColour(dlg.GetColourData().GetColour())
@@ -2548,7 +2515,7 @@ class NewSessionDialog(wx.Dialog):
 		self.parent=parent
 		self.plist=plist
 		self._popUpMenu = None
-		self.recent=[]
+		#self.recent=[]
 		pre = wx.PreDialog()
 		pre.SetExtraStyle(wx.DIALOG_EX_CONTEXTHELP)
 		pre.Create(parent, ID, title, pos, size, style)
@@ -2570,6 +2537,11 @@ class NewSessionDialog(wx.Dialog):
 		self.shards_btn={}
 		self.tmpl={}
 		self.copy_vector=[]
+		self.userhome = os.path.expanduser('~')
+		self.recent_fname= os.path.join(self.userhome,'recent.p')
+		self.recent=[]
+		if os.path.isfile(self.recent_fname):
+			self.recent=self.readRecent()
 		if 1:
 			#namesizer = wx.BoxSizer(wx.HORIZONTAL)
 			namesizer = wx.GridBagSizer(1, 4)			
@@ -2743,15 +2715,15 @@ class NewSessionDialog(wx.Dialog):
 			
 		self.create_btn = wx.Button(self, wx.ID_OK, "Create")
 		self.create_btn.Enable(False)
-		button4 = wx.Button(self, wx.ID_CANCEL, "Cancel")
+		btn_exit = wx.Button(self, wx.ID_CANCEL, "Cancel")
 		btnsizer.Add((3,3),1)
 		btnsizer.Add(self.create_btn, 0 , wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM)
 		btnsizer.Add((40,5),0)
 		
-		btnsizer.Add(button4, 0 , wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM)
+		btnsizer.Add(btn_exit, 0 , wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM)
 		
 		self.create_btn.Bind(wx.EVT_BUTTON, self.OnCreate)
-		#button4.Bind(wx.EVT_BUTTON, self.OnExit, id=ID_EXIT)
+		btn_exit.Bind(wx.EVT_BUTTON, self.OnExit)
 		#self.Bind(wx.EVT_BUTTON, self.OnTrial, id=ID_TRIAL)
 		sizer.Add(btnsizer, 0, wx.EXPAND|wx.ALL, 5)
 
@@ -2780,7 +2752,7 @@ class NewSessionDialog(wx.Dialog):
 				if not self.api_menu.has_key(m[:2]):
 					self.api_menu[m[:2]]=[]
 				self.api_menu[m[:2]].append(m)
-			#print api_menu		
+			#print pprint(self.api_menu)
 	def getConfig(self):
 		tmpl=self.get_template()
 		return [self.getSessionName(), self.copy_vector, tmpl, self.api_args[tmpl]]
@@ -2905,15 +2877,29 @@ class NewSessionDialog(wx.Dialog):
 	
 
 	def OnExit(self,e):
-		self.Close(True)
+		#print 'self.recent'
+		#self.Close(True)
 		#self.Destroy()
 		#return
+		
+		self.writeRecent()
+		e.Skip()
+	def writeRecent(self):
+		print 'writeRecent'
+		print self.recent
+		import pickle
+		
+		pickle.dump(self.recent, open( self.recent_fname, "wb" ) )
+	def readRecent(self):
+		import pickle
+		self.recent = pickle.load( open( self.recent_fname, "rb" ) )
 	def OnCreate(self,e):
 		print 'OnCreate'
 		if not self.tc_sname.GetValue():
 			self.Warn('Enter session name.')
 			self.tc_sname.SetFocus()
 		else:
+			self.writeRecent()
 			e.Skip()
 		#self.Close(True)
 		#return ID_CREATE
@@ -2977,25 +2963,28 @@ class NewSessionDialog(wx.Dialog):
 			if 1: #len(self.recent):
 				self.i +=1
 				self.recentMenu = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, "Recent", "", wx.ITEM_NORMAL, self.recentMenu)
-				self._popUpMenu.AppendItem(menuItem)				
-				for r in self.recent:
-					(a,b)=r
-					self.i +=1
-					#Menu1 = FM.FlatMenu()
-					menuItem = FM.FlatMenuItem(self.recentMenu, 20000+self.i, "%s --> %s" % (conf.dbs[a],conf.dbs[b]), "", wx.ITEM_NORMAL)
-					self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(a,b))
-					self.recentMenu.AppendItem(menuItem)
+				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, 'Recent', '', wx.ITEM_NORMAL, self.recentMenu)
+				self._popUpMenu.AppendItem(menuItem)
+				if self.recent:
+					for r in self.recent:
+						(a,b)=r
+						self.i +=1
+						#Menu1 = FM.FlatMenu()
+						menuItem = FM.FlatMenuItem(self.recentMenu, 20000+self.i, '%s --> %s' % (conf.dbs[a],conf.dbs[b]), '', wx.ITEM_NORMAL)
+						self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(a,b))
+						self.recentMenu.AppendItem(menuItem)
+					
 				self._popUpMenu.AppendSeparator()	
 			for k in self.api2:
 				self.i +=1
 				Menu1 = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, "From %s" % dbf[k], "", wx.ITEM_NORMAL, Menu1)
+				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, 'From %s' % dbf[k], '', wx.ITEM_NORMAL, Menu1)
 				self._popUpMenu.AppendItem(menuItem)
-				
+				if not k in ['OR']:
+					menuItem.Enable(False)
 				
 				for sm in self.api_menu[k]:
-					if len(self.api_menu)>1:
+					if len(self.api_menu[k])>1:
 						self.i +=1
 						self.create_Menu2(Menu1,sm,dbf)
 						
@@ -3010,7 +2999,7 @@ class NewSessionDialog(wx.Dialog):
 			for sm in conf.ff:
 				self.i +=1
 				Menu1 = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, "From %s" % sm, "", wx.ITEM_NORMAL, Menu1)
+				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, 'From %s' % sm, '', wx.ITEM_NORMAL, Menu1)
 				self._popUpMenu.AppendItem(menuItem)	
 				for k2 in self.api2:
 					self.i +=1
@@ -3018,22 +3007,34 @@ class NewSessionDialog(wx.Dialog):
 						self.create_Menu3(Menu1,k2,dbf,from_db=sm)
 					else:
 						self.create_Menu4(Menu1,self.api_menu[k2][0],from_db=sm)
+			for sm in conf.ff:
+				self.i +=1
+				Menu1 = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, 'To %s' % sm, '', wx.ITEM_NORMAL, Menu1)
+				self._popUpMenu.AppendItem(menuItem)	
+				for k2 in self.api2:
+					self.i +=1
+					if len(self.api_menu[k2])>1:
+						self.create_Menu3(Menu1,k2,dbf,from_db=sm, from_to='From')
+					else:
+						self.create_Menu4(Menu1,self.api_menu[k2][0],from_db=sm, from_to='From')						
 				
 		else:
 			#pprint(dir(self.recentMenu))
 			self.recentMenu.Clear()
-			for r in reversed(self.recent):
-				(a,b)=r
-				self.i +=1
-				#Menu1 = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(self.recentMenu, 20000+self.i, "%s --> %s" % (conf.dbs[a],conf.dbs[b]), "", wx.ITEM_NORMAL)
-				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(a,b))
-				self.recentMenu.AppendItem(menuItem)
+			if self.recent:
+				for r in reversed(self.recent):
+					(a,b)=r
+					self.i +=1
+					#Menu1 = FM.FlatMenu()
+					menuItem = FM.FlatMenuItem(self.recentMenu, 20000+self.i, '%s --> %s' % (conf.dbs[a],conf.dbs[b]), '', wx.ITEM_NORMAL)
+					self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(a,b))
+					self.recentMenu.AppendItem(menuItem)
 
-	def create_Menu2(self,Menu1,sm,dbf):
+	def create_Menu2(self,Menu1,sm,dbf, from_to='From'):
 		self.i +=1
 		Menu2 = FM.FlatMenu()
-		menuItem = FM.FlatMenuItem(Menu1, 20000+self.i, "From %s" % conf.dbs[sm] , "", wx.ITEM_NORMAL, Menu2)
+		menuItem = FM.FlatMenuItem(Menu1, 20000+self.i, '%s %s' % (from_to, conf.dbs[sm]) , '', wx.ITEM_NORMAL, Menu2)
 		Menu1.AppendItem(menuItem)
 		#self.set_sub_submenu(subSubMenu,1, 'CSV')
 		
@@ -3044,25 +3045,28 @@ class NewSessionDialog(wx.Dialog):
 			else:
 				self.create_Menu4(Menu2,self.api_menu[k2][0],from_db=sm)
 			
-	def create_Menu3(self,Menu2,k2,dbf,from_db):
+	def create_Menu3(self,Menu2,k2,dbf,from_db, from_to='To'):
 		self.i +=1
 		Menu3 = FM.FlatMenu()
-		menuItem = FM.FlatMenuItem(Menu2, 20000+self.i, "To %s" % dbf[k2], "", wx.ITEM_NORMAL, Menu3)
+		menuItem = FM.FlatMenuItem(Menu2, 20000+self.i, "%s %s" % (from_to, dbf[k2]), "", wx.ITEM_NORMAL, Menu3)
 		Menu2.AppendItem(menuItem)
-		
+		if not k2 in ['OR']:
+			menuItem.Enable(False)
 		for sm2 in self.api_menu[k2]:
 			self.i +=1
-			self.create_Menu4(Menu3,sm2,from_db)	
+			self.create_Menu4(Menu3,sm2,from_db,from_to)	
 			
 
-	def create_Menu4(self,Menu3,sm2,from_db):
+	def create_Menu4(self,Menu3,sm2,from_db, from_to='To'):
 		#Menu4 = FM.FlatMenu()
 		self.i +=1
 		
-		menuItem = FM.FlatMenuItem(Menu3, 20000+self.i, "To %s" % conf.dbs[sm2] , "", wx.ITEM_NORMAL)
+		menuItem = FM.FlatMenuItem(Menu3, 20000+self.i, "%s %s" % (from_to, conf.dbs[sm2]) , "", wx.ITEM_NORMAL)
 		#print from_db,sm2
 		self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(from_db,sm2))
 		Menu3.AppendItem(menuItem)
+		if not sm2 in self.api_menu['OR']:
+			menuItem.Enable(False)
 		#self.set_sub_submenu(subSubMenu,1, 'CSV')
 			
 
@@ -3160,7 +3164,7 @@ class dummy_args(wx.Panel):
 			disable=['copy_vector']
 			i=0
 			for k,v in self.cargs.items()	:
-				print k,v
+				#print k,v
 				short,long,val,desc=v
 				self.obj[k]= (wx.StaticText(self.core_args_panel, label=k), wx.TextCtrl(self.core_args_panel,value="", size=(140,22)))
 				self.fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
@@ -3185,8 +3189,8 @@ class dummy_args(wx.Panel):
 			fgs = wx.GridBagSizer(4, 10)
 			i=0
 			for k,v in self.fargs.items()	:
-				print k,v
-				print i
+				#print k,v
+				#print i
 				short,long,val,desc=v
 				self.obj[k]= (wx.StaticText(from_args_panel, label=k), wx.TextCtrl(from_args_panel,value="", size=(135,22)))
 				fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
@@ -3206,8 +3210,8 @@ class dummy_args(wx.Panel):
 			fgs = wx.GridBagSizer(4, 10)
 			i=0
 			for k,v in self.targs.items()	:
-				print k,v
-				print i
+				#print k,v
+				#print i
 				short,long,val,desc=v
 				self.obj[k]= (wx.StaticText(to_args_panel, label=k), wx.TextCtrl(to_args_panel,value="", size=(135,22)))
 				fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
@@ -3319,7 +3323,7 @@ class default_args(wx.Panel):
 			l=[wx.StaticText(panel_from, label="%s:" % t) for t in ttl]
 
 			p=[wx.TextCtrl(panel_from) for t in ttl]
-			pprint(dir(fgs))
+			#pprint(dir(fgs))
 			for lid in range(len(l)):
 				fgs.AddMany([(l[lid]), (p[lid], 1, wx.EXPAND|wx.TOP)])
 	
@@ -3349,7 +3353,7 @@ class default_args(wx.Panel):
 			l=[wx.StaticText(panel_from, label="%s:" % t) for t in ttl]
 
 			p=[wx.TextCtrl(panel_from) for t in ttl]
-			pprint(dir(fgs))
+			#pprint(dir(fgs))
 			for lid in range(len(l)):
 				fgs.AddMany([(l[lid]), (p[lid], 1, wx.EXPAND|wx.TOP)])
 	
@@ -3425,11 +3429,11 @@ class pnl_args(wx.Panel):
 			disable=['copy_vector']
 			i=0
 			for k,v in self.cargs.items()	:
-				print k,v
+				#print k,v
 				short,long,val,desc=v
 				row=i%4
 				col=(i-i%2)
-				print 'row',row, 'col', col
+				#print 'row',row, 'col', col
 				self.obj[k]= (wx.StaticText(self.core_args_panel, label=k), wx.TextCtrl(self.core_args_panel,value=str(val).strip('"'), size=(100,22)))
 				self.obj[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
 				self.fgs.Add(self.obj[k][0], pos=(i%2, col), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
@@ -3463,8 +3467,8 @@ class pnl_args(wx.Panel):
 			fgs = wx.GridBagSizer(4, 10)
 			i=0
 			for k,v in self.fargs.items()	:
-				print k,v
-				print i
+				#print k,v
+				#print i
 				short,long,val,desc=v
 				sval=str(val).strip('"')
 				self.obj[k]= (wx.StaticText(from_args_panel, label=k), wx.TextCtrl(from_args_panel,value=sval, size=(135,22)))
@@ -3498,8 +3502,8 @@ class pnl_args(wx.Panel):
 			fgs = wx.GridBagSizer(4, 10)
 			i=0
 			for k,v in self.targs.items()	:
-				print k,v
-				print i
+				#print k,v
+				#print i
 				short,long,val,desc=v
 				style=0
 				if k in ['to_passwd']:
@@ -3601,7 +3605,7 @@ class pnl_args(wx.Panel):
 			val=self.obj[k][1].GetValue()
 			self.cargs[k]=list(self.cargs[k])
 			if str(self.cargs[k][2]).strip('"') not in [val]:
-				print 'cargs "%s" value changed' % k, str(self.cargs[k][2]),'-->' ,val
+				#print 'cargs "%s" value changed' % k, str(self.cargs[k][2]),'-->' ,val
 				self.cargs[k][2]=val
 			#,self.fargs,self.targs=self.args
 		for k in self.fargs:
@@ -3613,7 +3617,7 @@ class pnl_args(wx.Panel):
 			#	self.targs[k][2]=base64.b64encode(val)
 			if 1: #else:			
 				if str(self.fargs[k][2]).strip('"') not in [val]:
-					print 'fargs "%s" value changed' % k, str(self.fargs[k][2]),'-->' ,val
+					#print 'fargs "%s" value changed' % k, str(self.fargs[k][2]),'-->' ,val
 					self.fargs[k][2]=val		
 		for k in self.targs:
 			assert self.obj.has_key(k), 'targs "%s" is not set' % k
@@ -3624,13 +3628,13 @@ class pnl_args(wx.Panel):
 			#	self.targs[k][2]=base64.b64encode(val)
 			if 1: #else:			
 				if str(self.targs[k][2]).strip('"') not in [val]:
-					print 'targs "%s" value changed' % k, str(self.targs[k][2]),'-->' ,val
+					#print 'targs "%s" value changed' % k, str(self.targs[k][2]),'-->' ,val
 					self.targs[k][2]=val
 		#save to file
 		return [self.cargs, self.fargs, self.targs]
 	def OnInputDir(self, evt,params):
 		[dir] = params
-		print dir
+		#print dir
 		#id=LOAD_FILE_ID
 		#os.getcwd()
 		import wx.lib.agw.multidirdialog as MDD
@@ -3673,26 +3677,26 @@ class pnl_args(wx.Panel):
 	def get_cmd(self,transport):
 		cmd='%s ^' % transport
 		for k, v in self.cargs.items():
-			print k,v
+			#print k,v
 			short,long,val,desc=v
 			cmd='%s\n%s "%s" ^' % (cmd, short,self.obj[k][1].GetValue())
 		for k, v in self.fargs.items():
-			print k,v
+			#print k,v
 			short,long,val,desc=v
 			cmd='%s\n%s "%s" ^' % (cmd, short,self.obj[k][1].GetValue())
 		for k, v in self.targs.items():
-			print k,v
+			#print k,v
 			short,long,val,tesc=v
 			cmd='%s\n%s "%s" ^' % (cmd, short,self.obj[k][1].GetValue())			
 		return cmd
 	def get_cmd_line(self,transport):
 		cmd='%s' % transport #'python  C:\Python27\data_migrator_1239\datamule.py' #
 		for k, v in self.cargs.items():
-			print k,v
+			#print k,v
 			short,long,val,desc=v
 			cmd='%s %s "%s"' % (cmd, short,self.obj[k][1].GetValue())
 		for k, v in self.fargs.items():
-			print k,v
+			#print k,v
 			short,long,val,desc=v
 			val=self.obj[k][1].GetValue()
 			if 0 and 'passwd' in long: 
@@ -3700,11 +3704,11 @@ class pnl_args(wx.Panel):
 			cmd='%s %s "%s"' % (cmd, short,val)
 			#print cmd
 		for k, v in self.targs.items():
-			print k,v
+			#print k,v
 			short,long,val,tesc=v
 			val=self.obj[k][1].GetValue()
 			if 0 and 'passwd' in long: 
-				pprint (val)
+				#pprint (val)
 				val= base64.b64decode(val)
 			cmd='%s %s "%s"' % (cmd, short,val)			
 		return cmd
@@ -3951,10 +3955,10 @@ class DataBuddy(wx.Frame):
 	def onDeleteSessions(self,  data, extra1, extra2=None):
 		(items)=data
 		for k,v in items.items():
-			print k, v
+			#print k, v
 			if os.access(v, os.W_OK) and os.path.isfile(v):
 				os.remove(v)
-				print 'removed', v
+				#print 'removed', v
 			
 		
 	def onDisableAllForDelete(self, data, extra1, extra2=None):	
@@ -3989,12 +3993,13 @@ class DataBuddy(wx.Frame):
 	def onOpenSession(self, data, extra1, extra2=None):
 		
 		(sname,cv_from,cv_to,type,tmpl,sdir, fname) = data
-		print sname
+		#print sname
 		self.Freeze()
 		self.enableForm()
 		self.open_session([sname,[cv_from,cv_to],type,tmpl,sdir,fname])
 		self.btn_delete.Enable(True)
 		self.btn_new.Enable(True)
+		self.btn_save.Enable(False)
 		#self.Fit()
 		self.Layout()
 		#self.Refresh()
@@ -4078,14 +4083,16 @@ class DataBuddy(wx.Frame):
 	def OnClearAllButton(self, event):
 		self.args_panel.ClearAll()
 	def OnSaveButton(self, event):
-		args=self.args_panel.getArgs()
-		data=[self.getSessionName(), self.getCopyVector(), '.'.join(self.getTemplates()), args]
 		#print self.getSessionName(), self.getCopyVector()
-		(dname,fname)=self.saveSession(data)
+		(dname,fname)=self.saveSession()
 		
 
-	def saveSession(self, data):
-		(sname,copy_vector,tmpl,args) = data
+	def saveSession(self, data=None):
+		
+		if data:
+			(sname,copy_vector,tmpl,args)=data
+		else:
+			(sname,copy_vector,tmpl,args)=[self.getSessionName(), self.getCopyVector(), '.'.join(self.getTemplates()), self.args_panel.getArgs()]
 		if not os.path.isdir(self.save_to_dir):
 			os.makedirs(self.save_to_dir)
 		#sname=self.getSessionName()
@@ -4095,7 +4102,7 @@ class DataBuddy(wx.Frame):
 		fname='%s;%s;%s.p' % ('.'.join(copy_vector), tmpl,sname)
 		save_to_file=os.path.join(self.save_to_dir, fname)
 		
-		print save_to_file
+		#print save_to_file
 		#print sname
 		#print copy_vector
 		#print tmpl
@@ -4108,13 +4115,13 @@ class DataBuddy(wx.Frame):
 		self.btn_save.Enable(False)	
 		return (self.save_to_dir, fname)
 	def obfuscate(self, data):
-		pprint(data)
+		#pprint(data)
 		for k in data[1]:
 			if 'passwd' in k:	
 				data[1][k]=list(data[1][k])
 				data[1][k][2]=base64.b64encode(data[1][k][2])
 		for k in data[2]:
-			print k
+			#print k
 			if 'passwd' in k:				
 				data[2][k]=list(data[2][k])
 				data[2][k][2]=base64.b64encode(data[2][k][2])	
@@ -4167,7 +4174,7 @@ class DataBuddy(wx.Frame):
 		apimod=import_module(api_file)
 		self.api_args=apimod.aa
 		#tmpl=data[2]
-		print self.api_args[tmpl]
+		#print self.api_args[tmpl]
 		return self.api_args[tmpl]
 		
 	def get_session_args(self,fname):
@@ -4187,23 +4194,23 @@ class DataBuddy(wx.Frame):
 		session_args=self.unobfuscate(session_args)
 		return session_args
 	def unobfuscate(self,data) 	:
-		pprint(data)
+		#pprint(data)
 		for k in data[1]:
-			print '--k--',k
+			#print '--k--',k
 			if 'passwd' in k:				
 				data[1][k][2]=base64.b64decode(data[1][k][2])
 		for k in data[2]:
 			if 'passwd' in k:				
-				print 'data[2][k]', data[2][k]
+				#print 'data[2][k]', data[2][k]
 				data[2][k][2]=base64.b64decode(data[2][k][2])				
 		return data	
 		
 	def open_session(self,data):
-			print len(data)
+			#print len(data)
 			(self.sname,self.copy_vector,self.type, self.tmpl,self.sdir,self.fname) = data
 			self.setSessionName(self.sname)
 			self.setCopyVector(self.copy_vector)
-			print self.tmpl
+			#print self.tmpl
 			#print sname,copy_vector,tmpl
 			self.setTemplates(self.tmpl)
 			sess=self.get_session_args(os.path.join(self.sdir,self.fname))
@@ -4235,16 +4242,16 @@ class DataBuddy(wx.Frame):
   
   
 	def set_new_session(self,data):
-			print len(data)
+			#print len(data)
 			(sname,copy_vector,tmpl,api_args) = data
 			self.setSessionName(sname)
 			self.setCopyVector(copy_vector)
 			#print sname,copy_vector,tmpl
 			self.setTemplates(tmpl)
 			(self.cargs,self.fargs,self.targs)=api_args
-			print len(self.cargs)
-			print len(self.fargs)
-			print len(self.targs)
+			#print len(self.cargs)
+			#print len(self.fargs)
+			#print len(self.targs)
 			#self.args_panel.Hide()
 			#self.args_panel.create_cargs(self.cargs)
 			#self.args_panel.Destroy()
@@ -4265,6 +4272,10 @@ class DataBuddy(wx.Frame):
 	def OnButtonShowInFolder(self, event):
 		# 
 		btn = event.GetEventObject()
+		#save changes
+		if_save=self.auto_save.GetValue() 
+		if if_save:
+			(dname,fname)=self.saveSession()
 		#create bat file
 		ts=time.strftime('%Y%m%d_%H%M%S')
 		dirname=os.path.join(home,'run')
@@ -4273,9 +4284,7 @@ class DataBuddy(wx.Frame):
 			os.makedirs(dirname)
 		f=open(fname,'w')
 		cmd=self.args_panel.get_cmd(self.transport)
-		#cmd=cmd.replace('csv2ora11g','csv2ora')
-		
-		#print cmd
+				
 		if_yes=self.send_yes.GetValue()
 		yes=''
 		if if_yes:
@@ -4294,14 +4303,14 @@ class DataBuddy(wx.Frame):
 	def OnButtonRun(self, event):
 		# 
 		btn = event.GetEventObject()
-		print btn.GetLabel()
-		from subprocess import Popen,PIPE
+		#print btn.GetLabel()
+		#from subprocess import Popen,PIPE
 		if 0:
 			
 			#Popen("cmd /w dir")
 			import shlex 
 			cmd=''.join(self.cmd.split('^\n'))
-			print cmd
+			#print cmd
 			lexer=shlex.shlex(cmd)
 			#lexer = shlex.shlex(input)
 			lexer.quotes = '"'
@@ -4316,11 +4325,11 @@ class DataBuddy(wx.Frame):
 			p.wait()
 			print err
 			print out
-			print '-'*40
+			#print '-'*40
 		if 0:
 			p=Popen(['mode con cols=50 lines=50;start "test"', 'cmd', '/k','.\\dm32\\dm32.exe', '-w', 'ora2ora', '-o', '1', '-r', '1',  '-c', 'SCOTT.Date_test_from', '-f', 'SCOTT/tiger2@orcl', '-e', '"YYYY-MM-DD HH24.MI.SS"', '-m', '"YYYY-MM-DD HH24.MI.SS.FF2"', '-O', '"YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM"','-z', '"C:\app\alex_buz\product\11.2.0\dbhome_2\BIN"', '-g', 'SCOTT/tiger2@orcl', '-a', 'SCOTT.Partitioned_test_to', '-G', 'part_15', '-e', '"YYYY-MM-DD HH24.MI.SS"', '-m', '"YYYY-MM-DD HH24.MI.SS.FF2"', '-O', '"YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM"', '-Z', '"C:\app\alex_buz\product\11.2.0\dbhome_2\BIN"'], stdin=PIPE, stdout=PIPE, shell=True)
 			out, err = p.communicate('y\n')
-			print out, err
+			#print out, err
 			p.wait()
 			p.close()
 		#os.system("mode 45, 20");
@@ -4332,7 +4341,12 @@ class DataBuddy(wx.Frame):
 		cmd=cmd.replace('|','^|')
 		#cmd=cmd.replace('csv2ora11g','csv2ora')
 		
-		pprint (cmd)
+		#pprint (cmd)
+		#save
+		if_save=self.auto_save.GetValue() 
+		if if_save:
+			(dname,fname)=self.saveSession()
+			
 		if_yes=self.send_yes.GetValue()
 		yes=''
 		if if_yes:
@@ -4347,7 +4361,7 @@ class DataBuddy(wx.Frame):
 			#u'C:\\Users\\alex_buz\\Documents\\GitHub\\DataBuddy\\dm32\\dm32.exe -t "|" -w "csv2ora11g" -r "1" -o "1" -I "c:\\Python27\\data_migrator_1239\\test\\v101\\data\\ora_data_dir" -y "1000" -g "SCOTT/tiger2@orcl" -m "YYYY-MM-DD HH24.MI.SS.FF2" -e "YYYY-MM-DD HH24.MI.SS" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -a "SCOTT.Timestamp_test_to" -Z "C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN"'		
 	def OnVectorButton(self, event,params):
 		(loc)=params
-		print (loc)
+		#print (loc)
 		#print dir(event)
 		#btn=event.GetEventObject()
 		#print btn.GetPosition()
@@ -4413,7 +4427,7 @@ class DataBuddy(wx.Frame):
 				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnVectMenu,(3,id))		
 	def OnVectMenu(self, event, params):
 		(a,b) = params
-		print a,b	
+		#print a,b	
 	def onRadioButton(self, event):
 		"""
 		This method is fired when its corresponding button is pressed
@@ -4432,7 +4446,7 @@ class DataBuddy(wx.Frame):
 		
 	def onTransportLoc(self, data, extra1, extra2=None):		
 		(tloc) = data
-		print tloc
+		#print tloc
 		self.txt_transport.SetLabel(tloc[0])
 
 	def loadFile(self, event):
