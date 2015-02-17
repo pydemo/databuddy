@@ -43,9 +43,9 @@ if 1:
 		#print args
 		#print signal,  charge
 		#print '#'*60
-		print signal
-		print charge
-		print extra1
+		#print signal
+		#print charge
+		#print extra1
 		pub.sendMessage(signal,data=charge, extra1=extra1)
 		return 0
 else:
