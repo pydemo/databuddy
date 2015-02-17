@@ -38,7 +38,7 @@ if 1:
 		pub.subscribe(method, signal)
 		return 0
 
-	print 'test=============================================='	
+	#print 'test=============================================='	
 	def send(signal,  charge, extra1=None):
 		#print args
 		#print signal,  charge
@@ -63,12 +63,12 @@ else:
 if 0:
 	from wx.lib.pubsub import Publisher
 	def _sub(method, signal):
-		print args
+		#print args
 		Publisher().subscribe(method,signal)
 		#pub.subscribe(method, *args, **kwargs)
 
 	def _send(signal,  *args):
-		print args
+		#print args
 		Publisher().sendMessage( signal, *args )
 		#pub.sendMessage(signal, *args)	
 	
@@ -99,7 +99,7 @@ for name, locs in tc_loc.items():
 	#tc_runat[name]={}
 	for loc_name, loc in locs.items():
 		tc_runat['%s.%s' % (name,loc_name)]=(tc_host[name][2],loc[0],loc_name)
-print tc_runat
+#print tc_runat
 
 if 0:
 	use_paramico=False
