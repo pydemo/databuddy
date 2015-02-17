@@ -4049,18 +4049,28 @@ class DataBuddy(wx.Frame):
 		items={}
 		data =self.sm.list.data[self.sm.list.current_list]
 		selected=self.sm.list.GetSelectedItems()
+		names=[]
 		for i in selected:
 			#print '$$$$$',i
 			ii=self.sm.list.getItemInfo(i)
 			#print i, self.sm.list.getItemInfo(i)
 			#print data[i]
 			key = ii[1] #pprint  (data[i])
+			names.append(self.sm.list.GetItemText(i))
 			items[key]=os.path.join(data[i][-2],data[i][-1])
-		send('delete_sessions', (items))
-		if len(selected)==1:
-			send('disable_all_for_delete',())
-		self.btn_delete.Enable(False)
-		self.btn_new.Enable(True)
+		#pprint (names)		 
+		if self.if_yes('Delete these sessions?\n%s' % '\\n'.join(names)):
+			send('delete_sessions', (items))
+			if len(selected)==1:
+				send('disable_all_for_delete',())
+			self.btn_delete.Enable(False)
+			self.btn_new.Enable(True)
+	def if_yes(self, message, caption = 'Warning!'):
+		dlg = wx.MessageDialog(self, message, caption, wx.YES_NO | wx.ICON_QUESTION)
+		answer=dlg.ShowModal()
+		dlg.Destroy()
+		return answer==wx.ID_YES
+		
 	def onNewSession(self, data, extra1, extra2=None):	
 		#print 'onNewSession'
 		if 1:
