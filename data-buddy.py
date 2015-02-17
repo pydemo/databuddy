@@ -8,7 +8,7 @@ __author__ = "Alex Buzunov"
 __copyright__ = "Copyright 2015, SequelWorks Inc."
 __credits__ = []
 __license__ = "GPL"
-__title__ = "QueryCopy"
+__title__ = "data-buddy"
 __version__ = "1.23.9"
 __maintainer__ = "Alex Buzunov"
 __email__ = "alexbuzunov@gmail.com"
@@ -21,7 +21,9 @@ from multiprocessing import freeze_support #Process, Queue, cpu_count, current_p
 from wx.lib.splitter import MultiSplitterWindow
 import wx.lib.agw.flatnotebook as fnb
 import wx.lib.mixins.listctrl as listmix
+
 from tc_lib import cml, getPipelineConfig, activeProjName, activeProjLoc, DEFAULT_PERSPECTIVE, projRootLoc, confDirName, configDirLoc,  appLoc
+
 from collections import OrderedDict
 from cache_lib import ifCacheExists,readFromCache
 import wx.lib.agw.hyperlink as hl
@@ -40,6 +42,7 @@ import base64
 import __builtin__
 __builtin__.copy_vector = None
 __builtin__.cvarg = None
+
 import common.v101.config as conf
 import argparse
 
@@ -473,9 +476,7 @@ class UltSessionLogger(wx.Panel):
 		self.log=cu.NullLog()
 		self.logList = UltListCtrl(self,self.log)
 		#print dir(self.logList)
-		if 0:
-			for i in range(100):
-				self.logList.append('test %d' % i)
+
 		self.sizer.Add(self.logList, 1, wx.GROW|wx.ALL, 1)
 
 		self.SetSizer(self.sizer)
@@ -1240,7 +1241,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 	def addSession(self,session):
 		item_mask='%s'
 		index=self.list.InsertStringItem(sys.maxint, item_mask % session[0])
-		for idx in range(1,len(session)):
+		for idx in range(1,len(session)-2):
 			self.list.SetStringItem(index, idx, str(session[idx]))
 		
 		key=len(self.list.data[self.list.current_list])
@@ -1344,18 +1345,20 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 					#print keys
 					j=0
 					list.DeleteAllItems()
-
+					#pprint(list.data[list.current_list])
 					for key in keys:
-						#print key
+						#print 'key',key
 						
 						i= list.data[list.current_list][key]
-						#print i
+						#print 'i',i
 						#e(0)
 						if  1:
 							index=list.InsertStringItem(sys.maxint, item_mask % i[0])
-							for idx in range(1,len(i)):
+							for idx in range(1,len(i)-2):
+								#print 'idx', idx
+								#print i[idx]
 								list.SetStringItem(index, idx, str(i[idx]))
-							
+
 
 							list.SetItemData(index,key)
 							
@@ -3022,7 +3025,7 @@ class NewSessionDialog(wx.Dialog):
 							else:
 								self.create_Menu4(Menu1,self.api_menu[k2][0],from_db=sm)
 			self._popUpMenu.AppendSeparator()	
-			for sm in conf.ff:
+			for sm in [conf.ff]:
 				self.i +=1
 				Menu1 = FM.FlatMenu()
 				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, 'From %s' % sm, '', wx.ITEM_NORMAL, Menu1)
@@ -3062,7 +3065,7 @@ class NewSessionDialog(wx.Dialog):
 				self.create_Menu4(Menu2,self.api_menu[k2][0],from_db=sm)
 		#append to_csv
 		Menu2.AppendSeparator()
-		for s in conf.ff:
+		for s in [conf.ff]:
 			self.i +=1
 			#Menu1 = FM.FlatMenu()
 			menuItem = FM.FlatMenuItem(Menu2, 20000+self.i, 'To %s' % s, '', wx.ITEM_NORMAL)
@@ -3762,6 +3765,8 @@ class DataBuddy(wx.Frame):
 		self.copy_vector=None
 		userhome = os.path.expanduser('~')
 		self.save_to_dir=os.path.join(userhome,'sessions')
+		if not os.path.isdir(self.save_to_dir):
+			os.makedirs(self.save_to_dir)
 		self.transport=os.path.join(self.home,r'%s32\%s32.exe' % (tr,tr))
 		self.args_panel = dummy_args(self,style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 		self.cmd=''
