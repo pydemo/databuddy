@@ -3220,7 +3220,7 @@ class dummy_args(wx.Panel):
 				#print k,v
 				#print i
 				short,long,val,desc=v
-				self.obj[k]= (wx.StaticText(from_args_panel, label=k), wx.TextCtrl(from_args_panel,value="", size=(135,22)))
+				self.obj[k]= (wx.StaticText(from_args_panel, label=k), wx.TextCtrl(from_args_panel,value="", size=(150,22)))
 				fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				fgs.Add(self.obj[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				self.obj[k][1].Enable(False)
@@ -3241,7 +3241,7 @@ class dummy_args(wx.Panel):
 				#print k,v
 				#print i
 				short,long,val,desc=v
-				self.obj[k]= (wx.StaticText(to_args_panel, label=k), wx.TextCtrl(to_args_panel,value="", size=(135,22)))
+				self.obj[k]= (wx.StaticText(to_args_panel, label=k), wx.TextCtrl(to_args_panel,value="", size=(150,22)))
 				fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				fgs.Add(self.obj[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				self.obj[k][1].Enable(False)
@@ -3432,6 +3432,7 @@ class pnl_args(wx.Panel):
 	def __init__(self, parent, copy_vector,tmpl,args_api,style):
 		wx.Panel.__init__(self, parent, -1, style=style)
 		#self.frame=frame
+		global home
 		ID_TC_MODE = wx.NewId()
 		ID_RUN_AT = wx.NewId()
 		self.parent=parent
@@ -3444,6 +3445,7 @@ class pnl_args(wx.Panel):
 		self.copy_vector=copy_vector
 		self.tmpl=tmpl
 		self.obj={}
+		self.tc_length=190
 		if 1: #Common
 			
 			self.core_args_panel = wx.Panel(self, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
@@ -3489,34 +3491,91 @@ class pnl_args(wx.Panel):
 			#sizer.Add(boxsizer, pos=(3, 0), span=(1, 3), flag=wx.TOP|wx.EXPAND, border=5)
 			
 			self.args_vbox.Add(boxsizer,1, flag=wx.ALL|wx.EXPAND, border=5)
-		if 1:
+		if 1: #Source
 			from_args_panel = wx.Panel(self, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			hbox = wx.BoxSizer(wx.HORIZONTAL)
-			fgs = wx.GridBagSizer(4, 10)
+			fgs = wx.GridBagSizer(3, 10)
 			i=0
 			for k,v in self.fargs.items()	:
 				#print k,v
 				#print i
 				short,long,val,desc=v
 				sval=str(val).strip('"')
-				self.obj[k]= (wx.StaticText(from_args_panel, label=k), wx.TextCtrl(from_args_panel,value=sval, size=(135,22)))
+				style=0
+				if k in ['from_passwd']:
+					style=wx.TE_PASSWORD
+				length=self.tc_length
+				if k in ['input_dirs', 'source_client_home']:
+					length=168
+				if k in ['from_passwd']:
+					length=168
+					self.obj[k]= [wx.StaticText(from_args_panel, label=k)]
+				else:
+					self.obj[k]= [wx.StaticText(from_args_panel, label=k), wx.TextCtrl(from_args_panel,value=sval, style=style, size=(length,22))]
 				fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-				fgs.Add(self.obj[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-				self.obj[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
-				if k in ['input_dirs']:
-					imageFile = "bmp_source/refresh_icon_16_grey2.png"
+				
+				
+				if k in ['input_dirs', 'source_client_home']:
+					
+					imageFile = os.path.join(home,"bmp_source/refresh_icon_16_grey2.png")
 					image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
-					self.btn_dir=wx.BitmapButton(from_args_panel, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6))
-					fgs.Add(self.btn_dir, pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	
-					global home
+					#print self.obj[k]
+					#print len(self.obj[k])
+					
+					self.obj[k].append(wx.BitmapButton(from_args_panel, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6)))
+					
+					#global home
 					dir =home
 					#print sval
 					if os.path.isdir(sval):
 						dir=sval
-					self.gen_bind(wx.EVT_BUTTON,self.btn_dir, self.OnInputDir,[dir])
-					#self.btn_dir.Bind(wx.EVT_BUTTON, self.OnInputDir)					
+					self.gen_bind(wx.EVT_BUTTON,self.obj[k][2], self.OnInputDir,[self.obj[k][1],dir])
+					#self.obj[k][2].Bind(wx.EVT_BUTTON, self.OnDirButton)					
 					#self.Bind(wx.EVT_BUTTON, self.OnInputDir, self.btn_dir)
+					bbox = wx.BoxSizer(wx.HORIZONTAL)
+					
+					bbox.Add(self.obj[k][1], 0, flag=wx.ALIGN_CENTER, border=5)	
+					bbox.Add(self.obj[k][2], 0, flag=wx.ALIGN_CENTER, border=5)	
+					#fgs.Add(self.obj[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	
+					fgs.Add(bbox, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				elif k in ['from_passwd']:
+					self.obj[k].append(None)
+					self.obj[k].append(None)
+					imageFile = os.path.join(home,"bmp_source/refresh_icon_16_grey2.png")
+					image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+					#print self.obj[k]
+					#print len(self.obj[k])
+					
+					self.obj[k][2]=wx.BitmapButton(from_args_panel, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6))
+					
+					#global home
+					dir =home
+					#print sval
+					if os.path.isdir(sval):
+						dir=sval
+					self.gen_bind(wx.EVT_BUTTON,self.obj[k][2], self.OnPassword,[self.obj[k][1],dir])
+					#self.obj[k][2].Bind(wx.EVT_BUTTON, self.OnDirButton)					
+					#self.Bind(wx.EVT_BUTTON, self.OnInputDir, self.btn_dir)
+					bbox = wx.BoxSizer(wx.HORIZONTAL)
+					pwd_panel = wx.Panel(from_args_panel, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+					tc_p1=wx.TextCtrl(pwd_panel,value=sval, style=0, size=(length,22))
+					tc_p1.Hide()
+					tc_p2=wx.TextCtrl(pwd_panel,value=sval, style=style, size=(length,22))
+					tc_p2.Show()
+					self.src_hide_show=[tc_p1, tc_p2]
+					self.obj[k][1]=tc_p2
+					 
+					bbox.Add(pwd_panel, 0, flag=wx.ALIGN_CENTER, border=5)	
+					bbox.Add(self.obj[k][2], 0, flag=wx.ALIGN_CENTER, border=5)	
+					tc_p1.Bind(wx.EVT_SET_FOCUS, self.OnPwdFocus)
+					tc_p2.Bind(wx.EVT_SET_FOCUS, self.OnPwdFocus)
+					#fgs.Add(self.obj[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	
+					fgs.Add(bbox, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				else:
+				
+					fgs.Add(self.obj[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				i+=1
+				self.obj[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
 			hbox.Add(fgs, 1, flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=5)	
 			from_args_panel.SetSizer(hbox)
 			
@@ -3536,7 +3595,7 @@ class pnl_args(wx.Panel):
 				style=0
 				if k in ['to_passwd']:
 					style=wx.TE_PASSWORD
-				self.obj[k]= (wx.StaticText(to_args_panel, label=k), wx.TextCtrl(to_args_panel,value=str(val).strip('"'), style=style, size=(135,22)))
+				self.obj[k]= (wx.StaticText(to_args_panel, label=k), wx.TextCtrl(to_args_panel,value=str(val).strip('"'), style=style, size=(self.tc_length,22)))
 				fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				fgs.Add(self.obj[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				self.obj[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
@@ -3609,6 +3668,8 @@ class pnl_args(wx.Panel):
 		self.args_vbox.Add(self.args_hbox,0,flag=wx.ALL|wx.EXPAND|wx.GROW)
 		self.SetSizer(self.args_vbox)
 		self.Fit()
+	def OnDirButton(self, event):
+		print 'OnDirButton'
 	def onKeyPress(self, event):
 		#print 'changed'
 		
@@ -3660,36 +3721,40 @@ class pnl_args(wx.Panel):
 					self.targs[k][2]=val
 		#save to file
 		return [self.cargs, self.fargs, self.targs]
+	def OnPwdFocus (self, evt):
+		print 'OnPwdFocus'
+		tc = evt.GetEventObject()
+		self.obj['from_passwd'][1]=tc
+	def OnPassword(self, evt,params):
+		print 'OnPassword'	
+		for tc in self.src_hide_show:
+			if tc.IsShown():
+				tc.Hide()
+			else:
+				tc.Show()
+			
+		#pprint(dir(self.src_hide_show[0]))		
 	def OnInputDir(self, evt,params):
-		[dir] = params
-		#print dir
-		#id=LOAD_FILE_ID
-		#os.getcwd()
-		import wx.lib.agw.multidirdialog as MDD
-		if 0:
-			dlg = wx.DirDialog(self, "Choose a CVS input directory:", dir, style=wx.DD_DEFAULT_STYLE | wx.DD_NEW_DIR_BUTTON)
-			dir =None
-			if dlg.ShowModal() == wx.ID_OK:
-				dir= 'You selected: %s\n' % dlg.GetPath()
-				#self.SetStatusText('You selected: %s\n' % dlg.GetPath())
+		print 'OnInputDir'
+		[dir_obj,dir] = params
+		if 1: #dirtype in ['input_dirs']:
+			import wx.lib.agw.multidirdialog as MDD
+			dlg = MDD.MultiDirDialog(None, title="Choose a CVS input directory:", defaultPath=dir,
+							 agwStyle=MDD.DD_MULTIPLE|MDD.DD_DIR_MUST_EXIST)
+
+			if dlg.ShowModal() != wx.ID_OK:
+				print("You Cancelled The Dialog!")
+				dlg.Destroy()
+				return
+
+			paths = dlg.GetPaths()
+			for indx, path in enumerate(paths):
+				print("Path %d: %s"%(indx+1, path))
 			
 			dlg.Destroy()
-		dlg = MDD.MultiDirDialog(None, title="Choose a CVS input directory:", defaultPath=dir,
-						 agwStyle=MDD.DD_MULTIPLE|MDD.DD_DIR_MUST_EXIST)
-
-		if dlg.ShowModal() != wx.ID_OK:
-			print("You Cancelled The Dialog!")
-			dlg.Destroy()
-			return
-
-		paths = dlg.GetPaths()
-		for indx, path in enumerate(paths):
-			print("Path %d: %s"%(indx+1, path))
-		
-		dlg.Destroy()
-		self.set_dirs(paths)
-		#print dir
-	def set_dirs(self, dirs):
+			self.set_dirs(dir_obj, paths)
+			#print dir
+	def set_dirs(self, dir_obj, dirs):
 		path=[]
 		#clean-up
 		for dir in dirs:
@@ -3698,7 +3763,7 @@ class pnl_args(wx.Panel):
 			else:
 				path.append(dir)
 		
-		self.obj['input_dirs'][1].SetValue(';'.join(path))
+		dir_obj.SetValue(';'.join(path))
 	def gen_bind(self, type, instance, handler, *args, **kwargs):
 		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)			
 		
