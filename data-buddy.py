@@ -3363,7 +3363,7 @@ class default_args(wx.Panel):
 
 			hbox.Add(fgs, proportion=1, flag=wx.ALL|wx.EXPAND, border=5)	
 			panel_from.SetSizer(hbox)
-			sb_from = wx.StaticBox(self, label="Source")
+			sb_from = wx.StaticBox(self, label="Source[%s]" % self.getCopyVector())
 			boxsizer = wx.StaticBoxSizer(sb_from, wx.VERTICAL)
 			boxsizer.Add(panel_from, flag=wx.LEFT|wx.TOP, border=5)
 			#sizer.Add(boxsizer, pos=(3, 0), span=(1, 3), flag=wx.TOP|wx.EXPAND, border=5)
@@ -3553,57 +3553,168 @@ class pnl_args(wx.Panel):
 					#print sval
 					if os.path.isdir(sval):
 						dir=sval
-					self.gen_bind(wx.EVT_BUTTON,self.obj[k][2], self.OnPassword,[self.obj[k][1],dir])
+					
 					#self.obj[k][2].Bind(wx.EVT_BUTTON, self.OnDirButton)					
 					#self.Bind(wx.EVT_BUTTON, self.OnInputDir, self.btn_dir)
 					bbox = wx.BoxSizer(wx.HORIZONTAL)
 					pwd_panel = wx.Panel(from_args_panel, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
-					tc_p1=wx.TextCtrl(pwd_panel,value=sval, style=0, size=(length,22))
-					tc_p1.Hide()
-					tc_p2=wx.TextCtrl(pwd_panel,value=sval, style=style, size=(length,22))
-					tc_p2.Show()
-					self.src_hide_show=[tc_p1, tc_p2]
-					self.obj[k][1]=tc_p2
+					self.tc_p1=wx.TextCtrl(pwd_panel,value=sval, style=0, size=(length,22))
+					self.tc_p1.SetName(k)
+					self.tc_p1.Hide()
+					self.tc_p2=wx.TextCtrl(pwd_panel,value=sval, style=style, size=(length,22))
+					self.tc_p2.SetName(k)
+					self.tc_p2.Show()
+					self.src_hide_show=[self.tc_p1, self.tc_p2]
+					self.obj[k][1]=self.tc_p2
 					 
 					bbox.Add(pwd_panel, 0, flag=wx.ALIGN_CENTER, border=5)	
 					bbox.Add(self.obj[k][2], 0, flag=wx.ALIGN_CENTER, border=5)	
-					tc_p1.Bind(wx.EVT_SET_FOCUS, self.OnPwdFocus)
-					tc_p2.Bind(wx.EVT_SET_FOCUS, self.OnPwdFocus)
+					self.tc_p1.Bind(wx.EVT_SET_FOCUS, self.OnPwdFocus)
+					self.tc_p2.Bind(wx.EVT_SET_FOCUS, self.OnPwdFocus)
+					self.gen_bind(wx.EVT_BUTTON,self.obj[k][2], self.OnPassword,[self.src_hide_show])
+					#self.gen_bind(wx.EVT_SET_FOCUS,self.tc_p1, self.OnPassword,[self.obj[k]])
+					#self.gen_bind(wx.EVT_SET_FOCUS,self.tc_p2, self.OnPassword,[self.obj[k]])
 					#fgs.Add(self.obj[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	
 					fgs.Add(bbox, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				else:
 				
 					fgs.Add(self.obj[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				i+=1
+				
 				self.obj[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
+			
+			
+			if not self.copy_vector[0].startswith('CSV'):
+				lbl="Test connect"					
+				btn_test_sconnect = wx.Button(from_args_panel, label=lbl, style=wx.BU_EXACTFIT)
+				fgs.Add(btn_test_sconnect, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				btn_test_sconnect.SetName('source')
+				btn_test_sconnect.Bind(wx.EVT_BUTTON, self.OnTestConnect)
 			hbox.Add(fgs, 1, flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=5)	
 			from_args_panel.SetSizer(hbox)
 			
-			sb_from = wx.StaticBox(self, label="Source")
+			sb_from = wx.StaticBox(self, label="Source (%s)" % conf.dbs[self.parent.getCopyVector()[0]])
 			boxsizer = wx.StaticBoxSizer(sb_from, wx.VERTICAL)
 			boxsizer.Add(from_args_panel, flag=wx.LEFT|wx.TOP, border=5)
 			self.args_hbox.Add(boxsizer, 1, flag=wx.ALL|wx.EXPAND, border=5)
-		if 1:
+		if 1: #Target
 			to_args_panel = wx.Panel(self, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			hbox = wx.BoxSizer(wx.HORIZONTAL)
 			fgs = wx.GridBagSizer(4, 10)
 			i=0
+			if 0:
+				for k,v in self.targs.items()	:
+					#print k,v
+					#print i
+					short,long,val,desc=v
+					style=0
+					if k in ['to_passwd']:
+						style=wx.TE_PASSWORD
+					self.obj[k]= (wx.StaticText(to_args_panel, label=k), wx.TextCtrl(to_args_panel,value=str(val).strip('"'), style=style, size=(self.tc_length,22)))
+					fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+					fgs.Add(self.obj[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+					self.obj[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
+					i+=1
+				
 			for k,v in self.targs.items()	:
 				#print k,v
 				#print i
 				short,long,val,desc=v
+				sval=str(val).strip('"')
 				style=0
+				
 				if k in ['to_passwd']:
 					style=wx.TE_PASSWORD
-				self.obj[k]= (wx.StaticText(to_args_panel, label=k), wx.TextCtrl(to_args_panel,value=str(val).strip('"'), style=style, size=(self.tc_length,22)))
+				length=self.tc_length
+				if k in ['to_dir', 'target_client_home']:
+					length=168
+				if k in ['to_passwd']:
+					length=168
+					self.obj[k]= [wx.StaticText(to_args_panel, label=k)]
+				else:
+					self.obj[k]= [wx.StaticText(to_args_panel, label=k), wx.TextCtrl(to_args_panel,value=sval, style=style, size=(length,22))]
 				fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-				fgs.Add(self.obj[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-				self.obj[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
+				
+				
+				if k in ['to_dir', 'target_client_home']:
+					
+					imageFile = os.path.join(home,"bmp_source/refresh_icon_16_grey2.png")
+					image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+					#print self.obj[k]
+					#print len(self.obj[k])
+					
+					self.obj[k].append(wx.BitmapButton(to_args_panel, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6)))
+					
+					#global home
+					dir =home
+					#print sval
+					if os.path.isdir(sval):
+						dir=sval
+					self.gen_bind(wx.EVT_BUTTON,self.obj[k][2], self.OnInputDir,[self.obj[k][1],dir])
+					#self.obj[k][2].Bind(wx.EVT_BUTTON, self.OnDirButton)					
+					#self.Bind(wx.EVT_BUTTON, self.OnInputDir, self.btn_dir)
+					bbox = wx.BoxSizer(wx.HORIZONTAL)
+					
+					bbox.Add(self.obj[k][1], 0, flag=wx.ALIGN_CENTER, border=5)	
+					bbox.Add(self.obj[k][2], 0, flag=wx.ALIGN_CENTER, border=5)	
+					#fgs.Add(self.obj[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	
+					fgs.Add(bbox, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				elif k in ['to_passwd']:
+					self.obj[k].append(None)
+					self.obj[k].append(None)
+					imageFile = os.path.join(home,"bmp_source/refresh_icon_16_grey2.png")
+					image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+					#print self.obj[k]
+					#print len(self.obj[k])
+					
+					self.obj[k][2]=wx.BitmapButton(to_args_panel, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6))
+					
+					#global home
+					dir =home
+					#print sval
+					if os.path.isdir(sval):
+						dir=sval
+					
+					#self.obj[k][2].Bind(wx.EVT_BUTTON, self.OnDirButton)					
+					#self.Bind(wx.EVT_BUTTON, self.OnInputDir, self.btn_dir)
+					bbox = wx.BoxSizer(wx.HORIZONTAL)
+					pwd_panel = wx.Panel(to_args_panel, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+					self.tc_p1=wx.TextCtrl(pwd_panel,value=sval, style=0, size=(length,22))
+					self.tc_p1.SetName(k)
+					self.tc_p1.Hide()
+					self.tc_p2=wx.TextCtrl(pwd_panel,value=sval, style=style, size=(length,22))
+					self.tc_p2.SetName(k)
+					self.tc_p2.Show()
+					self.trg_hide_show=[self.tc_p1, self.tc_p2]
+					self.obj[k][1]=self.tc_p2
+					 
+					bbox.Add(pwd_panel, 0, flag=wx.ALIGN_CENTER, border=5)	
+					bbox.Add(self.obj[k][2], 0, flag=wx.ALIGN_CENTER, border=5)	
+					self.tc_p1.Bind(wx.EVT_SET_FOCUS, self.OnPwdFocus)
+					self.tc_p2.Bind(wx.EVT_SET_FOCUS, self.OnPwdFocus)
+					self.gen_bind(wx.EVT_BUTTON,self.obj[k][2], self.OnPassword,[self.trg_hide_show])
+					#self.gen_bind(wx.EVT_SET_FOCUS,self.tc_p1, self.OnPassword,[self.obj[k]])
+					#self.gen_bind(wx.EVT_SET_FOCUS,self.tc_p2, self.OnPassword,[self.obj[k]])
+					#fgs.Add(self.obj[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	
+					fgs.Add(bbox, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				else:
+				
+					fgs.Add(self.obj[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				i+=1
+			
+			
+			if not self.copy_vector[1].startswith('CSV'):	
+				lbl="Test connect"			
+				btn_test_tconnect = wx.Button(to_args_panel, label=lbl, style=wx.BU_EXACTFIT)
+				btn_test_tconnect.SetName('target')
+				btn_test_tconnect.Bind(wx.EVT_BUTTON, self.OnTestConnect)
+				
+				fgs.Add(btn_test_tconnect, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				
 			hbox.Add(fgs, 1, flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=5)	
 			to_args_panel.SetSizer(hbox)
 			
-			sb_from = wx.StaticBox(self, label="Target")
+			sb_from = wx.StaticBox(self, label="Target (%s)" % conf.dbs[self.parent.getCopyVector()[1]])
 			boxsizer = wx.StaticBoxSizer(sb_from, wx.VERTICAL)
 			boxsizer.Add(to_args_panel, flag=wx.LEFT|wx.TOP, border=5)
 			self.args_hbox.Add(boxsizer, 1, flag=wx.ALL|wx.EXPAND, border=5)
@@ -3668,6 +3779,37 @@ class pnl_args(wx.Panel):
 		self.args_vbox.Add(self.args_hbox,0,flag=wx.ALL|wx.EXPAND|wx.GROW)
 		self.SetSizer(self.args_vbox)
 		self.Fit()
+	def OnTestConnect(self, evt):
+		print 'OnTestConnect'
+		
+		
+		#print r'start "%s" cmd.exe  /k "%s"' % (title, cmd)
+		#os.system(r'start "%s" cmd.exe  /k "%s"' % (title, cmd))
+		tc = evt.GetEventObject()
+		title='%s connection.' % tc.Name.upper()
+		print title
+		cmd=None
+		if tc.Name=='source':
+			cmd=r"%s\%s %s/%s@%s @C:\Users\alex_buz\Documents\GitHub\DataBuddy\test\test_connnect\Oracle.sql" % (
+			self.obj['source_client_home'][1].GetValue(), #path to spooler 
+			conf.dbtools['SPOOLER'][self.copy_vector[0]], #spooler name
+			self.obj['from_user'][1].GetValue(), #db user
+			self.obj['from_passwd'][1].GetValue(), #pwd
+			self.obj['from_db_name'][1].GetValue(), #pwd
+			)
+			#print cmd
+		if tc.Name=='target':
+			cmd=r"%s\%s %s/%s@%s @C:\Users\alex_buz\Documents\GitHub\DataBuddy\test\test_connnect\Oracle.sql" % (
+			self.obj['target_client_home'][1].GetValue(), #path to spooler 
+			conf.dbtools['SPOOLER'][self.copy_vector[1]], #spooler name
+			self.obj['to_user'][1].GetValue(), #db user
+			self.obj['to_passwd'][1].GetValue(), #pwd
+			self.obj['to_db_name'][1].GetValue(), #pwd
+			)
+		#print cmd
+		assert cmd, 'command is not set'
+		self.parent.exec_cmd(title, cmd)
+		#evt.Skip()
 	def OnDirButton(self, event):
 		print 'OnDirButton'
 	def onKeyPress(self, event):
@@ -3723,11 +3865,17 @@ class pnl_args(wx.Panel):
 		return [self.cargs, self.fargs, self.targs]
 	def OnPwdFocus (self, evt):
 		print 'OnPwdFocus'
+		#(objArr)=params
+		#print 'OnPwdFocus'
 		tc = evt.GetEventObject()
-		self.obj['from_passwd'][1]=tc
+		#print tc.Name
+		self.obj[tc.Name][1]=tc
+		
 	def OnPassword(self, evt,params):
-		print 'OnPassword'	
-		for tc in self.src_hide_show:
+		print 'OnPassword'
+		[flip] =params
+		for tc in flip:
+			print tc
 			if tc.IsShown():
 				tc.Hide()
 			else:
@@ -4506,8 +4654,13 @@ class DataBuddy(wx.Frame):
 			#os.system(r'start "test" cmd.exe  /k "echo y|python  C:\Python27\data_migrator_1239\datamule.py  -t "^|" -w "csv2ora11g" -r "1" -o "1" -I "c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_1;c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_2" -y "1000" -d "orcl" -e "YYYY-MM-DD HH24.MI.SS" -u "SCOTT" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -p "tiger2" -a "SCOTT.Timestamp_test_to" -m "YYYY-MM-DD HH24.MI.SS.FF2"')
 			#print r'start "test" cmd.exe  /k "echo y|python  C:\Python27\data_migrator_1239\datamule.py  -t "^|" -w "csv2ora11g" -r "1" -o "1" -I "c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_1;c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_2" -y "1000" -d "orcl" -e "YYYY-MM-DD HH24.MI.SS" -u "SCOTT" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -p "tiger2" -a "SCOTT.Timestamp_test_to" -m "YYYY-MM-DD HH24.MI.SS.FF2"'
 			#print r'start "test" cmd.exe  /k "%s%s"' % (yes,cmd)
-			os.system(r'start "test" cmd.exe  /k "%s%s"' % (yes,cmd))
+			cmd='%s%s' % (yes,cmd)
+			title='%s->%s' % (conf.dbs[self.copy_vector[0]],conf.dbs[self.copy_vector[1]])
+			self.exec_cmd(title, cmd)
 			#u'C:\\Users\\alex_buz\\Documents\\GitHub\\DataBuddy\\dm32\\dm32.exe -t "|" -w "csv2ora11g" -r "1" -o "1" -I "c:\\Python27\\data_migrator_1239\\test\\v101\\data\\ora_data_dir" -y "1000" -g "SCOTT/tiger2@orcl" -m "YYYY-MM-DD HH24.MI.SS.FF2" -e "YYYY-MM-DD HH24.MI.SS" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -a "SCOTT.Timestamp_test_to" -Z "C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN"'		
+	def exec_cmd(self, title, cmd):
+		print r'start "%s" cmd.exe  /k "%s"' % (title, cmd)
+		os.system(r'start "%s" cmd.exe  /k "%s"' % (title, cmd))
 	def OnVectorButton(self, event,params):
 		(loc)=params
 		#print (loc)
