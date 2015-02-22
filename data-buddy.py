@@ -3597,24 +3597,12 @@ class pnl_args(wx.Panel):
 			boxsizer = wx.StaticBoxSizer(sb_from, wx.VERTICAL)
 			boxsizer.Add(from_args_panel, flag=wx.LEFT|wx.TOP, border=5)
 			self.args_hbox.Add(boxsizer, 1, flag=wx.ALL|wx.EXPAND, border=5)
-		if 1: #Target
+		if 1: #Target pnl
 			to_args_panel = wx.Panel(self, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			hbox = wx.BoxSizer(wx.HORIZONTAL)
-			fgs = wx.GridBagSizer(4, 10)
+			fgs = wx.GridBagSizer(2, 10)
 			i=0
-			if 0:
-				for k,v in self.targs.items()	:
-					#print k,v
-					#print i
-					short,long,val,desc=v
-					style=0
-					if k in ['to_passwd']:
-						style=wx.TE_PASSWORD
-					self.obj[k]= (wx.StaticText(to_args_panel, label=k), wx.TextCtrl(to_args_panel,value=str(val).strip('"'), style=style, size=(self.tc_length,22)))
-					fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-					fgs.Add(self.obj[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-					self.obj[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
-					i+=1
+
 				
 			for k,v in self.targs.items()	:
 				#print k,v
@@ -3636,7 +3624,30 @@ class pnl_args(wx.Panel):
 				fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				
 				
-				if k in ['to_dir', 'target_client_home']:
+				if k in ['to_file']:
+					
+					imageFile = os.path.join(home,"bmp_source/refresh_icon_16_grey2.png")
+					image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+					#print self.obj[k]
+					#print len(self.obj[k])
+					
+					self.obj[k].append(wx.BitmapButton(to_args_panel, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6)))
+					
+					#global home
+					dir =home
+					#print sval
+					if os.path.isdir(sval):
+						dir=sval
+					self.gen_bind(wx.EVT_BUTTON,self.obj[k][2], self.OnInputFile,[self.obj[k][1],dir])
+					#self.obj[k][2].Bind(wx.EVT_BUTTON, self.OnDirButton)					
+					#self.Bind(wx.EVT_BUTTON, self.OnInputDir, self.btn_dir)
+					bbox = wx.BoxSizer(wx.HORIZONTAL)
+					
+					bbox.Add(self.obj[k][1], 0, flag=wx.ALIGN_CENTER, border=5)	
+					bbox.Add(self.obj[k][2], 0, flag=wx.ALIGN_CENTER, border=5)	
+					#fgs.Add(self.obj[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	
+					fgs.Add(bbox, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)				
+				elif k in ['to_dir', 'target_client_home']:
 					
 					imageFile = os.path.join(home,"bmp_source/refresh_icon_16_grey2.png")
 					image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
@@ -3887,11 +3898,11 @@ class pnl_args(wx.Panel):
 		[dir_obj,dir] = params
 		if 1: #dirtype in ['input_dirs']:
 			import wx.lib.agw.multidirdialog as MDD
-			dlg = MDD.MultiDirDialog(None, title="Choose a CVS input directory:", defaultPath=dir,
+			dlg = MDD.MultiDirDialog(None, title="Choose CVS directory:", defaultPath=dir,
 							 agwStyle=MDD.DD_MULTIPLE|MDD.DD_DIR_MUST_EXIST)
 
 			if dlg.ShowModal() != wx.ID_OK:
-				print("You Cancelled The Dialog!")
+				print("You Cancelled The Dialogue!")
 				dlg.Destroy()
 				return
 
@@ -3902,6 +3913,19 @@ class pnl_args(wx.Panel):
 			dlg.Destroy()
 			self.set_dirs(dir_obj, paths)
 			#print dir
+	def OnInputFile(self, evt,params):
+		print 'OnInputDir'
+		[file_obj,dir] = params
+		dlg = wx.FileDialog(self, "Choose CSV file", dir, "",
+                                       "*.*", wx.FD_OPEN )
+		if dlg.ShowModal() != wx.ID_OK:
+			print("You Cancelled The Dialogue!")
+			dlg.Destroy()
+			return
+		file = dlg.GetPath()
+		dlg.Destroy()
+		file_obj.SetValue(file)		
+
 	def set_dirs(self, dir_obj, dirs):
 		path=[]
 		#clean-up
