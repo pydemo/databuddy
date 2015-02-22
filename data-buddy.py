@@ -3514,7 +3514,29 @@ class pnl_args(wx.Panel):
 					self.obj[k]= [wx.StaticText(from_args_panel, label=k), wx.TextCtrl(from_args_panel,value=sval, style=style, size=(length,22))]
 				fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				
-				
+				if k in ['input_file']:
+					
+					imageFile = os.path.join(home,"bmp_source/refresh_icon_16_grey2.png")
+					image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+					#print self.obj[k]
+					#print len(self.obj[k])
+					
+					self.obj[k].append(wx.BitmapButton(from_args_panel, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6)))
+					
+					#global home
+					dir =home
+					#print sval
+					if os.path.isdir(sval):
+						dir=sval
+					self.gen_bind(wx.EVT_BUTTON,self.obj[k][2], self.OnInputDir,[self.obj[k][1],dir])
+					#self.obj[k][2].Bind(wx.EVT_BUTTON, self.OnDirButton)					
+					#self.Bind(wx.EVT_BUTTON, self.OnInputDir, self.btn_dir)
+					bbox = wx.BoxSizer(wx.HORIZONTAL)
+					
+					bbox.Add(self.obj[k][1], 0, flag=wx.ALIGN_CENTER, border=5)	
+					bbox.Add(self.obj[k][2], 0, flag=wx.ALIGN_CENTER, border=5)	
+					#fgs.Add(self.obj[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	
+					fgs.Add(bbox, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)				
 				if k in ['input_dirs', 'source_client_home']:
 					
 					imageFile = os.path.join(home,"bmp_source/refresh_icon_16_grey2.png")
@@ -3638,7 +3660,7 @@ class pnl_args(wx.Panel):
 					#print sval
 					if os.path.isdir(sval):
 						dir=sval
-					self.gen_bind(wx.EVT_BUTTON,self.obj[k][2], self.OnInputFile,[self.obj[k][1],dir])
+					self.gen_bind(wx.EVT_BUTTON,self.obj[k][2], self.OnOutputFile,[self.obj[k][1],dir])
 					#self.obj[k][2].Bind(wx.EVT_BUTTON, self.OnDirButton)					
 					#self.Bind(wx.EVT_BUTTON, self.OnInputDir, self.btn_dir)
 					bbox = wx.BoxSizer(wx.HORIZONTAL)
@@ -3902,7 +3924,7 @@ class pnl_args(wx.Panel):
 							 agwStyle=MDD.DD_MULTIPLE|MDD.DD_DIR_MUST_EXIST)
 
 			if dlg.ShowModal() != wx.ID_OK:
-				print("You Cancelled The Dialogue!")
+				print("You Cancelled The Dialog!")
 				dlg.Destroy()
 				return
 
@@ -3916,8 +3938,8 @@ class pnl_args(wx.Panel):
 	def OnInputFile(self, evt,params):
 		print 'OnInputDir'
 		[file_obj,dir] = params
-		dlg = wx.FileDialog(self, "Choose CSV file", dir, "",
-                                       "*.*", wx.FD_OPEN )
+		dlg = wx.FileDialog(self, "Choose input CSV file", dir, "",
+                                       "*.*", wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
 		if dlg.ShowModal() != wx.ID_OK:
 			print("You Cancelled The Dialogue!")
 			dlg.Destroy()
@@ -3925,7 +3947,18 @@ class pnl_args(wx.Panel):
 		file = dlg.GetPath()
 		dlg.Destroy()
 		file_obj.SetValue(file)		
-
+	def OnOutputFile(self, evt,params):
+		print 'OnInputDir'
+		[file_obj,dir] = params
+		dlg = wx.FileDialog(self, "Choose output CSV file", dir, "",
+                                       "*.*", wx.FD_OPEN)
+		if dlg.ShowModal() != wx.ID_OK:
+			print("You Cancelled The Dialogue!")
+			dlg.Destroy()
+			return
+		file = dlg.GetPath()
+		dlg.Destroy()
+		file_obj.SetValue(file)	
 	def set_dirs(self, dir_obj, dirs):
 		path=[]
 		#clean-up
