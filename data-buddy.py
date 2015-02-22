@@ -39,6 +39,9 @@ from collections import OrderedDict
 import imp
 from editor import TacoTextEditor
 import base64
+import win32con
+import win32gui
+import win32process
 import __builtin__
 __builtin__.copy_vector = None
 __builtin__.cvarg = None
@@ -3446,11 +3449,17 @@ class pnl_args(wx.Panel):
 		self.tmpl=tmpl
 		self.obj={}
 		self.tc_length=190
-		if 1:
+		if 1: #Src Timer
 			i=wx.NewId()			
-			self.Bind(wx.EVT_TIMER, lambda event, i=i: self.TimerHandler0(event, the_id=i), id=i)
+			self.Bind(wx.EVT_TIMER, lambda event, i=i: self.src_TimerHandler(event, the_id=i), id=i)
 			
-			self.timer=wx.Timer(self, id=i)	
+			self.src_timer=wx.Timer(self, id=i)
+		if 1: #Src Timer
+			i=wx.NewId()			
+			self.Bind(wx.EVT_TIMER, lambda event, i=i: self.trg_TimerHandler(event, the_id=i), id=i)
+			
+			self.trg_timer=wx.Timer(self, id=i)	
+			
 		if 1: #Common
 			
 			self.core_args_panel = wx.Panel(self, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
@@ -3820,24 +3829,44 @@ class pnl_args(wx.Panel):
 		self.args_vbox.Add(self.args_hbox,0,flag=wx.ALL|wx.EXPAND|wx.GROW)
 		self.SetSizer(self.args_vbox)
 		self.Fit()
-		sub(self.OnCloseExec, "close_exec")
-		self.count=0
-	def TimerHandler0(self, event,the_id):
-		self.count = self.count + 1
-		print 'Closing in %d' % (5-self.count)
-		if self.count >= 5:
-			self.close_exec(self.p)
-			self.count = 0
+		#sub(self.OnCloseExec, "close_exec")
+		self.src_count=0
+		self.trg_count=0
+	def src_TimerHandler(self, event,the_id):
+		#print  'the_id', the_id
+		self.src_count = self.src_count + 1
+		msg= 'Closing in %d' % (5-self.src_count)
+		hwnd= self.get_hwnds_for_pid (self.src_p.pid)
+		if not hwnd or self.src_count >= 5:
+			self.close_exec(self.src_p)
+			self.src_count = 0
+			self.src_timer.Stop()
+			self.src_btn.Enable(True)
+			self.src_btn.SetLabel('Test connect')
+		else:			
+			self.src_btn.SetLabel(msg)
 		#print self.count
 		#self.gauge.Show()
 		#print '||||||||||||||||| setting count', self.count
 		
 		#self.gauge.SetValue(self.count)
 		#self.gauge.Pulse()	
-		
-	def OnCloseExec(self, data, extra1, extra2=None):		
-		p = data	
-		self.close_exec(p)
+	def trg_TimerHandler(self, event,the_id):
+		#print  'the_id', the_id
+		self.trg_count = self.trg_count + 1
+		msg= 'Closing in %d' % (5-self.trg_count)
+		hwnd= self.get_hwnds_for_pid (self.trg_p.pid)
+		if not hwnd or self.trg_count >= 5:
+			self.close_exec(self.trg_p)
+			self.trg_count = 0
+			self.trg_timer.Stop()
+			self.trg_btn.Enable(True)
+			self.trg_btn.SetLabel('Test connect')
+		else:			
+			self.trg_btn.SetLabel(msg)		
+
+
+
 	def OnTestConnect(self, evt):
 		print 'OnTestConnect'
 		
@@ -3845,10 +3874,12 @@ class pnl_args(wx.Panel):
 		#print r'start "%s" cmd.exe  /k "%s"' % (title, cmd)
 		#os.system(r'start "%s" cmd.exe  /k "%s"' % (title, cmd))
 		tc = evt.GetEventObject()
-		title='%s connection.' % tc.Name.upper()
-		print title
+		
+		#print title
 		cmd=None
+		title='Connection test'
 		if tc.Name=='source':
+			title='%s (%s) connection test.' % (conf.dbs[self.copy_vector[0]],tc.Name)
 			cmd=r"%s\%s %s/%s@%s @C:\Users\alex_buz\Documents\GitHub\DataBuddy\test\test_connnect\Oracle.sql" % (
 			self.obj['source_client_home'][1].GetValue(), #path to spooler 
 			conf.dbtools['SPOOLER'][self.copy_vector[0]], #spooler name
@@ -3858,6 +3889,7 @@ class pnl_args(wx.Panel):
 			)
 			#print cmd
 		if tc.Name=='target':
+			title='%s (%s) connection test.' % (conf.dbs[self.copy_vector[1]],tc.Name)
 			cmd=r"%s\%s %s/%s@%s @C:\Users\alex_buz\Documents\GitHub\DataBuddy\test\test_connnect\Oracle.sql" % (
 			self.obj['target_client_home'][1].GetValue(), #path to spooler 
 			conf.dbtools['SPOOLER'][self.copy_vector[1]], #spooler name
@@ -3867,8 +3899,7 @@ class pnl_args(wx.Panel):
 			)
 		#print cmd
 		assert cmd, 'command is not set'
-		if 0:
-			self.parent.exec_cmd(title, cmd)
+
 		#evt.Skip()
 		#cmd=r'cmd.exe  /k %s' % ( cmd)
 		cmd=r'%s' % ( cmd)
@@ -3887,7 +3918,7 @@ class pnl_args(wx.Panel):
 			lexer.commenters = ''
 			cfg = list(lexer)
 			#cfg=['start',"'%s'" % title] + cfg
-			#e(0)
+			#C:\app\alex_buz\product\11.2.0\dbhome_2\BIN\sqlplus.exe SCOTT/tiger2@orcl @C:\Users\alex_buz\Documents\GitHub\DataBuddy\test\test_connnect\Oracle.sql
 			if 0:
 				cfg=['start',
  "'SOURCE connection.'",
@@ -3895,51 +3926,62 @@ class pnl_args(wx.Panel):
  '/k',
  'C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN\\sqlplus.exe SCOTT/tiger2@orcl @C:\\Users\\alex_buz\\Documents\\GitHub\\DataBuddy\\test\\test_connnect\\Oracle.sql']
 			pprint(cfg)	
-		print  cmd
+		#print  cmd
 		p = Popen(cfg, creationflags=CREATE_NEW_CONSOLE)
+		#time.sleep(1)
+		hwnd=None
+		while not hwnd:
+			hwnd=self.get_hwnds_for_pid(p.pid)
+		print hwnd
+		
+		win32gui.SetWindowText (hwnd[0], title)
 		#p = Popen(["C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN\\sqlplus.exe",'SCOTT/tiger2@orcl', '@C:\\Users\\alex_buz\\Documents\\GitHub\\DataBuddy\\test\\test_connnect\\Oracle.sql'],creationflags=CREATE_NEW_CONSOLE)
-		print p
-		print p.pid
-		self.timer.Start(500)
+		#print p
+		#print p.pid
+		#btn = evt.GetEventObject()
+		
+		tc.Enable(False)
+		if tc.Name=='source':
+			self.src_p=p
+			self.src_btn=tc
+			self.src_timer.Start(1000)
+		if tc.Name=='target':
+			self.trg_p=p
+			self.trg_btn=tc
+			self.trg_timer.Start(1000)
+
 		#self.timer.Stop()
-		self.p=p
+		
 		#send('close_exec', p)
 		#wnd = subprocess.Popen ([cmd], shell=True)
+	def get_hwnds_for_pid (self, pid):
+		def callback (hwnd, hwnds):
+			if win32gui.IsWindowVisible (hwnd) and win32gui.IsWindowEnabled (hwnd):
+				_, found_pid = win32process.GetWindowThreadProcessId (hwnd)
+				if found_pid == pid:
+					hwnds.append (hwnd)
+			return True
 
+		hwnds = []
+		win32gui.EnumWindows (callback, hwnds)
+		#print hwnds
+		return hwnds
 	def close_exec(self,p):
+
 		if 1:
-			import win32con
-			import win32gui
-			import win32process
-			
+			#import subprocess
+			#import time
+			#notepad = subprocess.Popen ([r"notepad.exe"])
+			#
+			# sleep to give the window time to appear
+			#
+			#time.sleep (5)
 
-			def get_hwnds_for_pid (pid):
-				def callback (hwnd, hwnds):
-					if win32gui.IsWindowVisible (hwnd) and win32gui.IsWindowEnabled (hwnd):
-						_, found_pid = win32process.GetWindowThreadProcessId (hwnd)
-						if found_pid == pid:
-							hwnds.append (hwnd)
-					return True
-
-				hwnds = []
-				win32gui.EnumWindows (callback, hwnds)
-				print hwnds
-				return hwnds
-
-			if 1:
-				#import subprocess
-				import time
-				#notepad = subprocess.Popen ([r"notepad.exe"])
-				#
-				# sleep to give the window time to appear
-				#
-				#time.sleep (5)
-
-				for hwnd in get_hwnds_for_pid (p.pid):
-					print hwnd, "=>", win32gui.GetWindowText (hwnd)
-					#win32gui.ShowWindow(hwnd, win32con.SW_MINIMIZE)
-					win32gui.SendMessage (hwnd, win32con.WM_CLOSE, 0, 0)
-		self.timer.Stop()
+			for hwnd in self.get_hwnds_for_pid (p.pid):
+				#print hwnd, "=>", win32gui.GetWindowText (hwnd)
+				#win32gui.ShowWindow(hwnd, win32con.SW_MINIMIZE)
+				win32gui.SendMessage (hwnd, win32con.WM_CLOSE, 0, 0)
+		
 	def OnDirButton(self, event):
 		print 'OnDirButton'
 	def onKeyPress(self, event):

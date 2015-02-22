@@ -1,2 +1,2 @@
-SELECT 'Connect OK.' status FROM DUAL;
-exit;
+--SELECT 'Connect OK.' status FROM DUAL;
+SELECT  * FROM Timestamp_test_from;
