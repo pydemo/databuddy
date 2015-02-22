@@ -2,18 +2,7 @@
 ##qc32.exe -h ABOUT 
 ##
 ----------------------------------------------------------------------
-QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/17 12:25:25) [32bit]
+QueryCopy for Oracle 11G (v1.23.9, beta, 2015/02/22 10:28:04) [32bit]
 Copyright (c): 2014 Alex Buzunov, All rights reserved.
 Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
 ----------------------------------------------------------------------
-#
-#
-#
-# "QueryCopy for Oracle 11G" version 1.23.9 (32bit)
-#
-# Query/Table/Partition/Sub-Partition data migrator for "Oracle 11G" database.
-#
-#
-#
-
-

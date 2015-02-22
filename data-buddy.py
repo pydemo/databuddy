@@ -3446,6 +3446,11 @@ class pnl_args(wx.Panel):
 		self.tmpl=tmpl
 		self.obj={}
 		self.tc_length=190
+		if 1:
+			i=wx.NewId()			
+			self.Bind(wx.EVT_TIMER, lambda event, i=i: self.TimerHandler0(event, the_id=i), id=i)
+			
+			self.timer=wx.Timer(self, id=i)	
 		if 1: #Common
 			
 			self.core_args_panel = wx.Panel(self, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
@@ -3505,7 +3510,7 @@ class pnl_args(wx.Panel):
 				if k in ['from_passwd']:
 					style=wx.TE_PASSWORD
 				length=self.tc_length
-				if k in ['input_dirs', 'source_client_home']:
+				if k in ['input_dirs','input_files', 'source_client_home']:
 					length=168
 				if k in ['from_passwd']:
 					length=168
@@ -3514,7 +3519,7 @@ class pnl_args(wx.Panel):
 					self.obj[k]= [wx.StaticText(from_args_panel, label=k), wx.TextCtrl(from_args_panel,value=sval, style=style, size=(length,22))]
 				fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				
-				if k in ['input_file']:
+				if k in ['input_files']:
 					
 					imageFile = os.path.join(home,"bmp_source/refresh_icon_16_grey2.png")
 					image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
@@ -3526,9 +3531,12 @@ class pnl_args(wx.Panel):
 					#global home
 					dir =home
 					#print sval
-					if os.path.isdir(sval):
-						dir=sval
-					self.gen_bind(wx.EVT_BUTTON,self.obj[k][2], self.OnInputDir,[self.obj[k][1],dir])
+					ffile=sval.split(';')[0]
+					if os.path.isfile(ffile):
+						dir=os.path.dirname(ffile) 
+					print sval
+					print dir
+					self.gen_bind(wx.EVT_BUTTON,self.obj[k][2], self.OnInputFiles,[self.obj[k][1],dir])
 					#self.obj[k][2].Bind(wx.EVT_BUTTON, self.OnDirButton)					
 					#self.Bind(wx.EVT_BUTTON, self.OnInputDir, self.btn_dir)
 					bbox = wx.BoxSizer(wx.HORIZONTAL)
@@ -3537,7 +3545,7 @@ class pnl_args(wx.Panel):
 					bbox.Add(self.obj[k][2], 0, flag=wx.ALIGN_CENTER, border=5)	
 					#fgs.Add(self.obj[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	
 					fgs.Add(bbox, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)				
-				if k in ['input_dirs', 'source_client_home']:
+				elif k in ['input_dirs', 'source_client_home']:
 					
 					imageFile = os.path.join(home,"bmp_source/refresh_icon_16_grey2.png")
 					image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
@@ -3812,6 +3820,24 @@ class pnl_args(wx.Panel):
 		self.args_vbox.Add(self.args_hbox,0,flag=wx.ALL|wx.EXPAND|wx.GROW)
 		self.SetSizer(self.args_vbox)
 		self.Fit()
+		sub(self.OnCloseExec, "close_exec")
+		self.count=0
+	def TimerHandler0(self, event,the_id):
+		self.count = self.count + 1
+		print 'Closing in %d' % (5-self.count)
+		if self.count >= 5:
+			self.close_exec(self.p)
+			self.count = 0
+		#print self.count
+		#self.gauge.Show()
+		#print '||||||||||||||||| setting count', self.count
+		
+		#self.gauge.SetValue(self.count)
+		#self.gauge.Pulse()	
+		
+	def OnCloseExec(self, data, extra1, extra2=None):		
+		p = data	
+		self.close_exec(p)
 	def OnTestConnect(self, evt):
 		print 'OnTestConnect'
 		
@@ -3841,8 +3867,79 @@ class pnl_args(wx.Panel):
 			)
 		#print cmd
 		assert cmd, 'command is not set'
-		self.parent.exec_cmd(title, cmd)
+		if 0:
+			self.parent.exec_cmd(title, cmd)
 		#evt.Skip()
+		#cmd=r'cmd.exe  /k %s' % ( cmd)
+		cmd=r'%s' % ( cmd)
+		print cmd
+		from subprocess import Popen, PIPE,CREATE_NEW_CONSOLE
+		cfg=[]
+		if 1:
+			import shlex 
+			cmd2=''.join(cmd.split('^\n'))
+			#print cmd
+			lexer=shlex.shlex(cmd2)
+			#lexer = shlex.shlex(input)
+			lexer.quotes = '"'
+			#lexer.wordchars += '\''
+			lexer.whitespace_split = True
+			lexer.commenters = ''
+			cfg = list(lexer)
+			#cfg=['start',"'%s'" % title] + cfg
+			#e(0)
+			if 0:
+				cfg=['start',
+ "'SOURCE connection.'",
+ 'cmd.exe',
+ '/k',
+ 'C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN\\sqlplus.exe SCOTT/tiger2@orcl @C:\\Users\\alex_buz\\Documents\\GitHub\\DataBuddy\\test\\test_connnect\\Oracle.sql']
+			pprint(cfg)	
+		print  cmd
+		p = Popen(cfg, creationflags=CREATE_NEW_CONSOLE)
+		#p = Popen(["C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN\\sqlplus.exe",'SCOTT/tiger2@orcl', '@C:\\Users\\alex_buz\\Documents\\GitHub\\DataBuddy\\test\\test_connnect\\Oracle.sql'],creationflags=CREATE_NEW_CONSOLE)
+		print p
+		print p.pid
+		self.timer.Start(500)
+		#self.timer.Stop()
+		self.p=p
+		#send('close_exec', p)
+		#wnd = subprocess.Popen ([cmd], shell=True)
+
+	def close_exec(self,p):
+		if 1:
+			import win32con
+			import win32gui
+			import win32process
+			
+
+			def get_hwnds_for_pid (pid):
+				def callback (hwnd, hwnds):
+					if win32gui.IsWindowVisible (hwnd) and win32gui.IsWindowEnabled (hwnd):
+						_, found_pid = win32process.GetWindowThreadProcessId (hwnd)
+						if found_pid == pid:
+							hwnds.append (hwnd)
+					return True
+
+				hwnds = []
+				win32gui.EnumWindows (callback, hwnds)
+				print hwnds
+				return hwnds
+
+			if 1:
+				#import subprocess
+				import time
+				#notepad = subprocess.Popen ([r"notepad.exe"])
+				#
+				# sleep to give the window time to appear
+				#
+				#time.sleep (5)
+
+				for hwnd in get_hwnds_for_pid (p.pid):
+					print hwnd, "=>", win32gui.GetWindowText (hwnd)
+					#win32gui.ShowWindow(hwnd, win32con.SW_MINIMIZE)
+					win32gui.SendMessage (hwnd, win32con.WM_CLOSE, 0, 0)
+		self.timer.Stop()
 	def OnDirButton(self, event):
 		print 'OnDirButton'
 	def onKeyPress(self, event):
@@ -3935,18 +4032,43 @@ class pnl_args(wx.Panel):
 			dlg.Destroy()
 			self.set_dirs(dir_obj, paths)
 			#print dir
-	def OnInputFile(self, evt,params):
+	def OnInputFiles_del(self, evt,params):
+		print 'OnInputDir'
+		[dir_obj,dir] = params
+		if 1: #dirtype in ['input_dirs']:
+			import wx.lib.agw.multidirdialog as MDD
+			dlg = MDD.MultiFileDialog(None, title="Choose CVS files:", defaultPath=dir,
+							 agwStyle=MDD.DD_MULTIPLE|MDD.DD_DIR_MUST_EXIST)
+
+			if dlg.ShowModal() != wx.ID_OK:
+				print("You Cancelled The Dialog!")
+				dlg.Destroy()
+				return
+
+			paths = dlg.GetPaths()
+			for indx, path in enumerate(paths):
+				print("Path %d: %s"%(indx+1, path))
+			
+			dlg.Destroy()
+			self.set_dirs(dir_obj, paths)
+			#print dir
+			
+	def OnInputFiles(self, evt,params):
 		print 'OnInputDir'
 		[file_obj,dir] = params
 		dlg = wx.FileDialog(self, "Choose input CSV file", dir, "",
-                                       "*.*", wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
+                                       "*.*", wx.FD_OPEN | wx.FD_MULTIPLE|wx.FD_FILE_MUST_EXIST)
 		if dlg.ShowModal() != wx.ID_OK:
 			print("You Cancelled The Dialogue!")
 			dlg.Destroy()
 			return
-		file = dlg.GetPath()
+		files = dlg.GetPaths()
+		for indx, path in enumerate(files):
+				print("File %d: %s"%(indx+1, path))
+		#pprint files
 		dlg.Destroy()
-		file_obj.SetValue(file)		
+		self.set_files(file_obj, files)
+			
 	def OnOutputFile(self, evt,params):
 		print 'OnInputDir'
 		[file_obj,dir] = params
@@ -3959,6 +4081,16 @@ class pnl_args(wx.Panel):
 		file = dlg.GetPath()
 		dlg.Destroy()
 		file_obj.SetValue(file)	
+	def set_files(self, file_obj, files):
+		path=[]
+		#clean-up
+		for file in files:
+			if file.startswith('OS '):
+				path.append(file.strip('OS ').replace('(','').replace(')',''))
+			else:
+				path.append(file)
+		
+		file_obj.SetValue(';'.join(path))
 	def set_dirs(self, dir_obj, dirs):
 		path=[]
 		#clean-up
@@ -3969,6 +4101,7 @@ class pnl_args(wx.Panel):
 				path.append(dir)
 		
 		dir_obj.SetValue(';'.join(path))
+		
 	def gen_bind(self, type, instance, handler, *args, **kwargs):
 		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)			
 		
