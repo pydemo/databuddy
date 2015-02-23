@@ -3138,6 +3138,7 @@ class dummy_args(wx.Panel):
 		self.args_vbox = wx.BoxSizer(wx.VERTICAL)
 		self.args_hbox = wx.BoxSizer(wx.HORIZONTAL)
 		self.obj={}
+		
 		self.api_args=[{'copy_vector': ('-w',
 						  '--copy_vector',
 						  'dbtde2maria',
@@ -3624,11 +3625,14 @@ class pnl_args(wx.Panel):
 			
 			
 			if not self.copy_vector[0].startswith('CSV'):
-				lbl="Test connect"					
-				btn_test_sconnect = wx.Button(from_args_panel, label=lbl, style=wx.BU_EXACTFIT)
-				fgs.Add(btn_test_sconnect, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-				btn_test_sconnect.SetName('source')
-				btn_test_sconnect.Bind(wx.EVT_BUTTON, self.OnTestConnect)
+				lbl="Test connect"
+				sn=self.parent.session_name
+				tc=self.parent.testconn
+				btn=wx.Button(from_args_panel, label=lbl, style=wx.BU_EXACTFIT)	
+				#tc[sn]['source'][0]
+				fgs.Add(btn, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				btn.SetName('source')
+				btn.Bind(wx.EVT_BUTTON, self.OnTestConnect)
 			hbox.Add(fgs, 1, flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=5)	
 			from_args_panel.SetSizer(hbox)
 			
@@ -4207,6 +4211,8 @@ class DataBuddy(wx.Frame):
 		panel=self.panel
 		sizer = wx.GridBagSizer(5, 5)
 		self.home=home
+		self.testconn={}
+		
 		self.copy_vector=None
 		userhome = os.path.expanduser('~')
 		self.save_to_dir=os.path.join(userhome,'sessions')
@@ -4477,16 +4483,70 @@ class DataBuddy(wx.Frame):
 		#print sname
 		self.Freeze()
 		self.enableForm()
+		if 1:
+			if not cv_from.startswith('CSV'):
+						
+				sn = sname
+				tc=self.testconn
+				if not sn in tc.keys():
+					tc[sn]={}
+				if not 'source' in tc[sn].keys():
+					tc[sn]['source']=[None,None]
+					i=wx.NewId()		
+					def TimerHandler(self, event,the_id):
+						#print  'the_id', the_id
+						self.src_count = self.src_count + 1
+						msg= 'Closing in %d' % (5-self.src_count)
+						hwnd= self.get_hwnds_for_pid (self.src_p.pid)
+						if not hwnd or self.src_count >= 5:
+							self.close_exec(self.src_p)
+							if 0:
+							self.src_count = 0
+							self.src_timer.Stop()
+							self.src_btn.Enable(True)
+							self.src_btn.SetLabel('Test connect')
+						else:			
+							self.src_btn.SetLabel(msg)
+			
+					self.Bind(wx.EVT_TIMER, lambda event, i=i: self.TimerHandler(event, the_id=i), id=i)
+			
+					self.src_timer=wx.Timer(self, id=i)
+		if 1: #Src Timer
+			i=wx.NewId()			
+			self.Bind(wx.EVT_TIMER, lambda event, i=i: self.trg_TimerHandler(event, the_id=i), id=i)
+			
+			self.trg_timer=wx.Timer(self, id=i)	
+			
+					#tc[sn]['source'][0] = wx.Button(self, label=lbl, style=wx.BU_EXACTFIT)	
+				pprint (tc)
+				#e(0)
+				#self.testconn				
+				#btn=tc[sn]['source'][0]
+				
 		self.open_session([sname,[cv_from,cv_to],type,tmpl,sdir,fname])
 		self.btn_delete.Enable(True)
 		self.btn_new.Enable(True)
 		self.btn_save.Enable(False)
+
+				
 		#self.Fit()
 		self.Layout()
 		#self.Refresh()
 		self.Thaw()
 		#
-		#self.Refresh()		
+		#self.Refresh()	
+	def get_hwnds_for_pid (self, pid):
+		def callback (hwnd, hwnds):
+			if win32gui.IsWindowVisible (hwnd) and win32gui.IsWindowEnabled (hwnd):
+				_, found_pid = win32process.GetWindowThreadProcessId (hwnd)
+				if found_pid == pid:
+					hwnds.append (hwnd)
+			return True
+
+		hwnds = []
+		win32gui.EnumWindows (callback, hwnds)
+		#print hwnds
+		return hwnds		
 	def enableForm(self):
 		self.btn_new.Enable(True)
 		self.btn_clearall.Enable(True)
