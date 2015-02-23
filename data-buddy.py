@@ -3433,7 +3433,7 @@ class default_args(wx.Panel):
 class pnl_args(wx.Panel):
 	"""Arguments"""
 	
-	def __init__(self, parent, copy_vector,tmpl,args_api,style):
+	def __init__(self, parent, copy_vector,tmpl,the_id,args_api,style):
 		wx.Panel.__init__(self, parent, -1, style=style)
 		#self.frame=frame
 		global home
@@ -3445,17 +3445,18 @@ class pnl_args(wx.Panel):
 		self.args_vbox = wx.BoxSizer(wx.VERTICAL)
 		self.args_hbox = wx.BoxSizer(wx.HORIZONTAL)
 		self.args=args_api
+		self.the_id=the_id
 		self.cargs,self.fargs,self.targs=self.args
 		self.copy_vector=copy_vector
 		self.tmpl=tmpl
 		self.obj={}
 		self.tc_length=190
-		if 1: #Src Timer
+		if 0: #Src Timer
 			i=wx.NewId()			
 			self.Bind(wx.EVT_TIMER, lambda event, i=i: self.src_TimerHandler(event, the_id=i), id=i)
 			
 			self.src_timer=wx.Timer(self, id=i)
-		if 1: #Src Timer
+		if 0: #Src Timer
 			i=wx.NewId()			
 			self.Bind(wx.EVT_TIMER, lambda event, i=i: self.trg_TimerHandler(event, the_id=i), id=i)
 			
@@ -3948,7 +3949,18 @@ class pnl_args(wx.Panel):
 		if tc.Name=='source':
 			self.src_p=p
 			self.src_btn=tc
-			self.src_timer.Start(1000)
+			#self.timers={}
+			#self.counters={}
+			#self.th={}
+			#self.the_id=None
+			the_id=self.the_id
+			self.parent.btn[the_id]=tc
+			self.parent.p[the_id]=p
+			btn=None
+			if tc:
+				btn=tc
+			#self.parent.Bind(wx.EVT_TIMER, lambda event, i=the_id: self.parent.th[the_id] (event, the_id), id=the_id)
+			self.parent.timers[the_id].Start(1000)
 		if tc.Name=='target':
 			self.trg_p=p
 			self.trg_btn=tc
@@ -4436,6 +4448,12 @@ class DataBuddy(wx.Frame):
 		(self.cargs,self.fargs,self.targs)=(None, None, None)
 		#print self.GetSize()
 		sub(self.onDeleteSessions, "delete_sessions")
+		self.timers={}
+		self.counters={}
+		self.th={}
+		self.btn={}
+		self.p={}
+		self.the_id=None
 	def openDefault(self, sname):
 		print sname
 		
@@ -4492,36 +4510,49 @@ class DataBuddy(wx.Frame):
 					tc[sn]={}
 				if not 'source' in tc[sn].keys():
 					tc[sn]['source']=[None,None]
-					i=wx.NewId()		
-					def TimerHandler(self, event,the_id):
-						#print  'the_id', the_id
-						self.src_count = self.src_count + 1
-						msg= 'Closing in %d' % (5-self.src_count)
-						hwnd= self.get_hwnds_for_pid (self.src_p.pid)
-						if not hwnd or self.src_count >= 5:
-							self.close_exec(self.src_p)
-							if 0:
-							self.src_count = 0
-							self.src_timer.Stop()
-							self.src_btn.Enable(True)
-							self.src_btn.SetLabel('Test connect')
-						else:			
-							self.src_btn.SetLabel(msg)
-			
-					self.Bind(wx.EVT_TIMER, lambda event, i=i: self.TimerHandler(event, the_id=i), id=i)
-			
-					self.src_timer=wx.Timer(self, id=i)
-		if 1: #Src Timer
+					i=wx.NewId()
+					self.the_id=i
+					self.timers[i]=wx.Timer(self, id=i)
+					self.counters[i]=0					
+					def TimerHandler(event,the_id):
+					
+						self.counters[the_id] = self.counters[the_id] + 1
+						
+						#print self.counters[the_id], the_id
+						btn=self.btn[the_id]
+						#print btn
+						p=self.p[the_id]
+						if 1:
+							
+							msg= 'Closing in %d' % (5-self.counters[the_id])
+							hwnd= self.get_hwnds_for_pid (p.pid)
+							if not hwnd or self.counters[the_id] >= 5:
+								self.close_exec(p)
+								if 1:
+									self.counters[the_id] = 0
+									self.timers[the_id].Stop()
+									if btn:										
+										btn.Enable(True)
+										btn.SetLabel('Test connect')
+							else:			
+								if btn:
+									btn.SetLabel(msg)
+					
+					self.th[i]=TimerHandler
+					self.Bind(wx.EVT_TIMER, lambda event, i=i: TimerHandler (event, the_id=i), id=i)
+					
+					
+		if 0: #Src Timer
 			i=wx.NewId()			
 			self.Bind(wx.EVT_TIMER, lambda event, i=i: self.trg_TimerHandler(event, the_id=i), id=i)
 			
 			self.trg_timer=wx.Timer(self, id=i)	
 			
-					#tc[sn]['source'][0] = wx.Button(self, label=lbl, style=wx.BU_EXACTFIT)	
-				pprint (tc)
-				#e(0)
-				#self.testconn				
-				#btn=tc[sn]['source'][0]
+			#tc[sn]['source'][0] = wx.Button(self, label=lbl, style=wx.BU_EXACTFIT)	
+			pprint (tc)
+			#e(0)
+			#self.testconn				
+			#btn=tc[sn]['source'][0]
 				
 		self.open_session([sname,[cv_from,cv_to],type,tmpl,sdir,fname])
 		self.btn_delete.Enable(True)
@@ -4535,6 +4566,21 @@ class DataBuddy(wx.Frame):
 		self.Thaw()
 		#
 		#self.Refresh()	
+	def close_exec(self,p):
+
+		if 1:
+			#import subprocess
+			#import time
+			#notepad = subprocess.Popen ([r"notepad.exe"])
+			#
+			# sleep to give the window time to appear
+			#
+			#time.sleep (5)
+
+			for hwnd in self.get_hwnds_for_pid (p.pid):
+				#print hwnd, "=>", win32gui.GetWindowText (hwnd)
+				#win32gui.ShowWindow(hwnd, win32con.SW_MINIMIZE)
+				win32gui.SendMessage (hwnd, win32con.WM_CLOSE, 0, 0)		
 	def get_hwnds_for_pid (self, pid):
 		def callback (hwnd, hwnds):
 			if win32gui.IsWindowVisible (hwnd) and win32gui.IsWindowEnabled (hwnd):
@@ -4814,7 +4860,7 @@ class DataBuddy(wx.Frame):
 			#self.args_panel.Hide()
 			#self.args_panel.create_cargs(self.cargs)
 			#self.args_panel.Destroy()
-			self.args_panel= pnl_args(self,self.copy_vector,self.tmpl,(self.cargs,self.fargs,self.targs),style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+			self.args_panel= pnl_args(self,self.copy_vector,self.tmpl,self.the_id,(self.cargs,self.fargs,self.targs),style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			self.nb.DeletePage(0)
 			self.nb.DeletePage(0)
 			#self.args_panel.Destroy()
@@ -4844,7 +4890,7 @@ class DataBuddy(wx.Frame):
 			#self.args_panel.Hide()
 			#self.args_panel.create_cargs(self.cargs)
 			#self.args_panel.Destroy()
-			self.args_panel= pnl_args(self,copy_vector,tmpl,api_args,style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+			self.args_panel= pnl_args(self,copy_vector,tmpl,self.the_id,api_args,style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			self.nb.DeletePage(0)
 			self.nb.DeletePage(0)
 			#self.args_panel.Destroy()
