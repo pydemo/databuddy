@@ -3628,12 +3628,17 @@ class pnl_args(wx.Panel):
 			if not self.copy_vector[0].startswith('CSV'):
 				lbl="Test connect"
 				sn=self.parent.session_name
-				tc=self.parent.testconn
+				#tc=self.parent.testconn
 				btn=wx.Button(from_args_panel, label=lbl, style=wx.BU_EXACTFIT)	
 				#tc[sn]['source'][0]
 				fgs.Add(btn, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				btn.SetName('source')
 				btn.Bind(wx.EVT_BUTTON, self.OnTestConnect)
+				if self.parent.btn.has_key(self.the_id[0]) and self.parent.counters[self.the_id[0]]>0:
+					btn.Enable(False)
+					lbl='Closing in %d' % (self.parent.closing_in-self.parent.counters[self.the_id[0]])
+					btn.SetLabel('%s: %s' % (sn,lbl))
+					self.parent.btn[self.the_id[0]]=btn
 			hbox.Add(fgs, 1, flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=5)	
 			from_args_panel.SetSizer(hbox)
 			
@@ -3760,11 +3765,23 @@ class pnl_args(wx.Panel):
 			
 			if not self.copy_vector[1].startswith('CSV'):	
 				lbl="Test connect"			
-				btn_test_tconnect = wx.Button(to_args_panel, label=lbl, style=wx.BU_EXACTFIT)
-				btn_test_tconnect.SetName('target')
-				btn_test_tconnect.Bind(wx.EVT_BUTTON, self.OnTestConnect)
-				
-				fgs.Add(btn_test_tconnect, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+
+				sn=self.parent.session_name
+				#tc=self.parent.testconn
+				btn=wx.Button(to_args_panel, label=lbl, style=wx.BU_EXACTFIT)	
+				#tc[sn]['source'][0]
+				fgs.Add(btn, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				btn.SetName('target')
+				btn.Bind(wx.EVT_BUTTON, self.OnTestConnect)
+				id=self.the_id[1]
+				if self.parent.btn.has_key(id) and self.parent.counters[id]>0:
+					btn.Enable(False)
+					lbl='Closing in %d' % (self.parent.closing_in-self.parent.counters[id])
+					btn.SetLabel('%s: %s' % (sn,lbl))
+					self.parent.btn[id]=btn
+
+					
+				#fgs.Add(btn, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				
 			hbox.Add(fgs, 1, flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=5)	
 			to_args_panel.SetSizer(hbox)
@@ -3947,24 +3964,39 @@ class pnl_args(wx.Panel):
 		
 		tc.Enable(False)
 		if tc.Name=='source':
-			self.src_p=p
-			self.src_btn=tc
+			#self.src_p=p
+			#self.src_btn=tc
 			#self.timers={}
 			#self.counters={}
 			#self.th={}
 			#self.the_id=None
-			the_id=self.the_id
+			the_id=self.the_id[0]
 			self.parent.btn[the_id]=tc
+			sn=self.parent.session_name
 			self.parent.p[the_id]=p
+			#self.parent.q.append([sn,self.the_id])
 			btn=None
-			if tc:
-				btn=tc
+			#if tc:
+			#	btn=tc
 			#self.parent.Bind(wx.EVT_TIMER, lambda event, i=the_id: self.parent.th[the_id] (event, the_id), id=the_id)
 			self.parent.timers[the_id].Start(1000)
 		if tc.Name=='target':
-			self.trg_p=p
-			self.trg_btn=tc
-			self.trg_timer.Start(1000)
+			#self.src_p=p
+			#self.src_btn=tc
+			#self.timers={}
+			#self.counters={}
+			#self.th={}
+			#self.the_id=None
+			the_id=self.the_id[1]
+			self.parent.btn[the_id]=tc
+			sn=self.parent.session_name
+			self.parent.p[the_id]=p
+			#self.parent.q.append([sn,self.the_id])
+			btn=None
+			#if tc:
+			#	btn=tc
+			#self.parent.Bind(wx.EVT_TIMER, lambda event, i=the_id: self.parent.th[the_id] (event, the_id), id=the_id)
+			self.parent.timers[the_id].Start(1000)
 
 		#self.timer.Stop()
 		
@@ -4223,7 +4255,7 @@ class DataBuddy(wx.Frame):
 		panel=self.panel
 		sizer = wx.GridBagSizer(5, 5)
 		self.home=home
-		self.testconn={}
+		self.sids={}
 		
 		self.copy_vector=None
 		userhome = os.path.expanduser('~')
@@ -4454,6 +4486,8 @@ class DataBuddy(wx.Frame):
 		self.btn={}
 		self.p={}
 		self.the_id=None
+		self.q=[]
+		self.closing_in=5
 	def openDefault(self, sname):
 		print sname
 		
@@ -4495,65 +4529,47 @@ class DataBuddy(wx.Frame):
 			self.btn_save.Enable(True)
 		event.Skip()
 		return
+	def TimerHandler(self, event, the_id):
+	
+		self.counters[the_id] = self.counters[the_id] + 1
+		#print self.counters[the_id], the_id
+		#if self.counters[the_id]>10:
+		#	self.timers[the_id].Stop()
+		if 1:
+			#print self.counters[the_id], the_id
+			btn=self.btn[the_id]
+			#print btn
+			#print the_id, self.session_name, self.args_panel.the_id
+			sn=self.session_name
+			p=self.p[the_id]
+			#print self.timers
+			msg= 'Closing in %d' % (self.closing_in-self.counters[the_id])
+			hwnd= self.get_hwnds_for_pid (p.pid)
+			
+			if not hwnd or self.counters[the_id] >= self.closing_in:
+				self.close_exec(p)
+				if 1:
+					self.counters[the_id] = 0
+					self.timers[the_id].Stop()
+					
+					if btn:										
+						btn.Enable(True)
+						btn.SetLabel('Test connect')
+						self.btn[the_id]=None
+			else:			
+				if btn and self.counters[the_id]>0:
+					print the_id, self.counters[the_id],msg
+					btn.Enable(False)
+					win32gui.SetWindowText (hwnd[0], '%s: %s' %(self.session_name,msg))
+					btn.SetLabel(msg)
+		
 	def onOpenSession(self, data, extra1, extra2=None):
 		
 		(sname,cv_from,cv_to,type,tmpl,sdir, fname) = data
 		#print sname
 		self.Freeze()
 		self.enableForm()
-		if 1:
-			if not cv_from.startswith('CSV'):
-						
-				sn = sname
-				tc=self.testconn
-				if not sn in tc.keys():
-					tc[sn]={}
-				if not 'source' in tc[sn].keys():
-					tc[sn]['source']=[None,None]
-					i=wx.NewId()
-					self.the_id=i
-					self.timers[i]=wx.Timer(self, id=i)
-					self.counters[i]=0					
-					def TimerHandler(event,the_id):
-					
-						self.counters[the_id] = self.counters[the_id] + 1
-						
-						#print self.counters[the_id], the_id
-						btn=self.btn[the_id]
-						#print btn
-						p=self.p[the_id]
-						if 1:
-							
-							msg= 'Closing in %d' % (5-self.counters[the_id])
-							hwnd= self.get_hwnds_for_pid (p.pid)
-							if not hwnd or self.counters[the_id] >= 5:
-								self.close_exec(p)
-								if 1:
-									self.counters[the_id] = 0
-									self.timers[the_id].Stop()
-									if btn:										
-										btn.Enable(True)
-										btn.SetLabel('Test connect')
-							else:			
-								if btn:
-									btn.SetLabel(msg)
-					
-					self.th[i]=TimerHandler
-					self.Bind(wx.EVT_TIMER, lambda event, i=i: TimerHandler (event, the_id=i), id=i)
-					
-					
-		if 0: #Src Timer
-			i=wx.NewId()			
-			self.Bind(wx.EVT_TIMER, lambda event, i=i: self.trg_TimerHandler(event, the_id=i), id=i)
-			
-			self.trg_timer=wx.Timer(self, id=i)	
-			
-			#tc[sn]['source'][0] = wx.Button(self, label=lbl, style=wx.BU_EXACTFIT)	
-			pprint (tc)
-			#e(0)
-			#self.testconn				
-			#btn=tc[sn]['source'][0]
-				
+
 		self.open_session([sname,[cv_from,cv_to],type,tmpl,sdir,fname])
 		self.btn_delete.Enable(True)
 		self.btn_new.Enable(True)
@@ -4860,6 +4876,36 @@ class DataBuddy(wx.Frame):
 			#self.args_panel.Hide()
 			#self.args_panel.create_cargs(self.cargs)
 			#self.args_panel.Destroy()
+			ids=None
+			#print self.copy_vector
+			if 1:
+				sn = self.sname
+				if not self.copy_vector[0].startswith('CSV'):
+							
+					
+					tc=self.sids
+					#print tc
+					#if not sn in tc.keys():
+					#	tc[sn]={}
+					if not sn in tc.keys():
+						#tc[sn]['source']=[None,None]
+						ids=[wx.NewId(),wx.NewId(),wx.NewId()]
+						tc[sn]=ids
+						self.the_id=ids
+										
+						
+						for i in self.the_id:
+							if not self.timers.has_key(i):
+								self.timers[i]=wx.Timer(self, id=i)
+								self.counters[i]=0					
+							
+								#self.th[i]=self.TimerHandler
+								self.Bind(wx.EVT_TIMER, lambda event, i=i: self.TimerHandler (event, the_id=i), id=i)
+					else:
+						self.the_id=self.sids[sn]
+						
+			#print 'open_session---------------theids', ids,self.sname, self.the_id
+			#pprint (self.sids)
 			self.args_panel= pnl_args(self,self.copy_vector,self.tmpl,self.the_id,(self.cargs,self.fargs,self.targs),style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			self.nb.DeletePage(0)
 			self.nb.DeletePage(0)
