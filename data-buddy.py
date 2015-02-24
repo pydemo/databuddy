@@ -1044,7 +1044,9 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			if not self.frame.session_name==session[0]:
 				if self.frame.changed:
 					if self.frame.if_yes('Save changes to %s?' % (self.frame.session_name)):
-						
+						(sname,cv,tmpl,dname,fname)=self.frame.saveSession() 
+						send('open_session',(session))
+					else:
 						send('open_session',(session))
 				else:
 					send('open_session',(session))
@@ -4437,6 +4439,7 @@ class DataBuddy(wx.Frame):
 			os.makedirs(self.save_to_dir)
 		self.transport=os.path.join(self.home,r'%s32\%s32.exe' % (tr,tr))
 		self.args_panel = dummy_args(self,style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+		self.nb_tab=0
 		self.cmd=''
 		self.default_session=None
 		
@@ -4519,9 +4522,10 @@ class DataBuddy(wx.Frame):
 			editor = TacoTextEditor(panel)
 			editor.AppendText(self.cmd)
 			self.nb.AddPage(editor, 'Command')
-			self.nb.SetSelection(0)
+			self.nb.SetSelection(self.nb_tab)
 			self.nb.EnableTab(0,False)
 			self.nb.EnableTab(1,False)
+			self.Bind(fnb.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.onTabChanged, self.nb)
 				
 			sizer.Add(self.nb, pos=(3, 0), span=(4, 4), flag=wx.GROW|wx.EXPAND|wx.ALL, border=0)
 		if 1:
@@ -4664,7 +4668,10 @@ class DataBuddy(wx.Frame):
 		self.closing_in=5
 	def openDefault(self, sname):
 		print sname
-		
+	def onTabChanged(self, evt):
+		#print 'onTabChanged'
+		self.nb_tab= self.nb.GetSelection()
+		#self.nb_tab=
 	def onDeleteSessions(self,  data, extra1, extra2=None):
 		(items)=data
 		for k,v in items.items():
@@ -5110,6 +5117,7 @@ class DataBuddy(wx.Frame):
 			self.btn_run.SetLabel('Run')		
 			print 'open_session---------------', ids,self.sname, self.the_id
 			#pprint (self.sids)
+			nb_tab=self.nb_tab
 			self.args_panel= pnl_args(self,self.copy_vector,self.tmpl,self.the_id,(self.cargs,self.fargs,self.targs),style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			self.nb.DeletePage(0)
 			self.nb.DeletePage(0)
@@ -5118,7 +5126,8 @@ class DataBuddy(wx.Frame):
 			editor = TacoTextEditor(self.args_panel)
 			editor.AppendText(self.args_panel.get_cmd(self.transport))
 			self.nb.AddPage(editor, 'Command')
-			self.nb.SetSelection(0)
+			self.nb_tab=nb_tab
+			self.nb.SetSelection(self.nb_tab)
 			self.btn_show.Enable(True)
 			self.btn_run.Enable(True)
 			self.btn_save.Enable(True)	
