@@ -1037,8 +1037,17 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			#print self.currentItem
 			ii=self.list.GetItemData(self.currentItem)
 			session= self.list.getList()[ii]
-			#print session
-			send('open_session',(session))
+			print session
+			print self.frame.session_name
+			print self.frame.session_name==session[0]
+			#print 'self.frame.changed', self.frame.changed
+			if not self.frame.session_name==session[0]:
+				if self.frame.changed:
+					if self.frame.if_yes('Save changes to %s?' % (self.frame.session_name)):
+						
+						send('open_session',(session))
+				else:
+					send('open_session',(session))
 			
 		#else:
 		#	send('disable_all_for_delete',(cnt))
@@ -3575,8 +3584,9 @@ class pnl_args(wx.Panel):
 		self.copy_vector=copy_vector
 		self.tmpl=tmpl
 		self.obj={}
-		
+		#self.changed=False
 		self.tc_length=190
+		
 		if 0: #Src Timer
 			i=wx.NewId()			
 			self.Bind(wx.EVT_TIMER, lambda event, i=i: self.src_TimerHandler(event, the_id=i), id=i)
@@ -3887,7 +3897,7 @@ class pnl_args(wx.Panel):
 				
 					fgs.Add(self.obj[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				i+=1
-			
+				self.obj[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
 			
 			if not self.copy_vector[1].startswith('CSV'):	
 				lbl="Test connect"			
@@ -3980,6 +3990,8 @@ class pnl_args(wx.Panel):
 		#sub(self.OnCloseExec, "close_exec")
 		self.src_count=0
 		self.trg_count=0
+	#def Changed(self, boo):
+	#	self.parent.changed=True
 	def src_TimerHandler(self, event,the_id):
 		#print  'the_id', the_id
 		self.src_count = self.src_count + 1
@@ -4170,11 +4182,12 @@ class pnl_args(wx.Panel):
 	def OnDirButton(self, event):
 		print 'OnDirButton'
 	def onKeyPress(self, event):
-		#print 'changed'
+		print 'changed1'
 		
 		kc = event.GetKeyCode()
 		if not (kc == wx.WXK_TAB or kc == wx.WXK_RETURN):
 			self.parent.btn_save.Enable(True)
+			self.parent.changed=True
 		event.Skip()
 		return
 	def ClearAll(self):
@@ -4416,7 +4429,7 @@ class DataBuddy(wx.Frame):
 		sizer = wx.GridBagSizer(5, 5)
 		self.home=home
 		self.sids={}
-		
+		self.changed=False
 		self.copy_vector=None
 		userhome = os.path.expanduser('~')
 		self.save_to_dir=os.path.join(userhome,'sessions')
@@ -4683,11 +4696,12 @@ class DataBuddy(wx.Frame):
 		self.nb.EnableTab(1,False)
 		
 	def onKeyPress(self, event):
-		#print 'changed'
+		print 'changed0'
 		
 		kc = event.GetKeyCode()
 		if not (kc == wx.WXK_TAB or kc == wx.WXK_RETURN):
 			self.btn_save.Enable(True)
+			#self.parent.changed=True
 		event.Skip()
 		return
 	def TimerHandler(self, event, the_id):
@@ -4697,12 +4711,13 @@ class DataBuddy(wx.Frame):
 		#if self.counters[the_id]>10:
 		#	self.timers[the_id].Stop()
 		btn=self.btn[the_id]
+		sn=self.session_name
 		if btn.Name in ['source', 'target'] :
 			#print self.counters[the_id], the_id
 			
 			#print btn
 			#print the_id, self.session_name, self.args_panel.the_id
-			sn=self.session_name
+			
 			p=self.p[the_id]
 			#print self.timers
 			msg= 'Closing in %d' % (self.closing_in-self.counters[the_id])
@@ -4728,8 +4743,20 @@ class DataBuddy(wx.Frame):
 			#print the_id, self.the_id
 			if the_id==self.the_id[2]:
 				#print btn.Name,self.counters[the_id] 
-				msg= 'Running...(%d)' % (self.counters[the_id])
-				btn.SetLabel(msg)
+				p=self.p[the_id]
+				poll=p.poll()
+				if poll in [None]:
+					msg= 'Running...(%d)' % (self.counters[the_id])
+					btn.SetLabel(msg)
+				else:
+					btn.SetLabel('Run')
+					self.timers[the_id].Stop()
+					del self.p[the_id]
+					self.p.pop(the_id, None)
+					#del self.sids[sn][2]
+				#else:
+				#	print 'Unknown poll status %s, id %d' % (poll, the_id)
+				
 			
 	def onOpenSession(self, data, extra1, extra2=None):
 		
@@ -4742,7 +4769,7 @@ class DataBuddy(wx.Frame):
 		self.btn_delete.Enable(True)
 		self.btn_new.Enable(True)
 		self.btn_save.Enable(False)
-
+		self.changed=False
 				
 		#self.Fit()
 		self.Layout()
@@ -4930,6 +4957,7 @@ class DataBuddy(wx.Frame):
 		import pickle
 		pickle.dump( [sname,copy_vector, tmpl, args], open( save_to_file, "wb" ) )
 		self.btn_save.Enable(False)	
+		self.changed=False
 		return (sname,copy_vector, tmpl,self.save_to_dir, fname)
 	def obfuscate(self, data):
 		#pprint(data)
@@ -5071,16 +5099,16 @@ class DataBuddy(wx.Frame):
 								self.Bind(wx.EVT_TIMER, lambda event, i=i: self.TimerHandler (event, the_id=i), id=i)
 					else:
 						self.the_id=self.sids[sn]
-						self.btn_run.SetLabel('Run')
+						#self.btn_run.SetLabel('Run')
 				elif not self.copy_vector[1].startswith('CSV'):
 					self.the_id=[None,wx.NewId(),wx.NewId()]
-					self.btn_run.SetLabel('Run')
+					#self.btn_run.SetLabel('Run')
 				else:
 					self.the_id=[wx.NewId(),None,wx.NewId()]
-					self.btn_run.SetLabel('Run')
+					#self.btn_run.SetLabel('Run')
 
-					
-			#print 'open_session---------------theids', ids,self.sname, self.the_id
+			self.btn_run.SetLabel('Run')		
+			print 'open_session---------------', ids,self.sname, self.the_id
 			#pprint (self.sids)
 			self.args_panel= pnl_args(self,self.copy_vector,self.tmpl,self.the_id,(self.cargs,self.fargs,self.targs),style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			self.nb.DeletePage(0)
@@ -5156,24 +5184,41 @@ class DataBuddy(wx.Frame):
 			EXPLORER = 'C:\\WINNT\\explorer.exe' 
 		os.spawnl(os.P_NOWAIT, EXPLORER, '.', '/n,/e,/select,"%s"'%fname)
 
-
+	def get_title(self):
+		return '%s: %s->%s' % (self.session_name,conf.dbs[self.copy_vector[0]],conf.dbs[self.copy_vector[1]])
 	def OnButtonRun(self, event):
 		# 
 		btn = event.GetEventObject()
 		the_id=self.the_id[2]
-		title='%s->%s' % (conf.dbs[self.copy_vector[0]],conf.dbs[self.copy_vector[1]])
+		title=self.get_title()
 		
-		print 'OnButtonRun'
-		pprint(self.p)
+		#print 'OnButtonRun'
+		#pprint(self.p)
 		if self.p.has_key(the_id) and self.p[the_id]:
-			window1 = find_window(title)
-			print window1
+			#window1 = find_window(title)
+			#print window1
+			hwnd=None
+			while not hwnd:
+				hwnd=self.get_hwnds_for_pid(self.p[the_id].pid)
+							
 			#print window1.SetFocus()
 			(x,y) = self.GetScreenPositionTuple()
 			(l,w) =self.GetClientSizeTuple()
 			dl,dw= 800,600
-			print window1.SetWindowPos(0, (x/2,y/2,dl,dw),0)
-			#window1.ShowWindow()
+			#print window1.SetWindowPos(0, (x/2,y/2,dl,dw),0)
+			if 0:
+				window1 = find_window(title)
+				window1.ShowWindow()
+				window1.SetFocus()
+			win32gui.SetWindowPos (hwnd[0],  0, x/2,y/2, dl, dw, 0)
+			#print(dir(win32gui))
+			#win32gui.SetActiveWindow(hwnd[0])
+			#win32gui.BringWindowToTop(hwnd[0])
+			#win32gui.EnableWindow(hwnd[0],True)
+			#win32gui.SetFocus(hwnd[0])
+			win32gui.ShowWindow(hwnd[0], win32con.SW_SHOWNORMAL)
+			#win32gui.ShowWindow(whnd, win32con.SW_SHOWNORMAL) # SW_RESTORE does not work 
+			win32gui.SetForegroundWindow(hwnd[0])
 			#print dir(window1)
 			#win32con.HWND_TOPMOST
 		else:
@@ -5278,8 +5323,33 @@ class DataBuddy(wx.Frame):
 					print out, err
 					p.wait()
 				else:
+					def onExit():
+						print 'process exited'
+						print '#'*100
 					#p = Popen(['start', 'cmd.exe', "/k"]+cfg, stdin=PIPE, shell=True) #stderr=PIPE, stdout=PIPE,
+					import threading
+					import subprocess
+					def popenAndCall(onExit, popenArgs):
+						"""
+						Runs the given args in a subprocess.Popen, and then calls the function
+						onExit when the subprocess completes.
+						onExit is a callable object, and popenArgs is a list/tuple of args that 
+						would give to subprocess.Popen.
+						"""
+						def runInThread(onExit, popenArgs):
+							#proc = subprocess.Popen(*popenArgs)
+							proc = Popen(popenArgs , creationflags=CREATE_NEW_CONSOLE)
+							proc.wait()
+							onExit()
+							return
+						thread = threading.Thread(target=runInThread, args=(onExit, popenArgs))
+						thread.start()
+						# returns immediately after the thread starts
+						return thread
+					#thread= popenAndCall(onExit,[sys.executable]+cfg)
+					#print thread
 					p = Popen([sys.executable]+cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
+					#p.wait()
 					#out,err=p.communicate('y\n')
 					#print out,err
 					print p
@@ -5479,8 +5549,18 @@ class AboutDlg(wx.Frame):
 class wxHTML(wx.html.HtmlWindow):	
 	def OnLinkClicked(self, link):
 		webbrowser.open(link.GetHref())
-		
+def incrcounter(n):
+    global _count
+    _count = _count + n
+
+def savecounter():
+    open("counter", "w").write("%d" % _count)		
 if __name__ == '__main__':
+	try:
+		_count = int(open("counter").read())
+	except IOError:
+		_count = 0
+	
 	freeze_support()	
 	app_title='%s %s' % (__title__,__version__)
 	parser = argparse.ArgumentParser(description=app_title)
@@ -5516,3 +5596,5 @@ if __name__ == '__main__':
 		app.MainLoop()
 	except Exception, e:
 		traceback.print_exc();
+	import atexit
+	atexit.register(savecounter)
