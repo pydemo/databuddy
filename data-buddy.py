@@ -159,25 +159,27 @@ def send_input( window1 ):
 
 	#window1.SetForegroundWindow()
 	#sleep(0.2)
+
 	#window1.SetFocus()
+	#pprint(dir(window1))
 	#sleep(0.2)
 	# writes "y\n"
 	# 0x10 is shift.  note that to repeat a key, as with 4C here, you have to release it after the first press
 
 	t_yes = ( ( 0x79, 0 ), ( 0x0D, 0 ), )
 	t_yes = ( ( 0x59, 0 ),  ( 0x0D, 0 ), )
-	print t_yes
-	time.sleep(1)
+	#print t_yes
+	#time.sleep(1)
 	l_keys = [ ]
 	## l_keys.extend( t_ctrl_o )
 	l_keys.extend( t_yes )
 	#l_keys.extend( t_ctrl_s )
 	t_inputs = make_input_objects( l_keys )
-	print t_inputs
+	#print t_inputs
 	window1.SetFocus()
 	rv = ct.windll.user32.SendInput( *t_inputs )
-	print rv
-	print 'send_input: DONE'
+	#print rv
+	#print 'send_input: DONE'
 	#if was_min and b_minimize:
 	#	sleep(0.3) # if the last input was Save, it may need time to take effect
 	#	window1.ShowWindow(SW_MINIMIZE)
@@ -3573,6 +3575,7 @@ class pnl_args(wx.Panel):
 		self.copy_vector=copy_vector
 		self.tmpl=tmpl
 		self.obj={}
+		
 		self.tc_length=190
 		if 0: #Src Timer
 			i=wx.NewId()			
@@ -4092,7 +4095,7 @@ class pnl_args(wx.Panel):
 		if tc.Name=='source':
 			#print x+(l-dl)/2, y+(w-dw)/2, dl,dw
 			#self.SetDimensions(x+(l-dl)/2, y+(w-dw)/2, dl,dw)
-			win32gui.SetWindowPos (hwnd[0],  win32con.HWND_TOPMOST, x,y, 750, 400, 0)
+			win32gui.SetWindowPos (hwnd[0],  0, x,y, 750, 400, 0)
 			#self.src_p=p
 			#self.src_btn=tc
 			#self.timers={}
@@ -4112,7 +4115,7 @@ class pnl_args(wx.Panel):
 		if tc.Name=='target':
 			#print x+(l-dl)/2, y+(w-dw)/2, dl,dw
 			#self.SetDimensions(x+(l-dl)/2, y+(w-dw)/2, dl,dw)
-			win32gui.SetWindowPos (hwnd[0],  win32con.HWND_TOPMOST, x+(l-dl)/2,y+(w-dw)/2, 750, 400, 0)		
+			win32gui.SetWindowPos (hwnd[0],  0, x+(l-dl)/2,y+(w-dw)/2, 750, 400, 0)		
 			#win32gui.SetWindowPos (hwnd[0],  win32con.HWND_TOPMOST,500,100, 750, 400, 0)
 			#self.src_p=p
 			#self.src_btn=tc
@@ -4558,6 +4561,7 @@ class DataBuddy(wx.Frame):
 		self.btn_show.Enable(False)
 
 		self.btn_run = wx.Button(panel, label='Run')
+		self.btn_run.SetName('run')
 		self.btn_run.Bind(wx.EVT_BUTTON, self.OnButtonRun)
 		sizer.Add(self.btn_run, pos=(9, 3),flag=wx.BOTTOM|wx.ALIGN_RIGHT)
 		self.btn_run.Enable(False)
@@ -4692,9 +4696,10 @@ class DataBuddy(wx.Frame):
 		#print self.counters[the_id], the_id
 		#if self.counters[the_id]>10:
 		#	self.timers[the_id].Stop()
-		if 1:
+		btn=self.btn[the_id]
+		if btn.Name in ['source', 'target'] :
 			#print self.counters[the_id], the_id
-			btn=self.btn[the_id]
+			
 			#print btn
 			#print the_id, self.session_name, self.args_panel.the_id
 			sn=self.session_name
@@ -4715,11 +4720,17 @@ class DataBuddy(wx.Frame):
 						self.btn[the_id]=None
 			else:			
 				if btn and self.counters[the_id]>0:
-					print the_id, self.counters[the_id],msg
+					#print the_id, self.counters[the_id],msg
 					btn.Enable(False)
 					win32gui.SetWindowText (hwnd[0], '%s: %s' %(self.session_name,msg))
 					btn.SetLabel(msg)
-		
+		else:
+			#print the_id, self.the_id
+			if the_id==self.the_id[2]:
+				#print btn.Name,self.counters[the_id] 
+				msg= 'Running...(%d)' % (self.counters[the_id])
+				btn.SetLabel(msg)
+			
 	def onOpenSession(self, data, extra1, extra2=None):
 		
 		(sname,cv_from,cv_to,type,tmpl,sdir, fname) = data
@@ -5060,7 +5071,15 @@ class DataBuddy(wx.Frame):
 								self.Bind(wx.EVT_TIMER, lambda event, i=i: self.TimerHandler (event, the_id=i), id=i)
 					else:
 						self.the_id=self.sids[sn]
-						
+						self.btn_run.SetLabel('Run')
+				elif not self.copy_vector[1].startswith('CSV'):
+					self.the_id=[None,wx.NewId(),wx.NewId()]
+					self.btn_run.SetLabel('Run')
+				else:
+					self.the_id=[wx.NewId(),None,wx.NewId()]
+					self.btn_run.SetLabel('Run')
+
+					
 			#print 'open_session---------------theids', ids,self.sname, self.the_id
 			#pprint (self.sids)
 			self.args_panel= pnl_args(self,self.copy_vector,self.tmpl,self.the_id,(self.cargs,self.fargs,self.targs),style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
@@ -5141,167 +5160,166 @@ class DataBuddy(wx.Frame):
 	def OnButtonRun(self, event):
 		# 
 		btn = event.GetEventObject()
-		#print btn.GetLabel()
-		#from subprocess import Popen,PIPE
-		if 0:
-			
-			#Popen("cmd /w dir")
-			import shlex 
-			cmd=''.join(self.cmd.split('^\n'))
-			#print cmd
-			lexer=shlex.shlex(cmd)
-			#lexer = shlex.shlex(input)
-			lexer.quotes = '"'
-			#lexer.wordchars += '\''
-			lexer.whitespace_split = True
-			lexer.commenters = ''
-			cfg = list(lexer)
-			#pprint(cfg)		
-			#e(0)
-			p = Popen(cfg, stdin=PIPE, stdout=PIPE, shell=True)
-			out, err = p.communicate('y\n')
-			p.wait()
-			print err
-			print out
-			#print '-'*40
-		if 0:
-			p=Popen(['mode con cols=50 lines=50;start "test"', 'cmd', '/k','.\\dm32\\dm32.exe', '-w', 'ora2ora', '-o', '1', '-r', '1',  '-c', 'SCOTT.Date_test_from', '-f', 'SCOTT/tiger2@orcl', '-e', '"YYYY-MM-DD HH24.MI.SS"', '-m', '"YYYY-MM-DD HH24.MI.SS.FF2"', '-O', '"YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM"','-z', '"C:\app\alex_buz\product\11.2.0\dbhome_2\BIN"', '-g', 'SCOTT/tiger2@orcl', '-a', 'SCOTT.Partitioned_test_to', '-G', 'part_15', '-e', '"YYYY-MM-DD HH24.MI.SS"', '-m', '"YYYY-MM-DD HH24.MI.SS.FF2"', '-O', '"YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM"', '-Z', '"C:\app\alex_buz\product\11.2.0\dbhome_2\BIN"'], stdin=PIPE, stdout=PIPE, shell=True)
-			out, err = p.communicate('y\n')
-			#print out, err
-			p.wait()
-			p.close()
-		#os.system("mode 45, 20");
-		#os.system(r'start "ora2ora" cmd /k echo y^|C:\Users\alex_buz\Documents\GitHub\DataBuddy\dm32\dm32.exe -w ora2ora -o 1 -r 1 -t "|" -c SCOTT.Date_test_from -f SCOTT/tiger2@orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -g SCOTT/tiger2@orcl -a SCOTT.Partitioned_test_to -G part_15 -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN"')
+		the_id=self.the_id[2]
+		title='%s->%s' % (conf.dbs[self.copy_vector[0]],conf.dbs[self.copy_vector[1]])
 		
-		cmd=self.args_panel.get_cmd_line_new(self.transport)
-		#print cmd
-		#e(0)
-		#C:\Users\alex_buz\Documents\GitHub\DataBuddy\qc32\qc32.exe -l 10 -t "|" -r 1 -o1 -w ora11g2ora11g -U 1 -q "C:\Python27\data_migrator_1239\test\v101\query\oracle_query.sql" -b "orcl" -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -j "SCOTT" -x "tiger2" -d "orcl" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -p "tiger2" -m "YYYY-MM-DD HH24.MI.SS.FF2" -u "SCOTT" -e "YYYY-MM-DD HH24.MI.SS" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -a "SCOTT.Sub_Partitioned_test_to" -N "part_15_sp1"		
-		#C:\Users\alex_buz\Documents\GitHub\DataBuddy\qc32\qc32.exe -t ^| -w ora11g2ora11g -r 1 -o 1 -q C:\Python27\data_migrator_1239\test\v101\query\oracle_query.sql -b orcl -e YYYY-MM-DD HH24.MI.SS -m YYYY-MM-DD HH24.MI.SS.FF2 -z C:\app\alex_buz\product\11.2.0\dbhome_2\BIN -O YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM -j SCOTT -x tiger2 -d orcl -Z C:\app\alex_buz\product\11.2.0\dbhome_2\BIN -e YYYY-MM-DD HH24.MI.SS -m YYYY-MM-DD HH24.MI.SS.FF2 -u SCOTT -p tiger2 -O YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM -a SCOTT.Partitioned_test_to -G part_15
-		#C:\Users\alex_buz\Documents\GitHub\DataBuddy\qc32\qc32.exe -t | -w ora11g2ora11g -r 1 -o 1 -q C:\Python27\data_migrator_1239\test\v101\query\oracle_query.sql -b orcl -e YYYY-MM-DD HH24.MI.SS -m YYYY-MM-DD HH24.MI.SS.FF2 -z C:\app\alex_buz\product\11.2.0\dbhome_2\BIN -O YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM -j SCOTT -x tiger2 -d orcl -Z C:\app\alex_buz\product\11.2.0\dbhome_2\BIN -e YYYY-MM-DD HH24.MI.SS -m YYYY-MM-DD HH24.MI.SS.FF2 -u SCOTT -p tiger2 -O YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM -a SCOTT.Partitioned_test_to -G part_15		
-		#self.args_panel
-		#e(0)
-		cmd=cmd.replace('|','^|')
-		#cmd=cmd.replace('csv2ora11g','csv2ora')
-		
-		#pprint (cmd)
-		#save
-		if_save=self.auto_save.GetValue() 
-		if if_save:
-			(sname,cv,tmpl,dname,fname)=self.saveSession()
-			
-		if_yes=self.send_yes.GetValue()
-		yes=''
-		if if_yes:
-			yes='echo y|'
-		if 0:
-			os.system(r'start "test" cmd.exe  /k "mode 100,45 && echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\dm32\dm32.exe -w ora2ora -o 1 -r 1 -t "^|" -c SCOTT.Date_test_from -f SCOTT/tiger2@orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -g SCOTT/tiger2@orcl -a SCOTT.Partitioned_test_to -G part_15 -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN""')
+		print 'OnButtonRun'
+		pprint(self.p)
+		if self.p.has_key(the_id) and self.p[the_id]:
+			window1 = find_window(title)
+			print window1
+			#print window1.SetFocus()
+			(x,y) = self.GetScreenPositionTuple()
+			(l,w) =self.GetClientSizeTuple()
+			dl,dw= 800,600
+			print window1.SetWindowPos(0, (x/2,y/2,dl,dw),0)
+			#window1.ShowWindow()
+			#print dir(window1)
+			#win32con.HWND_TOPMOST
 		else:
-			#os.system(r'start "test" cmd.exe  /k "echo y|python  C:\Python27\data_migrator_1239\datamule.py  -t "^|" -w "csv2ora11g" -r "1" -o "1" -I "c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_1;c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_2" -y "1000" -d "orcl" -e "YYYY-MM-DD HH24.MI.SS" -u "SCOTT" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -p "tiger2" -a "SCOTT.Timestamp_test_to" -m "YYYY-MM-DD HH24.MI.SS.FF2"')
-			#print r'start "test" cmd.exe  /k "echo y|python  C:\Python27\data_migrator_1239\datamule.py  -t "^|" -w "csv2ora11g" -r "1" -o "1" -I "c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_1;c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_2" -y "1000" -d "orcl" -e "YYYY-MM-DD HH24.MI.SS" -u "SCOTT" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -p "tiger2" -a "SCOTT.Timestamp_test_to" -m "YYYY-MM-DD HH24.MI.SS.FF2"'
-			#print r'start "test" cmd.exe  /k "%s%s"' % (yes,cmd)
-			#cmd='%s%s' % (yes,cmd)
-			title='%s->%s' % (conf.dbs[self.copy_vector[0]],conf.dbs[self.copy_vector[1]])
+			
+			btn.SetLabel('Running...(0)')
+			cmd=self.args_panel.get_cmd_line_new(self.transport)
+			cmd=cmd.replace('|','^|')
+			#cmd=cmd.replace('csv2ora11g','csv2ora')
+			
+			#pprint (cmd)
+			#save
+			if_save=self.auto_save.GetValue() 
+			if if_save:
+				(sname,cv,tmpl,dname,fname)=self.saveSession()
+				
+			if_yes=self.send_yes.GetValue()
+			yes=''
+			if if_yes:
+				yes='echo y|'
 			if 0:
-				self.exec_cmd(title, cmd)
-			if 1:
-					from subprocess import Popen, PIPE,CREATE_NEW_CONSOLE
-		cfg=[]
-		if 1:
-			import shlex 
-			#cmd2=''.join(cmd.split('^\n'))
-			#print cmd
-			lexer=shlex.shlex(cmd)
-			#lexer = shlex.shlex(input)
-			lexer.quotes = '"'
-			#lexer.wordchars += '\''
-			lexer.whitespace_split = True
-			lexer.commenters = ''
-			cfg = list(lexer)
-			#cfg=['start',"'%s'" % title] + cfg
-			#C:\app\alex_buz\product\11.2.0\dbhome_2\BIN\sqlplus.exe SCOTT/tiger2@orcl @C:\Users\alex_buz\Documents\GitHub\DataBuddy\test\test_connnect\Oracle.sql
-			#C:\Users\alex_buz\Documents\GitHub\DataBuddy\qc32\qc32.exe -t "^|" -w "ora11g2ora11g" -r "1" -o "1" -q "C:\Python27\data_migrator_1239\test\v101\query\oracle_query.sql" -b "orcl" -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -z"C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -j "SCOTT" -x "tiger2" -d "orcl" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -p "tiger2" -m "YYYY-MM-DD HH24.MI.SS.FF2" -u "SCOTT" -e "YYYY-MM-DD HH24.MI.SS" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -a "SCOTT.Partitioned_test_to" -G "part_15"
-			if 0:
-				cfg=['C:\\Users\\alex_buz\\Documents\\GitHub\\DataBuddy\\qc32\\qc32.exe',
- '-t',
- '"^|"',
- '-w',
- 'ora11g2ora11g',
- '-r',
- '1',
- '-o',
- '1',
- '-q',
- 'C:\\Python27\\data_migrator_1239\\test\\v101\\query\\oracle_query.sql',
- '-b',
- '"orcl"',
- '-e',
- '"YYYY-MM-DD HH24.MI.SS"',
- '-m',
- '"YYYY-MM-DD HH24.MI.SS.FF2"',
- '-z',
- '"C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN"',
- '-O',
- '"YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM"',
- '-j',
- '"SCOTT"',
- '-x',
- '"tiger2"',
- '-d',
- '"orcl"',
- '-Z',
- "'C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN'",
- '-e',
- '"YYYY-MM-DD HH24.MI.SS"',
- '-m',
- '"YYYY-MM-DD HH24.MI.SS.FF2"',
- '-u',
- '"SCOTT"',
- '-p',
- '"tiger2"',
- '-O',
- '"YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM"',
- '-a',
- '"SCOTT.Partitioned_test_to"',
- '-G',
- '"part_15"']
-			cfg[0]=r'C:\Python27\data_migrator_1239\datamule.py'
-			cfg=cfg+['-X','1']
-			pprint(cfg)	
-			#e(0)
-			#print  ' '.join(cfg)
-			#e(0)
-			#C:\Python27\data_migrator_1239\datamule.py -t ^| -w ora11g2ora11g -r 1 -o 1 -q C:\Python27\data_migrator_1239\test\v101\query\oracle_query.sql -b orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -z C:\app\alex_buz\product\11.2.0\dbhome_2\BIN -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -j SCOTT -x tiger2 -d orcl -Z C:\app\alex_buz\product\11.2.0\dbhome_2\BIN -p tiger2 -m "YYYY-MM-DD HH24.MI.SS.FF2" -u SCOTT -e "YYYY-MM-DD HH24.MI.SS" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -a SCOTT.Partitioned_test_to -G part_15			
-			if 0:
-				p = Popen(cfg, stdin=PIPE, stdout=PIPE, shell=True ) #creationflags=CREATE_NEW_CONSOLE
-				print p
-				out, err = p.communicate()
-				print out, err
-				p.wait()
+				os.system(r'start "test" cmd.exe  /k "mode 100,45 && echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\dm32\dm32.exe -w ora2ora -o 1 -r 1 -t "^|" -c SCOTT.Date_test_from -f SCOTT/tiger2@orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -g SCOTT/tiger2@orcl -a SCOTT.Partitioned_test_to -G part_15 -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN""')
 			else:
-				#p = Popen(['start', 'cmd.exe', "/k"]+cfg, stdin=PIPE, shell=True) #stderr=PIPE, stdout=PIPE,
-				p = Popen([sys.executable]+cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
-				#out,err=p.communicate('y\n')
-				#print out,err
-				print p
-				time.sleep(2)
+				#os.system(r'start "test" cmd.exe  /k "echo y|python  C:\Python27\data_migrator_1239\datamule.py  -t "^|" -w "csv2ora11g" -r "1" -o "1" -I "c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_1;c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_2" -y "1000" -d "orcl" -e "YYYY-MM-DD HH24.MI.SS" -u "SCOTT" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -p "tiger2" -a "SCOTT.Timestamp_test_to" -m "YYYY-MM-DD HH24.MI.SS.FF2"')
+				#print r'start "test" cmd.exe  /k "echo y|python  C:\Python27\data_migrator_1239\datamule.py  -t "^|" -w "csv2ora11g" -r "1" -o "1" -I "c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_1;c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_2" -y "1000" -d "orcl" -e "YYYY-MM-DD HH24.MI.SS" -u "SCOTT" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -p "tiger2" -a "SCOTT.Timestamp_test_to" -m "YYYY-MM-DD HH24.MI.SS.FF2"'
+				#print r'start "test" cmd.exe  /k "%s%s"' % (yes,cmd)
+				#cmd='%s%s' % (yes,cmd)
+				
+				if 0:
+					self.exec_cmd(title, cmd)
 				if 1:
-					hwnd=None
-					while not hwnd:
-						hwnd=self.get_hwnds_for_pid(p.pid)
-					print hwnd
-					#pprint(dir(win32gui))
-					win32gui.SetWindowText (hwnd[0], title)
-					window1 = find_window( title )
-					print window1
-					#sleep(0.2)
-					#hwnd= self.get_hwnds_for_pid (p.pid)
-					#print hwnd
-					#s_app_name
-					
-					send_input( window1)
-			#u'C:\\Users\\alex_buz\\Documents\\GitHub\\DataBuddy\\dm32\\dm32.exe -t "|" -w "csv2ora11g" -r "1" -o "1" -I "c:\\Python27\\data_migrator_1239\\test\\v101\\data\\ora_data_dir" -y "1000" -g "SCOTT/tiger2@orcl" -m "YYYY-MM-DD HH24.MI.SS.FF2" -e "YYYY-MM-DD HH24.MI.SS" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -a "SCOTT.Timestamp_test_to" -Z "C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN"'		
-	
+						from subprocess import Popen, PIPE,CREATE_NEW_CONSOLE
+			cfg=[]
+			if 1:
+				import shlex 
+				#cmd2=''.join(cmd.split('^\n'))
+				#print cmd
+				lexer=shlex.shlex(cmd)
+				#lexer = shlex.shlex(input)
+				lexer.quotes = '"'
+				#lexer.wordchars += '\''
+				lexer.whitespace_split = True
+				lexer.commenters = ''
+				cfg = list(lexer)
+				#cfg=['start',"'%s'" % title] + cfg
+				#C:\app\alex_buz\product\11.2.0\dbhome_2\BIN\sqlplus.exe SCOTT/tiger2@orcl @C:\Users\alex_buz\Documents\GitHub\DataBuddy\test\test_connnect\Oracle.sql
+				#C:\Users\alex_buz\Documents\GitHub\DataBuddy\qc32\qc32.exe -t "^|" -w "ora11g2ora11g" -r "1" -o "1" -q "C:\Python27\data_migrator_1239\test\v101\query\oracle_query.sql" -b "orcl" -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -z"C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -j "SCOTT" -x "tiger2" -d "orcl" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -p "tiger2" -m "YYYY-MM-DD HH24.MI.SS.FF2" -u "SCOTT" -e "YYYY-MM-DD HH24.MI.SS" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -a "SCOTT.Partitioned_test_to" -G "part_15"
+				if 0:
+					cfg=['C:\\Users\\alex_buz\\Documents\\GitHub\\DataBuddy\\qc32\\qc32.exe',
+	 '-t',
+	 '"^|"',
+	 '-w',
+	 'ora11g2ora11g',
+	 '-r',
+	 '1',
+	 '-o',
+	 '1',
+	 '-q',
+	 'C:\\Python27\\data_migrator_1239\\test\\v101\\query\\oracle_query.sql',
+	 '-b',
+	 '"orcl"',
+	 '-e',
+	 '"YYYY-MM-DD HH24.MI.SS"',
+	 '-m',
+	 '"YYYY-MM-DD HH24.MI.SS.FF2"',
+	 '-z',
+	 '"C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN"',
+	 '-O',
+	 '"YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM"',
+	 '-j',
+	 '"SCOTT"',
+	 '-x',
+	 '"tiger2"',
+	 '-d',
+	 '"orcl"',
+	 '-Z',
+	 "'C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN'",
+	 '-e',
+	 '"YYYY-MM-DD HH24.MI.SS"',
+	 '-m',
+	 '"YYYY-MM-DD HH24.MI.SS.FF2"',
+	 '-u',
+	 '"SCOTT"',
+	 '-p',
+	 '"tiger2"',
+	 '-O',
+	 '"YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM"',
+	 '-a',
+	 '"SCOTT.Partitioned_test_to"',
+	 '-G',
+	 '"part_15"']
+				cfg[0]=r'C:\Python27\data_migrator_1239\datamule.py'
+				cfg=cfg+['-X','1']
+				pprint(cfg)	
+				#e(0)
+				#print  ' '.join(cfg)
+				#e(0)
+				#C:\Python27\data_migrator_1239\datamule.py -t ^| -w ora11g2ora11g -r 1 -o 1 -q C:\Python27\data_migrator_1239\test\v101\query\oracle_query.sql -b orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -z C:\app\alex_buz\product\11.2.0\dbhome_2\BIN -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -j SCOTT -x tiger2 -d orcl -Z C:\app\alex_buz\product\11.2.0\dbhome_2\BIN -p tiger2 -m "YYYY-MM-DD HH24.MI.SS.FF2" -u SCOTT -e "YYYY-MM-DD HH24.MI.SS" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -a SCOTT.Partitioned_test_to -G part_15			
+				if 0:
+					p = Popen(cfg, stdin=PIPE, stdout=PIPE, shell=True ) #creationflags=CREATE_NEW_CONSOLE
+					print p
+					out, err = p.communicate()
+					print out, err
+					p.wait()
+				else:
+					#p = Popen(['start', 'cmd.exe', "/k"]+cfg, stdin=PIPE, shell=True) #stderr=PIPE, stdout=PIPE,
+					p = Popen([sys.executable]+cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
+					#out,err=p.communicate('y\n')
+					#print out,err
+					print p
+					#time.sleep(2)
+					if 1:
+						hwnd=None
+						while not hwnd:
+							hwnd=self.get_hwnds_for_pid(p.pid)
+						#print hwnd
+						#pprint(dir(win32gui))
+						#(x,y) = self.GetScreenPositionTuple()
+						#(l,w) =self.GetClientSizeTuple()
+						#dl,dw= 600,400
+						
+						the_id=self.the_id[2]
+						
+						self.btn[the_id]=event.GetEventObject()
+						sn=self.session_name
+						self.p[the_id]=p
+						self.timers[the_id].Start(1000)
+				
+						win32gui.SetWindowText (hwnd[0], title)
+						window1 = find_window( title )
+						#print window1
+						#sleep(0.2)
+						#hwnd= self.get_hwnds_for_pid (p.pid)
+						#print hwnd
+						#s_app_name
+						#win32gui.SetWindowPos (hwnd[0],  win32con.HWND_TOPMOST, x,y, 850, 500, 0)
+						(x,y) = self.GetScreenPositionTuple()
+						(l,w) =self.GetClientSizeTuple()
+						dl,dw= 800,600
+						#self.SetDimensions(x+(l-dl)/2, y+(w-dw)/2, dl,dw)
+						window1.SetWindowPos(0, (x/2,y/2,dl,dw),0)
+						 #win32con.HWND_TOPMOST, x,y, 850, 500, 0)
+		 
+						send_input( window1)
+						#win32gui.SetWindowPos (hwnd[0],  0, x,y, 860, 500, 0)
+				#u'C:\\Users\\alex_buz\\Documents\\GitHub\\DataBuddy\\dm32\\dm32.exe -t "|" -w "csv2ora11g" -r "1" -o "1" -I "c:\\Python27\\data_migrator_1239\\test\\v101\\data\\ora_data_dir" -y "1000" -g "SCOTT/tiger2@orcl" -m "YYYY-MM-DD HH24.MI.SS.FF2" -e "YYYY-MM-DD HH24.MI.SS" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -a "SCOTT.Timestamp_test_to" -Z "C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN"'		
+		
 	def exec_cmd(self, title, cmd):
 		print r'start "%s" cmd.exe  /k "%s"' % (title, cmd)
 		os.system(r'start "%s" cmd.exe  /k "%s"' % (title, cmd))
