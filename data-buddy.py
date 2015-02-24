@@ -4671,6 +4671,10 @@ class DataBuddy(wx.Frame):
 	def onTabChanged(self, evt):
 		#print 'onTabChanged'
 		self.nb_tab= self.nb.GetSelection()
+		if self.nb_tab:
+			self.btn_clearall.Enable(False)
+		else:
+			self.btn_clearall.Enable(True)
 		#self.nb_tab=
 	def onDeleteSessions(self,  data, extra1, extra2=None):
 		(items)=data
