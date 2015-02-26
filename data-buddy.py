@@ -2861,6 +2861,7 @@ class NewSessionDialog(wx.Dialog):
 			self.rb_use_templates=wx.RadioButton(self, label="Use templates",style=wx.RB_GROUP)
 			boxsizer.Add(self.rb_use_templates, flag=wx.LEFT|wx.TOP, border=5)
 			self.rb_set_manually=wx.RadioButton(self, label="Set manually")
+			self.rb_set_manually.Enable(False)
 			boxsizer.Add(self.rb_set_manually, flag=wx.LEFT|wx.TOP, border=5)
 			self.rb_use_templates.Bind(wx.EVT_RADIOBUTTON, self.onUseRbButton)
 			self.rb_set_manually.Bind(wx.EVT_RADIOBUTTON, self.onUseRbButton)
@@ -4543,6 +4544,8 @@ class DataBuddy(wx.Frame):
 			self.btn_clearall.Enable(False)
 			self.btn_save=wx.Button(panel, label="Save")
 			self.btn_save.Enable(False)			
+			#self.btn_log=wx.Button(panel, label="Log")
+			#self.btn_log.Enable(False)			
 			fgs.AddMany([(self.btn_new, 1, wx.EXPAND),(self.btn_delete, 1, wx.EXPAND),wx.StaticText(panel, label=' '),(self.btn_clearall, 1, wx.EXPAND),wx.StaticText(panel, label=' \n'),(self.btn_save, 1, wx.EXPAND)])
 			self.btn_new.Bind(wx.EVT_BUTTON, self.OnNewButton)	
 			self.btn_delete.Bind(wx.EVT_BUTTON, self.OnDeleteButton)	
@@ -4568,9 +4571,10 @@ class DataBuddy(wx.Frame):
 		sizer.Add(boxsizer, pos=(8, 0), span=(1, 5), 
 			flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=10)
 
-		button3 = wx.Button(panel, label='Help')
-		sizer.Add(button3, pos=(9, 0), flag=wx.LEFT, border=10)
-		button3.Enable(False)
+		self.btn_log = wx.Button(panel, label='Log')
+		sizer.Add(self.btn_log, pos=(9, 0), flag=wx.LEFT, border=10)
+		self.btn_log.Enable(True)
+		self.btn_log.Bind(wx.EVT_BUTTON, self.OnButtonShowLog)
 
 		self.btn_show = wx.Button(panel, label='Show in Folder')
 		self.btn_show.Bind(wx.EVT_BUTTON, self.OnButtonShowInFolder)
@@ -5112,7 +5116,17 @@ class DataBuddy(wx.Frame):
 						self.the_id=self.sids[sn]
 						#self.btn_run.SetLabel('Run')
 				elif not self.copy_vector[1].startswith('CSV'):
-					self.the_id=[None,wx.NewId(),wx.NewId()]
+					#ids=[wx.NewId(),wx.NewId(),wx.NewId()]
+					ids=[None,wx.NewId(),wx.NewId()]
+					self.the_id=ids
+					for i in self.the_id:
+					
+						if i and not self.timers.has_key(i) :
+							self.timers[i]=wx.Timer(self, id=i)
+							self.counters[i]=0					
+						
+							#self.th[i]=self.TimerHandler
+							self.Bind(wx.EVT_TIMER, lambda event, i=i: self.TimerHandler (event, the_id=i), id=i)
 					#self.btn_run.SetLabel('Run')
 				else:
 					self.the_id=[wx.NewId(),None,wx.NewId()]
@@ -5166,7 +5180,13 @@ class DataBuddy(wx.Frame):
 			self.btn_run.Enable(True)
 			self.btn_save.Enable(True)	
 			self.btn_clearall.Enable(True)
-  
+	def OnButtonShowLog(self, event):
+		#show log location in  explorer
+		dirname=os.path.join(home,'qc32','logs')
+		EXPLORER = 'C:\\windows\\explorer.exe' 
+		if not os.path.isfile(EXPLORER):
+			EXPLORER = 'C:\\WINNT\\explorer.exe' 
+		os.spawnl(os.P_NOWAIT, EXPLORER, '.', '/n,/e,/select,"%s"' %  dirname)  
 	def OnButtonShowInFolder(self, event):
 		# 
 		btn = event.GetEventObject()
@@ -5324,7 +5344,7 @@ class DataBuddy(wx.Frame):
 	 '"part_15"']
 				cfg[0]=r'C:\Python27\data_migrator_1239\datamule.py'
 				cfg=cfg+['-X','1']
-				pprint(cfg)	
+				#pprint(cfg)	
 				#e(0)
 				#print  ' '.join(cfg)
 				#e(0)
@@ -5336,29 +5356,7 @@ class DataBuddy(wx.Frame):
 					print out, err
 					p.wait()
 				else:
-					def onExit():
-						print 'process exited'
-						print '#'*100
-					#p = Popen(['start', 'cmd.exe', "/k"]+cfg, stdin=PIPE, shell=True) #stderr=PIPE, stdout=PIPE,
-					import threading
-					import subprocess
-					def popenAndCall(onExit, popenArgs):
-						"""
-						Runs the given args in a subprocess.Popen, and then calls the function
-						onExit when the subprocess completes.
-						onExit is a callable object, and popenArgs is a list/tuple of args that 
-						would give to subprocess.Popen.
-						"""
-						def runInThread(onExit, popenArgs):
-							#proc = subprocess.Popen(*popenArgs)
-							proc = Popen(popenArgs , creationflags=CREATE_NEW_CONSOLE)
-							proc.wait()
-							onExit()
-							return
-						thread = threading.Thread(target=runInThread, args=(onExit, popenArgs))
-						thread.start()
-						# returns immediately after the thread starts
-						return thread
+
 					#thread= popenAndCall(onExit,[sys.executable]+cfg)
 					#print thread
 					p = Popen([sys.executable]+cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
@@ -5371,35 +5369,41 @@ class DataBuddy(wx.Frame):
 						hwnd=None
 						while not hwnd:
 							hwnd=self.get_hwnds_for_pid(p.pid)
-						#print hwnd
+						print hwnd
+						#e(0)
 						#pprint(dir(win32gui))
 						#(x,y) = self.GetScreenPositionTuple()
 						#(l,w) =self.GetClientSizeTuple()
 						#dl,dw= 600,400
 						
 						the_id=self.the_id[2]
+						print self.the_id,the_id
 						
 						self.btn[the_id]=event.GetEventObject()
 						sn=self.session_name
+						print sn
 						self.p[the_id]=p
 						self.timers[the_id].Start(1000)
-				
+						
 						win32gui.SetWindowText (hwnd[0], title)
-						window1 = find_window( title )
-						#print window1
-						#sleep(0.2)
-						#hwnd= self.get_hwnds_for_pid (p.pid)
-						#print hwnd
-						#s_app_name
-						#win32gui.SetWindowPos (hwnd[0],  win32con.HWND_TOPMOST, x,y, 850, 500, 0)
-						(x,y) = self.GetScreenPositionTuple()
-						(l,w) =self.GetClientSizeTuple()
-						dl,dw= 800,600
-						#self.SetDimensions(x+(l-dl)/2, y+(w-dw)/2, dl,dw)
-						window1.SetWindowPos(0, (x/2,y/2,dl,dw),0)
-						 #win32con.HWND_TOPMOST, x,y, 850, 500, 0)
-		 
-						send_input( window1)
+						print title
+						#e(0)
+						if if_yes:
+							window1 = find_window( title )
+							#print window1
+							#sleep(0.2)
+							#hwnd= self.get_hwnds_for_pid (p.pid)
+							#print hwnd
+							#s_app_name
+							#win32gui.SetWindowPos (hwnd[0],  win32con.HWND_TOPMOST, x,y, 850, 500, 0)
+							(x,y) = self.GetScreenPositionTuple()
+							(l,w) =self.GetClientSizeTuple()
+							dl,dw= 800,600
+							#self.SetDimensions(x+(l-dl)/2, y+(w-dw)/2, dl,dw)
+							window1.SetWindowPos(0, (x/2,y/2,dl,dw),0)
+							 #win32con.HWND_TOPMOST, x,y, 850, 500, 0)
+			 
+							send_input( window1)
 						#win32gui.SetWindowPos (hwnd[0],  0, x,y, 860, 500, 0)
 				#u'C:\\Users\\alex_buz\\Documents\\GitHub\\DataBuddy\\dm32\\dm32.exe -t "|" -w "csv2ora11g" -r "1" -o "1" -I "c:\\Python27\\data_migrator_1239\\test\\v101\\data\\ora_data_dir" -y "1000" -g "SCOTT/tiger2@orcl" -m "YYYY-MM-DD HH24.MI.SS.FF2" -e "YYYY-MM-DD HH24.MI.SS" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -a "SCOTT.Timestamp_test_to" -Z "C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN"'		
 		
