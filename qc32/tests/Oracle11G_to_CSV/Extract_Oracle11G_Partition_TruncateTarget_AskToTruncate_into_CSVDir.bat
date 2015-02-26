@@ -18,7 +18,7 @@
 ::	-z[--source_client_home] is "Path to Oracle 11G client home."
 ::	-D[--to_dir] is "To directory."	
 	
-python -c "print 'y\ny'" |C:\Python27\qc_dist_32\20150225_185457\qc32\qc32.exe ^
+python -c "print 'y\ny'" |C:\Python27\qc_dist_32\20150226_103047\qc32\qc32.exe ^
 -w ora11g2csv ^
 -o 1 ^
 -r 1 ^

@@ -17,7 +17,7 @@ inc['ORAXE']='oraxe.py'
 
 print args.copy_vector
 
-target=None
+db=None
 from_db, to_db=args.copy_vector.split('2')
 
 if inc.has_key(to_db.upper()):
@@ -25,8 +25,8 @@ if inc.has_key(to_db.upper()):
 	__builtin__.args = args
 	dmhome=os.path.dirname(os.path.realpath(__file__))
 
-	target = import_module(os.path.join(dmhome,'include',inc[to_db.upper()]))
-
+	db = import_module(os.path.join(dmhome,'include',inc[to_db.upper()]))
+	
 abspath=os.path.abspath(os.path.dirname(sys.argv[0]))
 ts=datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')
 logdir=os.path.join(abspath,'logs')

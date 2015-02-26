@@ -1,0 +1,23 @@
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\qc32\qc32.exe ^
+-l "10" ^
+-t "|" ^
+-w "ora11g2ora11g" ^
+-r "1" ^
+-o "1" ^
+-b "orcl6" ^
+-e "YYYY-MM-DD HH24.MI.SS" ^
+-m "YYYY-MM-DD HH24.MI.SS.FF2" ^
+-z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" ^
+-O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" ^
+-j "SCOTT1" ^
+-x "tiger2" ^
+-Q "C:\Python27\data_migrator_1239\test\v101\query\query_dir_ora" ^
+-d "orcl" ^
+-Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" ^
+-e "YYYY-MM-DD HH24.MI.SS" ^
+-m "YYYY-MM-DD HH24.MI.SS.FF2" ^
+-u "SCOTT" ^
+-p "tiger2" ^
+-O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" ^
+-a "SCOTT.Partitioned_test_to" ^
+-G "part_15" ^

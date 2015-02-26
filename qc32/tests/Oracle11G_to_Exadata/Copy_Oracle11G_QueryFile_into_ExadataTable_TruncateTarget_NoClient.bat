@@ -23,7 +23,7 @@
 ::	-O[--nls_timestamp_tz_format] is "nls_timestamp_tz_format for target."
 ::	-Z[--target_client_home] is "Path to Exadata client home bin dir."	
 	
-python -c "print 'y\ny'" |C:\Python27\qc_dist_32\20150225_185457\qc32\qc32.exe ^
+python -c "print 'y\ny'" |C:\Python27\qc_dist_32\20150226_103047\qc32\qc32.exe ^
 -w ora11g2oraexa ^
 -o 1 ^
 -r 1 ^

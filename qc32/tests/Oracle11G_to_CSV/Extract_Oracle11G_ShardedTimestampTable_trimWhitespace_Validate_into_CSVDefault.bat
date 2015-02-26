@@ -16,7 +16,7 @@
 ::	-z[--source_client_home] is "Path to Oracle 11G client home."
 ::	-W[--trim_whitespace] is "Trim whitespace from varchar2 in "Oracle 11G" extract."	
 	
-echo y|C:\Python27\qc_dist_32\20150225_185457\qc32\qc32.exe ^
+echo y|C:\Python27\qc_dist_32\20150226_103047\qc32\qc32.exe ^
 -w ora11g2csv ^
 -o 3 ^
 -r 3 ^
