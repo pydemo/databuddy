@@ -43,3 +43,11 @@ Ad-hoc data migration between databases and file formats (CSV)
 ##Execution
 
 python data-buddy.py
+
+
+#TODO
+- argument values reuse from existing session
+- clean uargs.db
+- test UI
+- add --log_dir to backend
+- add "source" and "target" datasources to "New Session"
