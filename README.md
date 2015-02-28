@@ -55,3 +55,4 @@ python data-buddy.py
 - generic "New Session" so user not limited by source and target templates
 - history of values for each argument
 - cleanup all other databases but Oracle
+- more templates and better template hierarchy
