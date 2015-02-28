@@ -7,10 +7,10 @@ DataBuddy 1.23.9
 
 Ad-hoc data migration between databases and file formats (CSV)
 
-##Conponents
+##Components
 
-  1. Gront end.
-  2. Command line.
+  1. Gront end UI.
+  2. Command line executable.
   
 ##Features:
 
