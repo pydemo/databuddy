@@ -39,3 +39,7 @@ Ad-hoc data migration between databases and file formats (CSV)
 
 - Wriiten using Python and wxPython.
 - Compiled with PyInstaller
+ 
+##Execution
+
+python data-buddy.py
