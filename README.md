@@ -51,3 +51,7 @@ python data-buddy.py
 - test UI
 - add --log_dir to backend
 - add "source" and "target" datasources to "New Session"
+- Copy/Paste of argument values between sessions
+- generic "New Session" so user not limited by source and target templates
+- history of values for each argument
+- 
