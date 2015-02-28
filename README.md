@@ -54,3 +54,4 @@ python data-buddy.py
 - Copy/Paste of argument values between sessions
 - generic "New Session" so user not limited by source and target templates
 - history of values for each argument
+- cleanup all other databases but Oracle
