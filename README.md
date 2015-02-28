@@ -19,11 +19,10 @@ Ad-hoc data migration between databases and file formats (CSV)
   1.session management.
 
 ###Command line:
-
-  1.Multi-query load.
-  2.Partition/sub-partition copy
-  3.Sharded copy (turbo mode)
-  4.Custom spool location (config/user_conf.py)
+1. Multi-query load.
+2. Partition/sub-partition copy
+3. Sharded copy (turbo mode)
+4. Custom spool location (config/user_conf.py)
   5.config/include/oracle.py - configurable SQL*Loader args.
   6.3 generic arguments (use them to pass job_id or timestamp and process in config/user_config.py)
   7.added all usecases
