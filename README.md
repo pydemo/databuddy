@@ -34,6 +34,7 @@ Ad-hoc data migration between databases and file formats (CSV)
 13. Ask to truncate.
 14. No client (url) connect.
 15. Supports CSV file load from multiple dirs.
+16. --exit_on_key - let's you keep exec window open after load job is done
 
 ##Implementation
 
