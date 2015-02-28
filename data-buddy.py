@@ -40,7 +40,7 @@ import imp
 from editor import TacoTextEditor
 import base64
 import win32con
-import win32gui
+import win32gui, win32api
 import win32process
 import __builtin__
 
@@ -49,6 +49,7 @@ from win32con import SW_MINIMIZE, SW_RESTORE
 from win32ui import FindWindow, error as ui_err
 from time import sleep
 		
+import wx.combo
 		
 __builtin__.copy_vector = None
 __builtin__.cvarg = None
@@ -84,6 +85,35 @@ LOAD_FILE_ID = wx.NewId()
 update_cache=True
 dBtn='N/A'
 tr='qc'
+from subprocess import Popen, PIPE,CREATE_NEW_CONSOLE
+def onExit():
+	print 'process exited'
+	print '#'*100
+#p = Popen(['start', 'cmd.exe', "/k"]+cfg, stdin=PIPE, shell=True) #stderr=PIPE, stdout=PIPE,
+import threading
+import subprocess
+def popenAndCall(onExit, popenArgs):
+	print 'popenAndCall'
+	"""
+	Runs the given args in a subprocess.Popen, and then calls the function
+	onExit when the subprocess completes.
+	onExit is a callable object, and popenArgs is a list/tuple of args that 
+	would give to subprocess.Popen.
+	"""
+	def runInThread(onExit, popenArgs):
+		print 'runInThread'
+		#proc = subprocess.Popen(*popenArgs)
+		proc = Popen(popenArgs , creationflags=CREATE_NEW_CONSOLE)
+		out,err=proc.communicate()
+		print out ,err
+		proc.wait()
+		onExit()
+		return
+	thread = threading.Thread(target=runInThread, args=(onExit, popenArgs))
+	thread.start()
+	# returns immediately after the thread starts
+	return thread
+					
 class cls_KeyBdInput(ct.Structure):
     _fields_ = [
         ("wVk", ct.c_ushort),
@@ -804,14 +834,23 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		
 		sub(self.onDeleteSessions, "delete_sessions")
 	def onDeleteSessions(self,  data, extra1, extra2=None):
-		(items) = data
-		#print 
-		for i in items.keys():
-			self.list.DeleteItem(i)
-		self.list.set_data()
+		#(items) = data
+		#print data
+		#for i in items.keys():
+			#self.list.DeleteItem(i)
 		
+		#self.list.DeleteAllItems()
+		(items)=data
+		for k,v in items.items():
+			#print k, v
+			if os.access(v, os.W_OK) and os.path.isfile(v):
+				os.remove(v)
+				#print 'removed', v
+				
+		self.list.set_data()
+		self.RecreateList(None,(self.list,self.filter))
 	def delete_seleted_items_remove(self):
-		print 'OnDeleteButton'
+		#print 'OnDeleteButton'
 		#print self.list.GetSelectedItemCount()
 		#print 
 		for i in self.list.GetSelectedItems():
@@ -819,7 +858,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 							   
 	def onRefreshList(self, data, extra1, extra2=None):
 		
-		print 'onRefreshList'
+		#print 'onRefreshList'
 		self.list.set_data()
 		self.RecreateList(None,(self.list,self.filter))
 	def OnAddSession(self, data, extra1, extra2=None):
@@ -837,9 +876,10 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		#print 'selecting %s' % idx
 		self.list.SetItemState(idx, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED) 
 		self.list.EnsureVisible(idx) 
-		
+		ss=(sname,cv[0],cv[1],'Copy',tmpl,dname,fname)
+		send('open_session',(ss))
 		#self.SetItemState(idx, 0, wxLIST_STATE_SELECTED)
-
+	
 	def OnUseCache(self, event):
 		#print 'use cache', self.pos
 		event.Skip()		
@@ -1037,9 +1077,9 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			#print self.currentItem
 			ii=self.list.GetItemData(self.currentItem)
 			session= self.list.getList()[ii]
-			print session
-			print self.frame.session_name
-			print self.frame.session_name==session[0]
+			#print session
+			#print self.frame.session_name
+			#print self.frame.session_name==session[0]
 			#print 'self.frame.changed', self.frame.changed
 			if not self.frame.session_name==session[0]:
 				if self.frame.changed:
@@ -1047,6 +1087,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 						(sname,cv,tmpl,dname,fname)=self.frame.saveSession() 
 						send('open_session',(session))
 					else:
+						self.frame.restore_changed_args()
 						send('open_session',(session))
 				else:
 					send('open_session',(session))
@@ -1945,12 +1986,13 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		#                   (self.list.GetItemText(self.currentItem), self.list.GetTopItem()))
 
 	def OnBeginEdit(self, event):
-		print "OnBeginEdit"
+		#print "OnBeginEdit"
 		#self.log.WriteText("OnBeginEdit")
 		event.Allow()
 
 	def OnItemDelete(self, event):
-		print "OnItemDelete"
+		pass
+		#print "OnItemDelete"
 		#self.log.WriteText("OnItemDelete\n")
 
 	def OnColClick(self, event):
@@ -2651,10 +2693,56 @@ class ConfigTree(wx.Frame):
 	def OnSelChanged(self, event):
 		item =  event.GetItem()
 		self.display.SetLabel(self.tree.GetItemText(item))
-
+class CheckListBoxComboPopup(wx.CheckListBox, wx.combo.ComboPopup):
+  
+    def __init__(self, values):
+        self.values = values
+        self.PostCreate(wx.PreCheckListBox())
+        wx.combo.ComboPopup.__init__(self)
+  
+    def Create(self, parent):
+        wx.CheckListBox.Create(self, parent)
+        self.InsertItems(self.values, 0)
+        return True
+  
+    def GetControl(self):
+        return self
+  
+    def OnPopup(self):
+        combo = self.GetCombo()
+        value = map(string.strip, combo.GetValue().split('|'))
+        if value == ['']: value = []
+        self.ignored = []
+        for i in value:
+            try:
+                self.Check(self.values.index(i))
+            except ValueError:
+                # Try to find equal
+                if self.equal.has_key(i):
+                    self.Check(self.values.index(self.equal[i]))
+                else:
+                    logger.warning('unknown flag: %s: ignored.', i)
+                    self.ignored.append(i)
+  
+        wx.combo.ComboPopup.OnPopup(self)
+  
+    def OnDismiss(self):
+        combo = self.GetCombo()
+        value = []
+        for i in range(self.GetCount()):
+            if self.IsChecked(i):
+                value.append(self.values[i])
+        # Add ignored flags
+        value.extend(self.ignored)
+        strValue = '|'.join(value)
+        if combo.GetValue() != strValue:
+            combo.SetValue(strValue)
+            Presenter.setApplied(False)
+  
+        wx.combo.ComboPopup.OnDismiss(self)
 class NewSessionDialog(wx.Dialog):
 	def __init__(
-			self, parent, ID, title, size,data, pos=wx.DefaultPosition, 
+			self, parent, ID, title, size,data, values_source, pos=wx.DefaultPosition, 
 			style=wx.DEFAULT_DIALOG_STYLE,
 			useMetal=False 
 			):
@@ -2665,6 +2753,7 @@ class NewSessionDialog(wx.Dialog):
 		# method.
 		self.parent=parent
 		self.data=data
+		self.values_source=values_source
 		#pprint(data)
 		self._popUpMenu = None
 		#self.recent=[]
@@ -2856,18 +2945,45 @@ class NewSessionDialog(wx.Dialog):
 			optsizer.Add(boxsizer, 0 , wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT)	
 		btnsizer = wx.BoxSizer(wx.HORIZONTAL)
 		if 1:
-			sb = wx.StaticBox(self, label='Arguments')
+			sb = wx.StaticBox(self, label='Arguments source')
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			self.rb_use_templates=wx.RadioButton(self, label="Use templates",style=wx.RB_GROUP)
+			self.rb_use_templates=wx.RadioButton(self, label="Templates",style=wx.RB_GROUP)
 			boxsizer.Add(self.rb_use_templates, flag=wx.LEFT|wx.TOP, border=5)
-			self.rb_set_manually=wx.RadioButton(self, label="Set manually")
+			self.rb_set_manually=wx.RadioButton(self, label="Generic")
 			self.rb_set_manually.Enable(False)
 			boxsizer.Add(self.rb_set_manually, flag=wx.LEFT|wx.TOP, border=5)
 			self.rb_use_templates.Bind(wx.EVT_RADIOBUTTON, self.onUseRbButton)
 			self.rb_set_manually.Bind(wx.EVT_RADIOBUTTON, self.onUseRbButton)
 			btnsizer.Add(boxsizer, 0 , wx.TOP|wx.BOTTOM|wx.LEFT)
+		if 0: #checkbox
+			sb = wx.StaticBox(self, label='Source Values')
+			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
+			#self.rb_use_templates=wx.RadioButton(self, label="Templates",style=wx.RB_GROUP)
+			self.values = ['test1','test2']
+			popup = CheckListBoxComboPopup(self.values)
+			self.combo = wx.combo.ComboCtrl(self, size=(220,-1))
+			self.combo.SetPopupControl(popup)
+			boxsizer.Add(self.combo, 1, wx.ALL, 0)
+			self.combo.Bind(wx.EVT_TEXT, self.OnChange)
+			#self.combo.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
+			btnsizer.Add(boxsizer, 0 , wx.TOP|wx.BOTTOM|wx.LEFT)
+		if 1:
+			sb = wx.StaticBox(self, label='Values source')
+			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
+			lbl='None            '
+			if self.values_source:
+				lbl='Reuse "%s"' % self.values_source
+			self.rb_reuse=wx.CheckBox(self, label=lbl)
+			self.rb_reuse.Enable(True)
+			self.rb_reuse.SetValue(True)
+			if not self.values_source:
+				self.rb_reuse.Enable(False)
+				self.rb_reuse.SetValue(False)
+				
+			boxsizer.Add(self.rb_reuse, flag=wx.LEFT|wx.TOP, border=5)
 			
-		self.create_btn = wx.Button(self, wx.ID_OK, "Create")
+			btnsizer.Add(boxsizer, 0 , wx.TOP|wx.BOTTOM|wx.LEFT)			
+		self.create_btn = wx.Button(self, wx.ID_OK, 'Create')
 		self.create_btn.Enable(False)
 		btn_exit = wx.Button(self, wx.ID_CANCEL, "Cancel")
 		btnsizer.Add((3,3),1)
@@ -2907,9 +3023,16 @@ class NewSessionDialog(wx.Dialog):
 					self.api_menu[m[:2]]=[]
 				self.api_menu[m[:2]].append(m)
 			#print pprint(self.api_menu)
+	def OnChange(self, evt):
+		# ComboCtrl still generates events in SetValue
+		if self.freeze: return
+		Presenter.setApplied(False)
+		evt.Skip() 			
+	def onSourceValues(self, evt):
+		print 'onSourceValues'
 	def getConfig(self):
 		tmpl=self.get_template()
-		return [self.getSessionName(), self.copy_vector, tmpl, self.api_args[tmpl]]
+		return [self.getSessionName(), self.copy_vector, tmpl, self.api_args[tmpl], self.rb_reuse.GetValue()]
 	def getSessionName(self):
 		return self.tc_sname.GetValue()
 	def onSourceObjButton(self, event): 
@@ -3332,7 +3455,8 @@ class dummy_args(wx.Panel):
 			#pprint(dir(fgs))
 			disable=['copy_vector']
 			i=0
-			for k,v in self.cargs.items()	:
+			
+			for k,v in sorted(self.cargs.items()):
 				#print k,v
 				short,long,val,desc=v
 				self.obj[k]= (wx.StaticText(self.core_args_panel, label=k), wx.TextCtrl(self.core_args_panel,value="", size=(140,22)))
@@ -3357,7 +3481,7 @@ class dummy_args(wx.Panel):
 			hbox = wx.BoxSizer(wx.HORIZONTAL)
 			fgs = wx.GridBagSizer(4, 10)
 			i=0
-			for k,v in self.fargs.items()	:
+			for k,v in sorted(self.fargs.items()):
 				#print k,v
 				#print i
 				short,long,val,desc=v
@@ -3378,7 +3502,7 @@ class dummy_args(wx.Panel):
 			hbox = wx.BoxSizer(wx.HORIZONTAL)
 			fgs = wx.GridBagSizer(4, 10)
 			i=0
-			for k,v in self.targs.items()	:
+			for k,v in sorted(self.targs.items()):
 				#print k,v
 				#print i
 				short,long,val,desc=v
@@ -3613,13 +3737,14 @@ class pnl_args(wx.Panel):
 			#pprint(dir(fgs))
 			disable=['copy_vector']
 			i=0
-			for k,v in self.cargs.items()	:
+			for k,v in sorted(self.cargs.items()):
 				#print k,v
 				short,long,val,desc=v
 				row=i%4
 				col=(i-i%2)
 				#print 'row',row, 'col', col
 				self.obj[k]= (wx.StaticText(self.core_args_panel, label=k), wx.TextCtrl(self.core_args_panel,value=str(val).strip('"'), size=(100,22)))
+				self.obj[k][1].SetName(k)
 				self.obj[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
 				self.fgs.Add(self.obj[k][0], pos=(i%2, col), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				self.fgs.Add(self.obj[k][1], pos=(i%2, col+1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
@@ -3651,7 +3776,7 @@ class pnl_args(wx.Panel):
 			hbox = wx.BoxSizer(wx.HORIZONTAL)
 			fgs = wx.GridBagSizer(3, 10)
 			i=0
-			for k,v in self.fargs.items()	:
+			for k,v in sorted(self.fargs.items()):
 				#print k,v
 				#print i
 				short,long,val,desc=v
@@ -3660,7 +3785,7 @@ class pnl_args(wx.Panel):
 				if k in ['from_passwd']:
 					style=wx.TE_PASSWORD
 				length=self.tc_length
-				if k in ['input_dirs','input_files', 'source_client_home']:
+				if k in ['query_sql_file', 'input_dirs','input_files', 'source_client_home']:
 					length=168
 				if k in ['from_passwd']:
 					length=168
@@ -3694,7 +3819,34 @@ class pnl_args(wx.Panel):
 					bbox.Add(self.obj[k][1], 0, flag=wx.ALIGN_CENTER, border=5)	
 					bbox.Add(self.obj[k][2], 0, flag=wx.ALIGN_CENTER, border=5)	
 					#fgs.Add(self.obj[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	
-					fgs.Add(bbox, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)				
+					fgs.Add(bbox, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	
+				elif k in ['query_sql_file']:
+					
+					imageFile = os.path.join(home,"bmp_source/refresh_icon_16_grey2.png")
+					image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+					#print self.obj[k]
+					#print len(self.obj[k])
+					
+					self.obj[k].append(wx.BitmapButton(from_args_panel, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6)))
+					
+					#global home
+					dir =home
+					#print sval
+					ffile=sval.split(';')[0]
+					if os.path.isfile(ffile):
+						dir=os.path.dirname(ffile) 
+					print sval
+					print dir
+					self.gen_bind(wx.EVT_BUTTON,self.obj[k][2], self.OnQuerySqlFile,[self.obj[k][1],dir])
+					#self.obj[k][2].Bind(wx.EVT_BUTTON, self.OnDirButton)					
+					#self.Bind(wx.EVT_BUTTON, self.OnInputDir, self.btn_dir)
+					bbox = wx.BoxSizer(wx.HORIZONTAL)
+					
+					bbox.Add(self.obj[k][1], 0, flag=wx.ALIGN_CENTER, border=5)	
+					bbox.Add(self.obj[k][2], 0, flag=wx.ALIGN_CENTER, border=5)	
+					#fgs.Add(self.obj[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	
+					fgs.Add(bbox, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+					
 				elif k in ['input_dirs', 'source_client_home']:
 					
 					imageFile = os.path.join(home,"bmp_source/refresh_icon_16_grey2.png")
@@ -3760,11 +3912,14 @@ class pnl_args(wx.Panel):
 				
 					fgs.Add(self.obj[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				i+=1
-				
+				self.obj[k][1].SetName(k)
 				self.obj[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
 			
 			
 			if not self.copy_vector[0].startswith('CSV'):
+				if 0:
+					self.tc_0test=wx.StaticText(from_args_panel, label='NOT TESTED')
+					fgs.Add(self.tc_0test, pos=(i, 0), flag=wx.ALIGN_RIGHT|wx.TOP|wx.BOTTOM, border=1)
 				lbl="Test connect"
 				sn=self.parent.session_name
 				#tc=self.parent.testconn
@@ -3778,6 +3933,7 @@ class pnl_args(wx.Panel):
 					lbl='Closing in %d' % (self.parent.closing_in-self.parent.counters[self.the_id[0]])
 					btn.SetLabel('%s: %s' % (sn,lbl))
 					self.parent.btn[self.the_id[0]]=btn
+				
 			hbox.Add(fgs, 1, flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=5)	
 			from_args_panel.SetSizer(hbox)
 			
@@ -3792,7 +3948,7 @@ class pnl_args(wx.Panel):
 			i=0
 
 				
-			for k,v in self.targs.items()	:
+			for k,v in sorted(self.targs.items()):
 				#print k,v
 				#print i
 				short,long,val,desc=v
@@ -3900,9 +4056,14 @@ class pnl_args(wx.Panel):
 				
 					fgs.Add(self.obj[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				i+=1
+				self.obj[k][1].SetName(k)
 				self.obj[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
 			
 			if not self.copy_vector[1].startswith('CSV'):	
+				if 0:
+					self.tc_1test=wx.StaticText(to_args_panel, label='NOT TESTED')
+					fgs.Add(self.tc_1test, pos=(i, 0), flag=wx.ALIGN_RIGHT|wx.RIGHT, border=1)
+
 				lbl="Test connect"			
 
 				sn=self.parent.session_name
@@ -4031,7 +4192,7 @@ class pnl_args(wx.Panel):
 
 
 	def OnTestConnect(self, evt):
-		print 'OnTestConnect'
+		#print 'OnTestConnect'
 		
 		
 		#print r'start "%s" cmd.exe  /k "%s"' % (title, cmd)
@@ -4041,119 +4202,138 @@ class pnl_args(wx.Panel):
 		#print title
 		cmd=None
 		title='Connection test'
+		spooler=None
+		path_to_db_client=None
+		tfile=os.path.join(home,'test','test_connnect','Oracle.sql')
 		if tc.Name=='source':
+			spooler=conf.dbtools['SPOOLER'][self.copy_vector[0]]
+			path_to_db_client=self.obj['source_client_home'][1].GetValue()
 			title='%s (%s) connection test.' % (conf.dbs[self.copy_vector[0]],tc.Name)
-			cmd=r"%s\%s %s/%s@%s @C:\Users\alex_buz\Documents\GitHub\DataBuddy\test\test_connnect\Oracle.sql" % (
-			self.obj['source_client_home'][1].GetValue(), #path to spooler 
-			conf.dbtools['SPOOLER'][self.copy_vector[0]], #spooler name
+			cmd=r"%s\%s %s/%s@%s @%s" % (
+			path_to_db_client, #path to spooler 
+			spooler, #spooler name
 			self.obj['from_user'][1].GetValue(), #db user
 			self.obj['from_passwd'][1].GetValue(), #pwd
 			self.obj['from_db_name'][1].GetValue(), #pwd
+			tfile
 			)
 			#print cmd
 		if tc.Name=='target':
+			spooler=conf.dbtools['SPOOLER'][self.copy_vector[1]]
+			path_to_db_client=self.obj['target_client_home'][1].GetValue()
 			title='%s (%s) connection test.' % (conf.dbs[self.copy_vector[1]],tc.Name)
-			cmd=r"%s\%s %s/%s@%s @C:\Users\alex_buz\Documents\GitHub\DataBuddy\test\test_connnect\Oracle.sql" % (
-			self.obj['target_client_home'][1].GetValue(), #path to spooler 
-			conf.dbtools['SPOOLER'][self.copy_vector[1]], #spooler name
+			cmd=r"%s\%s %s/%s@%s @%s" % (
+			path_to_db_client, #path to spooler 
+			spooler, #spooler name
 			self.obj['to_user'][1].GetValue(), #db user
 			self.obj['to_passwd'][1].GetValue(), #pwd
 			self.obj['to_db_name'][1].GetValue(), #pwd
+			tfile
 			)
 		#print cmd
 		assert cmd, 'command is not set'
-
-		#evt.Skip()
-		#cmd=r'cmd.exe  /k %s' % ( cmd)
-		cmd=r'%s' % ( cmd)
-		print cmd
-		from subprocess import Popen, PIPE,CREATE_NEW_CONSOLE
-		cfg=[]
-		if 1:
-			import shlex 
-			cmd2=''.join(cmd.split('^\n'))
+		if not os.path.isfile(os.path.join(path_to_db_client,spooler)):
+			self.parent.Warn('"%s" does not exists at "%s".' % (spooler,path_to_db_client))
+		else:
+			#evt.Skip()
+			#cmd=r'cmd.exe  /k %s' % ( cmd)
+			cmd=r'%s' % ( cmd)
 			#print cmd
-			lexer=shlex.shlex(cmd2)
-			#lexer = shlex.shlex(input)
-			lexer.quotes = '"'
-			#lexer.wordchars += '\''
-			lexer.whitespace_split = True
-			lexer.commenters = ''
-			cfg = list(lexer)
-			#cfg=['start',"'%s'" % title] + cfg
-			#C:\app\alex_buz\product\11.2.0\dbhome_2\BIN\sqlplus.exe SCOTT/tiger2@orcl @C:\Users\alex_buz\Documents\GitHub\DataBuddy\test\test_connnect\Oracle.sql
+			from subprocess import Popen, PIPE,CREATE_NEW_CONSOLE
+			cfg=[]
+			if 1:
+				import shlex 
+				cmd2=''.join(cmd.split('^\n'))
+				#print cmd
+				lexer=shlex.shlex(cmd2)
+				#lexer = shlex.shlex(input)
+				lexer.quotes = '"'
+				#lexer.wordchars += '\''
+				lexer.whitespace_split = True
+				lexer.commenters = ''
+				cfg = list(lexer)
+				#cfg=['start',"'%s'" % title] + cfg
+				#C:\app\alex_buz\product\11.2.0\dbhome_2\BIN\sqlplus.exe SCOTT/tiger2@orcl @C:\Users\alex_buz\Documents\GitHub\DataBuddy\test\test_connnect\Oracle.sql
+				if 0:
+					cfg=['start',
+	 "'SOURCE connection.'",
+	 'cmd.exe',
+	 '/k',
+	 'C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN\\sqlplus.exe SCOTT/tiger2@orcl @C:\\Users\\alex_buz\\Documents\\GitHub\\DataBuddy\\test\\test_connnect\\Oracle.sql']
+				#pprint(cfg)	
+			
+			#print  cmd
+			#e(0)
 			if 0:
-				cfg=['start',
- "'SOURCE connection.'",
- 'cmd.exe',
- '/k',
- 'C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN\\sqlplus.exe SCOTT/tiger2@orcl @C:\\Users\\alex_buz\\Documents\\GitHub\\DataBuddy\\test\\test_connnect\\Oracle.sql']
-			pprint(cfg)	
-		#print  cmd
-		p = Popen(cfg, creationflags=CREATE_NEW_CONSOLE)
-		#time.sleep(1)
-		hwnd=None
-		while not hwnd:
-			hwnd=self.get_hwnds_for_pid(p.pid)
-		print hwnd
-		#pprint(dir(win32gui))
-		win32gui.SetWindowText (hwnd[0], title)
-		
-		#p = Popen(["C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN\\sqlplus.exe",'SCOTT/tiger2@orcl', '@C:\\Users\\alex_buz\\Documents\\GitHub\\DataBuddy\\test\\test_connnect\\Oracle.sql'],creationflags=CREATE_NEW_CONSOLE)
-		#print p
-		#print p.pid
-		#btn = evt.GetEventObject()
-		(x,y) = self.parent.GetScreenPositionTuple()
-		(l,w) =self.parent.GetClientSizeTuple()
-		dl,dw= 600,400
-		tc.Enable(False)
-		if tc.Name=='source':
-			#print x+(l-dl)/2, y+(w-dw)/2, dl,dw
-			#self.SetDimensions(x+(l-dl)/2, y+(w-dw)/2, dl,dw)
-			win32gui.SetWindowPos (hwnd[0],  0, x,y, 750, 400, 0)
-			#self.src_p=p
-			#self.src_btn=tc
-			#self.timers={}
-			#self.counters={}
-			#self.th={}
-			#self.the_id=None
-			the_id=self.the_id[0]
-			self.parent.btn[the_id]=tc
-			sn=self.parent.session_name
-			self.parent.p[the_id]=p
-			#self.parent.q.append([sn,self.the_id])
-			btn=None
-			#if tc:
-			#	btn=tc
-			#self.parent.Bind(wx.EVT_TIMER, lambda event, i=the_id: self.parent.th[the_id] (event, the_id), id=the_id)
-			self.parent.timers[the_id].Start(1000)
-		if tc.Name=='target':
-			#print x+(l-dl)/2, y+(w-dw)/2, dl,dw
-			#self.SetDimensions(x+(l-dl)/2, y+(w-dw)/2, dl,dw)
-			win32gui.SetWindowPos (hwnd[0],  0, x+(l-dl)/2,y+(w-dw)/2, 750, 400, 0)		
-			#win32gui.SetWindowPos (hwnd[0],  win32con.HWND_TOPMOST,500,100, 750, 400, 0)
-			#self.src_p=p
-			#self.src_btn=tc
-			#self.timers={}
-			#self.counters={}
-			#self.th={}
-			#self.the_id=None
-			the_id=self.the_id[1]
-			self.parent.btn[the_id]=tc
-			sn=self.parent.session_name
-			self.parent.p[the_id]=p
-			#self.parent.q.append([sn,self.the_id])
-			#win32gui.ShowWindow(firefox[0], win32con.SW_MINIMIZE)
-			btn=None
-			#if tc:
-			#	btn=tc
-			#self.parent.Bind(wx.EVT_TIMER, lambda event, i=the_id: self.parent.th[the_id] (event, the_id), id=the_id)
-			self.parent.timers[the_id].Start(1000)
 
-		#self.timer.Stop()
-		
-		#send('close_exec', p)
-		#wnd = subprocess.Popen ([cmd], shell=True)
+				thread=popenAndCall(onExit,cfg)
+				print thread
+			else:
+				p = Popen(cfg, creationflags=CREATE_NEW_CONSOLE)
+			#e(0)
+			#time.sleep(1)
+			hwnd=None
+			while not hwnd:
+				hwnd=self.get_hwnds_for_pid(p.pid)
+			print hwnd
+			#pprint(dir(win32gui))
+			win32gui.SetWindowText (hwnd[0], title)
+			
+			#p = Popen(["C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN\\sqlplus.exe",'SCOTT/tiger2@orcl', '@C:\\Users\\alex_buz\\Documents\\GitHub\\DataBuddy\\test\\test_connnect\\Oracle.sql'],creationflags=CREATE_NEW_CONSOLE)
+			#print p
+			#print p.pid
+			#btn = evt.GetEventObject()
+			(x,y) = self.parent.GetScreenPositionTuple()
+			(l,w) =self.parent.GetClientSizeTuple()
+			dl,dw= 600,400
+			tc.Enable(False)
+			if tc.Name=='source':
+				#print x+(l-dl)/2, y+(w-dw)/2, dl,dw
+				#self.SetDimensions(x+(l-dl)/2, y+(w-dw)/2, dl,dw)
+				win32gui.SetWindowPos (hwnd[0],  0, x/2,y/2, 750, 400, 0)
+				#self.src_p=p
+				#self.src_btn=tc
+				#self.timers={}
+				#self.counters={}
+				#self.th={}
+				#self.the_id=None
+				the_id=self.the_id[0]
+				self.parent.btn[the_id]=tc
+				sn=self.parent.session_name
+				self.parent.p[the_id]=p
+				#self.parent.q.append([sn,self.the_id])
+				btn=None
+				#if tc:
+				#	btn=tc
+				#self.parent.Bind(wx.EVT_TIMER, lambda event, i=the_id: self.parent.th[the_id] (event, the_id), id=the_id)
+				self.parent.timers[the_id].Start(1000)
+			if tc.Name=='target':
+				#print x+(l-dl)/2, y+(w-dw)/2, dl,dw
+				#self.SetDimensions(x+(l-dl)/2, y+(w-dw)/2, dl,dw)
+				win32gui.SetWindowPos (hwnd[0],  0, x+l/2,y/2, 750, 400, 0)		
+				#win32gui.SetWindowPos (hwnd[0],  win32con.HWND_TOPMOST,500,100, 750, 400, 0)
+				#self.src_p=p
+				#self.src_btn=tc
+				#self.timers={}
+				#self.counters={}
+				#self.th={}
+				#self.the_id=None
+				the_id=self.the_id[1]
+				self.parent.btn[the_id]=tc
+				sn=self.parent.session_name
+				self.parent.p[the_id]=p
+				#self.parent.q.append([sn,self.the_id])
+				#win32gui.ShowWindow(firefox[0], win32con.SW_MINIMIZE)
+				btn=None
+				#if tc:
+				#	btn=tc
+				#self.parent.Bind(wx.EVT_TIMER, lambda event, i=the_id: self.parent.th[the_id] (event, the_id), id=the_id)
+				self.parent.timers[the_id].Start(1000)
+
+			#self.timer.Stop()
+			
+			#send('close_exec', p)
+			#wnd = subprocess.Popen ([cmd], shell=True)
 	def get_hwnds_for_pid (self, pid):
 		def callback (hwnd, hwnds):
 			if win32gui.IsWindowVisible (hwnd) and win32gui.IsWindowEnabled (hwnd):
@@ -4185,12 +4365,21 @@ class pnl_args(wx.Panel):
 	def OnDirButton(self, event):
 		print 'OnDirButton'
 	def onKeyPress(self, event):
-		print 'changed1'
-		
+		print 'pnl onKeyPress'
+		tc = event.GetEventObject()
+		print 'name=',tc.Name
 		kc = event.GetKeyCode()
 		if not (kc == wx.WXK_TAB or kc == wx.WXK_RETURN):
 			self.parent.btn_save.Enable(True)
-			self.parent.changed=True
+			#self.parent.changed=True
+			if not tc.Name in self.parent.changed:
+				self.parent.changed.append(tc.Name)
+		controlDown = event.CmdDown()
+		if controlDown:
+			print 'controlDown', kc
+			if kc == 1: #in ['a','A']:
+				print 'Ctrl-A'
+				tc.SelectAll()				
 		event.Skip()
 		return
 	def ClearAll(self):
@@ -4237,23 +4426,34 @@ class pnl_args(wx.Panel):
 		#save to file
 		return [self.cargs, self.fargs, self.targs]
 	def OnPwdFocus (self, evt):
-		print 'OnPwdFocus'
+		#print 'OnPwdFocus'
 		#(objArr)=params
 		#print 'OnPwdFocus'
 		tc = evt.GetEventObject()
 		#print tc.Name
+		#print self.obj[tc.Name][1].GetValue()
 		self.obj[tc.Name][1]=tc
+		evt.Skip()
 		
 	def OnPassword(self, evt,params):
-		print 'OnPassword'
+		#print 'OnPassword'
 		[flip] =params
+
 		for tc in flip:
-			print tc
+			#print tc
 			if tc.IsShown():
+				[a,b]=flip
+				if tc==flip[0]:
+					if a.GetValue()<>b.GetValue():
+						b.SetValue(a.GetValue())
+				else:
+					if a.GetValue()<>b.GetValue():
+						a.SetValue(b.GetValue())
+					
 				tc.Hide()
 			else:
 				tc.Show()
-			
+		evt.Skip()	
 		#pprint(dir(self.src_hide_show[0]))		
 	def OnInputDir(self, evt,params):
 		print 'OnInputDir'
@@ -4295,7 +4495,23 @@ class pnl_args(wx.Panel):
 			dlg.Destroy()
 			self.set_dirs(dir_obj, paths)
 			#print dir
-			
+		OnQuerySqlFile	
+	def OnQuerySqlFile(self, evt,params):
+		print 'OnQuerySqlFile'
+		[file_obj,dir] = params
+		dlg = wx.FileDialog(self, "Choose SQL file", dir, "",
+                                       "*.*", wx.FD_OPEN | wx.FD_FILE_MUST_EXIST) #wx.FD_MULTIPLE|
+		if dlg.ShowModal() != wx.ID_OK:
+			print("You Cancelled The Dialogue!")
+			dlg.Destroy()
+			return
+		files = dlg.GetPaths()
+		for indx, path in enumerate(files):
+				print("File %d: %s"%(indx+1, path))
+		#pprint files
+		dlg.Destroy()
+		self.set_files(file_obj, files)
+		
 	def OnInputFiles(self, evt,params):
 		print 'OnInputDir'
 		[file_obj,dir] = params
@@ -4350,26 +4566,26 @@ class pnl_args(wx.Panel):
 		
 	def get_cmd(self,transport):
 		cmd='%s ^' % transport
-		for k, v in self.cargs.items():
+		for k, v in sorted(self.cargs.items()):
 			#print k,v
 			short,long,val,desc=v
 			cmd='%s\n%s "%s" ^' % (cmd, short,self.obj[k][1].GetValue())
-		for k, v in self.fargs.items():
+		for k, v in sorted(self.fargs.items()):
 			#print k,v
 			short,long,val,desc=v
 			cmd='%s\n%s "%s" ^' % (cmd, short,self.obj[k][1].GetValue())
-		for k, v in self.targs.items():
+		for k, v in sorted(self.targs.items()):
 			#print k,v
 			short,long,val,tesc=v
 			cmd='%s\n%s "%s" ^' % (cmd, short,self.obj[k][1].GetValue())			
 		return cmd
 	def get_cmd_line(self,transport):
 		cmd='%s' % transport #'python  C:\Python27\data_migrator_1239\datamule.py' #
-		for k, v in self.cargs.items():
+		for k, v in sorted(self.cargs.items()):
 			#print k,v
 			short,long,val,desc=v
 			cmd='%s %s "%s"' % (cmd, short,self.obj[k][1].GetValue())
-		for k, v in self.fargs.items():
+		for k, v in sorted(self.fargs.items()):
 			#print k,v
 			short,long,val,desc=v
 			val=self.obj[k][1].GetValue()
@@ -4377,7 +4593,7 @@ class pnl_args(wx.Panel):
 				val= base64.b64decode(val)
 			cmd='%s %s "%s"' % (cmd, short,val)
 			#print cmd
-		for k, v in self.targs.items():
+		for k, v in sorted(self.targs.items()):
 			#print k,v
 			short,long,val,tesc=v
 			val=self.obj[k][1].GetValue()
@@ -4432,7 +4648,7 @@ class DataBuddy(wx.Frame):
 		sizer = wx.GridBagSizer(5, 5)
 		self.home=home
 		self.sids={}
-		self.changed=False
+		self.changed=[]
 		self.copy_vector=None
 		userhome = os.path.expanduser('~')
 		self.save_to_dir=os.path.join(userhome,'sessions')
@@ -4450,7 +4666,7 @@ class DataBuddy(wx.Frame):
 			sizer.Add(self.st_session_name, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
 			self.session_name=None
 			self.tc_session_name = wx.TextCtrl(panel,value='n/a')
-			
+			self.tc_session_name.SetName('session_name')
 			self.tc_session_name.Bind(wx.EVT_CHAR, self.onKeyPress)
 			self.tc_session_name.Enable(False)
 			sizer.Add(self.tc_session_name, pos=(0, 1), span=(1, 3), flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=10)
@@ -4581,7 +4797,7 @@ class DataBuddy(wx.Frame):
 		sizer.Add(self.btn_show, pos=(9, 2),flag=wx.BOTTOM|wx.ALIGN_RIGHT)
 		self.btn_show.Enable(False)
 
-		self.btn_run = wx.Button(panel, label='Run')
+		self.btn_run = wx.Button(panel, label='Run', size=(100,25))
 		self.btn_run.SetName('run')
 		self.btn_run.Bind(wx.EVT_BUTTON, self.OnButtonRun)
 		sizer.Add(self.btn_run, pos=(9, 3),flag=wx.BOTTOM|wx.ALIGN_RIGHT)
@@ -4661,7 +4877,7 @@ class DataBuddy(wx.Frame):
 		self.Show(True)
 		(self.cargs,self.fargs,self.targs)=(None, None, None)
 		#print self.GetSize()
-		sub(self.onDeleteSessions, "delete_sessions")
+		#sub(self.onDeleteSessions, "delete_sessions")
 		self.timers={}
 		self.counters={}
 		self.th={}
@@ -4669,7 +4885,35 @@ class DataBuddy(wx.Frame):
 		self.p={}
 		self.the_id=None
 		self.q=[]
-		self.closing_in=5
+		self.closing_in=6
+	def restore_changed_args(self):
+		pprint(self.changed)
+		sess=self.get_session_args(os.path.join(self.sdir,self.fname))
+		(self.cargs,self.fargs,self.targs)=sess
+		for k,v in self.cargs.items():
+			#print k, v
+			if k in self.changed:
+				#restoring value
+				
+				print 'restoring',k,'from',self.args_panel.obj[k][1].GetValue(),'to', v[2]
+				self.args_panel.obj[k][1]=v[2].strip('"')
+				del self.changed[self.changed.index(k)]
+		for k,v in self.fargs.items():
+			#print k, v
+			if k in self.changed:
+				#restoring value
+				#print self.args_panel.obj[k][1]
+				print 'restoring',k,'from',self.args_panel.obj[k][1].GetValue(),'to', v[2]
+				self.args_panel.obj[k][1]=v[2].strip('"')
+				del self.changed[self.changed.index(k)]
+		for k,v in self.targs.items():
+			#print k, v
+			if k in self.changed:
+				#restoring value
+				print 'restoring',k,'from',self.args_panel.obj[k][1].GetValue(),'to', v[2]
+				self.args_panel.obj[k][1]=v[2].strip('"')
+				del self.changed[self.changed.index(k)]
+		self.changed=[]
 	def openDefault(self, sname):
 		print sname
 	def onTabChanged(self, evt):
@@ -4680,7 +4924,7 @@ class DataBuddy(wx.Frame):
 		else:
 			self.btn_clearall.Enable(True)
 		#self.nb_tab=
-	def onDeleteSessions(self,  data, extra1, extra2=None):
+	def onDeleteSessions_(self,  data, extra1, extra2=None):
 		(items)=data
 		for k,v in items.items():
 			#print k, v
@@ -4711,16 +4955,25 @@ class DataBuddy(wx.Frame):
 		self.nb.EnableTab(1,False)
 		
 	def onKeyPress(self, event):
-		print 'changed0'
-		
+		print 'frame onKeyPress'
+		tc = event.GetEventObject()
+		print 'name=',tc.Name
 		kc = event.GetKeyCode()
 		if not (kc == wx.WXK_TAB or kc == wx.WXK_RETURN):
 			self.btn_save.Enable(True)
+			if not tc.Name in self.changed:
+				self.changed.append(tc.Name)
 			#self.parent.changed=True
+		controlDown = event.CmdDown()
+		if controlDown:
+			print 'controlDown', kc
+			if kc == 1: #in ['a','A']:
+				print 'Ctrl-A'
+				tc.SelectAll()
 		event.Skip()
 		return
 	def TimerHandler(self, event, the_id):
-	
+		#self.closing_in=15
 		self.counters[the_id] = self.counters[the_id] + 1
 		#print self.counters[the_id], the_id
 		#if self.counters[the_id]>10:
@@ -4739,6 +4992,8 @@ class DataBuddy(wx.Frame):
 			hwnd= self.get_hwnds_for_pid (p.pid)
 			
 			if not hwnd or self.counters[the_id] >= self.closing_in:
+				poll=p.poll()
+				#print 'poll', p
 				self.close_exec(p)
 				if 1:
 					self.counters[the_id] = 0
@@ -4750,10 +5005,36 @@ class DataBuddy(wx.Frame):
 						self.btn[the_id]=None
 			else:			
 				if btn and self.counters[the_id]>0:
-					#print the_id, self.counters[the_id],msg
+					#print the_id, self.counters[the_id],msg,  'poll', p.poll()
 					btn.Enable(False)
 					win32gui.SetWindowText (hwnd[0], '%s: %s' %(self.session_name,msg))
 					btn.SetLabel(msg)
+					if 0:
+						def all_ok(hwnd, param):
+							print hwnd
+							return True
+						print win32gui.EnumChildWindows(hwnd[0], all_ok, None)
+					if 0:
+						buf_size = 1 + win32gui.SendMessage(hwnd[0], win32con.WM_GETTEXTLENGTH, 0, 0)
+						if buf_size:
+							buffer = win32gui.PyMakeBuffer(buf_size)
+							win32gui.SendMessage(hwnd[0], win32con.WM_GETTEXT, buf_size, buffer)
+							txt = buffer[:buf_size]
+
+						if buf_size:
+							selinfo  = win32gui.SendMessage(hwnd[0], win32con.EM_GETSEL, 0, 0)
+							endpos   = win32api.HIWORD(selinfo)
+							startpos = win32api.LOWORD(selinfo)
+							print 'txt', txt[startpos: endpos]
+			
+					if 0:
+						control = win32gui.FindWindowEx(hwnd[0], 0, 'static', None)
+						buffer = win32gui.PyMakeBuffer(255)
+						length = win32gui.SendMessage(control, win32con.WM_GETTEXT, 255, buffer)
+
+						result = buffer[:length]
+						print 'buffer', result
+						#time.sleep(1)
 		else:
 			#print the_id, self.the_id
 			if the_id==self.the_id[2]:
@@ -4774,7 +5055,8 @@ class DataBuddy(wx.Frame):
 				
 			
 	def onOpenSession(self, data, extra1, extra2=None):
-		
+		#print 'onOpenSession'
+		#pprint(data)
 		(sname,cv_from,cv_to,type,tmpl,sdir, fname) = data
 		#print sname
 		self.Freeze()
@@ -4784,7 +5066,7 @@ class DataBuddy(wx.Frame):
 		self.btn_delete.Enable(True)
 		self.btn_new.Enable(True)
 		self.btn_save.Enable(False)
-		self.changed=False
+		self.changed=[]
 				
 		#self.Fit()
 		self.Layout()
@@ -4851,9 +5133,11 @@ class DataBuddy(wx.Frame):
 			key = ii[1] #pprint  (data[i])
 			names.append(self.sm.list.GetItemText(i))
 			items[key]=os.path.join(data[i][-2],data[i][-1])
-			del data[i]
+			#del data[i]
 		#pprint (names)		 
 		if self.if_yes('Delete these sessions?\n%s' % '\\n'.join(names)):
+			#print items
+			#e(0)
 			send('delete_sessions', (items))
 			if len(selected)==1:
 				send('disable_all_for_delete',())
@@ -4868,7 +5152,7 @@ class DataBuddy(wx.Frame):
 	def onNewSession(self, data, extra1, extra2=None):	
 		#print 'onNewSession'
 		if 1:
-			(sname,cv,tmpl,args) = data
+			(sname,cv,tmpl,args,reuse) = data
 			#print sname
 			#e(0)
 			#self.setSessionName(sname)
@@ -4948,7 +5232,38 @@ class DataBuddy(wx.Frame):
 	def saveSession(self, data=None):
 		
 		if data:
-			(sname,copy_vector,tmpl,args)=data
+			#it's a new session
+			(sname,copy_vector,tmpl,args,reuse)=data
+			if reuse:
+				(cargs,fargs,targs)=args
+				print len(args)
+				print len(cargs),len(fargs),len(targs)
+				(reuse_cargs,reuse_fargs,reuse_targs)= self.args_panel.getArgs() 
+				for k in reuse_cargs:
+					
+					if k in cargs.keys():
+						print k, cargs[k][2],self.args_panel.obj[k][1].GetValue()
+						cargs[k]=list(cargs[k])
+						#val=self.args_panel.obj[k][1].GetValue()
+						cargs[k][2]=self.args_panel.obj[k][1].GetValue()
+				for k in reuse_fargs:
+					
+					if k in fargs.keys():
+						print k, fargs[k][2], self.args_panel.obj[k][1].GetValue()
+						fargs[k]=list(fargs[k])
+						#val=self.args_panel.obj[k][1].GetValue()
+						fargs[k][2]=self.args_panel.obj[k][1].GetValue()		
+				for k in reuse_targs:	
+					
+					if k in targs.keys():	
+						print k, targs[k][2], self.args_panel.obj[k][1].GetValue()
+						targs[k]=list(targs[k])
+						#val=self.args_panel.obj[k][1].GetValue()
+						targs[k][2]=self.args_panel.obj[k][1].GetValue()
+				args=(cargs,fargs,targs)
+				pprint(fargs)
+				print reuse_targs
+				pprint(targs)
 		else:
 			(sname,copy_vector,tmpl,args)=[self.getSessionName(), self.getCopyVector(), '.'.join(self.getTemplates()), self.args_panel.getArgs()]
 		if not os.path.isdir(self.save_to_dir):
@@ -4972,7 +5287,7 @@ class DataBuddy(wx.Frame):
 		import pickle
 		pickle.dump( [sname,copy_vector, tmpl, args], open( save_to_file, "wb" ) )
 		self.btn_save.Enable(False)	
-		self.changed=False
+		self.changed=[]
 		return (sname,copy_vector, tmpl,self.save_to_dir, fname)
 	def obfuscate(self, data):
 		#pprint(data)
@@ -4989,10 +5304,11 @@ class DataBuddy(wx.Frame):
 		return data	
 	def OnNewButton(self, event):
 		if 1:
+			#print self.session_name, 'self.session_name
 			dlg = NewSessionDialog(self, -1, "Defaults for new session.", size=(250, 250),				
 							 #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
 							 style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
-							 useMetal=False, data=self.data
+							 useMetal=False, data=self.data, values_source=self.session_name
 							 )
 			#dlg.CenterOnScreen()
 			# this does not return until the dialog is closed.
@@ -5000,13 +5316,13 @@ class DataBuddy(wx.Frame):
 			#print wx.ID_OK, ID_EXIT, val
 			if val == wx.ID_OK:
 				if 1:					
-					(sname,cv,tmpl,api_args)= dlg.getConfig()
+					(sname,cv,tmpl,api_args,reuse)= dlg.getConfig()
 					#print sname
 					#e(0)
 					#tmpl=self.get_template()
 					#api_args=self.api_args[tmpl]
 					#print '-----',self.tc_sname.GetValue(),self.copy_vector, tmpl
-					send("create_new_session", (sname,cv, tmpl,api_args) )
+					send("create_new_session", (sname,cv, tmpl,api_args,reuse) )
 			dlg.Destroy()
 			#[self.sname, self.copy_vector, self.tmpl, self.args]=dlg.getConfig()
 			#print conf
@@ -5133,7 +5449,7 @@ class DataBuddy(wx.Frame):
 					#self.btn_run.SetLabel('Run')
 
 			self.btn_run.SetLabel('Run')		
-			print 'open_session---------------', ids,self.sname, self.the_id
+			#print 'open_session---------------', ids,self.sname, self.the_id
 			#pprint (self.sids)
 			nb_tab=self.nb_tab
 			self.args_panel= pnl_args(self,self.copy_vector,self.tmpl,self.the_id,(self.cargs,self.fargs,self.targs),style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
@@ -5258,7 +5574,9 @@ class DataBuddy(wx.Frame):
 			
 			btn.SetLabel('Running...(0)')
 			cmd=self.args_panel.get_cmd_line_new(self.transport)
-			cmd=cmd.replace('|','^|')
+			pprint (cmd)
+			
+			#cmd=cmd.replace('|','^|')
 			#cmd=cmd.replace('csv2ora11g','csv2ora')
 			
 			#pprint (cmd)
@@ -5342,7 +5660,7 @@ class DataBuddy(wx.Frame):
 	 '"SCOTT.Partitioned_test_to"',
 	 '-G',
 	 '"part_15"']
-				cfg[0]=r'C:\Python27\data_migrator_1239\datamule.py'
+				#cfg[0]=r'C:\Python27\data_migrator_1239\datamule.py'
 				cfg=cfg+['-X','1']
 				#pprint(cfg)	
 				#e(0)
@@ -5359,11 +5677,28 @@ class DataBuddy(wx.Frame):
 
 					#thread= popenAndCall(onExit,[sys.executable]+cfg)
 					#print thread
-					p = Popen([sys.executable]+cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
+					#p = Popen([sys.executable]+cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
+					if 0:
+						pprint(cfg)
+						nls_timestamp_format=self.args_panel.obj['nls_timestamp_format'][1].GetValue()
+						nls_timestamp_tz_format=self.args_panel.obj['nls_timestamp_tz_format'][1].GetValue()
+						if 1:
+							if nls_timestamp_format:
+								os.environ['NLS_TIMESTAMP_FORMAT'] = nls_timestamp_format
+							else:
+								os.environ['NLS_TIMESTAMP_FORMAT'] =''
+							if nls_timestamp_tz_format:
+								os.environ['NLS_TIMESTAMP_TZ_FORMAT'] = nls_timestamp_tz_format
+							else:
+								os.environ['NLS_TIMESTAMP_TZ_FORMAT'] =''	
+						
+					#print self.args_panel.obj['nls_timestamp_format'][1].GetValue()
+					#e(0)
+					p = Popen(cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
 					#p.wait()
 					#out,err=p.communicate('y\n')
 					#print out,err
-					print p
+					#print p
 					#time.sleep(2)
 					if 1:
 						hwnd=None
@@ -5547,12 +5882,11 @@ class AboutDlg(wx.Frame):
 		html = wxHTML(self)
 		page="""
 <h2>%s</h2>						
-<p>Loads multiple CSV files' data into Oracle 11G table.</p>
-<p>Created in Feb. 2015 by %s.</p>
+<p>Loads query results into Oracle 11G table.</p>
 <p><b>Software used in making this tool:</h3></p>
 <p><b><a href="http://www.python.org">Python 2.7</a></b></p>
 <p><b><a href="http://www.wxpython.org">wxPython 2.8</a></b></p>
-		""" % (__title__, __author__)
+		""" % (__title__)
 		
 		html.SetPage(
 			page
