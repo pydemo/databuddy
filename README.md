@@ -38,7 +38,7 @@ CSV   | yes | yes
 
 ###Front end.
 
-- session management.
+- Session management.
 
 ###Command line:
 - Multi-query load.
