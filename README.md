@@ -46,7 +46,7 @@ python data-buddy.py
 
 
 #TODO
-- argument values reuse from existing session
+- argument values reuse from existing session (DONE)
 - clean uargs.db
 - test UI
 - add --log_dir to backend
