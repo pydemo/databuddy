@@ -20,7 +20,7 @@ import wx.lib.mixins.inspection
 from multiprocessing import freeze_support #Process, Queue, cpu_count, current_process, 
 from wx.lib.splitter import MultiSplitterWindow
 import wx.lib.agw.flatnotebook as fnb
-import wx.lib.mixins.listctrl as listmix
+import wx.lib.mixins.listctrl as listmix 
 
 from tc_lib import cml, getPipelineConfig, activeProjName, activeProjLoc, DEFAULT_PERSPECTIVE, projRootLoc, confDirName, configDirLoc,  appLoc
 
