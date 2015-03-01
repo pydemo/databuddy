@@ -11,16 +11,17 @@ Ad-hoc data migration between databases and file formats (CSV)
 
 Database | GUI | Command line
 ---------|---- | -------------
-Oracle   | yes | yes
-SQLServer|   | yes
 DB2      |  | yes
-Sybase   |  | yes
 Informix |  | yes
-MySQL    |  | yes
 MariaDB    |  | yes
+MySQL    |  | yes
+_Oracle_   | yes | yes
 PostgreSQL|  | yes
-TimesTen|  | yes
 SQLite|  | yes
+SQLServer|   | yes
+Sybase   |  | yes
+TimesTen|  | yes
+
 
 ##File formats
 
