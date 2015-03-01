@@ -58,5 +58,5 @@ python data-buddy.py
 - more templates and better templates hierarchy
 
 #Does it work?
-yes, for Oracle. 
+yes, with some quirks and only for Oracle. 
 Change SQL*Loader config and control file in ```qc32\config\include\oracle.py```
