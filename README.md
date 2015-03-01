@@ -1,5 +1,5 @@
 # DataBuddy
-##version
+##Version
 
 DataBuddy 0.23.9 beta
 
@@ -56,3 +56,6 @@ python data-buddy.py
 - history of values for each argument
 - cleanup all other databases but Oracle
 - more templates and better templates hierarchy
+
+#Does it work?
+yes, for Oracle
