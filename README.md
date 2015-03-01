@@ -1,7 +1,7 @@
 # DataBuddy
 ##version
 
-DataBuddy 1.23.9
+DataBuddy 0.23.9 beta
 
 ##Purpose
 
