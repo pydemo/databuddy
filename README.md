@@ -7,7 +7,7 @@ DataBuddy 0.23.9 beta
 
 Ad-hoc data migration between databases and file formats (CSV)
 
-##Database supported
+##Databases supported
 
 Database | GUI | Command line
 ---------|---- | -------------
@@ -17,7 +17,17 @@ DB2      |  | yes
 Sybase   |  | yes
 Informix |  | yes
 MySQL    |  | yes
+MariaDB    |  | yes
 PostgreSQL|  | yes
+TimesTen|  | yes
+SQLite|  | yes
+
+##File formats
+
+Format | GUI | Command line
+---------|---- | -------------
+CSV   | yes | yes
+
 
 ##Components
 - Gront end UI.
