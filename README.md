@@ -91,4 +91,5 @@ python data-buddy.py
 
 #Does it work?
 yes, with some quirks and only for Oracle. 
-Change SQL*Loader config and control file in ```qc32\config\include\oracle.py```
+##SQL*Loader config
+-Change SQL*Loader arguments and control file in ```qc32\config\include\oracle.py```
