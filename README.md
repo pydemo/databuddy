@@ -73,6 +73,9 @@ python data-buddy.py
 ##Cons
 -user have to create new session if new argument has to be added/removed
 
+#SQL*Loader config
+-Change SQL*Loader arguments and control file in ```qc32\config\include\oracle.py```
+
 #TODO
 - argument values reuse from existing session (DONE)
 - clean uargs.db
@@ -91,5 +94,4 @@ python data-buddy.py
 
 #Does it work?
 yes, with some quirks and only for Oracle. 
-##SQL*Loader config
--Change SQL*Loader arguments and control file in ```qc32\config\include\oracle.py```
+
