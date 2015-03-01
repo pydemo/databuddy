@@ -48,7 +48,7 @@ python data-buddy.py
 #TODO
 - argument values reuse from existing session (DONE)
 - clean uargs.db
-- nls_format* duplication
+- nls_format* duplication (DONE)
 - test UI
 - add --log_dir to backend
 - add "source" and "target" datasources to "New Session"
