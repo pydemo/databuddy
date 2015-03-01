@@ -60,7 +60,7 @@ CSV   | yes | yes
 
 ##Implementation
 
-- Wriiten using Python and wxPython.
+- Wriiten using Python (command line) and wxPython (GUI).
 - Compiled with PyInstaller
  
 ##Execution
