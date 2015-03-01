@@ -12,6 +12,12 @@ Ad-hoc data migration between databases and file formats (CSV)
 Database | GUI | Command line
 ---------|---- | -------------
 Oracle   | yes | yes
+SQLServer|   | yes
+DB2      |  | yes
+Sybase   |  | yes
+Informix |  | yes
+MySQL    |  | yes
+PostgreSQL|  | yes
 
 ##Components
 - Gront end UI.
