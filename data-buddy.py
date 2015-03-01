@@ -2975,7 +2975,7 @@ class NewSessionDialog(wx.Dialog):
 				lbl='Reuse "%s"' % self.values_source
 			self.rb_reuse=wx.CheckBox(self, label=lbl)
 			self.rb_reuse.Enable(True)
-			self.rb_reuse.SetValue(True)
+			self.rb_reuse.SetValue(False)
 			if not self.values_source:
 				self.rb_reuse.Enable(False)
 				self.rb_reuse.SetValue(False)
@@ -2983,9 +2983,11 @@ class NewSessionDialog(wx.Dialog):
 			boxsizer.Add(self.rb_reuse, flag=wx.LEFT|wx.TOP, border=5)
 			
 			btnsizer.Add(boxsizer, 0 , wx.TOP|wx.BOTTOM|wx.LEFT)			
+		self.test = wx.Button(self, wx.NewId(), 'Test')
 		self.create_btn = wx.Button(self, wx.ID_OK, 'Create')
 		self.create_btn.Enable(False)
 		btn_exit = wx.Button(self, wx.ID_CANCEL, "Cancel")
+		btnsizer.Add(self.test, 0 , wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM)
 		btnsizer.Add((3,3),1)
 		btnsizer.Add(self.create_btn, 0 , wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM)
 		btnsizer.Add((40,5),0)
@@ -2993,6 +2995,7 @@ class NewSessionDialog(wx.Dialog):
 		btnsizer.Add(btn_exit, 0 , wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM)
 		
 		self.create_btn.Bind(wx.EVT_BUTTON, self.OnCreate)
+		self.test.Bind(wx.EVT_BUTTON, self.OnTest)
 		btn_exit.Bind(wx.EVT_BUTTON, self.OnExit)
 		#self.Bind(wx.EVT_BUTTON, self.OnTrial, id=ID_TRIAL)
 		sizer.Add(btnsizer, 0, wx.EXPAND|wx.ALL, 5)
@@ -3023,6 +3026,14 @@ class NewSessionDialog(wx.Dialog):
 					self.api_menu[m[:2]]=[]
 				self.api_menu[m[:2]].append(m)
 			#print pprint(self.api_menu)
+			
+		
+
+	def OnTest(self,e):
+		[cn, cv, tmpl, args, reuse] = self.getConfig()		
+		print len(args)	
+		#pprint(args[2])
+		pprint(self.api_args[tmpl][0])
 	def OnChange(self, evt):
 		# ComboCtrl still generates events in SetValue
 		if self.freeze: return
@@ -3090,7 +3101,7 @@ class NewSessionDialog(wx.Dialog):
 		apimod=import_module(api_file)
 		self.api_args=apimod.aa
 		for f in self.api_args: 
-			#print f
+			print f
 			if f not in ('default'):
 				(t_from,t_to) = f.split('.')
 				if not self.tmpl.has_key(t_from): self.tmpl[t_from]=[]
@@ -3189,9 +3200,9 @@ class NewSessionDialog(wx.Dialog):
 		else:
 		
 			self.writeRecent()
-			e.Skip()
-		#self.Close(True)
-		#return ID_CREATE
+		
+		e.Skip()
+
 	def Warn(self, message, caption = 'Warning!'):
 		dlg = wx.MessageDialog(self, message, caption, wx.OK | wx.ICON_WARNING)
 		dlg.ShowModal()
@@ -3691,6 +3702,14 @@ class default_args(wx.Panel):
 
 ###################################################################################################
 
+class Args(object):
+	def __init__(self, args_dict):
+		for name, value in args_dict.items():
+			print name, value[2]
+			setattr(Args, name, value[2])
+			#self.__dict__[name] = value[2]
+
+		
 class pnl_args(wx.Panel):
 	"""Arguments"""
 	
@@ -3733,10 +3752,12 @@ class pnl_args(wx.Panel):
 			#sizer.Add(text1, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
 			#sizer.Add(tc0, pos=(0, 1), span=(1, 3), flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=10)
 			#fgs = wx.FlexGridSizer(3, 4, 9, 20)
-			ttl=['Copy vector','Pool size','Num of shards','Field terminator','Truncate target']
+			#ttl=['Copy vector','Pool size','Num of shards','Field terminator','Truncate target']
 			#pprint(dir(fgs))
 			disable=['copy_vector']
 			i=0
+			#pprint(self.cargs.items())
+			#e(0)
 			for k,v in sorted(self.cargs.items()):
 				#print k,v
 				short,long,val,desc=v
@@ -3946,9 +3967,31 @@ class pnl_args(wx.Panel):
 			hbox = wx.BoxSizer(wx.HORIZONTAL)
 			fgs = wx.GridBagSizer(2, 10)
 			i=0
-
-				
-			for k,v in sorted(self.targs.items()):
+			#args_dict={}
+			#args_dict.update(self.cargs)
+			#args_dict.update(self.fargs)
+			args_dict = dict(self.cargs, **self.fargs)
+			pprint (args_dict.keys())
+			
+			args=Args(args_dict)
+			#print self.targs.keys()
+			print args
+			print args.copy_vector
+			#e(0)
+			import __builtin__
+			__builtin__.args = args
+			uargs = import_module(os.path.join(conf.abspath,'qc32','config','user_conf.py'))
+			(_,to_tmpl)=self.tmpl.split('.')
+			if to_tmpl in ['CSV_Default']:
+				lbl='Extracting to default location (user_conf.to_dir)\nExample: %s' % uargs.to_dir
+				default=wx.StaticText(to_args_panel, label=lbl)
+				fgs.Add(default, pos=(0, 0), span=(1,2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				#e(0)
+			tkeys=[k for k in self.targs.keys() if not self.obj.has_key(k)]
+			#print tkeys
+			#e(0)
+			for k in sorted(tkeys):
+				v=self.targs[k]
 				#print k,v
 				#print i
 				short,long,val,desc=v
