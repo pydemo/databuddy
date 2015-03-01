@@ -7,6 +7,12 @@ DataBuddy 0.23.9 beta
 
 Ad-hoc data migration between databases and file formats (CSV)
 
+##Database supported
+
+Database | GUI | Command line
+---------|---- | -------------
+Oracle   | yes | yes
+
 ##Components
 - Gront end UI.
 - Command line executable.
