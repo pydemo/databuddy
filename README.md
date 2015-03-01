@@ -67,6 +67,11 @@ CSV   | yes | yes
 
 python data-buddy.py
 
+#Templates v.s. free argument entry
+##Pros
+-it's tested
+##Cons
+-user have to create new session if new argument has to be added/removed
 
 #TODO
 - argument values reuse from existing session (DONE)
