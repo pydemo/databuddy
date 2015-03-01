@@ -15,7 +15,7 @@ DB2      |  | yes
 Informix |  | yes
 MariaDB    |  | yes
 MySQL    |  | yes
-~~Oracle~~   | yes | yes
+**Oracle**   | yes | yes
 PostgreSQL|  | yes
 SQLite|  | yes
 SQLServer|   | yes
