@@ -71,7 +71,7 @@ python data-buddy.py
 ##Pros
 -it's tested
 ##Cons
--user have to create new session if new argument has to be added/removed
+-user has to create new session if new argument has to be added/removed
 
 #SQL*Loader config
 -Change SQL*Loader arguments and control file in ```qc32\config\include\oracle.py```
