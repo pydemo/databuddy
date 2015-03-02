@@ -1,2 +1,0 @@
-ALTER TABLE SCOTT.Timestamp_test_to TRUNCATE SUBPARTITION part_15_sp1;
-exit;
