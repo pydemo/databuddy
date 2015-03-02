@@ -409,14 +409,14 @@ class SessionList(wx.ListCtrl):
 										)
 
 		self.parent=parent
-		self.images = [ 'bmp_source/arrow_sans_up_16.png', 'bmp_source/arrow_sans_down_16.png','bmp_source/arrow_sans_up_16.png', \
-		'bmp_source/Right_Arrow_16.png', 'bmp_source/Left_Arrow_16.png', 'bmp_source/folder_16.png'  \
-		 , 'bmp_source/config_16.png','bmp_source/database-sql_16.png', 'bmp_source/database_share_16.png', \
-		 'bmp_source/database_connect_16.png','bmp_source/user_16.png','bmp_source/database_table_16.png', \
-		'bmp_source/table_select_column_16.png','bmp_source/database_red_16.png',
-		'bmp_source/database_green_16.png',
-		'bmp_source/database_blue_16.png',
-		'bmp_source/database_black_16.png','bmp_source/file_16.png',]
+		self.images = [ 'images/arrow_sans_up_16.png', 'images/arrow_sans_down_16.png','images/arrow_sans_up_16.png', \
+		'images/Right_Arrow_16.png', 'images/Left_Arrow_16.png', 'images/folder_16.png'  \
+		 , 'images/config_16.png','images/database-sql_16.png', 'images/database_share_16.png', \
+		 'images/database_connect_16.png','images/user_16.png','images/database_table_16.png', \
+		'images/table_select_column_16.png','images/database_red_16.png',
+		'images/database_green_16.png',
+		'images/database_blue_16.png',
+		'images/database_black_16.png','images/file_16.png',]
 		self.image_refs={}
 		self._bg='#e6f1f5'
 		self._imgstart=3
@@ -744,12 +744,12 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			#self.btnUp = wx.Button(self, -1, "[..]", style=wx.BU_EXACTFIT, size=(30,20))
 			
 
-			imageFile = "bmp_source/arrow_back_dgrey_16x2.png"
+			imageFile = "images/arrow_back_dgrey_16x2.png"
 			image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
 				
 			self.btnFav = wx.Button(self, -1, "Fav", style=wx.BU_EXACTFIT, size=(30,20))
 			#self.btnHist = wx.Button(self, -1, "Hist", style=wx.BU_EXACTFIT, size=(30,20))	
-			imageFile = "bmp_source/refresh_icon_16_grey2.png"
+			imageFile = "images/refresh_icon_16_grey2.png"
 			image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
 			self.btn_refresh=wx.BitmapButton(self, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6))
 			#self.btn_log = wx.Button(self, -1, "Log", size=(25,20))
@@ -1427,8 +1427,8 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		key=len(self.list.data[self.list.current_list])
 		self.list.data[self.list.current_list][key]=session
 		self.list.SetItemData(index,key)
-		imgs= {'default':'bmp_source/database_green_16.png', 'DEV':'bmp_source/database_green_16.png','PROD':'bmp_source/database_red_16.png', \
-		'UAT':'bmp_source/database_blue_16.png','QA':'bmp_source/database_black_16.png'}
+		imgs= {'default':'images/database_green_16.png', 'DEV':'images/database_green_16.png','PROD':'images/database_red_16.png', \
+		'UAT':'images/database_blue_16.png','QA':'images/database_black_16.png'}
 		img_type_col_id= self.list.img_col
 		img_type = 'DEV'
 		img_name=None
@@ -1554,8 +1554,8 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 
 							#if i[1] == 'xml':
 							#print list._imgstart,list.img_offset
-							imgs= {'default':'bmp_source/database_green_16.png', 'DEV':'bmp_source/database_green_16.png','PROD':'bmp_source/database_red_16.png', \
-							'UAT':'bmp_source/database_blue_16.png','QA':'bmp_source/database_black_16.png'}
+							imgs= {'default':'images/database_green_16.png', 'DEV':'images/database_green_16.png','PROD':'images/database_red_16.png', \
+							'UAT':'images/database_blue_16.png','QA':'images/database_black_16.png'}
 							img_type_col_id= self.list.img_col
 							img_type = i[img_type_col_id]
 							img_name=None
@@ -2742,7 +2742,7 @@ class CheckListBoxComboPopup(wx.CheckListBox, wx.combo.ComboPopup):
         wx.combo.ComboPopup.OnDismiss(self)
 class NewSessionDialog(wx.Dialog):
 	def __init__(
-			self, parent, ID, title, size,data, values_source, pos=wx.DefaultPosition, 
+			self, parent, ID, title, size,data, values_source,defaults, pos=wx.DefaultPosition, 
 			style=wx.DEFAULT_DIALOG_STYLE,
 			useMetal=False 
 			):
@@ -2754,6 +2754,12 @@ class NewSessionDialog(wx.Dialog):
 		self.parent=parent
 		self.data=data
 		self.values_source=values_source
+		self.def_cv,self.def_tmpl=(None,None)
+		if defaults:
+			self.def_cv=defaults[0] #default copy_vector if any
+
+			self.def_tmpl=defaults[1].split('.') #default templates if any
+		print defaults
 		#pprint(data)
 		self._popUpMenu = None
 		#self.recent=[]
@@ -2796,7 +2802,7 @@ class NewSessionDialog(wx.Dialog):
 			
 			namesizer.Add(self.tc_sname, pos=(0, 1),  flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND|wx.GROW, border=10)
 			namesizer.Add((60,3),pos=(0, 2),  flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND|wx.GROW, border=10)
-			icon = wx.StaticBitmap(self, bitmap=wx.Bitmap('exec.png'))
+			icon = wx.StaticBitmap(self, bitmap=wx.Bitmap(os.path.join(home,'images','exec.png')))
 			#namesizer.Add((3,3),0)
 			namesizer.Add(icon, pos=(0, 3), flag=wx.TOP|wx.RIGHT|wx.ALIGN_RIGHT,border=6)
 			sizer.Add(namesizer, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP|wx.EXPAND, 5)
@@ -2884,6 +2890,8 @@ class NewSessionDialog(wx.Dialog):
 			vboxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
 			#rb_v=wx.RadioButton(panel, label="ora2ora",style=wx.RB_GROUP)
 			lbl='Click to set'
+			if self.def_cv:
+				lbl='%s->%s' % (conf.dbs[self.def_cv[0]], conf.dbs[self.def_cv[1]])
 			self.b_vector = wx.Button(self, label=lbl,size=(100,25))
 			#b_vector.Enable(True)
 			vboxsizer.Add(self.b_vector, flag=wx.LEFT|wx.TOP, border=0)
@@ -2968,26 +2976,29 @@ class NewSessionDialog(wx.Dialog):
 			#self.combo.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
 			btnsizer.Add(boxsizer, 0 , wx.TOP|wx.BOTTOM|wx.LEFT)
 		if 1:
-			sb = wx.StaticBox(self, label='Values source')
-			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			lbl='None            '
 			if self.values_source:
-				lbl='Reuse "%s"' % self.values_source
-			self.rb_reuse=wx.CheckBox(self, label=lbl)
-			self.rb_reuse.Enable(True)
-			self.rb_reuse.SetValue(False)
-			if not self.values_source:
-				self.rb_reuse.Enable(False)
-				self.rb_reuse.SetValue(False)
+				lbl='Reuse "%s" Values' % self.values_source
+				sb = wx.StaticBox(self, label=lbl)
+				boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)			
+				self.rb_r0=wx.CheckBox(self, label='Common')
+				self.rb_r1=wx.CheckBox(self, label='Source')
+				self.rb_r2=wx.CheckBox(self, label='Target')
+				self.rb_r0.Enable(True)
+				self.rb_r0.SetValue(False)
+				self.rb_r1.Enable(True)
+				self.rb_r1.SetValue(False)
+				self.rb_r2.Enable(True)
+				self.rb_r2.SetValue(False)
+				boxsizer.Add(self.rb_r0, flag=wx.LEFT|wx.TOP, border=5)
+				boxsizer.Add(self.rb_r1, flag=wx.LEFT|wx.TOP, border=5)
+				boxsizer.Add(self.rb_r2, flag=wx.LEFT|wx.TOP, border=5)
 				
-			boxsizer.Add(self.rb_reuse, flag=wx.LEFT|wx.TOP, border=5)
-			
-			btnsizer.Add(boxsizer, 0 , wx.TOP|wx.BOTTOM|wx.LEFT)			
-		self.test = wx.Button(self, wx.NewId(), 'Test')
+				btnsizer.Add(boxsizer, 0 , wx.TOP|wx.BOTTOM|wx.LEFT)			
+		#self.test = wx.Button(self, wx.NewId(), 'Test')
 		self.create_btn = wx.Button(self, wx.ID_OK, 'Create')
 		self.create_btn.Enable(False)
 		btn_exit = wx.Button(self, wx.ID_CANCEL, "Cancel")
-		btnsizer.Add(self.test, 0 , wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM)
+		#btnsizer.Add(self.test, 0 , wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM)
 		btnsizer.Add((3,3),1)
 		btnsizer.Add(self.create_btn, 0 , wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM)
 		btnsizer.Add((40,5),0)
@@ -2995,7 +3006,7 @@ class NewSessionDialog(wx.Dialog):
 		btnsizer.Add(btn_exit, 0 , wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM)
 		
 		self.create_btn.Bind(wx.EVT_BUTTON, self.OnCreate)
-		self.test.Bind(wx.EVT_BUTTON, self.OnTest)
+		#self.test.Bind(wx.EVT_BUTTON, self.OnTest)
 		btn_exit.Bind(wx.EVT_BUTTON, self.OnExit)
 		#self.Bind(wx.EVT_BUTTON, self.OnTrial, id=ID_TRIAL)
 		sizer.Add(btnsizer, 0, wx.EXPAND|wx.ALL, 5)
@@ -3026,12 +3037,18 @@ class NewSessionDialog(wx.Dialog):
 					self.api_menu[m[:2]]=[]
 				self.api_menu[m[:2]].append(m)
 			#print pprint(self.api_menu)
-			
-		
-
+		if self.def_cv:
+			self.copy_vector=self.def_cv
+			self.refresh_src_list()
+			for i in range(self.listCtrl.GetItemCount()):
+				if self.listCtrl.GetItemText(i) in [self.def_tmpl[0]]:
+					self.listCtrl.SetItemState(i, wx.LIST_STATE_SELECTED, wx.LIST_STATE_SELECTED)
+			for i in range(self.targlistCtrl.GetItemCount()):
+				if self.targlistCtrl.GetItemText(i) in [self.def_tmpl[1]]:
+					self.targlistCtrl.SetItemState(i, wx.LIST_STATE_SELECTED, wx.LIST_STATE_SELECTED)
 	def OnTest(self,e):
 		[cn, cv, tmpl, args, reuse] = self.getConfig()		
-		print len(args)	
+		#print len(args)	
 		#pprint(args[2])
 		pprint(self.api_args[tmpl][0])
 	def OnChange(self, evt):
@@ -3043,7 +3060,7 @@ class NewSessionDialog(wx.Dialog):
 		print 'onSourceValues'
 	def getConfig(self):
 		tmpl=self.get_template()
-		return [self.getSessionName(), self.copy_vector, tmpl, self.api_args[tmpl], self.rb_reuse.GetValue()]
+		return [self.getSessionName(), self.copy_vector, tmpl, self.api_args[tmpl], (self.rb_r0.GetValue(),self.rb_r1.GetValue(),self.rb_r2.GetValue())]
 	def getSessionName(self):
 		return self.tc_sname.GetValue()
 	def onSourceObjButton(self, event): 
@@ -3101,7 +3118,7 @@ class NewSessionDialog(wx.Dialog):
 		apimod=import_module(api_file)
 		self.api_args=apimod.aa
 		for f in self.api_args: 
-			print f
+			#print f
 			if f not in ('default'):
 				(t_from,t_to) = f.split('.')
 				if not self.tmpl.has_key(t_from): self.tmpl[t_from]=[]
@@ -3817,7 +3834,7 @@ class pnl_args(wx.Panel):
 				
 				if k in ['input_files']:
 					
-					imageFile = os.path.join(home,"bmp_source/refresh_icon_16_grey2.png")
+					imageFile = os.path.join(home,"images/refresh_icon_16_grey2.png")
 					image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
 					#print self.obj[k]
 					#print len(self.obj[k])
@@ -3843,7 +3860,7 @@ class pnl_args(wx.Panel):
 					fgs.Add(bbox, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	
 				elif k in ['query_sql_file']:
 					
-					imageFile = os.path.join(home,"bmp_source/refresh_icon_16_grey2.png")
+					imageFile = os.path.join(home,"images/refresh_icon_16_grey2.png")
 					image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
 					#print self.obj[k]
 					#print len(self.obj[k])
@@ -3870,7 +3887,7 @@ class pnl_args(wx.Panel):
 					
 				elif k in ['input_dirs', 'source_client_home']:
 					
-					imageFile = os.path.join(home,"bmp_source/refresh_icon_16_grey2.png")
+					imageFile = os.path.join(home,"images/refresh_icon_16_grey2.png")
 					image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
 					#print self.obj[k]
 					#print len(self.obj[k])
@@ -3894,7 +3911,7 @@ class pnl_args(wx.Panel):
 				elif k in ['from_passwd']:
 					self.obj[k].append(None)
 					self.obj[k].append(None)
-					imageFile = os.path.join(home,"bmp_source/refresh_icon_16_grey2.png")
+					imageFile = os.path.join(home,"images/refresh_icon_16_grey2.png")
 					image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
 					#print self.obj[k]
 					#print len(self.obj[k])
@@ -4013,7 +4030,7 @@ class pnl_args(wx.Panel):
 				
 				if k in ['to_file']:
 					
-					imageFile = os.path.join(home,"bmp_source/refresh_icon_16_grey2.png")
+					imageFile = os.path.join(home,"images/refresh_icon_16_grey2.png")
 					image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
 					#print self.obj[k]
 					#print len(self.obj[k])
@@ -4036,7 +4053,7 @@ class pnl_args(wx.Panel):
 					fgs.Add(bbox, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)				
 				elif k in ['to_dir', 'target_client_home']:
 					
-					imageFile = os.path.join(home,"bmp_source/refresh_icon_16_grey2.png")
+					imageFile = os.path.join(home,"images/refresh_icon_16_grey2.png")
 					image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
 					#print self.obj[k]
 					#print len(self.obj[k])
@@ -4060,7 +4077,7 @@ class pnl_args(wx.Panel):
 				elif k in ['to_passwd']:
 					self.obj[k].append(None)
 					self.obj[k].append(None)
-					imageFile = os.path.join(home,"bmp_source/refresh_icon_16_grey2.png")
+					imageFile = os.path.join(home,"images/refresh_icon_16_grey2.png")
 					image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
 					#print self.obj[k]
 					#print len(self.obj[k])
@@ -4693,6 +4710,7 @@ class DataBuddy(wx.Frame):
 		self.sids={}
 		self.changed=[]
 		self.copy_vector=None
+		self.tmpl=None
 		userhome = os.path.expanduser('~')
 		self.save_to_dir=os.path.join(userhome,'sessions')
 		if not os.path.isdir(self.save_to_dir):
@@ -4713,7 +4731,7 @@ class DataBuddy(wx.Frame):
 			self.tc_session_name.Bind(wx.EVT_CHAR, self.onKeyPress)
 			self.tc_session_name.Enable(False)
 			sizer.Add(self.tc_session_name, pos=(0, 1), span=(1, 3), flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=10)
-			icon = wx.StaticBitmap(panel, bitmap=wx.Bitmap('exec.png'))
+			icon = wx.StaticBitmap(panel, bitmap=wx.Bitmap(os.path.join(home,'images','exec.png')))
 			sizer.Add(icon, pos=(0, 4), flag=wx.TOP|wx.RIGHT|wx.ALIGN_RIGHT,border=6)
 
 		if 1:
@@ -5178,7 +5196,7 @@ class DataBuddy(wx.Frame):
 			items[key]=os.path.join(data[i][-2],data[i][-1])
 			#del data[i]
 		#pprint (names)		 
-		if self.if_yes('Delete these sessions?\n%s' % '\\n'.join(names)):
+		if self.if_yes('Delete these sessions?\n%s' % '\n'.join(names)):
 			#print items
 			#e(0)
 			send('delete_sessions', (items))
@@ -5227,6 +5245,7 @@ class DataBuddy(wx.Frame):
 		self.copy_vector=cv	
 		self.st_copy_vector.SetLabel('{:s} -> {:s}'.format(conf.dbs[cv[0]], conf.dbs[cv[1]]))
 	def setTemplates(self,tmpl):
+		self.tmpl=tmpl
 		a,b=tmpl.split('.')
 		self.st_sourcet.SetLabel('{:s}'.format(a))
 		self.st_targett.SetLabel('{:s}'.format(b))
@@ -5279,34 +5298,39 @@ class DataBuddy(wx.Frame):
 			(sname,copy_vector,tmpl,args,reuse)=data
 			if reuse:
 				(cargs,fargs,targs)=args
-				print len(args)
-				print len(cargs),len(fargs),len(targs)
+				#print len(args)
+				#print len(cargs),len(fargs),len(targs)
 				(reuse_cargs,reuse_fargs,reuse_targs)= self.args_panel.getArgs() 
-				for k in reuse_cargs:
-					
-					if k in cargs.keys():
-						print k, cargs[k][2],self.args_panel.obj[k][1].GetValue()
-						cargs[k]=list(cargs[k])
-						#val=self.args_panel.obj[k][1].GetValue()
-						cargs[k][2]=self.args_panel.obj[k][1].GetValue()
-				for k in reuse_fargs:
-					
-					if k in fargs.keys():
-						print k, fargs[k][2], self.args_panel.obj[k][1].GetValue()
-						fargs[k]=list(fargs[k])
-						#val=self.args_panel.obj[k][1].GetValue()
-						fargs[k][2]=self.args_panel.obj[k][1].GetValue()		
-				for k in reuse_targs:	
-					
-					if k in targs.keys():	
-						print k, targs[k][2], self.args_panel.obj[k][1].GetValue()
-						targs[k]=list(targs[k])
-						#val=self.args_panel.obj[k][1].GetValue()
-						targs[k][2]=self.args_panel.obj[k][1].GetValue()
+				if reuse[0]:
+					ckeys= [x for x in cargs.keys() if x not in ['copy_vector']]
+				
+					for k in reuse_cargs:
+						
+						if k in ckeys:
+							print k, cargs[k][2],self.args_panel.obj[k][1].GetValue()
+							cargs[k]=list(cargs[k])
+							#val=self.args_panel.obj[k][1].GetValue()
+							cargs[k][2]=self.args_panel.obj[k][1].GetValue()
+				if reuse[1]:
+					for k in reuse_fargs:
+						
+						if k in fargs.keys():
+							print k, fargs[k][2], self.args_panel.obj[k][1].GetValue()
+							fargs[k]=list(fargs[k])
+							#val=self.args_panel.obj[k][1].GetValue()
+							fargs[k][2]=self.args_panel.obj[k][1].GetValue()		
+				if reuse[2]:
+					for k in reuse_targs:	
+						
+						if k in targs.keys():	
+							print k, targs[k][2], self.args_panel.obj[k][1].GetValue()
+							targs[k]=list(targs[k])
+							#val=self.args_panel.obj[k][1].GetValue()
+							targs[k][2]=self.args_panel.obj[k][1].GetValue()
 				args=(cargs,fargs,targs)
-				pprint(fargs)
-				print reuse_targs
-				pprint(targs)
+				#pprint(fargs)
+				#print reuse_targs
+				#pprint(targs)
 		else:
 			(sname,copy_vector,tmpl,args)=[self.getSessionName(), self.getCopyVector(), '.'.join(self.getTemplates()), self.args_panel.getArgs()]
 		if not os.path.isdir(self.save_to_dir):
@@ -5348,10 +5372,14 @@ class DataBuddy(wx.Frame):
 	def OnNewButton(self, event):
 		if 1:
 			#print self.session_name, 'self.session_name
+			defaults=None
+			if self.copy_vector and self.tmpl:
+				defaults=(self.copy_vector, self.tmpl)
 			dlg = NewSessionDialog(self, -1, "Defaults for new session.", size=(250, 250),				
 							 #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
 							 style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
-							 useMetal=False, data=self.data, values_source=self.session_name
+							 useMetal=False, data=self.data, values_source=self.session_name,
+							 defaults=defaults
 							 )
 			#dlg.CenterOnScreen()
 			# this does not return until the dialog is closed.
@@ -5703,9 +5731,9 @@ class DataBuddy(wx.Frame):
 	 '"SCOTT.Partitioned_test_to"',
 	 '-G',
 	 '"part_15"']
-				#cfg[0]=r'C:\Python27\data_migrator_1239\datamule.py'
+				cfg[0]=r'C:\Python27\data_migrator_1239\datamule.py'
 				cfg=cfg+['-X','1']
-				#pprint(cfg)	
+				pprint(cfg)	
 				#e(0)
 				#print  ' '.join(cfg)
 				#e(0)
@@ -5720,7 +5748,7 @@ class DataBuddy(wx.Frame):
 
 					#thread= popenAndCall(onExit,[sys.executable]+cfg)
 					#print thread
-					#p = Popen([sys.executable]+cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
+					p = Popen([sys.executable]+cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
 					if 0:
 						pprint(cfg)
 						nls_timestamp_format=self.args_panel.obj['nls_timestamp_format'][1].GetValue()
@@ -5737,7 +5765,7 @@ class DataBuddy(wx.Frame):
 						
 					#print self.args_panel.obj['nls_timestamp_format'][1].GetValue()
 					#e(0)
-					p = Popen(cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
+					#p = Popen(cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
 					#p.wait()
 					#out,err=p.communicate('y\n')
 					#print out,err

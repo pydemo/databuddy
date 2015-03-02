@@ -11,11 +11,12 @@ e=sys.exit
 #	
 class target(base):
 	"""target Oracle methods"""
-	def __init__(self,datadir,login,conf,db):
+	def __init__(self,datadir,login,conf,db,to_table):
 		self.datadir=datadir
 		self.login=login
 		self.conf=conf
 		self.db=db
+		self.to_table=to_table
 		self.args=conf.args
 		self.tab_cols={}
 		self.db_client_dbshell=None
@@ -158,7 +159,68 @@ class target(base):
 			
 			if not os.path.isfile(self.db_client_dbshell):
 				self.log.warn('Path to source loader is not set. Defaulting to %s' % loader)	
-		return self.db_client_dbshell		
+		return self.db_client_dbshell
+	def load_data(self,logger,loadConf,outfn,shard):
+		
+		out=[]
+		err=[]
+		if 1:
+			if self.args.nls_date_format:
+				os.environ['NLS_DATE_FORMAT'] = self.args.nls_date_format
+			#else:
+				#os.environ['NLS_DATE_FORMAT'] = ''
+			if self.args.nls_timestamp_format:
+				os.environ['NLS_TIMESTAMP_FORMAT'] = self.args.nls_timestamp_format
+			if self.args.nls_timestamp_format:
+				os.environ['NLS_TIMESTAMP_TZ_FORMAT'] = self.args.nls_timestamp_tz_format				
+
+		
+		#pprint(loadConf)
+		p3 = Popen(loadConf, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+		output=' '
+		while output:
+			output = p3.stdout.readline()
+			#print output
+			out.append(output)
+		status=p3.wait()
+		if status==0:
+			logger.info('SQL*Loader status =%s' % status)
+		if status!=0:
+			logger.error('SQL*Loader status =%s' % status)
+		if 1:
+			
+			error=' '
+			while error:
+				error = p3.stderr.readline()
+				print error
+				err.append(error)
+		status = p3.wait()
+
+		ins_cnt = self.get_inserted_count(shard)
+
+		return (out,status,err,ins_cnt)	
+	def get_inserted_count(self,shard):
+		ptn=''
+		sptn=''
+		
+		logfn='%s\\%s%s_Shard-%s.log' % (self.ctldir,self.to_table, "%s%s" % (ptn,sptn),shard)
+
+		rows_copied=-1
+		#print logfn
+		if not os.path.isfile(logfn):
+			print shard
+			self.log.error('Log file for shard %d is missing.' % shard)
+		else:
+			shl=open(logfn, 'r').read()
+			#print shl
+			r=re.compile(r'\s+(\d+) Rows successfully loaded\.')
+
+			g=re.search(r,shl)
+			#print g.groups()
+			if g:
+				rows_copied=int(g.groups()[0])
+
+		return rows_copied		
 	def do_query(self,login, query, query_file=None, regexp=None, grp=None, spset=''):
 		status=0
 		out=[]
