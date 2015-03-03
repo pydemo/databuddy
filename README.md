@@ -101,6 +101,8 @@ python data-buddy.py
 - fix template filters
 - create "Menu" button and hide "About"
 - create session library on first run
+- validate session name for chars not usable in file name
+- allow user to create multiple session libraries
 
 #Does it work?
 yes, with some quirks and only for Oracle. 
