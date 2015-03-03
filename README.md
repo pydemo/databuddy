@@ -100,6 +100,7 @@ python data-buddy.py
 - smaller test_api files (get default args from test routines, not canned files)
 - fix template filters
 - create "Menu" button and hide "About"
+- create session library on first run
 
 #Does it work?
 yes, with some quirks and only for Oracle. 
