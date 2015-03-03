@@ -98,6 +98,7 @@ python data-buddy.py
 - init templates to open session for "New Session"
 - validate args on Run
 - smaller test_api files (get default args from test routines, not canned files)
+- fix template filters
 
 #Does it work?
 yes, with some quirks and only for Oracle. 
