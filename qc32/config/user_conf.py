@@ -24,8 +24,12 @@ if inc.has_key(to_db.upper()):
 	import __builtin__
 	__builtin__.args = args
 	dmhome=os.path.dirname(os.path.realpath(__file__))
-
 	db = import_module(os.path.join(dmhome,'include',inc[to_db.upper()]))
+elif inc.has_key(from_db.upper()):
+	import __builtin__
+	__builtin__.args = args
+	dmhome=os.path.dirname(os.path.realpath(__file__))
+	db = import_module(os.path.join(dmhome,'include',inc[from_db.upper()]))
 	
 abspath=os.path.abspath(os.path.dirname(sys.argv[0]))
 ts=datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')
