@@ -84,9 +84,9 @@ python data-buddy.py
 -Change SQL*Loader arguments and control file in ```qc32\config\include\oracle.py```
 
 #TODO
-- argument values reuse from existing session (DONE)
+- argument values reuse from existing session DONE
 - clean uargs.db
-- nls_format* duplication (DONE)
+- nls_format* duplication DONE
 - test UI
 - add --log_dir to backend
 - add "source" and "target" datasources to "New Session"
@@ -95,10 +95,11 @@ python data-buddy.py
 - history of values for each argument
 - cleanup all other databases but Oracle
 - more templates and better templates hierarchy
-- init templates to open session for "New Session"
+- init templates to open session for "New Session" DONE
 - validate args on Run
 - smaller test_api files (get default args from test routines, not canned files)
 - fix template filters
+- create "Menu" button and hide "About"
 
 #Does it work?
 yes, with some quirks and only for Oracle. 
