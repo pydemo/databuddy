@@ -106,7 +106,7 @@ python data-buddy.py
 - change explore dir to generic control
 - make sure all paths are windows friendly
 - open dir and open file use stale values
-- filter control keys from ne affecting field value
+- filter control keys from ones affecting field value
 
 #Does it work?
 yes, with some quirks and only for Oracle. 
