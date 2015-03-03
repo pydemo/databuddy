@@ -7,6 +7,10 @@ DataBuddy 0.23.9 beta
 
 Ad-hoc data migration between databases and file formats (CSV)
 
+##Audience
+
+Database developers, Data Integrators.
+
 ##Databases supported
 
 Database | GUI | Command line
