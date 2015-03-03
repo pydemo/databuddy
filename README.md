@@ -103,6 +103,9 @@ python data-buddy.py
 - create session library on first run
 - validate session name for chars not usable in file name
 - allow user to create multiple session libraries
+- change explore dir to generic control
+- make sure all paths are windows friendly
+- open dir and open file use stale values
 
 #Does it work?
 yes, with some quirks and only for Oracle. 
