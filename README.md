@@ -38,8 +38,8 @@ CSV   | yes | yes
 
 
 ##Components
-- Gront end UI.
-- Command line executable.
+- Front end GUI (wxPython).
+- Command line script (Python).
   
 ##Features:
 
