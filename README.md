@@ -11,6 +11,9 @@ Ad-hoc data migration between databases and file formats (CSV)
 
 Database developers, Data Integrators.
 
+##Designated Environment
+Pre-Prod (UAT/QA/DEV)
+
 ##Databases supported
 
 Database | GUI | Command line
