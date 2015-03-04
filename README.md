@@ -107,6 +107,7 @@ python data-buddy.py
 - make sure all paths are windows friendly
 - open dir and open file use stale values
 - filter control keys from ones affecting field value
+- close all existing shells/shell groups upon exit
 
 #Does it work?
 yes, with some quirks and only for Oracle. 
