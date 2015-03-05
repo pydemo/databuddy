@@ -96,8 +96,8 @@ python data-buddy.py
 - cleanup all other databases but Oracle
 - more templates and better templates hierarchy
 - init templates to open session for "New Session" DONE
-- - validate args on Run
-- - smaller test_api files (get default args from test routines, not canned files)
+- **validate args on Run**
+- smaller test_api files (get default args from test routines, not canned files)
 - fix template filters
 - create "Menu" button and hide "About"
 - create session library on first run
