@@ -96,18 +96,23 @@ python data-buddy.py
 - cleanup all other databases but Oracle
 - more templates and better templates hierarchy
 - init templates to open session for "New Session" DONE
+- 
 - validate args on Run
+- 
 - smaller test_api files (get default args from test routines, not canned files)
 - fix template filters
 - create "Menu" button and hide "About"
 - create session library on first run
 - validate session name for chars not usable in file name
 - allow user to create multiple session libraries
-- change explore dir to generic control
+- fix mailformed path from MDD.MultiDirDialog DONE
 - make sure all paths are windows friendly
 - open dir and open file use stale values
 - filter control keys from ones affecting field value
 - close all existing shells/shell groups upon exit
+- highlight running sessions
+- beep on failing sessions
+- detect DONE/FAILED from cmd window
 
 #Does it work?
 yes, with some quirks and only for Oracle. 
