@@ -32,12 +32,35 @@ elif inc.has_key(from_db.upper()):
 	db = import_module(os.path.join(dmhome,'include',inc[from_db.upper()]))
 	
 abspath=os.path.abspath(os.path.dirname(sys.argv[0]))
+
+
 ts=datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')
-logdir=os.path.join(abspath,'logs')
+if hasattr(args, 'time_stamp') and args.time_stamp :
+	ts=args.time_stamp
+else:
+	args.time_stamp=ts
+	
+job_name='default_job'	
+if hasattr(args, 'job_name') and args.job_name :
+	job_name=args.job_name
+else:
+	args.job_name=job_name
+
+logdir=os.path.join(abspath,'logs',job_name)
+if hasattr(args, 'log_dir') and args.log_dir :
+	logdir=os.path.join(args.log_dir,job_name)
+if not os.path.isdir(logdir):
+	os.makedirs(logdir)
+	
+
+	
 spooldir=os.path.join(logdir,'data')
+print spooldir
+#e(0)
 datadir= os.path.join(logdir,ts)
 
 ##default export location if not provided as command line arg
+TIMESTAMPED_DEFAULT_SPOOL_DIR = True
 TIMESTAMPED_TO_DIR = True
 TIMESTAMPED_TO_FILE = True
 
@@ -45,16 +68,22 @@ TIMESTAMPED_TO_FILE = True
 #print args.to_file
 #print args.to_dir
 #e(0)
-to_dir=None
+default_spool_dir= os.path.join( r'C:\tmp\qc_default_spool',job_name)
+if hasattr(args, 'default_spool_dir') and args.default_spool_dir:
+	default_spool_dir= os.path.join(args.default_spool_dir,job_name)
+
+
+to_dir=default_spool_dir
+
 if hasattr(args, 'to_dir') and args.to_dir:
 	to_dir=args.to_dir
-else:
-	#default dir
-	to_dir=r'C:\tmp\dm_out'
-	if TIMESTAMPED_TO_DIR:
-		to_dir =os.path.join(to_dir,ts)
-	if not os.path.isdir(to_dir):
-		os.makedirs(to_dir)	
+if TIMESTAMPED_TO_DIR:
+	to_dir =os.path.join(to_dir,ts)
+if TIMESTAMPED_DEFAULT_SPOOL_DIR:
+	default_spool_dir =os.path.join(default_spool_dir,ts)
+
+if not os.path.isdir(to_dir):
+	os.makedirs(to_dir)	
 to_file=None
 if hasattr(args, 'to_file') and args.to_file:
 	to_file=args.to_file

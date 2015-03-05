@@ -1,0 +1,47 @@
+
+C:\Python27\data_migrator_1239>echo y  | C:\Python27\qc_dist_32\20150303_203242\qc32\qc32.exe -w ora11g2ora11g -o 3 -r 3 -t "|" -c SCOTT.Timestamp_test_from -j SCOTT -x tiger2 -b orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -u SCOTT -p tiger2 -d orcl -a SCOTT.Timestamp_test_to -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" 
+----------------------------------------------------------------------
+QueryCopy for Oracle 11G (v0.2.9, beta, 2015/03/03 20:32:42) [32bit]
+Copyright (c): 2014 Alex Buzunov, All rights reserved.
+Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
+----------------------------------------------------------------------
+ora11g2ora11g
+####################
+Performing data copy.
+		
+From Oracle 11G:	
+	from db: SCOTT@orcl
+	table: SCOTT.Timestamp_test_from
+	shards:	3
+		
+		
+	To Oracle:	
+		to db: SCOTT@orcl
+		to table: SCOTT.Timestamp_test_to
+		
+####################
+Are you sure you want to proceed?(y/n): 
+
+Thread-0 (0, 5304L, 44)
+############################################################
+Copy stats (3 threads, 3 shards):
+############################################################
+2015-03-03 20:34:00,499 - ora11g2ora11g - INFO - Starting Thread-0
+2015-03-03 20:34:00,500 - ora11g2ora11g - INFO - Starting Thread-1
+2015-03-03 20:34:00,500 - ora11g2ora11g - INFO - Starting Thread-2
+2015-03-03 20:34:00,500 - ora11g2ora11g - INFO - Thread-0 processing Shard-0
+2015-03-03 20:34:00,500 - ora11g2ora11g - INFO - Exiting Thread-1
+2015-03-03 20:34:00,500 - ora11g2ora11g - INFO - Exiting Thread-2
+2015-03-03 20:34:00,500 - ora11g2ora11g - INFO - Extracting data...
+2015-03-03 20:34:00,565 - ora11g2ora11g - INFO - Done
+2015-03-03 20:34:00,767 - ora11g2ora11g - INFO - Loading data...
+2015-03-03 20:34:00,966 - ora11g2ora11g - INFO - SQL*Loader status =0
+2015-03-03 20:34:00,967 - ora11g2ora11g - INFO - Done
+2015-03-03 20:34:00,967 - ora11g2ora11g - INFO - spool file deleted.
+2015-03-03 20:34:00,967 - ora11g2ora11g - INFO - Thread-0 exit status 0
+2015-03-03 20:34:00,967 - ora11g2ora11g - INFO - Exiting Thread-0
+2015-03-03 20:34:00,967 - ora11g2ora11g - INFO - Shard-0/0:          44 rows
+2015-03-03 20:34:00,967 - ora11g2ora11g - INFO - TOTAL Bytes:        5304 Bytes
+2015-03-03 20:34:00,967 - ora11g2ora11g - INFO - TOTAL Rows:           44 Rows
+2015-03-03 20:34:00,967 - ora11g2ora11g - INFO - Done.
+2015-03-03 20:34:00,967 - ora11g2ora11g - INFO - Elapsed: 00:00:00

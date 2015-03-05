@@ -168,9 +168,9 @@ class target(common):
 			userid='%s@\"%s\"/%s' % (u,sid.strip("'").replace('(',r'\(').replace(')',r'\)'),p)
 		
 		loadConf=[db_loader_loc, 
-		'control=%s' % ctlfn, 
+		'control="%s"' % ctlfn, 
 		'userid=%s' % userid, #args.to_db,
-		'DATA=%s' % outfn,
+		'DATA="%s"' % outfn,
 		'COLUMNARRAYROWS=%s' % dpl_columnarrayrows,
 		'STREAMSIZE=%s' % dpl_streamsize,'READSIZE=%s' % dpl_readsize,
 		'PARALLEL=%s' % if_dpl_parallel,
@@ -179,10 +179,10 @@ class target(common):
 		'SKIP_INDEX_MAINTENANCE=%s' % dpl_skip_index_maintenance, 'SKIP_UNUSABLE_INDEXES=%s' % dpl_skip_unusable_indexes,
 		'DIRECT=%s' % if_direct, 	
 		'MULTITHREADING=TRUE', 
-		#'EXTERNAL_TABLE=EXECUTE',
-		'LOG=%s/sqlloader/%s%s_%s.log' % (datadir,args.to_table, "%s%s" % (ptn,sptn),shard_name), 
-		'BAD=%s/sqlloader/%s%s_%s.bad' % (datadir,args.to_table, "%s%s" % (ptn,sptn),shard_name),
-		'DISCARD=%s/sqlloader/%s%s_%s.dsc' % (datadir,args.to_table, "%s%s" % (ptn,sptn),shard_name),				
+		#'EXTERNAL_TABLE=EXECUTE', %s/sqlloader/%s%s_%s.log
+		'LOG=%s' % os.path.join(datadir,'sqlloader','%s%s_%s.log' % (args.to_table, "%s%s" % (ptn,sptn),shard_name)), 
+		'BAD=%s' % os.path.join(datadir,'sqlloader','%s%s_%s.bad' % (args.to_table, "%s%s" % (ptn,sptn),shard_name)),
+		'DISCARD=%s' % os.path.join(datadir,'sqlloader','%s%s_%s.dsc' % (args.to_table, "%s%s" % (ptn,sptn),shard_name)),				
 		'ERRORS=%s' % loader_errors]
 		if row_from:
 			loadConf.append('SKIP=%s' % (row_from-1))
@@ -298,8 +298,8 @@ class target(common):
 		rows_copied=-1
 		#print logfn
 		if not os.path.isfile(logfn):
-			print shard
-			self.log.error('Log file for shard %d is missing.' % shard)
+			print 'Log file for shard "%s" is missing.' % shard
+			#self.log.error('Log file for shard %d is missing.' % shard)
 		else:
 			shl=open(logfn, 'r').read()
 			#print shl
