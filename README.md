@@ -16,7 +16,7 @@ Pre-Prod (UAT/QA/DEV)
 
 ##Databases supported
 
-Database | GUI | Command line ([QueryCopy](https://github.com/QueryCopy/QueryCopy-for-Oracle))
+Database | GUI (data-buddy) | Command line ([QueryCopy](https://github.com/QueryCopy/QueryCopy-for-Oracle))
 ---------|---- | -------------
 DB2      |  | yes
 Informix |  | yes
