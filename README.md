@@ -38,8 +38,8 @@ CSV   | yes | yes
 
 
 ##Components
-- data-buddy front end GUI (wxPython).
-- QueryCopy command line script (Python).
+- Fron end - data-buddy GUI (wxPython, PyInstaller).
+- Back end -[QueryCopy](https://github.com/QueryCopy/QueryCopy-for-Oracle) (Python, PyInstaller).
   
 ##Features:
 
