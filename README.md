@@ -47,7 +47,7 @@ CSV   | yes | yes
 
 - Session management.
 
-###Command line (qc32/qc32.exe):
+###Command line (QueryCopy):
 - Multi-query load.
 - Partition/sub-partition copy
 - Sharded copy (turbo mode)
