@@ -1,7 +1,6 @@
 # DataBuddy
 ##Version
 
-0.2.9 beta
 FrontBack | GUI (data-buddy) | Command line (QueryCopy)
 ---------|---- | -------------
 Version     | 0.2.9 beta | 1.23.9 beta
