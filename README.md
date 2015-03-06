@@ -39,21 +39,6 @@ Format | GUI | Command line
 CSV   | yes | yes
 
 
-##Copy vectors (To Oracle)
-
-From | To
----------|----
-DB2      | 
-Informix |  
-MariaDB    | 
-MySQL    | 
-**Oracle** | --> Oracle  
-PostgreSQL|  
-SQLite|  | 
-SQLServer|   
-Sybase   |  
-TimesTen|  
-
 
 
 ##Components
