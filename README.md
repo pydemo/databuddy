@@ -116,4 +116,4 @@ python data-buddy.py
 yes, with some quirks and only for Oracle. 
 
 ##References
-* Organization/Repository: QueryCopy/QueryCopy-for-Oracle
+* #* [QueryCopy](https://github.com/QueryCopy/QueryCopy-for-Oracle) -- `qc32\qc32.exe`
