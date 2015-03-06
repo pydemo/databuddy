@@ -39,13 +39,20 @@ Format | GUI | Command line
 CSV   | yes | yes
 
 
-##Copy vectors
+##Copy vectors (To Oracle)
 
-From | To/From | To
----------|---- | -------------
-DB2      
-Informix 
-MariaDB    |  | yes
+From | To
+---------|----
+DB2      | 
+Informix |  
+MariaDB    | 
+MySQL    | 
+**Oracle** | --> Oracle  
+PostgreSQL|  
+SQLite|  | 
+SQLServer|   
+Sybase   |  
+TimesTen|  
 
 
 
