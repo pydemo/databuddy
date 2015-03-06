@@ -43,7 +43,7 @@ CSV   | yes | yes
 
 ##Components
 - Fron end - data-buddy GUI (wxPython, PyInstaller).
-- Back end -[QueryCopy](https://github.com/QueryCopy/QueryCopy-for-Oracle) (Python, PyInstaller).
+- Back end -[QueryCopy](https://github.com/QueryCopy/QueryCopy-for-Oracle/releases/tag/v1.23.9) (Python, PyInstaller).
   
 ##Features:
 
