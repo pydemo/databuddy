@@ -16,13 +16,13 @@ Pre-Prod (UAT/QA/DEV)
 
 ##Databases supported
 
-Database | GUI (data-buddy) | Command line ([QueryCopy](https://github.com/QueryCopy/QueryCopy-for-Oracle))
+Database | GUI (data-buddy) | Command line (QueryCopy)
 ---------|---- | -------------
 DB2      |  | yes
 Informix |  | yes
 MariaDB    |  | yes
 MySQL    |  | yes
-**Oracle**   | yes | yes
+**Oracle**   | yes | [yes](https://github.com/QueryCopy/QueryCopy-for-Oracle)
 PostgreSQL|  | yes
 SQLite|  | yes
 SQLServer|   | yes
