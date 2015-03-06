@@ -74,7 +74,8 @@ CSV   | yes | yes
  
 ##Execution
 
-python data-buddy.py
+* python data-buddy.py
+* data-buddy.exe
 
 #Templates v.s. free argument entry
 ##Pros
