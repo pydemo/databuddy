@@ -38,16 +38,16 @@ CSV   | yes | yes
 
 
 ##Components
-- Front end GUI (wxPython).
-- Command line script (Python).
+- data-buddy front end GUI (wxPython).
+- QueryCopy command line script (Python).
   
 ##Features:
 
-###Front end.
+###Front end (data-buddy).
 
 - Session management.
 
-###Command line:
+###Command line (qc32/qc32.exe):
 - Multi-query load.
 - Partition/sub-partition copy
 - Sharded copy (turbo mode)
