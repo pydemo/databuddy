@@ -39,6 +39,16 @@ Format | GUI | Command line
 CSV   | yes | yes
 
 
+##Copy vectors
+
+From | To/From | To
+---------|---- | -------------
+DB2      
+Informix 
+MariaDB    |  | yes
+
+
+
 ##Components
 - Fron end - data-buddy GUI (wxPython, PyInstaller).
 - Back end -[QueryCopy](https://github.com/QueryCopy/QueryCopy-for-Oracle) (Python, PyInstaller).
