@@ -115,3 +115,5 @@ python data-buddy.py
 #Does it work?
 yes, with some quirks and only for Oracle. 
 
+##References
+* QueryCopy: QueryCopy/QueryCopy-for-Oracle
