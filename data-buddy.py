@@ -52,8 +52,11 @@ from time import sleep
 import datetime
 
 import threading
-import subprocess
+from subprocess import Popen, PIPE,CREATE_NEW_CONSOLE
+
 import wx.combo
+
+import shlex 
 		
 __builtin__.copy_vector = None
 __builtin__.cvarg = None
@@ -545,17 +548,20 @@ class SessionList(wx.ListCtrl):
 		#e(0)
 		#print config_file
 		self.InsertColumn(0, 'Name')
-		self.InsertColumn(1, 'From')
-		self.InsertColumn(2, 'To')
-		self.InsertColumn(3, 'Type')
-		self.InsertColumn(4, 'Template')
+		self.InsertColumn(1, 'To_Template')
+		self.InsertColumn(2, 'From')		
+		self.InsertColumn(3, 'To')
+		
+		self.InsertColumn(4, 'Type')
+		self.InsertColumn(5, 'From_Template')
 		#self.InsertColumn(4, 'Desription')
 
 		self.SetColumnWidth(0, 225)
-		self.SetColumnWidth(1, 60)
+		self.SetColumnWidth(1, 130)
 		self.SetColumnWidth(2, 60)
 		self.SetColumnWidth(3, 60)
-		self.SetColumnWidth(4, 180)
+		self.SetColumnWidth(4, 60)
+		self.SetColumnWidth(5, 120)
 
 		#self.SetColumnWidth(4, 420)
 		self.img_col = 1
@@ -582,7 +588,7 @@ class SessionList(wx.ListCtrl):
 				type='Load'
 			if '.CSV_' in tmpl:
 				type='Spool'
-			flist[i] = [name,cv.split('.')[0],cv.split('.')[1],type,tmpl,self.save_to_dir,f]
+			flist[i] = [name,tmpl.split('.')[1],cv.split('.')[0],cv.split('.')[1],type,tmpl.split('.')[0],self.save_to_dir,f]
 			i +=1
 		self.data[self.current_list]= flist
 	def getList(self):
@@ -3537,7 +3543,7 @@ class dummy_args(wx.Panel):
 			
 			self.core_args_panel = wx.Panel(self, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			hbox = wx.BoxSizer(wx.HORIZONTAL)
-			self.fgs = wx.GridBagSizer(4, 10)
+			self.fgs = wx.GridBagSizer(4, 14)
 			#sizer.Add(text1, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
 			#sizer.Add(tc0, pos=(0, 1), span=(1, 3), flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=10)
 			#fgs = wx.FlexGridSizer(3, 4, 9, 20)
@@ -3827,7 +3833,7 @@ class pnl_args(wx.Panel):
 			
 			self.core_args_panel = wx.Panel(self, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			hbox = wx.BoxSizer(wx.HORIZONTAL)
-			self.fgs = wx.GridBagSizer(6, 3)
+			self.fgs = wx.GridBagSizer(10, 3)
 			#sizer.Add(text1, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
 			#sizer.Add(tc0, pos=(0, 1), span=(1, 3), flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND, border=10)
 			#fgs = wx.FlexGridSizer(3, 4, 9, 20)
@@ -4891,20 +4897,18 @@ class pnl_args(wx.Panel):
 		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)			
 		
 	def get_cmd(self,transport):
-		cmd='%s ^' % transport
-		for k, v in sorted(self.cargs.items()):
-			#print k,v
-			short,long,val,desc=v
-			cmd='%s\n%s "%s" ^' % (cmd, short,self.obj[k][1].GetValue())
-		for k, v in sorted(self.fargs.items()):
-			#print k,v
-			short,long,val,desc=v
-			cmd='%s\n%s "%s" ^' % (cmd, short,self.obj[k][1].GetValue())
-		for k, v in sorted(self.targs.items()):
-			#print k,v
-			short,long,val,tesc=v
-			cmd='%s\n%s "%s" ^' % (cmd, short,self.obj[k][1].GetValue())			
-		return cmd
+		cmd=self.get_cmd_line_new(transport)
+		lexer=shlex.shlex(cmd)
+		lexer.quotes = '"'
+		lexer.whitespace_split = True
+		lexer.commenters = ''
+		cfg = list(lexer)
+		out=['%s ^' % cfg[0]]
+		for i in xrange(1,len(cfg),2):
+			print i,cfg[i],cfg[i+1]
+			out.append('%s %s ^' % (cfg[i],cfg[i+1]		))
+		return ('\n'.join(out)).strip('^')
+
 	def get_cmd_line(self,transport):
 		cmd='%s' % transport #'python  C:\Python27\data_migrator_1239\datamule.py' #
 		for k, v in sorted(self.cargs.items()):
@@ -4936,8 +4940,13 @@ class pnl_args(wx.Panel):
 			value=self.obj[k][1].GetValue()
 			#if not value.isdigit() and short not in ['-w']:
 			#	value='"%s"' % value
-			if value and value.strip('"'):
-				cmd=r'%s %s %s' % (cmd, short,value)
+			if value and value.strip('"') :
+				print long, long.strip('--') in ['email_to'] and self.parent.if_send_email()
+				if long.strip('--') in ['email_to']:
+					if self.parent.if_send_email():
+						cmd=r'%s %s %s' % (cmd, short,value)
+				else:
+					cmd=r'%s %s %s' % (cmd, short,value)
 		for k, v in self.fargs.items():
 			#print k,v
 			short,long,val,desc=v
@@ -5070,6 +5079,7 @@ class DataBuddy(wx.Frame):
 			editor.AppendText(self.cmd)
 			self.nb.AddPage(editor, 'Command')
 			self.nb.SetSelection(self.nb_tab)
+			
 			self.nb.EnableTab(0,False)
 			self.nb.EnableTab(1,False)
 			self.Bind(fnb.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.onTabChanged, self.nb)
@@ -5103,19 +5113,30 @@ class DataBuddy(wx.Frame):
 			#button2 = wx.Button(panel, label="Delete")
 			#sizer.Add(button2, pos=(3, 4), flag=wx.TOP|wx.RIGHT, border=5)
 			sizer.Add(fgs, pos=(3, 4), flag=wx.TOP|wx.RIGHT, border=5)
-		sb = wx.StaticBox(panel, label='Run')
+		if 1:
+			sb = wx.StaticBox(panel, label='Post-etl Email')
 
-		boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-		self.send_yes=wx.CheckBox(panel, label="Send 'y'")
-		boxsizer.Add(self.send_yes, flag=wx.LEFT|wx.TOP, border=5)
-		self.send_yes.SetValue(True)
-		self.auto_save=wx.CheckBox(panel, label="Auto-save")
-		boxsizer.Add(self.auto_save, flag=wx.LEFT|wx.TOP, border=5)
-		self.auto_save.SetValue(True)
-		
-		#print(dir(cb))
-		sizer.Add(boxsizer, pos=(8, 0), span=(1, 5), 
-			flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=10)
+			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
+			self.send_email=wx.CheckBox(panel, label="Send email")
+			boxsizer.Add(self.send_email, flag=wx.LEFT|wx.TOP, border=5)
+			self.send_email.Bind(wx.EVT_CHECKBOX, self.OnChangeEmailYesNo)
+			self.send_email.SetValue(True)		
+			
+			#print(dir(cb))
+			sizer.Add(boxsizer, pos=(8, 0),flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=10)
+		if 1:
+			sb = wx.StaticBox(panel, label='Run')
+
+			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
+			self.send_yes=wx.CheckBox(panel, label="Send 'y'")
+			boxsizer.Add(self.send_yes, flag=wx.LEFT|wx.TOP, border=5)
+			self.send_yes.SetValue(True)
+			self.auto_save=wx.CheckBox(panel, label="Auto-save")
+			boxsizer.Add(self.auto_save, flag=wx.LEFT|wx.TOP, border=5)
+			self.auto_save.SetValue(True)
+			
+			#print(dir(cb))
+			sizer.Add(boxsizer, pos=(8, 1),flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=10)			
 		self.last_log_dir={}
 		self.btn_log = wx.Button(panel, label='Show Log')
 		sizer.Add(self.btn_log, pos=(9, 0), flag=wx.LEFT, border=10)
@@ -5223,8 +5244,12 @@ class DataBuddy(wx.Frame):
 		self.the_id=None
 		self.q=[]
 		self.closing_in=6
-		
-		
+	def OnChangeEmailYesNo(self,evt):
+		print 'OnChangeEmailYesNo'
+		cb = evt.GetEventObject()		
+		self.updateCommand()
+	def if_send_email(self):
+		return self.send_email.GetValue()
 	def restore_changed_args(self):
 		#pprint(self.changed)
 		sess=self.get_session_args(os.path.join(self.sdir,self.fname))
@@ -5262,6 +5287,7 @@ class DataBuddy(wx.Frame):
 			self.btn_clearall.Enable(False)
 		else:
 			self.btn_clearall.Enable(True)
+		self.updateCommand(self.nb_tab)
 		#self.nb_tab=
 	def onDeleteSessions_(self,  data, extra1, extra2=None):
 		(items)=data
@@ -5417,11 +5443,11 @@ class DataBuddy(wx.Frame):
 		#pprint(data)
 		size=self.GetSize()
 		
-		(sname,cv_from,cv_to,type,tmpl,sdir, fname) = data
+		(sname,tmpl2,cv_from,cv_to,type,tmpl1,sdir, fname) = data
 		#print sname
 		self.Freeze()
 		self.enableForm()
-
+		tmpl='.'.join([tmpl1,tmpl2])
 		self.open_session([sname,[cv_from,cv_to],type,tmpl,sdir,fname])
 		self.btn_delete.Enable(True)
 		self.btn_new.Enable(True)
@@ -5772,20 +5798,9 @@ class DataBuddy(wx.Frame):
 			sess=self.get_session_args(os.path.join(self.sdir,self.fname))
 			#pprint(sess.keys())
 			(self.cargs,self.fargs,self.targs)=sess
-			#if 'to_passwd' in self.targs.keys():
-			#	print self.targs['to_passwd']
-			#	self.targs['to_passwd']=list(self.targs['to_passwd'])
-			#	self.targs['to_passwd'][2]=base64.b64decode(self.targs['to_passwd'][2])
-			#print len(self.cargs)
-			##print len(self.fargs)
-			#print len(self.targs)
-			#self.args_panel.Hide()
-			#self.args_panel.create_cargs(self.cargs)
-			#self.args_panel.Destroy()
+
 			ids=None
-			#print self.copy_vector
-			#print '#'*60
-			#pprint (self.sids)
+
 			if 1:
 				sn = self.sname
 				if not sn in self.sids.keys():
@@ -5801,70 +5816,36 @@ class DataBuddy(wx.Frame):
 							self.Bind(wx.EVT_TIMER, lambda event, i=i: self.TimerHandler (event, the_id=i), id=i)					
 				else:
 					self.the_id=self.sids[sn]
-				if 0:
-					if  not self.copy_vector[0].startswith('CSV'):
-								
-						
-						#tc=self.sids
-						#pprint (tc)
-						#if not sn in tc.keys():
-						#	tc[sn]={}
-						if not sn in self.sids.keys():
-							print 'new keys'
-							#tc[sn]['source']=[None,None]
-							ids=[wx.NewId(),wx.NewId(),wx.NewId()]
-							self.sids[sn]=ids
-							self.the_id=ids
-											
-							
-							for i in self.the_id:
-								if not self.timers.has_key(i):
-									self.timers[i]=wx.Timer(self, id=i)
-									self.counters[i]=0					
-								
-									#self.th[i]=self.TimerHandler
-									self.Bind(wx.EVT_TIMER, lambda event, i=i: self.TimerHandler (event, the_id=i), id=i)
-						else:
-							self.the_id=self.sids[sn]
-							#self.btn_run.SetLabel('Run')
-					elif not self.copy_vector[1].startswith('CSV'):
-						#ids=[wx.NewId(),wx.NewId(),wx.NewId()]
-						ids=[None,wx.NewId(),wx.NewId()]
-						self.the_id=ids
-						for i in self.the_id:
-						
-							if i and not self.timers.has_key(i) :
-								self.timers[i]=wx.Timer(self, id=i)
-								self.counters[i]=0					
-							
-								#self.th[i]=self.TimerHandler
-								self.Bind(wx.EVT_TIMER, lambda event, i=i: self.TimerHandler (event, the_id=i), id=i)
-						#self.btn_run.SetLabel('Run')
-					else:
-						self.the_id=[wx.NewId(),None,wx.NewId()]
-						#self.btn_run.SetLabel('Run')
+
 
 			self.btn_run.SetLabel('Run')		
 			#print 'open_session---------------', ids,self.sname, self.the_id
 			#pprint (self.sids)
 			nb_tab=self.nb_tab
 			self.args_panel= pnl_args(self,self.copy_vector,self.tmpl,self.the_id,(self.cargs,self.fargs,self.targs),style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
-			self.nb.DeletePage(0)
-			self.nb.DeletePage(0)
+			self.nb.DeleteAllPages()
+			#self.nb.DeletePage(0)
+			#self.nb.DeletePage(0)
 			#self.args_panel.Destroy()
 			self.nb.AddPage(self.args_panel, 'Arguments')
-			editor = TacoTextEditor(self.args_panel)
-			editor.AppendText(self.args_panel.get_cmd(self.transport))
-			self.nb.AddPage(editor, 'Command')
+			self.editor = TacoTextEditor(self.args_panel)
+			self.editor.AppendText(self.args_panel.get_cmd(self.transport))
+			self.nb.AddPage(self.editor, 'Command')
 			self.nb_tab=nb_tab
+			
 			self.nb.SetSelection(self.nb_tab)
+			self.updateCommand(self.nb_tab)
 			#self.nb.SetSize((100,-1))
 			self.btn_show.Enable(True)
 			self.btn_run.Enable(True)
 			self.btn_save.Enable(True)	
 			self.btn_clearall.Enable(True)
   
-  
+	def updateCommand(self, page_id=1):
+		print 'setNbSelection'
+		page_title=self.nb.GetPageText(page_id)
+		if page_title in ['Command']:
+			self.editor.SetText(self.args_panel.get_cmd(self.transport))
 	def set_new_session(self,data):
 			#print len(data)
 			(sname,copy_vector,tmpl,api_args) = data
@@ -5999,18 +5980,9 @@ class DataBuddy(wx.Frame):
 			yes=''
 			if if_yes:
 				yes='echo y|'
-			if 0:
-				os.system(r'start "test" cmd.exe  /k "mode 100,45 && echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\dm32\dm32.exe -w ora2ora -o 1 -r 1 -t "^|" -c SCOTT.Date_test_from -f SCOTT/tiger2@orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -g SCOTT/tiger2@orcl -a SCOTT.Partitioned_test_to -G part_15 -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN""')
-			else:
-				#os.system(r'start "test" cmd.exe  /k "echo y|python  C:\Python27\data_migrator_1239\datamule.py  -t "^|" -w "csv2ora11g" -r "1" -o "1" -I "c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_1;c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_2" -y "1000" -d "orcl" -e "YYYY-MM-DD HH24.MI.SS" -u "SCOTT" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -p "tiger2" -a "SCOTT.Timestamp_test_to" -m "YYYY-MM-DD HH24.MI.SS.FF2"')
-				#print r'start "test" cmd.exe  /k "echo y|python  C:\Python27\data_migrator_1239\datamule.py  -t "^|" -w "csv2ora11g" -r "1" -o "1" -I "c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_1;c:\Python27\data_migrator_1239\test\v101\data\ora_data_dir_2" -y "1000" -d "orcl" -e "YYYY-MM-DD HH24.MI.SS" -u "SCOTT" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -p "tiger2" -a "SCOTT.Timestamp_test_to" -m "YYYY-MM-DD HH24.MI.SS.FF2"'
-				#print r'start "test" cmd.exe  /k "%s%s"' % (yes,cmd)
-				#cmd='%s%s' % (yes,cmd)
-				
-				if 0:
-					self.exec_cmd(title, cmd)
-				if 1:
-						from subprocess import Popen, PIPE,CREATE_NEW_CONSOLE
+			
+
+						
 			cfg=[]
 			if 1:
 				import shlex 
