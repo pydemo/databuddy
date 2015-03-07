@@ -93,21 +93,21 @@ CSV   | yes | yes
 - clean uargs.db.
 - nls_format* duplication. **DONE**
 - test UI.
-- add --log_dir to backend.
-- add "source" and "target" datasources to "New Session"
+- add --log_dir to backend. **DONE**
+- add "source" and "target" datasources to "New Session".
 - Copy/Paste of argument values between sessions.
 - generic "New Session" so user not limited by source and target templates.
-- history of values for each argument
-- cleanup all other databases but Oracle
-- more templates and better templates hierarchy
+- history of values for each argument.
+- cleanup all other databases but Oracle.
+- more templates and better templates hierarchy.
 - init templates to open session for "New Session". **DONE**
 - **validate args on Run**.
 - smaller test_api files (get default args from test routines, not canned files).
-- fix template filters
-- create "Menu" button and hide "About"
-- create session library on first run
-- validate session name for chars not usable in file name
-- allow user to create multiple session libraries
+- fix template filters.
+- create "Menu" button and hide "About".
+- create session library on first run.
+- validate session name for chars not usable in file name.
+- allow user to create multiple session libraries.
 - fix mailformed path from MDD.MultiDirDialog. **DONE**
 - make sure all paths are windows friendly.
 - open dir and open file use stale values.
