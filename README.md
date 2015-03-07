@@ -109,11 +109,11 @@ CSV   | yes | yes
 - validate session name for chars not usable in file name.
 - allow user to create multiple session libraries.
 - fix mailformed path from MDD.MultiDirDialog. **DONE**
-- make sure all paths are windows friendly.
-- open dir and open file use stale values.
+- make sure all paths are windows friendly.**DONE**
+- open dir and open file use stale values.**DONE**
 - filter control keys from ones affecting field value.
 - close all existing shells/shell groups upon exit.
-- highlight running sessions.
+- highlight running sessions.**DONE**
 - beep on failing sessions.
 - detect DONE/FAILED from cmd window.
 - let user disable post-etl email (Common: email_to). **DONE**
