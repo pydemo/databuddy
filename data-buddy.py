@@ -4905,8 +4905,8 @@ class pnl_args(wx.Panel):
 		cfg = list(lexer)
 		out=['%s ^' % cfg[0]]
 		for i in xrange(1,len(cfg),2):
-			print i,cfg[i],cfg[i+1]
-			out.append('%s %s ^' % (cfg[i],cfg[i+1]		))
+			#print i,cfg[i],cfg[i+1]
+			out.append('%s %s ^' % (cfg[i],cfg[i+1]))
 		return ('\n'.join(out)).strip('^')
 
 	def get_cmd_line(self,transport):
@@ -4940,8 +4940,8 @@ class pnl_args(wx.Panel):
 			value=self.obj[k][1].GetValue()
 			#if not value.isdigit() and short not in ['-w']:
 			#	value='"%s"' % value
-			if value and value.strip('"') :
-				print long, long.strip('--') in ['email_to'] and self.parent.if_send_email()
+			if value and value.strip('"') and value.strip(' ') :
+				#print long, long.strip('--') in ['email_to'] and self.parent.if_send_email()
 				if long.strip('--') in ['email_to']:
 					if self.parent.if_send_email():
 						cmd=r'%s %s %s' % (cmd, short,value)
@@ -4953,7 +4953,7 @@ class pnl_args(wx.Panel):
 			value=self.obj[k][1].GetValue()
 			if not value.isdigit() and ' ' in value:
 				value='"%s"' % value
-			if value and value.strip('"'):
+			if value and value.strip('"')  and value.strip(' '):
 				cmd=r'%s %s %s' % (cmd, short,value)			
 		for k, v in self.targs.items():
 			#print k,v
@@ -4961,7 +4961,7 @@ class pnl_args(wx.Panel):
 			value=self.obj[k][1].GetValue()
 			if (not value.isdigit() and ' ' in value):
 				value='"%s"' % value
-			if value and value.strip('"'):
+			if value and value.strip('"')  and value.strip(' '):
 				cmd=r'%s %s %s' % (cmd, short,value)			
 		return cmd		
 ###################################################################################################
@@ -5960,170 +5960,179 @@ class DataBuddy(wx.Frame):
 			#print dir(window1)
 			#win32con.HWND_TOPMOST
 		else:
-			self.updateTimeStamp()
-			#time_stamp=datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')
-			
-			btn.SetLabel('Running...(0)')
-			cmd=self.args_panel.get_cmd_line_new(self.transport)
-			#pprint (cmd)
-			
-			#cmd=cmd.replace('|','^|')
-			#cmd=cmd.replace('csv2ora11g','csv2ora')
-			
-			#pprint (cmd)
-			#save
-			if_save=self.auto_save.GetValue() 
-			if if_save:
-				(sname,cv,tmpl,dname,fname)=self.saveSession()
-				
-			if_yes=self.send_yes.GetValue()
-			yes=''
-			if if_yes:
-				yes='echo y|'
-			
-
-						
-			cfg=[]
-			if 1:
-				import shlex 
-				#cmd2=''.join(cmd.split('^\n'))
-				#print cmd
-				lexer=shlex.shlex(cmd)
-				#lexer = shlex.shlex(input)
-				lexer.quotes = '"'
-				#lexer.wordchars += '\''
-				lexer.whitespace_split = True
-				lexer.commenters = ''
-				cfg = list(lexer)
-				#cfg=['start',"'%s'" % title] + cfg
-				#C:\app\alex_buz\product\11.2.0\dbhome_2\BIN\sqlplus.exe SCOTT/tiger2@orcl @C:\Users\alex_buz\Documents\GitHub\DataBuddy\test\test_connnect\Oracle.sql
-				#C:\Users\alex_buz\Documents\GitHub\DataBuddy\qc32\qc32.exe -t "^|" -w "ora11g2ora11g" -r "1" -o "1" -q "C:\Python27\data_migrator_1239\test\v101\query\oracle_query.sql" -b "orcl" -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -z"C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -j "SCOTT" -x "tiger2" -d "orcl" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -p "tiger2" -m "YYYY-MM-DD HH24.MI.SS.FF2" -u "SCOTT" -e "YYYY-MM-DD HH24.MI.SS" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -a "SCOTT.Partitioned_test_to" -G "part_15"
-				if 0:
-					cfg=['C:\\Users\\alex_buz\\Documents\\GitHub\\DataBuddy\\qc32\\qc32.exe',
-	 '-t',
-	 '"^|"',
-	 '-w',
-	 'ora11g2ora11g',
-	 '-r',
-	 '1',
-	 '-o',
-	 '1',
-	 '-q',
-	 'C:\\Python27\\data_migrator_1239\\test\\v101\\query\\oracle_query.sql',
-	 '-b',
-	 '"orcl"',
-	 '-e',
-	 '"YYYY-MM-DD HH24.MI.SS"',
-	 '-m',
-	 '"YYYY-MM-DD HH24.MI.SS.FF2"',
-	 '-z',
-	 '"C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN"',
-	 '-O',
-	 '"YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM"',
-	 '-j',
-	 '"SCOTT"',
-	 '-x',
-	 '"tiger2"',
-	 '-d',
-	 '"orcl"',
-	 '-Z',
-	 "'C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN'",
-	 '-e',
-	 '"YYYY-MM-DD HH24.MI.SS"',
-	 '-m',
-	 '"YYYY-MM-DD HH24.MI.SS.FF2"',
-	 '-u',
-	 '"SCOTT"',
-	 '-p',
-	 '"tiger2"',
-	 '-O',
-	 '"YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM"',
-	 '-a',
-	 '"SCOTT.Partitioned_test_to"',
-	 '-G',
-	 '"part_15"']
-				
-				#pprint(cfg)	
-				#e(0)
-				#print  ' '.join(cfg)
-				#e(0)
-				#C:\Python27\data_migrator_1239\datamule.py -t ^| -w ora11g2ora11g -r 1 -o 1 -q C:\Python27\data_migrator_1239\test\v101\query\oracle_query.sql -b orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -z C:\app\alex_buz\product\11.2.0\dbhome_2\BIN -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -j SCOTT -x tiger2 -d orcl -Z C:\app\alex_buz\product\11.2.0\dbhome_2\BIN -p tiger2 -m "YYYY-MM-DD HH24.MI.SS.FF2" -u SCOTT -e "YYYY-MM-DD HH24.MI.SS" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -a SCOTT.Partitioned_test_to -G part_15			
-				if 0:
-					p = Popen(cfg, stdin=PIPE, stdout=PIPE, shell=True ) #creationflags=CREATE_NEW_CONSOLE
-					#print p
-					out, err = p.communicate()
-					#print out, err
-					p.wait()
-				else:
-					#py
-					#
-
-					if 0:
-						#pprint(cfg)
-						nls_timestamp_format=self.args_panel.obj['nls_timestamp_format'][1].GetValue()
-						nls_timestamp_tz_format=self.args_panel.obj['nls_timestamp_tz_format'][1].GetValue()
-						if 1:
-							if nls_timestamp_format:
-								os.environ['NLS_TIMESTAMP_FORMAT'] = nls_timestamp_format
-							else:
-								os.environ['NLS_TIMESTAMP_FORMAT'] =''
-							if nls_timestamp_tz_format:
-								os.environ['NLS_TIMESTAMP_TZ_FORMAT'] = nls_timestamp_tz_format
-							else:
-								os.environ['NLS_TIMESTAMP_TZ_FORMAT'] =''	
+			if self.validateOnRun():
+				msg='Are you sure you want to execute this command?\n%s' % self.args_panel.get_cmd(self.transport)
+				yes= self.if_yes( msg, 'Confirmation.')
+				if yes:
+					self.updateTimeStamp()
+					#time_stamp=datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')
 					
-					if 1:	#exe										
-						cfg=cfg+['-X','1']
-						p = Popen(cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
-					else:	#py
-						cfg[0]=r'C:\Python27\data_migrator_1239\datamule.py'
-						cfg=cfg+['-X','1']
-						p = Popen([sys.executable]+cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
+					btn.SetLabel('Running...(0)')
+					cmd=self.args_panel.get_cmd_line_new(self.transport)
+					#pprint (cmd)
 
+					if_save=self.auto_save.GetValue() 
+					if if_save:
+						(sname,cv,tmpl,dname,fname)=self.saveSession()
+						
+					if_yes=self.send_yes.GetValue()
+					yes=''
+					if if_yes:
+						yes='echo y|'
+		
+					cfg=[]
 					if 1:
-						hwnd=None
-						while not hwnd:
-							hwnd=self.get_hwnds_for_pid(p.pid)
-						#print hwnd
+						import shlex 
+						#cmd2=''.join(cmd.split('^\n'))
+						#print cmd
+						lexer=shlex.shlex(cmd)
+						#lexer = shlex.shlex(input)
+						lexer.quotes = '"'
+						#lexer.wordchars += '\''
+						lexer.whitespace_split = True
+						lexer.commenters = ''
+						cfg = list(lexer)
+						#cfg=['start',"'%s'" % title] + cfg
+						#C:\app\alex_buz\product\11.2.0\dbhome_2\BIN\sqlplus.exe SCOTT/tiger2@orcl @C:\Users\alex_buz\Documents\GitHub\DataBuddy\test\test_connnect\Oracle.sql
+						#C:\Users\alex_buz\Documents\GitHub\DataBuddy\qc32\qc32.exe -t "^|" -w "ora11g2ora11g" -r "1" -o "1" -q "C:\Python27\data_migrator_1239\test\v101\query\oracle_query.sql" -b "orcl" -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -z"C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -j "SCOTT" -x "tiger2" -d "orcl" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -p "tiger2" -m "YYYY-MM-DD HH24.MI.SS.FF2" -u "SCOTT" -e "YYYY-MM-DD HH24.MI.SS" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -a "SCOTT.Partitioned_test_to" -G "part_15"
+						if 0:
+							cfg=['C:\\Users\\alex_buz\\Documents\\GitHub\\DataBuddy\\qc32\\qc32.exe',
+			 '-t',
+			 '"^|"',
+			 '-w',
+			 'ora11g2ora11g',
+			 '-r',
+			 '1',
+			 '-o',
+			 '1',
+			 '-q',
+			 'C:\\Python27\\data_migrator_1239\\test\\v101\\query\\oracle_query.sql',
+			 '-b',
+			 '"orcl"',
+			 '-e',
+			 '"YYYY-MM-DD HH24.MI.SS"',
+			 '-m',
+			 '"YYYY-MM-DD HH24.MI.SS.FF2"',
+			 '-z',
+			 '"C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN"',
+			 '-O',
+			 '"YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM"',
+			 '-j',
+			 '"SCOTT"',
+			 '-x',
+			 '"tiger2"',
+			 '-d',
+			 '"orcl"',
+			 '-Z',
+			 "'C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN'",
+			 '-e',
+			 '"YYYY-MM-DD HH24.MI.SS"',
+			 '-m',
+			 '"YYYY-MM-DD HH24.MI.SS.FF2"',
+			 '-u',
+			 '"SCOTT"',
+			 '-p',
+			 '"tiger2"',
+			 '-O',
+			 '"YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM"',
+			 '-a',
+			 '"SCOTT.Partitioned_test_to"',
+			 '-G',
+			 '"part_15"']
+						
+						#pprint(cfg)	
 						#e(0)
-						#pprint(dir(win32gui))
-						#(x,y) = self.GetScreenPositionTuple()
-						#(l,w) =self.GetClientSizeTuple()
-						#dl,dw= 600,400
-						
-						the_id=self.the_id[2]
-						#print self.the_id,the_id
-						
-						self.btn[the_id]=event.GetEventObject()
-						sn=self.session_name
-						#print sn
-						self.p[the_id]=p
-						self.timers[the_id].Start(1000)
-						
-						win32gui.SetWindowText (hwnd[0], title)
-						#print title
+						#print  ' '.join(cfg)
 						#e(0)
-						if if_yes:
-							window1 = find_window( title )
-							#print window1
-							#sleep(0.2)
-							#hwnd= self.get_hwnds_for_pid (p.pid)
-							#print hwnd
-							#s_app_name
-							#win32gui.SetWindowPos (hwnd[0],  win32con.HWND_TOPMOST, x,y, 850, 500, 0)
-							(x,y) = self.GetScreenPositionTuple()
-							(l,w) =self.GetClientSizeTuple()
-							dl,dw= 800,600
-							#self.SetDimensions(x+(l-dl)/2, y+(w-dw)/2, dl,dw)
-							window1.SetWindowPos(0, (x/2,y/2,dl,dw),0)
-							 #win32con.HWND_TOPMOST, x,y, 850, 500, 0)
-			 
-							send_input( window1)
-					#disable form
-					self.DisableOnRun()
-					send('highlight_session',self.session_name)
-					self.last_log_dir[self.session_name]=self.getLogDir()
-					
+						#C:\Python27\data_migrator_1239\datamule.py -t ^| -w ora11g2ora11g -r 1 -o 1 -q C:\Python27\data_migrator_1239\test\v101\query\oracle_query.sql -b orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -z C:\app\alex_buz\product\11.2.0\dbhome_2\BIN -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -j SCOTT -x tiger2 -d orcl -Z C:\app\alex_buz\product\11.2.0\dbhome_2\BIN -p tiger2 -m "YYYY-MM-DD HH24.MI.SS.FF2" -u SCOTT -e "YYYY-MM-DD HH24.MI.SS" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -a SCOTT.Partitioned_test_to -G part_15			
+						if 0:
+							p = Popen(cfg, stdin=PIPE, stdout=PIPE, shell=True ) #creationflags=CREATE_NEW_CONSOLE
+							#print p
+							out, err = p.communicate()
+							#print out, err
+							p.wait()
+						else:
+							#py
+							#
+
+							if 0:
+								#pprint(cfg)
+								nls_timestamp_format=self.args_panel.obj['nls_timestamp_format'][1].GetValue()
+								nls_timestamp_tz_format=self.args_panel.obj['nls_timestamp_tz_format'][1].GetValue()
+								if 1:
+									if nls_timestamp_format:
+										os.environ['NLS_TIMESTAMP_FORMAT'] = nls_timestamp_format
+									else:
+										os.environ['NLS_TIMESTAMP_FORMAT'] =''
+									if nls_timestamp_tz_format:
+										os.environ['NLS_TIMESTAMP_TZ_FORMAT'] = nls_timestamp_tz_format
+									else:
+										os.environ['NLS_TIMESTAMP_TZ_FORMAT'] =''	
+							
+							if 1:	#exe										
+								cfg=cfg+['-X','1']
+								p = Popen(cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
+							else:	#py
+								cfg[0]=r'C:\Python27\data_migrator_1239\datamule.py'
+								cfg=cfg+['-X','1']
+								p = Popen([sys.executable]+cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
+
+							if 1:
+								hwnd=None
+								while not hwnd:
+									hwnd=self.get_hwnds_for_pid(p.pid)
+								#print hwnd
+								#e(0)
+								#pprint(dir(win32gui))
+								#(x,y) = self.GetScreenPositionTuple()
+								#(l,w) =self.GetClientSizeTuple()
+								#dl,dw= 600,400
+								
+								the_id=self.the_id[2]
+								#print self.the_id,the_id
+								
+								self.btn[the_id]=event.GetEventObject()
+								sn=self.session_name
+								#print sn
+								self.p[the_id]=p
+								self.timers[the_id].Start(1000)
+								
+								win32gui.SetWindowText (hwnd[0], title)
+								#print title
+								#e(0)
+								if if_yes:
+									window1 = find_window( title )
+									#print window1
+									#sleep(0.2)
+									#hwnd= self.get_hwnds_for_pid (p.pid)
+									#print hwnd
+									#s_app_name
+									#win32gui.SetWindowPos (hwnd[0],  win32con.HWND_TOPMOST, x,y, 850, 500, 0)
+									(x,y) = self.GetScreenPositionTuple()
+									(l,w) =self.GetClientSizeTuple()
+									dl,dw= 800,600
+									#self.SetDimensions(x+(l-dl)/2, y+(w-dw)/2, dl,dw)
+									window1.SetWindowPos(0, (x/2,y/2,dl,dw),0)
+									 #win32con.HWND_TOPMOST, x,y, 850, 500, 0)
+					 
+									send_input( window1)
+							#disable form
+							self.DisableOnRun()
+							send('highlight_session',self.session_name)
+							self.last_log_dir[self.session_name]=self.getLogDir()
+	def validateOnRun(self):
+		obj=self.args_panel.obj
+		msg=''
+		keys= [k for k in sorted(obj.keys()) if k not in ['email_to']]
+		for k in keys:
+			val=obj[k][1].GetValue()
+			if not (val and val.strip('"') and val.strip(' ')):
+				msg='%s\nERROR: "%s" is not set.' % (msg,k)
+		if msg:
+			msg='Some argument are not set:\n%s' % msg
+			self.Warn(msg,'Validation log.')
+			return False
+		return True
 	def DisableOnRun(self):
 		self.args_panel.DisableAll()
 		self.btn_delete.Enable(False)
