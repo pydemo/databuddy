@@ -6123,15 +6123,21 @@ class DataBuddy(wx.Frame):
 	def validateOnRun(self):
 		obj=self.args_panel.obj
 		msg=''
-		keys= [k for k in sorted(obj.keys()) if k not in ['email_to']]
+		keys= [k for k in sorted(obj.keys())] #  if k not in ['email_to']
 		for k in keys:
 			val=obj[k][1].GetValue()
 			if not (val and val.strip('"') and val.strip(' ')):
-				msg='%s\nERROR: "%s" is not set.' % (msg,k)
+				
+				if k in ['email_to']:
+					if self.if_send_email():
+						msg='%s\nERROR: "%s" is not set.' % (msg,k)
+						msg='%s\nHINT: Uncheck "Post-etl Email" to pass email validation.\n' % msg
+				else:
+					msg='%s\nERROR: "%s" is not set.' % (msg,k)
 		if msg:
 			msg='Some argument are not set:\n%s' % msg
 			self.Warn(msg,'Validation log.')
-			return False
+			return False 
 		return True
 	def DisableOnRun(self):
 		self.args_panel.DisableAll()
