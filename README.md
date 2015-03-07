@@ -117,7 +117,7 @@ CSV   | yes | yes
 - beep on failing sessions.
 - detect DONE/FAILED from cmd window.
 - let user disable post-etl email (Common: email_to). **DONE**
-- change copy_vector gormat from db2db to db->db or db_2_db
+- change copy_vector format from db2db to db->db or db_2_db
 
 #Does it work?
 yes, with some quirks and only for Oracle. 
