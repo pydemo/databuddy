@@ -116,6 +116,7 @@ CSV   | yes | yes
 - highlight running sessions
 - beep on failing sessions
 - detect DONE/FAILED from cmd window
+- let user disable post-etl email (Common: email_to).
 
 #Does it work?
 yes, with some quirks and only for Oracle. 
