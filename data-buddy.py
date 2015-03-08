@@ -4897,7 +4897,7 @@ class pnl_args(wx.Panel):
 		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)			
 		
 	def get_cmd(self,transport):
-		cmd=self.get_cmd_line_new(transport)
+		cmd=self.get_cmd_line_new(transport, passwords=False)
 		lexer=shlex.shlex(cmd)
 		lexer.quotes = '"'
 		lexer.whitespace_split = True
@@ -4932,7 +4932,7 @@ class pnl_args(wx.Panel):
 				val= base64.b64decode(val)
 			cmd='%s %s "%s"' % (cmd, short,val)			
 		return cmd
-	def get_cmd_line_new(self,transport):
+	def get_cmd_line_new(self,transport, passwords=True):
 		cmd='%s' % transport #'python  C:\Python27\data_migrator_1239\datamule.py' #
 		for k, v in self.cargs.items():
 			#print k,v
@@ -4947,16 +4947,26 @@ class pnl_args(wx.Panel):
 						cmd=r'%s %s %s' % (cmd, short,value)
 				else:
 					cmd=r'%s %s %s' % (cmd, short,value)
-		for k, v in self.fargs.items():
-			#print k,v
+		filter=[]
+		if not passwords:
+			filter=['to_passwd', 'from_passwd']
+		keys =[k for k in self.fargs.keys() if k not in filter]
+		for k in keys:
+			print k
+			v= self.fargs[k]
 			short,long,val,desc=v
 			value=self.obj[k][1].GetValue()
 			if not value.isdigit() and ' ' in value:
 				value='"%s"' % value
 			if value and value.strip('"')  and value.strip(' '):
-				cmd=r'%s %s %s' % (cmd, short,value)			
-		for k, v in self.targs.items():
-			#print k,v
+				cmd=r'%s %s %s' % (cmd, short,value)
+		filter=[]
+		if not passwords:
+			filter=['to_passwd', 'from_passwd']
+		keys =[k for k in self.targs.keys() if k not in filter]				
+		for k in keys:
+			print k
+			v= self.targs[k]
 			short,long,val,tesc=v
 			value=self.obj[k][1].GetValue()
 			if (not value.isdigit() and ' ' in value):
@@ -5134,6 +5144,9 @@ class DataBuddy(wx.Frame):
 			self.auto_save=wx.CheckBox(panel, label="Auto-save")
 			boxsizer.Add(self.auto_save, flag=wx.LEFT|wx.TOP, border=5)
 			self.auto_save.SetValue(True)
+			self.confirm_run=wx.CheckBox(panel, label="Confirm")
+			boxsizer.Add(self.confirm_run, flag=wx.LEFT|wx.TOP, border=5)
+			self.confirm_run.SetValue(True)
 			
 			#print(dir(cb))
 			sizer.Add(boxsizer, pos=(8, 1),flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=10)			
@@ -5962,7 +5975,9 @@ class DataBuddy(wx.Frame):
 		else:
 			if self.validateOnRun():
 				msg='Are you sure you want to execute this command?\n%s' % self.args_panel.get_cmd(self.transport)
-				yes= self.if_yes( msg, 'Confirmation.')
+				yes=True
+				if self.confirm_run.GetValue():
+					yes= self.if_yes( msg, 'Confirmation.')
 				if yes:
 					self.updateTimeStamp()
 					#time_stamp=datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')
