@@ -1,0 +1,24 @@
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\qc32\qc32.exe ^
+-t | ^
+-r 1 ^
+-o 1 ^
+-L alex_buz@yahoo.com;alexbuzunov@gmail.com ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-Y 20150307_123455_383000 ^
+-w ora11g2ora11g ^
+-B qc_job ^
+-q C:\Python27\data_migrator_1239\test\v101\query\oracle_query.sql ^
+-b orcl ^
+-e "YYYY-MM-DD HH24.MI.SS" ^
+-m "YYYY-MM-DD HH24.MI.SS.FF2" ^
+-z C:\app\alex_buz\product\11.2.0\dbhome_2\BIN ^
+-O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" ^
+-j SCOTT ^
+-d orcl ^
+-Z C:\app\alex_buz\product\11.2.0\dbhome_2\BIN ^
+-e "YYYY-MM-DD HH24.MI.SS" ^
+-m "YYYY-MM-DD HH24.MI.SS.FF2" ^
+-u SCOTT ^
+-O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" ^
+-a SCOTT.Timezone_test_to 

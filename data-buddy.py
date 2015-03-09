@@ -1488,7 +1488,11 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		self.list.SetItemImage(index, self.list.img[key])
 		#print 'SetItemImage',index,key,list.img[key]		
 		return index
-							
+	def getIdFromText(self, item_text):
+		for i in range(self.list.GetItemCount()):
+			if self.list.GetItemText(i) == item_text:
+				return i
+		return -1
 	def RecreateList(self, evt=None, tf=None):
 		# Catch the search type (name or content)
 		cl =self.list.current_list
@@ -2842,7 +2846,17 @@ class NewSessionDialog(wx.Dialog):
 			
 			text1 = wx.StaticText(self, label="Session name:")
 			#sizer.Add(text1, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
-			self.tc_sname = wx.TextCtrl(self,size=(400,23))
+			#self.tc_sname = wx.TextCtrl(self,size=(400,23))
+			self.tc_sname = masked.TextCtrl(self, -1, "",
+										mask         = maskText[1],
+										excludeChars = maskText[2],
+										formatcodes  = maskText[3],
+										includeChars = "_0123456789",
+										validRegex   = maskText[4],
+										validRange   = maskText[5],
+										choices      = maskText[6],
+										choiceRequired = False,
+										defaultValue = maskText[7])			
 			#namesizer.Add((3,3),0)
 			namesizer.Add(text1, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
 			
@@ -4381,6 +4395,10 @@ class pnl_args(wx.Panel):
 		self.src_count=0
 		self.trg_count=0
 		self.sldr_btns=None
+		#enable keep/show dump
+		if not (self.copy_vector[0].startswith('CSV') or self.copy_vector[0].startswith('CSV')):
+			self.parent.enableKeepDump()
+			
 	#def Changed(self, boo):
 	#	self.parent.changed=True
 	def f_EVT_TEXT_ENTER(self, evt):
@@ -4906,6 +4924,7 @@ class pnl_args(wx.Panel):
 		out=['%s ^' % cfg[0]]
 		for i in xrange(1,len(cfg),2):
 			#print i,cfg[i],cfg[i+1]
+			#print cfg[i]
 			out.append('%s %s ^' % (cfg[i],cfg[i+1]))
 		return ('\n'.join(out)).strip('^')
 
@@ -4935,6 +4954,7 @@ class pnl_args(wx.Panel):
 	def get_cmd_line_new(self,transport, passwords=True):
 		cmd='%s' % transport #'python  C:\Python27\data_migrator_1239\datamule.py' #
 		for k, v in self.cargs.items():
+			#print k, self.parent.if_send_email()
 			#print k,v
 			short,long,val,desc=v
 			value=self.obj[k][1].GetValue()
@@ -4947,12 +4967,13 @@ class pnl_args(wx.Panel):
 						cmd=r'%s %s %s' % (cmd, short,value)
 				else:
 					cmd=r'%s %s %s' % (cmd, short,value)
+		#print cmd
 		filter=[]
 		if not passwords:
 			filter=['to_passwd', 'from_passwd']
 		keys =[k for k in self.fargs.keys() if k not in filter]
 		for k in keys:
-			print k
+			#print k
 			v= self.fargs[k]
 			short,long,val,desc=v
 			value=self.obj[k][1].GetValue()
@@ -4965,7 +4986,7 @@ class pnl_args(wx.Panel):
 			filter=['to_passwd', 'from_passwd']
 		keys =[k for k in self.targs.keys() if k not in filter]				
 		for k in keys:
-			print k
+			#print k
 			v= self.targs[k]
 			short,long,val,tesc=v
 			value=self.obj[k][1].GetValue()
@@ -4973,11 +4994,36 @@ class pnl_args(wx.Panel):
 				value='"%s"' % value
 			if value and value.strip('"')  and value.strip(' '):
 				cmd=r'%s %s %s' % (cmd, short,value)			
-		return cmd		
+		return cmd	
+		
+class DummyStaticText(object): 
+	def __init__(self, value, boo=True):		
+		self.value=value
+		self.enabled=boo
+	def SetLabel(self,value):
+		self.value=value
+	def GetLabel(self):
+		return value
+	def Enable(self,boo):
+		self.enabled=boo
+		
+class DummyTextControl(object): 
+	def __init__(self, value, boo=True):		
+		self.value=value
+		self.enabled=boo
+	def SetValue(self,value):
+		self.value=value
+	def GetValue(self):
+		return self.value
+	def Enable(self,boo):
+		self.enabled=boo	
+import  wx.lib.masked as  masked
+maskText = ["Session Name", "C{60}", " ", 'F_', '^[a-zA-Z0-9_]+', '', '', '']
+		
 ###################################################################################################
 class DataBuddy(wx.Frame):
 	def __init__(self, parent, id, title, size):
-		global tr
+		global tr,maskText
 		#wx.Frame.__init__(self, parent, -1, title)
 		#super(DataBuddy, self).__init__(parent, title=title , size=(900, 565))
 		global app_title, home
@@ -5000,11 +5046,11 @@ class DataBuddy(wx.Frame):
 		self.copy_vector=None
 		self.tmpl=None
 		userhome = os.path.expanduser('~')
-		self.save_to_dir=os.path.join(userhome,'sessions')
+		self.save_to_dir=os.path.join(userhome,'sessions','My_Sessions')
 		if not os.path.isdir(self.save_to_dir):
 			os.makedirs(self.save_to_dir)
 		self.transport=os.path.join(self.home,r'%s32\%s32.exe' % (tr,tr))
-		self.args_panel = dummy_args(self,style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+		self.args_panel = dummy_args(panel,style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 		self.nb_tab=0
 		self.cmd=''
 		self.default_session=None
@@ -5014,7 +5060,18 @@ class DataBuddy(wx.Frame):
 			self.st_session_name = wx.StaticText(panel, label="Session name:")
 			sizer.Add(self.st_session_name, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
 			self.session_name=None
-			self.tc_session_name = wx.TextCtrl(panel,value='n/a')
+			#self.tc_session_name = wx.TextCtrl(panel,value='n/a')
+			self.tc_session_name = masked.TextCtrl(panel, -1, "",
+										mask         = maskText[1],
+										excludeChars = maskText[2],
+										formatcodes  = maskText[3],
+										includeChars = "_0123456789",
+										validRegex   = maskText[4],
+										validRange   = maskText[5],
+										choices      = maskText[6],
+										choiceRequired = False,
+										defaultValue = maskText[7])
+												
 			self.tc_session_name.SetName('session_name')
 			self.tc_session_name.Bind(wx.EVT_CHAR, self.onKeyPress)
 			self.tc_session_name.Enable(False)
@@ -5087,6 +5144,7 @@ class DataBuddy(wx.Frame):
 			self.nb.AddPage(self.args_panel, 'Arguments')
 			editor = TacoTextEditor(panel)
 			editor.AppendText(self.cmd)
+			editor.SetEditable(False)
 			self.nb.AddPage(editor, 'Command')
 			self.nb.SetSelection(self.nb_tab)
 			
@@ -5149,7 +5207,30 @@ class DataBuddy(wx.Frame):
 			self.confirm_run.SetValue(True)
 			
 			#print(dir(cb))
-			sizer.Add(boxsizer, pos=(8, 1),flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=10)			
+			sizer.Add(boxsizer, pos=(8, 1),flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=10)		
+		if 1:
+			sb = wx.StaticBox(panel, label='Temporary data dump')
+			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
+			self.keep_dump=wx.CheckBox(panel, label="Keep")
+			self.keep_dump.SetName('keep_data_file')
+			boxsizer.Add(self.keep_dump, flag=wx.LEFT|wx.TOP, border=5)
+			self.keep_dump.Bind(wx.EVT_CHECKBOX, self.OnKeepDump)
+			if self.args_panel.cargs.has_key('keep_data_file') and self.args_panel.cargs['keep_data_file'][2] in ['1']:
+				self.keep_dump.SetValue(True)
+			else:
+				self.keep_dump.SetValue(False)	
+			#self.keep_dump.Enable(False)
+			if 1:
+				self.btn_show_dump = wx.Button(panel, label='Show', size=(70,20))
+				self.btn_show_dump.SetName('spool')
+				self.btn_show_dump.Bind(wx.EVT_BUTTON, self.onShowDump)
+				self.btn_show_dump.Enable(False)
+				boxsizer.Add(self.btn_show_dump, flag=wx.LEFT|wx.TOP, border=0)
+			
+			#e(0)
+			#print(dir(cb))
+			sizer.Add(boxsizer, pos=(8, 2),flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=10)
+			
 		self.last_log_dir={}
 		self.btn_log = wx.Button(panel, label='Show Log')
 		sizer.Add(self.btn_log, pos=(9, 0), flag=wx.LEFT, border=10)
@@ -5257,6 +5338,46 @@ class DataBuddy(wx.Frame):
 		self.the_id=None
 		self.q=[]
 		self.closing_in=6
+	def enableKeepDump(self,):
+		self.keep_dump.Enable(True)
+	def enableShowDump(self):
+		self.btn_show_dump.Enable(False)
+	def OnKeepDump(self, evt):
+		print 'OnKeepDump'
+		cb = evt.GetEventObject()	
+		name=cb.Name
+		print name
+		if not name in self.args_panel.obj.keys():
+			self.args_panel.obj[name]=[DummyStaticText(name), DummyTextControl('1',True)]
+			self.args_panel.cargs[name]=['-K', '--%s' % name, '0', 'Keep dump file after load.']
+		if cb.GetValue():
+			self.args_panel.obj[name][1].SetValue('1')
+			self.EnableShowDumpButton()
+		else:
+			self.args_panel.obj[name][1].SetValue('0')
+			self.btn_show_dump.Enable(False)
+		self.updateCommand()
+	def EnableShowDumpButton(self):
+		if self.keep_dump.GetValue():
+			#check if dump file exists
+			dump_dir=self.getDumpDir()
+			dump_file=os.path.join(dump_dir,'shard_0.data')
+			print 'dump file: %s' % dump_file
+			if os.path.isfile(dump_file):
+				self.btn_show_dump.Enable(True)
+			
+	def onShowDump(self, evt):
+		if self.keep_dump.GetValue():
+			#check if dump file exists
+			dump_dir=self.getDumpDir()
+			dump_file=os.path.join(dump_dir,'shard_0.data')
+			print 'dump file: %s' % dump_file
+			self.ShowLocation(dump_file)
+	def getDumpDir(self):
+		dump_dir=self.args_panel.obj['default_spool_dir'][1].GetValue()
+		job_name=self.args_panel.obj['job_name'][1].GetValue()
+		time_stamp=self.args_panel.obj['time_stamp'][1].GetValue()
+		return os.path.join(dump_dir, job_name,time_stamp)			
 	def OnChangeEmailYesNo(self,evt):
 		print 'OnChangeEmailYesNo'
 		cb = evt.GetEventObject()		
@@ -5582,6 +5703,7 @@ class DataBuddy(wx.Frame):
 		
 	def setSessionName(self, sn):
 		self.tc_session_name.SetValue(sn)
+		#ORA11G_TimezoneQueryFile_to_ORA11G_Subpartitio
 		self.tc_session_name.Enable(True)
 		self.session_name=sn
 	def getSessionName(self):
@@ -5621,9 +5743,14 @@ class DataBuddy(wx.Frame):
 			#(sname,cv,tmpl,dname,fname) = data		
 			if save_as:
 				session=[sname,cv[0],cv[1],'Copy',tmpl,dname,fname]
-				idx=self.sm.slp.addSession(session)			
-				self.sm.list.SetItemState(idx, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED) 
-				self.sm.list.EnsureVisible(idx)
+				idx=self.sm.slp.addSession(session)	
+				print 'session added', idx
+				self.sm.slp.list.set_data()
+				self.sm.slp.RecreateList(None,(self.sm.slp.list,self.sm.slp.filter))
+				idx = self.sm.slp.getIdFromText(sname)
+				if idx>-1:				
+					self.sm.list.SetItemState(idx, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED) 
+					self.sm.list.EnsureVisible(idx)
 		
 	def Warn(self, message, caption = 'Warning!'):
 		dlg = wx.MessageDialog(self, message, caption, wx.OK | wx.ICON_WARNING)
@@ -5843,6 +5970,7 @@ class DataBuddy(wx.Frame):
 			self.nb.AddPage(self.args_panel, 'Arguments')
 			self.editor = TacoTextEditor(self.args_panel)
 			self.editor.AppendText(self.args_panel.get_cmd(self.transport))
+			self.editor.SetEditable(False)
 			self.nb.AddPage(self.editor, 'Command')
 			self.nb_tab=nb_tab
 			
@@ -5855,10 +5983,14 @@ class DataBuddy(wx.Frame):
 			self.btn_clearall.Enable(True)
   
 	def updateCommand(self, page_id=1):
-		print 'setNbSelection'
+		print 'updateCommand', page_id
 		page_title=self.nb.GetPageText(page_id)
+		#print page_title
 		if page_title in ['Command']:
+			#pprint(self.args_panel.get_cmd(self.transport))
+			self.editor.SetEditable(True)
 			self.editor.SetText(self.args_panel.get_cmd(self.transport))
+			self.editor.SetEditable(False)
 	def set_new_session(self,data):
 			#print len(data)
 			(sname,copy_vector,tmpl,api_args) = data
@@ -5881,6 +6013,7 @@ class DataBuddy(wx.Frame):
 			self.nb.AddPage(self.args_panel, 'Arguments')
 			editor = TacoTextEditor(self.args_panel)
 			editor.AppendText(self.args_panel.get_cmd(self.transport))
+			editor.SetEditable(False)
 			self.nb.AddPage(editor, 'Command')
 			self.nb.SetSelection(0)
 			self.btn_show.Enable(True)
@@ -6084,7 +6217,7 @@ class DataBuddy(wx.Frame):
 									else:
 										os.environ['NLS_TIMESTAMP_TZ_FORMAT'] =''	
 							
-							if 1:	#exe										
+							if 0:	#exe										
 								cfg=cfg+['-X','1']
 								p = Popen(cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
 							else:	#py
@@ -6135,6 +6268,7 @@ class DataBuddy(wx.Frame):
 							self.DisableOnRun()
 							send('highlight_session',self.session_name)
 							self.last_log_dir[self.session_name]=self.getLogDir()
+							self.EnableShowDumpButton()
 	def validateOnRun(self):
 		obj=self.args_panel.obj
 		msg=''
