@@ -119,6 +119,7 @@ CSV   | yes | yes
 - let user disable post-etl email (Common: email_to). **DONE**
 - change copy_vector format from db2db to db->db or db_2_db
 - fix flicker on frame freeze
+- save on close
 
 #Does it work?
 yes, with some quirks and only for Oracle. 
