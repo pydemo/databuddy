@@ -588,11 +588,14 @@ class SessionList(wx.ListCtrl):
 				type='Load'
 			if '.CSV_' in tmpl:
 				type='Spool'
-			flist[i] = [name,tmpl.split('.')[1],cv.split('.')[0],cv.split('.')[1],type,tmpl.split('.')[0],self.save_to_dir,f]
+			flist[i] = [name.strip(' '),tmpl.split('.')[1],cv.split('.')[0],cv.split('.')[1],type,tmpl.split('.')[0],self.save_to_dir,f]
 			i +=1
 		self.data[self.current_list]= flist
 	def getList(self):
+		print 'getlist'
+		pprint (self.data[self.current_list])
 		return self.data[self.current_list]
+	
 					
 	def setTableList(self, vars):
 		self.ClearAll()
@@ -816,6 +819,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 
 
 		self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected, self.list)
+		self.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.OnItemDeselected)
 		self.Bind(wx.EVT_LIST_COL_CLICK, self.OnColClick, self.list)
 
 		self.list.Populate()
@@ -846,7 +850,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			if 'wxMac' in wx.PlatformInfo:
 				sizer.Add((5,5))  # Make sure there is room for the focus ring
 			self.SetSizer(sizer)
-			self.SetAutoLayout(True)
+			#self.SetAutoLayout(True)
 
 		self.list.setEnvironmentList(('configDirLoc','ConfigList',))
 		sub(self.onRefreshList, "refresh_list")
@@ -855,29 +859,60 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		sub(self.onLowlightSession, "lowlight_session")
 		sub(self.onDeleteSessions, "delete_sessions")
 	def onHighlightSession(self, data, extra1, extra2=None):
-		(sname) = data		
+		print 'onHighlightSession'
+		(sname,color) = data
+		print color, color		
 		index = self.list.GetFirstSelected()
-		iname = self.list.GetItemText(index)
-		#print '@'*60
-		if sname in [iname]:
-			f = self.list.GetItemFont(index)
-			f.SetWeight(wx.BOLD)
-			self.list.SetItemFont(index, f)
-			#self.listControl.SetItemTextColour(0, wx.RED)
+		if index>-1:
+			iname = self.list.GetItemText(index).strip().strip(' ')
+			#print '@'*60
+			if sname in [iname]:
+				#self.list.SetItemTextColour(index, color)
+				i = self.list.GetItem(index)
+				#print(dir(i))
+				i.SetTextColour(color)
+				self.list.SetItem(i)
+				#print(dir( self.list))
+				#e(0)
+				#style = self.list.GetSingleStyle()
+				#self.list.SetItemTextColour(index, color)
+				#f = style.GetFont()
+				if 1:
+					f = self.list.GetItemFont(index)
+					#style.SetTextColour(wx.BLUE)
+					f.SetWeight(wx.BOLD)
+					#style.SetFont(f)
+					#f.SetColor(color)
+					#pprint(dir(f))
+					self.list.SetItemFont(index, f)
+					#self.list.SetItem(i)
+					#self.list.SetDefaultStyle(style)
+					
+					#self.listControl.SetItemTextColour(0, wx.RED)
 
-		else:
-			print 'Session name mismatch.', sname, iname
+			else:
+				print 'Session name mismatch: [%s] != [%s]' % ( sname, iname)
 	def onLowlightSession(self, data, extra1, extra2=None):
+		print 'onLowlightSession'
 		(sname) = data		
 		index = self.list.GetFirstSelected()
-		iname = self.list.GetItemText(index)
-		#print '@'*60
-		if sname in [iname]:
-			f = self.list.GetItemFont(index)
-			f.SetWeight(wx.FONTWEIGHT_NORMAL)
-			self.list.SetItemFont(index, f)
-		else:
-			print 'Session name mismatch.', sname, iname
+		if index>-1:
+			iname = self.list.GetItemText(index)
+			#print '@'*60
+			if sname in [iname]:
+				#i = self.list.GetItem(index)
+				#i.SetTextColour(wx.BLACK)
+				i = self.list.GetItem(index)
+				#print(dir(i))
+				i.SetTextColour(wx.BLACK)
+				self.list.SetItem(i)
+				
+				f = self.list.GetItemFont(index)
+				f.SetWeight(wx.FONTWEIGHT_NORMAL)
+				self.list.SetItemFont(index, f)
+				#self.list.SetItem(i)
+			else:
+				print 'Session name mismatch.', sname, iname
 		
 	def onDeleteSessions(self,  data, extra1, extra2=None):
 		#(items) = data
@@ -905,12 +940,14 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 	def onRefreshList(self, data, extra1, extra2=None):
 		
 		#print 'onRefreshList'
+		
 		self.list.set_data()
 		self.RecreateList(None,(self.list,self.filter))
 	def OnAddSession(self, data, extra1, extra2=None):
 		(sname,cv,tmpl,dname,fname) = data		
-	
-		session=[sname,cv[0],cv[1],'Copy',tmpl,dname,fname]
+		self.Freeze()
+		tmpl1,tmpl2=tmpl.split('.')
+		session=[sname.strip(' '),tmpl2,cv[0],cv[1],'Copy',tmpl1,dname,fname]
 		#add
 		idx= self.addSession(session)
 		#deselect
@@ -922,10 +959,12 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		#print 'selecting %s' % idx
 		self.list.SetItemState(idx, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED) 
 		self.list.EnsureVisible(idx) 
-		ss=(sname,cv[0],cv[1],'Copy',tmpl,dname,fname)
-		send('open_session',(ss))
+		
+		#ss=(sname,tmpl2,cv[0],cv[1],'Copy',tmpl1,dname,fname)
+		
+		send('open_session',(session))
 		#self.SetItemState(idx, 0, wxLIST_STATE_SELECTED)
-	
+		self.Thaw()
 	def OnUseCache(self, event):
 		#print 'use cache', self.pos
 		event.Skip()		
@@ -1114,7 +1153,16 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		#self.url_combo_list.Focus()
 		self.url_combo_list.Refresh()
 		event.Skip()
-		
+	def OnItemDeselected(self, evt):
+		item = evt.GetItem()
+		cnt=self.list.GetSelectedItemCount()
+		if cnt==0:
+			send('disable_all_for_delete',())
+			#onDisableAllForDelete
+			#self.parent.DisableAll()
+			#"disable_all_for_delete"
+		#print 'GetSelectedItemCount',cnt
+			
 	def OnItemSelected(self, event):
 		##print event.GetItem().GetTextColour()
 		cnt=self.list.GetSelectedItemCount()
@@ -1123,7 +1171,10 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			#print self.currentItem
 			ii=self.list.GetItemData(self.currentItem)
 			session= self.list.getList()[ii]
-			#print session
+			#pprint (s)
+			#session= [s[0],s[2],s[3],s[4],'%s.%s' % (s[5],s[1]),s[6],s[7]]
+			pprint (session)
+			#e(0)
 			#print self.frame.session_name
 			#print self.frame.session_name==session[0]
 			#print 'self.frame.changed', self.frame.changed
@@ -1137,7 +1188,8 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 						send('open_session',(session))
 				else:
 					send('open_session',(session))
-			
+			else:
+				send('enable_all',())
 		#else:
 		#	send('disable_all_for_delete',(cnt))
 		event.Skip()		
@@ -2630,7 +2682,7 @@ class SessionListCtrlPanelManager(wx.Panel):
 		self.sizer = wx.BoxSizer(wx.VERTICAL)
 		self.sizer.Add(self.nb, 1, wx.GROW|wx.EXPAND|wx.ALL, 0)
 		self.SetSizer(self.sizer)
-		self.SetAutoLayout(True)
+		#self.SetAutoLayout(True)
 
 		if 1:
 			
@@ -3131,7 +3183,7 @@ class NewSessionDialog(wx.Dialog):
 			reuse=(self.rb_r0.GetValue(),self.rb_r1.GetValue(),self.rb_r2.GetValue())
 		return [self.getSessionName(), self.copy_vector, tmpl, self.api_args[tmpl], reuse]
 	def getSessionName(self):
-		return self.tc_sname.GetValue()
+		return self.tc_sname.GetValue().strip().strip(' ')
 	def onSourceObjButton(self, event): 
 		""" 
 		Source object filter
@@ -4097,7 +4149,7 @@ class pnl_args(wx.Panel):
 					self.tc_0test=wx.StaticText(from_args_panel, label='NOT TESTED')
 					fgs.Add(self.tc_0test, pos=(i, 0), flag=wx.ALIGN_RIGHT|wx.TOP|wx.BOTTOM, border=1)
 				lbl="Test connect"
-				sn=self.parent.session_name
+				sn=self.parent.getSessionName()
 				#tc=self.parent.testconn
 				btn=wx.Button(from_args_panel, label=lbl, style=wx.BU_EXACTFIT)	
 				#tc[sn]['source'][0]
@@ -4285,7 +4337,7 @@ class pnl_args(wx.Panel):
 
 				lbl="Test connect"			
 
-				sn=self.parent.session_name
+				sn=self.parent.getSessionName()
 				#tc=self.parent.testconn
 				btn=wx.Button(to_args_panel, label=lbl, style=wx.BU_EXACTFIT)	
 				#tc[sn]['source'][0]
@@ -4585,7 +4637,7 @@ class pnl_args(wx.Panel):
 				#self.the_id=None
 				the_id=self.the_id[0]
 				self.parent.btn[the_id]=tc
-				sn=self.parent.session_name
+				sn=self.parent.getSessionName()
 				self.parent.p[the_id]=p
 				#self.parent.q.append([sn,self.the_id])
 				btn=None
@@ -4606,7 +4658,7 @@ class pnl_args(wx.Panel):
 				#self.the_id=None
 				the_id=self.the_id[1]
 				self.parent.btn[the_id]=tc
-				sn=self.parent.session_name
+				sn=self.parent.getSessionName()
 				self.parent.p[the_id]=p
 				#self.parent.q.append([sn,self.the_id])
 				#win32gui.ShowWindow(firefox[0], win32con.SW_MINIMIZE)
@@ -5188,7 +5240,7 @@ class DataBuddy(wx.Frame):
 			self.send_email=wx.CheckBox(panel, label="Send email")
 			boxsizer.Add(self.send_email, flag=wx.LEFT|wx.TOP, border=5)
 			self.send_email.Bind(wx.EVT_CHECKBOX, self.OnChangeEmailYesNo)
-			self.send_email.SetValue(True)		
+			self.send_email.SetValue(False)		
 			
 			#print(dir(cb))
 			sizer.Add(boxsizer, pos=(8, 0),flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=10)
@@ -5309,6 +5361,7 @@ class DataBuddy(wx.Frame):
 		sub(self.onOpenSession, "open_session")
 		sub(self.onValueChanged, "value_changed")
 		sub(self.onDisableAllForDelete, "disable_all_for_delete")
+		sub(self.onEnableAll, "enable_all")
 		
 		#self.SetSizeHints(250,300,500,400)
 		if 1:
@@ -5319,10 +5372,10 @@ class DataBuddy(wx.Frame):
 		
 		#self.Refresh()
 		self.Center()
-		x,y=self.GetSize()
-		self.SetSize((x+100,y))
+		#x,y=self.GetSize()
+		#self.SetSize((x+100,y))
 		#self.Refresh()
-		self.SetSize(size)
+		#self.SetSize(size)
 		#self.EnsureVisible(self.btn_run)
 		self.Layout()
 		#self.Fit()
@@ -5335,6 +5388,7 @@ class DataBuddy(wx.Frame):
 		self.th={}
 		self.btn={}
 		self.p={}
+		self.hwnd={}
 		self.the_id=None
 		self.q=[]
 		self.closing_in=6
@@ -5452,7 +5506,26 @@ class DataBuddy(wx.Frame):
 		self.st_targett.Enable(False)
 		self.nb.EnableTab(0,False)
 		self.nb.EnableTab(1,False)
+	def onEnableAll(self, data, extra1, extra2=None):	
+		print 'onDisableAllForDelete'	
+		#self.args_panel.DisableAll()
+		#self.btn_delete.Enable(True)
+		self.btn_new.Enable(True)
+		self.btn_clearall.Enable(True)
+		self.btn_save.Enable(True)
+		self.btn_run.Enable(True)
+		self.btn_show.Enable(True)
 		
+		self.st_session_name.Enable(True)
+		self.tc_session_name.Enable(True)
+		self.send_yes.Enable(True)
+		self.auto_save.Enable(True)
+		self.st_type.Enable(True)
+		self.st_copy_vector.Enable(True)
+		self.st_sourcet.Enable(True)
+		self.st_targett.Enable(True)
+		self.nb.EnableTab(0,True)
+		self.nb.EnableTab(1,True)		
 	def onKeyPress(self, event):
 		print 'frame onKeyPress'
 		tc = event.GetEventObject()
@@ -5479,7 +5552,7 @@ class DataBuddy(wx.Frame):
 		#	self.timers[the_id].Stop()
 		btn=self.btn[the_id]
 		#print 'TimerHandler', the_id, btn.Name
-		sn=self.session_name
+		sn=self.getSessionName()
 		if btn.Name in ['source', 'target'] :
 			#print self.counters[the_id], the_id
 			
@@ -5545,7 +5618,7 @@ class DataBuddy(wx.Frame):
 				#print 'poll', poll
 				if poll in [None]:
 					self.Freeze()
-					msg= self.getRunning(the_id)
+					msg= self.getRunning(the_id,p)
 					btn.SetLabel(msg)
 					self.DisableOnRun()
 					ld=os.path.isdir(self.args_panel.getLogDir())
@@ -5567,16 +5640,34 @@ class DataBuddy(wx.Frame):
 				#else:
 				#	print 'Unknown poll status %s, id %d' % (poll, the_id)
 				
-	def getRunning(self,the_id):
+	def getRunning(self,the_id, pid):
 		elapsed='%dm%ds' % (self.counters[the_id]/60,self.counters[the_id]%60)
+
+			
 		if self.counters[the_id]<60:
 			elapsed='%ds' % (self.counters[the_id])
-		return 'Running...(%s)' % (elapsed)
+		print the_id, self.hwnd[the_id]
+		title=win32gui.GetWindowText (self.hwnd[the_id][0])
+		print title
+		if title.startswith('DONE:'):
+			status=title.split(':')[1]
+			#print status
+			if status in ['FAILED']:
+				print status
+				send('highlight_session',(self.session_name,wx.RED))
+			elif status in ['SUCCESS']:
+				print status
+				send('highlight_session',(self.session_name,wx.BLUE))
+
+			
+			return '%s (%s)' % (status, elapsed)
+		else:
+			return 'Running...(%s)' % (elapsed)
 	def onOpenSession(self, data, extra1, extra2=None):
 		#print 'onOpenSession'
 		#pprint(data)
-		size=self.GetSize()
-		
+		#size=self.GetSize()
+		#pprint(data)
 		(sname,tmpl2,cv_from,cv_to,type,tmpl1,sdir, fname) = data
 		#print sname
 		self.Freeze()
@@ -5596,7 +5687,7 @@ class DataBuddy(wx.Frame):
 			
 		#self.Fit()
 		self.Layout()
-		print size
+		#print size
 		#self.Refresh()
 		#self.sm.nb.SetSize((300,-1))
 		
@@ -5705,9 +5796,9 @@ class DataBuddy(wx.Frame):
 		self.tc_session_name.SetValue(sn)
 		#ORA11G_TimezoneQueryFile_to_ORA11G_Subpartitio
 		self.tc_session_name.Enable(True)
-		self.session_name=sn
+		self.session_name=self.getSessionName()
 	def getSessionName(self):
-		return self.tc_session_name.GetValue()
+		return self.tc_session_name.GetValue().strip().strip(' ')
 	def getCopyVector(self):
 		return self.copy_vector		
 	def setCopyVector(self, cv):
@@ -5732,7 +5823,7 @@ class DataBuddy(wx.Frame):
 	def OnClearAllButton(self, event):
 		self.args_panel.ClearAll()
 	def OnSaveButton(self, event):
-		sname=self.tc_session_name.GetValue()
+		sname=self.getSessionName() #tc_session_name.GetValue()
 		save_as=self.session_name!=sname 
 		if save_as and self.if_duplicate_name(sname):
 			self.Warn('Duplicate session name.')
@@ -5770,6 +5861,7 @@ class DataBuddy(wx.Frame):
 		if data:
 			#it's a new session
 			(sname,copy_vector,tmpl,args,reuse)=data
+			sname=sname.strip().strip(' ')
 			if reuse:
 				(cargs,fargs,targs)=args
 				#print len(args)
@@ -5814,7 +5906,14 @@ class DataBuddy(wx.Frame):
 		#print self.tmpl
 		#print self.copy_vector
 		#print sname
+		#pprint((sname,copy_vector,tmpl,args)) 
 		fname='%s;%s;%s.p' % ('.'.join(copy_vector), tmpl,sname)
+		print fname
+		print copy_vector
+		print tmpl
+		print sname
+		
+		print '#'*60
 		save_to_file=os.path.join(self.save_to_dir, fname)
 		
 		#print save_to_file
@@ -6043,7 +6142,7 @@ class DataBuddy(wx.Frame):
 		#create bat file
 		ts=time.strftime('%Y%m%d_%H%M%S')
 		dirname=os.path.join(home,'run')
-		fname = os.path.join(dirname, '%s_%s.bat' % (self.tc_session_name.GetValue(),ts))
+		fname = os.path.join(dirname, '%s_%s.bat' % (self.getSessionName(),ts))
 		if not os.path.isdir(dirname):
 			os.makedirs(dirname)
 		f=open(fname,'w')
@@ -6081,9 +6180,12 @@ class DataBuddy(wx.Frame):
 		if self.p.has_key(the_id) and self.p[the_id]:
 			#window1 = find_window(title)
 			#print window1
-			hwnd=None
-			while not hwnd:
-				hwnd=self.get_hwnds_for_pid(self.p[the_id].pid)
+			
+			if self.hwnd.has_key(the_id):
+				hwnd=self.hwnd[the_id]
+			else:
+				while not hwnd:
+					hwnd=self.get_hwnds_for_pid(self.p[the_id].pid)
 							
 			#print window1.SetFocus()
 			(x,y) = self.GetScreenPositionTuple()
@@ -6110,6 +6212,10 @@ class DataBuddy(wx.Frame):
 				msg='Are you sure you want to execute this command?\n%s' % self.args_panel.get_cmd(self.transport)
 				yes=True
 				if self.confirm_run.GetValue():
+					if not self.send_email.GetValue():
+						msg='%s\n\nSend email: NO (Check "Post-etl email" to enable).' %msg
+					else:
+						msg='%s\n\nSend email: YES (Check "Post-etl email" to disable).' %msg
 					yes= self.if_yes( msg, 'Confirmation.')
 				if yes:
 					self.updateTimeStamp()
@@ -6228,7 +6334,8 @@ class DataBuddy(wx.Frame):
 							if 1:
 								hwnd=None
 								while not hwnd:
-									hwnd=self.get_hwnds_for_pid(p.pid)
+									self.hwnd[the_id]=self.get_hwnds_for_pid(p.pid)
+									hwnd=self.hwnd[the_id]
 								#print hwnd
 								#e(0)
 								#pprint(dir(win32gui))
@@ -6266,7 +6373,7 @@ class DataBuddy(wx.Frame):
 									send_input( window1)
 							#disable form
 							self.DisableOnRun()
-							send('highlight_session',self.session_name)
+							send('highlight_session',(self.session_name,wx.BLACK))
 							self.last_log_dir[self.session_name]=self.getLogDir()
 							self.EnableShowDumpButton()
 	def validateOnRun(self):
@@ -6485,7 +6592,7 @@ if __name__ == '__main__':
 			global imgs
 			imgs = i
 			self.Init()
-			self.frame = DataBuddy(None, -1,title=app_title, size=(1100,800))
+			self.frame = DataBuddy(None, -1,title=app_title, size=(1100,850))
 			if default_session:
 				self.frame.openDefault(default_session)
 			self.frame.Show(True)
