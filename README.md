@@ -101,12 +101,12 @@ CSV   | yes | yes
 - cleanup all other databases but Oracle.
 - more templates and better templates hierarchy.
 - init templates to open session for "New Session". **DONE**
-- **validate args on Run**.
+- validate args on Run. **DONE**.
 - smaller test_api files (get default args from test routines, not canned files).
 - fix template filters.
 - create "Menu" button and hide "About".
 - create session library on first run.
-- validate session name for chars not usable in file name.
+- validate session name for chars not usable in file name. **DONE**
 - allow user to create multiple session libraries.
 - fix mailformed path from MDD.MultiDirDialog. **DONE**
 - make sure all paths are windows friendly.**DONE**
