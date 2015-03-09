@@ -115,7 +115,7 @@ CSV   | yes | yes
 - close all existing shells/shell groups upon exit.
 - highlight running sessions.**DONE**
 - beep on failing sessions.
-- detect DONE/FAILED from cmd window.
+- detect DONE/FAILED from cmd window. **DONE**
 - let user disable post-etl email (Common: email_to). **DONE**
 - change copy_vector format from db2db to db->db or db_2_db
 - find flicker on frame freeze
