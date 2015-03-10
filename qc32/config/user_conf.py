@@ -110,7 +110,8 @@ else:
 			to_file=os.path.join(to_dir,'%s.%s.data' % (args.from_table,args.from_partition))
 		elif hasattr(args, 'from_table') and args.from_table:
 			to_file=os.path.join(to_dir,'%s.data' % (args.from_table ))
-
+#print to_file
+#e(0)
 def get_sharded_outfn(shard):
 	#print self.uargs.to_file
 	#print self.uargs.to_dir

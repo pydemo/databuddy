@@ -198,7 +198,7 @@ def make_input_objects( l_keys ):
 	'''It is interesting that o_input_array has gone out of scope
 	by the time p_input_array is used, but it works.'''	
 		
-def send_input( window1 ):
+def send_yes( window1 ):
 
 	#tpl1 = window1.GetWindowPlacement()
 	#	window1.ShowWindow(SW_RESTORE)
@@ -232,6 +232,41 @@ def send_input( window1 ):
 	#	window1.ShowWindow(SW_MINIMIZE)
 
 	#return rv
+def send_no( window1 ):
+
+	#tpl1 = window1.GetWindowPlacement()
+	#	window1.ShowWindow(SW_RESTORE)
+	#	sleep(0.2)
+
+	#window1.SetForegroundWindow()
+	#sleep(0.2)
+
+	#window1.SetFocus()
+	#pprint(dir(window1))
+	#sleep(0.2)
+	# writes "y\n"
+	# 0x10 is shift.  note that to repeat a key, as with 4C here, you have to release it after the first press
+
+	#t_yes = ( ( 0x79, 0 ), ( 0x0D, 0 ), )
+	t_no = ( ( 0x4e, 0 ),  ( 0x0D, 0 ), )
+	#print t_yes
+	#time.sleep(1)
+	l_keys = [ ]
+	## l_keys.extend( t_ctrl_o )
+	l_keys.extend( t_no )
+	#l_keys.extend( t_ctrl_s )
+	t_inputs = make_input_objects( l_keys )
+	#print t_inputs
+	window1.SetFocus()
+	rv = ct.windll.user32.SendInput( *t_inputs )
+	#print rv
+	#print 'send_input: DONE'
+	#if was_min and b_minimize:
+	#	sleep(0.3) # if the last input was Save, it may need time to take effect
+	#	window1.ShowWindow(SW_MINIMIZE)
+
+	#return rv
+	
 def find_window( s_app_name ):
 
     try:
@@ -556,7 +591,7 @@ class SessionList(wx.ListCtrl):
 		self.InsertColumn(5, 'From_Template')
 		#self.InsertColumn(4, 'Desription')
 
-		self.SetColumnWidth(0, 225)
+		self.SetColumnWidth(0, 350)
 		self.SetColumnWidth(1, 130)
 		self.SetColumnWidth(2, 60)
 		self.SetColumnWidth(3, 60)
@@ -1166,6 +1201,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 	def OnItemSelected(self, event):
 		##print event.GetItem().GetTextColour()
 		cnt=self.list.GetSelectedItemCount()
+		self.Freeze()
 		if cnt==1:
 			self.currentItem = event.m_itemIndex
 			#print self.currentItem
@@ -1192,6 +1228,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 				send('enable_all',())
 		#else:
 		#	send('disable_all_for_delete',(cnt))
+		self.Thaw()
 		event.Skip()		
 	
 		
@@ -3607,7 +3644,7 @@ class dummy_args(wx.Panel):
 		(self.cargs,self.fargs,self.targs)= self.api_args		
 		if 1: #Common
 			
-			self.core_args_panel = wx.Panel(self, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+			self.core_args_panel = wx.Panel(self, style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			hbox = wx.BoxSizer(wx.HORIZONTAL)
 			self.fgs = wx.GridBagSizer(4, 14)
 			#sizer.Add(text1, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
@@ -3897,7 +3934,7 @@ class pnl_args(wx.Panel):
 			
 		if 1: #Common
 			
-			self.core_args_panel = wx.Panel(self, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+			self.core_args_panel = wx.Panel(self, style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			hbox = wx.BoxSizer(wx.HORIZONTAL)
 			self.fgs = wx.GridBagSizer(10, 3)
 			#sizer.Add(text1, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
@@ -3997,7 +4034,7 @@ class pnl_args(wx.Panel):
 			
 			self.args_vbox.Add(boxsizer,1, flag=wx.ALL|wx.EXPAND, border=5)
 		if 1: #Source
-			from_args_panel = wx.Panel(self, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+			from_args_panel = wx.Panel(self, style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			hbox = wx.BoxSizer(wx.HORIZONTAL)
 			fgs = wx.GridBagSizer(3, 10)
 			i=0
@@ -4116,7 +4153,7 @@ class pnl_args(wx.Panel):
 					#self.obj[k][2].Bind(wx.EVT_BUTTON, self.OnDirButton)					
 					#self.Bind(wx.EVT_BUTTON, self.OnInputDir, self.btn_dir)
 					bbox = wx.BoxSizer(wx.HORIZONTAL)
-					pwd_panel = wx.Panel(from_args_panel, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+					pwd_panel = wx.Panel(from_args_panel, style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 					self.tc_p1=wx.TextCtrl(pwd_panel,value=sval, style=0, size=(length,22))
 					self.tc_p1.SetName(k)
 					self.tc_p1.Hide()
@@ -4153,6 +4190,7 @@ class pnl_args(wx.Panel):
 				#tc=self.parent.testconn
 				btn=wx.Button(from_args_panel, label=lbl, style=wx.BU_EXACTFIT)	
 				#tc[sn]['source'][0]
+				
 				fgs.Add(btn, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				btn.SetName('source')
 				btn.Bind(wx.EVT_BUTTON, self.OnTestConnect)
@@ -4170,7 +4208,7 @@ class pnl_args(wx.Panel):
 			boxsizer.Add(from_args_panel, flag=wx.LEFT|wx.TOP, border=5)
 			self.args_hbox.Add(boxsizer, 1, flag=wx.ALL|wx.EXPAND, border=5)
 		if 1: #Target pnl
-			to_args_panel = wx.Panel(self, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+			to_args_panel = wx.Panel(self, style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			hbox = wx.BoxSizer(wx.HORIZONTAL)
 			fgs = wx.GridBagSizer(2, 10)
 			i=0
@@ -4304,7 +4342,7 @@ class pnl_args(wx.Panel):
 					#self.obj[k][2].Bind(wx.EVT_BUTTON, self.OnDirButton)					
 					#self.Bind(wx.EVT_BUTTON, self.OnInputDir, self.btn_dir)
 					bbox = wx.BoxSizer(wx.HORIZONTAL)
-					pwd_panel = wx.Panel(to_args_panel, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+					pwd_panel = wx.Panel(to_args_panel, style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 					self.tc_p1=wx.TextCtrl(pwd_panel,value=sval, style=0, size=(length,22))
 					self.tc_p1.SetName(k)
 					self.tc_p1.Hide()
@@ -4385,7 +4423,7 @@ class pnl_args(wx.Panel):
 			
 		if 0: #Source
 			
-			panel_from = wx.Panel(self, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+			panel_from = wx.Panel(self, style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			hbox = wx.BoxSizer(wx.HORIZONTAL)
 
 			fgs = wx.FlexGridSizer(3, 2, 9, 5)
@@ -4414,7 +4452,7 @@ class pnl_args(wx.Panel):
 
 		
 		if 0: #Target
-			panel_from = wx.Panel(self, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+			panel_from = wx.Panel(self, style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			hbox = wx.BoxSizer(wx.HORIZONTAL)
 
 			fgs = wx.FlexGridSizer(3, 2, 9, 5)
@@ -4698,7 +4736,7 @@ class pnl_args(wx.Panel):
 			for hwnd in self.get_hwnds_for_pid (p.pid):
 				#print hwnd, "=>", win32gui.GetWindowText (hwnd)
 				#win32gui.ShowWindow(hwnd, win32con.SW_MINIMIZE)
-				win32gui.SendMessage (hwnd, win32con.WM_CLOSE, 0, 0)
+				win32gui.SendMessage (hwnd, win32con.WM_CLOSE, 0, 0)	
 		
 	def OnDirButton(self, event):
 		print 'OnDirButton'
@@ -4707,7 +4745,8 @@ class pnl_args(wx.Panel):
 		tc = event.GetEventObject()
 		print 'name=',tc.Name
 		kc = event.GetKeyCode()
-		if not (kc == wx.WXK_TAB or kc == wx.WXK_RETURN):
+		print 'kc=', kc
+		if kc<123: #not (kc == wx.WXK_TAB or kc == wx.WXK_RETURN):
 			self.parent.btn_save.Enable(True)
 			#self.parent.changed=True
 			if not tc.Name in self.parent.changed:
@@ -5070,7 +5109,7 @@ class DummyTextControl(object):
 	def Enable(self,boo):
 		self.enabled=boo	
 import  wx.lib.masked as  masked
-maskText = ["Session Name", "C{60}", " ", 'F_', '^[a-zA-Z0-9_]+', '', '', '']
+maskText = ["Session Name", "C{75}", " ", 'F_', '^[a-zA-Z0-9_]+', '', '', '']
 		
 ###################################################################################################
 class DataBuddy(wx.Frame):
@@ -5089,7 +5128,7 @@ class DataBuddy(wx.Frame):
 		#panel layout
 		self.panel_pos=[(0,i) for i in range(3)]
 		#print self.panel_pos
-		self.panel = wx.Panel(self, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+		self.panel = wx.Panel(self, style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 		panel=self.panel
 		sizer = wx.GridBagSizer(5, 5)
 		self.home=home
@@ -5102,7 +5141,7 @@ class DataBuddy(wx.Frame):
 		if not os.path.isdir(self.save_to_dir):
 			os.makedirs(self.save_to_dir)
 		self.transport=os.path.join(self.home,r'%s32\%s32.exe' % (tr,tr))
-		self.args_panel = dummy_args(panel,style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+		self.args_panel = dummy_args(panel,style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 		self.nb_tab=0
 		self.cmd=''
 		self.default_session=None
@@ -5245,21 +5284,20 @@ class DataBuddy(wx.Frame):
 			#print(dir(cb))
 			sizer.Add(boxsizer, pos=(8, 0),flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=10)
 		if 1:
-			sb = wx.StaticBox(panel, label='Run')
+			sb = wx.StaticBox(panel, label='On Run')
 
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
-			self.send_yes=wx.CheckBox(panel, label="Send 'y'")
-			boxsizer.Add(self.send_yes, flag=wx.LEFT|wx.TOP, border=5)
-			self.send_yes.SetValue(True)
+
 			self.auto_save=wx.CheckBox(panel, label="Auto-save")
 			boxsizer.Add(self.auto_save, flag=wx.LEFT|wx.TOP, border=5)
 			self.auto_save.SetValue(True)
-			self.confirm_run=wx.CheckBox(panel, label="Confirm")
-			boxsizer.Add(self.confirm_run, flag=wx.LEFT|wx.TOP, border=5)
-			self.confirm_run.SetValue(True)
+			#self.confirm_run=wx.CheckBox(panel, label='Confirm run')
+			#boxsizer.Add(self.confirm_run, flag=wx.LEFT|wx.TOP, border=5)
+			#self.confirm_run.SetValue(True)
 			
 			#print(dir(cb))
 			sizer.Add(boxsizer, pos=(8, 1),flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=10)		
+		boxsizer2 =  wx.BoxSizer(wx.HORIZONTAL)
 		if 1:
 			sb = wx.StaticBox(panel, label='Temporary data dump')
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
@@ -5281,8 +5319,28 @@ class DataBuddy(wx.Frame):
 			
 			#e(0)
 			#print(dir(cb))
-			sizer.Add(boxsizer, pos=(8, 2),flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=10)
-			
+			#sizer.Add(boxsizer, pos=(8, 2),flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=10)
+			boxsizer2.Add(boxsizer, flag=wx.LEFT|wx.TOP, border=5)
+		if 1:
+			sb = wx.StaticBox(panel, label='Confirmation')
+			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
+			self.send_yes=wx.CheckBox(panel, label="Confirm run")
+			boxsizer.Add(self.send_yes, flag=wx.LEFT|wx.TOP, border=5)
+			self.send_yes.SetValue(True)			
+			self.confirm_truncate=wx.CheckBox(panel, label="Confirm truncate")
+			self.confirm_truncate.SetName('truncate_target')
+			boxsizer.Add(self.confirm_truncate, flag=wx.LEFT|wx.TOP, border=5)
+			#self.confirm_truncate.Bind(wx.EVT_CHECKBOX, self.OnConfirmTruncate)
+			if self.args_panel.cargs.has_key('truncate_target') and self.args_panel.cargs['truncate_target'][2] in ['0']:
+				self.confirm_truncate.SetValue(False)
+				self.confirm_truncate.Enable(False)
+			else:
+				self.confirm_truncate.SetValue(True)	
+				self.confirm_truncate.Enable(True)
+
+			#sizer.Add(boxsizer, pos=(8, 3),flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=10)
+			boxsizer2.Add(boxsizer, flag=wx.LEFT|wx.TOP, border=5)
+		sizer.Add(boxsizer2, pos=(8, 2),flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=10)
 		self.last_log_dir={}
 		self.btn_log = wx.Button(panel, label='Show Log')
 		sizer.Add(self.btn_log, pos=(9, 0), flag=wx.LEFT, border=10)
@@ -5312,7 +5370,7 @@ class DataBuddy(wx.Frame):
 		sizer.AddGrowableRow(7)
 				
 		if 1:
-			self.panel2 = wx.Panel(self, wx.ID_ANY, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+			self.panel2 = wx.Panel(self, wx.ID_ANY, style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			panel2=self.panel2
 			vsizer =  wx.BoxSizer(wx.VERTICAL)
 			#wx.BoxSizer(wx.VERTICAL)
@@ -5392,6 +5450,9 @@ class DataBuddy(wx.Frame):
 		self.the_id=None
 		self.q=[]
 		self.closing_in=6
+	def ifTruncateTarget(self):
+		#print self.args_panel.cargs.has_key('truncate_target') , self.args_panel.cargs['truncate_target'][2] in ['1',1]
+		return self.args_panel.cargs.has_key('truncate_target') and self.args_panel.cargs['truncate_target'][2] in ['1',1]
 	def enableKeepDump(self,):
 		self.keep_dump.Enable(True)
 	def enableShowDump(self):
@@ -5488,6 +5549,7 @@ class DataBuddy(wx.Frame):
 		
 	def onDisableAllForDelete(self, data, extra1, extra2=None):	
 		print 'onDisableAllForDelete'	
+		self.Freeze()
 		#self.args_panel.DisableAll()
 		#self.btn_delete.Enable(True)
 		self.btn_new.Enable(False)
@@ -5506,10 +5568,12 @@ class DataBuddy(wx.Frame):
 		self.st_targett.Enable(False)
 		self.nb.EnableTab(0,False)
 		self.nb.EnableTab(1,False)
+		self.Thaw()
 	def onEnableAll(self, data, extra1, extra2=None):	
 		print 'onDisableAllForDelete'	
 		#self.args_panel.DisableAll()
 		#self.btn_delete.Enable(True)
+		self.Freeze()
 		self.btn_new.Enable(True)
 		self.btn_clearall.Enable(True)
 		self.btn_save.Enable(True)
@@ -5525,12 +5589,14 @@ class DataBuddy(wx.Frame):
 		self.st_sourcet.Enable(True)
 		self.st_targett.Enable(True)
 		self.nb.EnableTab(0,True)
-		self.nb.EnableTab(1,True)		
+		self.nb.EnableTab(1,True)
+		self.Thaw()		
 	def onKeyPress(self, event):
 		print 'frame onKeyPress'
 		tc = event.GetEventObject()
 		print 'name=',tc.Name
 		kc = event.GetKeyCode()
+		print 'kc=', kc
 		if not (kc == wx.WXK_TAB or kc == wx.WXK_RETURN):
 			self.btn_save.Enable(True)
 			if not tc.Name in self.changed:
@@ -5586,7 +5652,7 @@ class DataBuddy(wx.Frame):
 						def all_ok(hwnd, param):
 							#print hwnd
 							return True
-						print win32gui.EnumChildWindows(hwnd[0], all_ok, None)
+						#print win32gui.EnumChildWindows(hwnd[0], all_ok, None)
 					if 0:
 						buf_size = 1 + win32gui.SendMessage(hwnd[0], win32con.WM_GETTEXTLENGTH, 0, 0)
 						if buf_size:
@@ -5598,7 +5664,7 @@ class DataBuddy(wx.Frame):
 							selinfo  = win32gui.SendMessage(hwnd[0], win32con.EM_GETSEL, 0, 0)
 							endpos   = win32api.HIWORD(selinfo)
 							startpos = win32api.LOWORD(selinfo)
-							print 'txt', txt[startpos: endpos]
+							#print 'txt', txt[startpos: endpos]
 			
 					if 0:
 						control = win32gui.FindWindowEx(hwnd[0], 0, 'static', None)
@@ -5646,17 +5712,17 @@ class DataBuddy(wx.Frame):
 			
 		if self.counters[the_id]<60:
 			elapsed='%ds' % (self.counters[the_id])
-		print the_id, self.hwnd[the_id]
+		#print the_id, self.hwnd[the_id]
 		title=win32gui.GetWindowText (self.hwnd[the_id][0])
-		print title
+		#print title
 		if title.startswith('DONE:'):
 			status=title.split(':')[1]
 			#print status
 			if status in ['FAILED']:
-				print status
+				#print status
 				send('highlight_session',(self.session_name,wx.RED))
 			elif status in ['SUCCESS']:
-				print status
+				#print status
 				send('highlight_session',(self.session_name,wx.BLUE))
 
 			
@@ -5670,7 +5736,7 @@ class DataBuddy(wx.Frame):
 		#pprint(data)
 		(sname,tmpl2,cv_from,cv_to,type,tmpl1,sdir, fname) = data
 		#print sname
-		self.Freeze()
+		#self.Freeze()
 		self.enableForm()
 		tmpl='.'.join([tmpl1,tmpl2])
 		self.open_session([sname,[cv_from,cv_to],type,tmpl,sdir,fname])
@@ -5684,14 +5750,15 @@ class DataBuddy(wx.Frame):
 			self.btn_log.Enable(False)
 		self.args_panel.enableSqlLoaderButtons()
 		self.changed=[]
-			
-		#self.Fit()
-		self.Layout()
+		x,y=self.GetSize()
+		self.Fit()
+		#self.Layout()
 		#print size
-		#self.Refresh()
+		self.Refresh()
 		#self.sm.nb.SetSize((300,-1))
 		
-		self.Thaw()
+		self.SetSize((x,y))
+		#self.Thaw()
 		#
 		#self.Refresh()	
 	def close_exec(self,p):
@@ -6061,11 +6128,15 @@ class DataBuddy(wx.Frame):
 			#print 'open_session---------------', ids,self.sname, self.the_id
 			#pprint (self.sids)
 			nb_tab=self.nb_tab
-			self.args_panel= pnl_args(self,self.copy_vector,self.tmpl,self.the_id,(self.cargs,self.fargs,self.targs),style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+			
+			self.args_panel= pnl_args(self,self.copy_vector,self.tmpl,self.the_id,(self.cargs,self.fargs,self.targs),style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+			#
 			self.nb.DeleteAllPages()
 			#self.nb.DeletePage(0)
 			#self.nb.DeletePage(0)
 			#self.args_panel.Destroy()
+			self.Freeze()
+			self.args_panel.Freeze()
 			self.nb.AddPage(self.args_panel, 'Arguments')
 			self.editor = TacoTextEditor(self.args_panel)
 			self.editor.AppendText(self.args_panel.get_cmd(self.transport))
@@ -6075,6 +6146,8 @@ class DataBuddy(wx.Frame):
 			
 			self.nb.SetSelection(self.nb_tab)
 			self.updateCommand(self.nb_tab)
+			self.args_panel.Thaw()
+			self.Thaw()
 			#self.nb.SetSize((100,-1))
 			self.btn_show.Enable(True)
 			self.btn_run.Enable(True)
@@ -6105,7 +6178,7 @@ class DataBuddy(wx.Frame):
 			#self.args_panel.Hide()
 			#self.args_panel.create_cargs(self.cargs)
 			#self.args_panel.Destroy()
-			self.args_panel= pnl_args(self,copy_vector,tmpl,self.the_id,api_args,style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+			self.args_panel= pnl_args(self,copy_vector,tmpl,self.the_id,api_args,style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			self.nb.DeletePage(0)
 			self.nb.DeletePage(0)
 			#self.args_panel.Destroy()
@@ -6210,14 +6283,15 @@ class DataBuddy(wx.Frame):
 		else:
 			if self.validateOnRun():
 				msg='Are you sure you want to execute this command?\n%s' % self.args_panel.get_cmd(self.transport)
-				yes=True
-				if self.confirm_run.GetValue():
+				yes=False
+				if_run=self.send_yes.GetValue()
+				if if_run:
 					if not self.send_email.GetValue():
 						msg='%s\n\nSend email: NO (Check "Post-etl email" to enable).' %msg
 					else:
 						msg='%s\n\nSend email: YES (Check "Post-etl email" to disable).' %msg
 					yes= self.if_yes( msg, 'Confirmation.')
-				if yes:
+				if if_run and yes:
 					self.updateTimeStamp()
 					#time_stamp=datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')
 					
@@ -6229,10 +6303,10 @@ class DataBuddy(wx.Frame):
 					if if_save:
 						(sname,cv,tmpl,dname,fname)=self.saveSession()
 						
-					if_yes=self.send_yes.GetValue()
-					yes=''
-					if if_yes:
-						yes='echo y|'
+					
+					#yes=''
+					#if if_yes:
+					#	yes='echo y|'
 		
 					cfg=[]
 					if 1:
@@ -6355,7 +6429,8 @@ class DataBuddy(wx.Frame):
 								win32gui.SetWindowText (hwnd[0], title)
 								#print title
 								#e(0)
-								if if_yes:
+								#sending 'y' to job
+								if 1: #if_yes:
 									window1 = find_window( title )
 									#print window1
 									#sleep(0.2)
@@ -6370,7 +6445,32 @@ class DataBuddy(wx.Frame):
 									window1.SetWindowPos(0, (x/2,y/2,dl,dw),0)
 									 #win32con.HWND_TOPMOST, x,y, 850, 500, 0)
 					 
-									send_input( window1)
+									send_yes( window1)
+								
+								if_confirm_truncate=self.confirm_truncate.GetValue()
+								yes_truncate=self.ifTruncateTarget()
+								print '````', yes_truncate, if_confirm_truncate
+								if yes_truncate and if_confirm_truncate:
+									yes_truncate= self.if_yes('Truncate target')
+								
+								if yes_truncate:
+									window1 = find_window( title )
+									(x,y) = self.GetScreenPositionTuple()
+									(l,w) =self.GetClientSizeTuple()
+									dl,dw= 800,600
+									window1.SetWindowPos(0, (x/2,y/2,dl,dw),0)
+					 
+									send_yes( window1)
+								else:
+									window1 = find_window( title )
+									(x,y) = self.GetScreenPositionTuple()
+									(l,w) =self.GetClientSizeTuple()
+									dl,dw= 800,600
+									window1.SetWindowPos(0, (x/2,y/2,dl,dw),0)
+					 
+									send_no( window1)
+									
+									
 							#disable form
 							self.DisableOnRun()
 							send('highlight_session',(self.session_name,wx.BLACK))
@@ -6592,7 +6692,7 @@ if __name__ == '__main__':
 			global imgs
 			imgs = i
 			self.Init()
-			self.frame = DataBuddy(None, -1,title=app_title, size=(1100,850))
+			self.frame = DataBuddy(None, -1,title=app_title, size=(1200,850))
 			if default_session:
 				self.frame.openDefault(default_session)
 			self.frame.Show(True)
