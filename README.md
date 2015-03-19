@@ -103,7 +103,7 @@ CSV   | yes | yes
 - init templates to open session for "New Session". **DONE**
 - validate args on Run. **DONE**.
 - smaller test_api files (get default args from test routines, not canned files).
-- fix template filters.
+- fix template filters. **DONE**
 - create "Menu" button and hide "About".
 - create session library on first run.
 - validate session name for chars not usable in file name. **DONE**
@@ -118,8 +118,8 @@ CSV   | yes | yes
 - detect DONE/FAILED from cmd window. **DONE**
 - let user disable post-etl email (Common: email_to). **DONE**
 - change copy_vector format from db2db to db->db or db_2_db
-- fix flicker on frame freeze
-- save on close
+- fix flicker on frame freeze **DONE**
+- save on close **DONE**
 
 #Does it work?
 yes, with some quirks and only for Oracle. 
