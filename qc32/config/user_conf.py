@@ -15,7 +15,7 @@ inc['ORA11G']=inc['ORAEXA']='oracle.py'
 inc['ORAXE']='oraxe.py'
 #print  inc
 
-print args.copy_vector
+#print args.copy_vector
 
 db=None
 from_db, to_db=args.copy_vector.split('2')
@@ -54,8 +54,8 @@ if not os.path.isdir(logdir):
 	
 
 	
-spooldir=os.path.join(logdir,'data')
-print spooldir
+spooldir=os.path.join(logdir,'data1')
+#print spooldir
 #e(0)
 datadir= os.path.join(logdir,ts)
 
@@ -112,9 +112,21 @@ else:
 			to_file=os.path.join(to_dir,'%s.data' % (args.from_table ))
 #print to_file
 #e(0)
-def get_sharded_outfn(shard):
+def get_sharded_outfn(shard, qname=None):
 	#print self.uargs.to_file
 	#print self.uargs.to_dir
-	return os.path.join(to_dir, 'shard_%s.data' % shard)	
+	#e(0)
+	if qname:
+		#q=qname.split('.')
+		#if len(q)>2:
+		#	owner=q[0]
+		#	table_name=q[1]
+			
+		return os.path.join(to_dir, '%s.shard_%s.data' % (qname, shard))	
+		#else:
+		#	return os.path.join(to_dir, 'shard_%s.data' % shard)	
+			
+	else:
+		return os.path.join(to_dir, 'shard_%s.data' % shard)	
 #print  to_file
 #e(0)

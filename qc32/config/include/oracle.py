@@ -19,6 +19,7 @@ class common(base):
 		if self.tab_cols.has_key(tab_name):
 			return self.tab_cols[tab_name]
 		else:
+			print tab_name
 			assert len(tab_name.upper().split('.'))==2, 'Table format: SCHEMA.TABLE'
 			qry="""
 			set pagesize 0 feedback off TIMING OFF
@@ -28,6 +29,7 @@ class common(base):
 			exit;
 			""" % tuple(tab_name.upper().split('.'))
 			#print qry
+			
 			cqfn=self.save_qry('get_table_columns',qry)
 			regexp=re.compile(r'(.*)')
 			(r_int, status,err)=self.do_query(self.login, query=None,query_file=cqfn,regexp=regexp)
@@ -93,11 +95,13 @@ class common(base):
 		(colname, colsize, coltype)= x[0].split(':')
 		#print x, int(colsize), int(colsize)>265
 		if colsize:
-			if int(colsize)>5000:
+			if int(colsize)>255:
 				#print x, '%s CHAR(%s) NULLIF %s=BLANKS ' % (colname,colsize,colname)
 				#row = x.split(':')
-
-				return '%s CHAR(%s) NULLIF %s=BLANKS ' % (colname,colsize,colname)
+				if coltype in ('VARCHAR2'):
+					return '%s CHAR(%s) NULLIF %s=BLANKS ' % (colname,colsize,colname)
+				if coltype in ('CHAR'):
+					return '%s filler CHAR(%s)' % (colname,colsize)				
 			if coltype in ('DATE'):
 					return '%s "TO_DATE(:%s, \'%s\')" ' % (colname,colname,self.args.nls_date_format)
 			if coltype in ('TIMESTAMP'):
@@ -160,9 +164,9 @@ class target(common):
 		loader_errors=10
 		ptn=''
 		sptn=''
-		userid = args.to_db
+		userid = self.args.to_db
 		#check if url connect
-		c,sid = args.to_db.split('@')
+		c,sid = self.args.to_db.split('@')
 		if sid.strip().startswith("'(DESCRIPTION"):
 			u,p=c.split('/')
 			userid='%s@\"%s\"/%s' % (u,sid.strip("'").replace('(',r'\(').replace(')',r'\)'),p)
@@ -180,9 +184,9 @@ class target(common):
 		'DIRECT=%s' % if_direct, 	
 		'MULTITHREADING=TRUE', 
 		#'EXTERNAL_TABLE=EXECUTE', %s/sqlloader/%s%s_%s.log
-		'LOG=%s' % os.path.join(datadir,'sqlloader','%s%s_%s.log' % (args.to_table, "%s%s" % (ptn,sptn),shard_name)), 
-		'BAD=%s' % os.path.join(datadir,'sqlloader','%s%s_%s.bad' % (args.to_table, "%s%s" % (ptn,sptn),shard_name)),
-		'DISCARD=%s' % os.path.join(datadir,'sqlloader','%s%s_%s.dsc' % (args.to_table, "%s%s" % (ptn,sptn),shard_name)),				
+		'LOG=%s' % os.path.join(datadir,'sqlloader','%s%s_%s.log' % (self.args.to_table, "%s%s" % (ptn,sptn),shard_name)), 
+		'BAD=%s' % os.path.join(datadir,'sqlloader','%s%s_%s.bad' % (self.args.to_table, "%s%s" % (ptn,sptn),shard_name)),
+		'DISCARD=%s' % os.path.join(datadir,'sqlloader','%s%s_%s.dsc' % (self.args.to_table, "%s%s" % (ptn,sptn),shard_name)),				
 		'ERRORS=%s' % loader_errors]
 		if row_from:
 			loadConf.append('SKIP=%s' % (row_from-1))

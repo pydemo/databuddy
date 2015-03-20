@@ -238,7 +238,7 @@ class TxtSTC(stc.StyledTextCtrl):
 			if not self.ignore_change:
 				self.changed=True		
 				print 'sending "star_tab_name"' 
-				Publisher().sendMessage( "star_tab_name", (self.ID) )
+				#Publisher().sendMessage( "star_tab_name", (self.ID) )
 		#self.ignore_change=False
 
 	def OnUpdateUI(self, evt):
