@@ -4,7 +4,7 @@ from pprint import pprint
 from common.v101.base import base 
 import re, types, os, codecs
 from subprocess import Popen, PIPE,STDOUT
-
+import yaml
 e=sys.exit
 
 class common(base):
@@ -153,14 +153,18 @@ class target(common):
 		if not os.path.isdir(self.ctldir):
 			os.makedirs(self.ctldir)		
 	def get_load_config(self, db_loader_loc,shard_name, row_from, row_to,ctlfn,outfn, datadir):
-		dpl_columnarrayrows=10000
-		dpl_streamsize=500000
-		dpl_readsize=200000
-		if_dpl_parallel='TRUE'
-		dpl_bindsize=200000
-		dpl_skip_index_maintenance='TRUE'
-		dpl_skip_unusable_indexes='TRUE'
-		if_direct='TRUE'
+		to_db=self.args.copy_vector.split('2')[1].upper()
+		loader_profile= self.conf.dlp[to_db].strip('"')
+		if hasattr(self.args, 'loader_profile') and self.args.loader_profile:
+			print 'using non-default loader profile'
+			loader_profile=self.args.loader_profile.strip('"')
+		assert os.path.isfile(loader_profile), 'Loader profile\n%s\ndoes not exists.' % loader_profile
+			
+		loader={}
+		with open(loader_profile, 'r') as f:
+			loader = yaml.load(f)
+
+		loader_args= ['%s=%s' % (x,loader[x].strip().strip(' ')) for x in loader]
 		loader_errors=10
 		ptn=''
 		sptn=''
@@ -175,25 +179,17 @@ class target(common):
 		'control="%s"' % ctlfn, 
 		'userid=%s' % userid, #args.to_db,
 		'DATA="%s"' % outfn,
-		'COLUMNARRAYROWS=%s' % dpl_columnarrayrows,
-		'STREAMSIZE=%s' % dpl_streamsize,'READSIZE=%s' % dpl_readsize,
-		'PARALLEL=%s' % if_dpl_parallel,
-		'BINDSIZE=%s' % dpl_bindsize, 
-		#'UNRECOVERABLE=Y', 
-		'SKIP_INDEX_MAINTENANCE=%s' % dpl_skip_index_maintenance, 'SKIP_UNUSABLE_INDEXES=%s' % dpl_skip_unusable_indexes,
-		'DIRECT=%s' % if_direct, 	
-		'MULTITHREADING=TRUE', 
 		#'EXTERNAL_TABLE=EXECUTE', %s/sqlloader/%s%s_%s.log
 		'LOG=%s' % os.path.join(datadir,'sqlloader','%s%s_%s.log' % (self.args.to_table, "%s%s" % (ptn,sptn),shard_name)), 
 		'BAD=%s' % os.path.join(datadir,'sqlloader','%s%s_%s.bad' % (self.args.to_table, "%s%s" % (ptn,sptn),shard_name)),
-		'DISCARD=%s' % os.path.join(datadir,'sqlloader','%s%s_%s.dsc' % (self.args.to_table, "%s%s" % (ptn,sptn),shard_name)),				
-		'ERRORS=%s' % loader_errors]
+		'DISCARD=%s' % os.path.join(datadir,'sqlloader','%s%s_%s.dsc' % (self.args.to_table, "%s%s" % (ptn,sptn),shard_name))
+		] + loader_args
 		if row_from:
 			loadConf.append('SKIP=%s' % (row_from-1))
 		if row_to:
 			loadConf.append('LOAD=%s' % (row_to-row_from))
 			
-		#pprint(loadConf)
+		pprint(loadConf)
 		#e(0)
 		
 		return loadConf	
