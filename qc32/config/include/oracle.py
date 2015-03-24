@@ -38,7 +38,7 @@ class common(base):
 			assert not status, 'Cannot fetch table columns (%s)' % tab_name
 			self.tab_cols[tab_name] = (r_int, map(self.coldef, r_int))
 			return self.tab_cols[tab_name]
-	def do_query(self,login, query, query_file=None, regexp=None, grp=None, spset=''):
+	def do_query(self,login, query, query_file=None, regexp=None, grp=None, spset='', qname=None):
 		status=0
 		out=[]
 		assert  len(login)>0, 'Default login is not set.'
@@ -51,13 +51,20 @@ class common(base):
 		db_client_dbshell= self.get_db_client_dbshell()		
 		assert os.path.isfile(db_client_dbshell), 'Oracle sqlplus.exe does not exists at %s.' % db_client_dbshell
 		if query_file:
-			q = "%s\n%s\n@%s" % ( spset,opt,query_file)			
+			#q = "%s\n%s\n@%s" % ( spset,opt,query_file)			
 			assert os.path.isfile(query_file), 'Query file does not exists!'
-		else:		
-			q = "%s%s" % ( opt,query)
 			
-		
+		else:		
+			#print self.datadir
+			q = "%s\n%s\n%s\nexit;" % ( spset,opt, query)
+			assert qname, 'query name "qname" is not set'
+			query_file=self.save_qry(qname,q)
+			#print query_file
+			#q = "%s%s" % ( opt,query)
+			#cfg=[ db_client_dbshell, login]
 		cfg=[ db_client_dbshell,"-S", login,r'@%s' %  query_file]
+		
+		
 
 		if self.args.nls_timestamp_format:
 			os.environ['NLS_TIMESTAMP_FORMAT'] = self.args.nls_timestamp_format
@@ -72,6 +79,7 @@ class common(base):
 			self.log.err(err)
 		status=p.wait()	
 		for o in output.split(os.linesep):
+			#print o
 			if o.strip():
 				if regexp:
 					m = re.match(regexp, o.strip()) 
@@ -144,7 +152,7 @@ class target(common):
 		#self.datadir=datadir
 		#self.login=login
 		#self.conf=conf
-		self.db=db
+		self.db=db.upper()
 		self.to_table=to_table
 		self.args=conf.args
 		self.tab_cols={}
