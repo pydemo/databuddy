@@ -189,7 +189,7 @@ class target(common):
 		if row_to:
 			loadConf.append('LOAD=%s' % (row_to-row_from))
 			
-		pprint(loadConf)
+		#pprint(loadConf)
 		#e(0)
 		
 		return loadConf	
