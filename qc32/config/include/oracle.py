@@ -141,7 +141,29 @@ class source(common):
 			if not os.path.isfile(self.db_client_dbshell):
 				self.log.warn('Path to source loader is not set. Defaulting to %' % loader)	
 		return self.db_client_dbshell
-	
+	def get_ddl_sppol_query(self):
+		schema,tab= self.from_table.split('.')
+		q= """set heading off;
+set echo off;
+Set pages 999;
+set long 90000;
+
+--spool ddl_list.sql
+EXEC DBMS_METADATA.SET_TRANSFORM_PARAM(DBMS_METADATA.SESSION_TRANSFORM,'PRETTY',true);
+EXECUTE DBMS_METADATA.SET_TRANSFORM_PARAM(DBMS_METADATA.SESSION_TRANSFORM,'SQLTERMINATOR',true);
+select dbms_metadata.get_ddl('TABLE','%s','%s') 
+from all_tables where owner='%s' and table_name='%s';
+
+SELECT DBMS_METADATA.GET_DDL ('INDEX', index_name, table_owner)
+FROM all_indexes
+WHERE table_owner='%s' and table_name='%s';
+
+exit;
+
+""" % (tab.upper(), schema.upper(), schema.upper(), tab.upper(),schema.upper(), tab.upper())
+
+		#print q
+		return q	
 #
 # Define your custom SQL*Loader config
 #	
@@ -320,4 +342,6 @@ class target(common):
 				#rows_total +=rows_copied
 				#print rows_total
 		#print rows_copied
-		return rows_copied		
+		return rows_copied
+
+		

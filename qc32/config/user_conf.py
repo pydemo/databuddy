@@ -117,20 +117,21 @@ else:
 #print to_file
 #e(0)
 def get_sharded_outfn(shard, qname=None):
-	#print self.uargs.to_file
-	#print self.uargs.to_dir
-	#e(0)
+	ext={'CSV':'data', 'DDL':'ddl'}
+	ex='data'
+	if to_db.upper() in ext.keys():
+		ex=ext[to_db.upper()]
 	if qname:
-		#q=qname.split('.')
-		#if len(q)>2:
-		#	owner=q[0]
-		#	table_name=q[1]
+
 			
 		return os.path.join(to_dir, '%s.shard_%s.data' % (qname, shard))	
 		#else:
 		#	return os.path.join(to_dir, 'shard_%s.data' % shard)	
 			
 	else:
-		return os.path.join(to_dir, 'shard_%s.data' % shard)	
+		if hasattr(args, 'from_table') and args.from_table:
+			return os.path.join(to_dir, '%s.shard_%s.%s' % (args.from_table,shard,ex))	
+		else:
+			return os.path.join(to_dir, 'shard_%s.%s' % (shard, ex))	
 #print  to_file
 #e(0)
