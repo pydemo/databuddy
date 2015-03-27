@@ -105,7 +105,8 @@ CSV   | yes | yes
 - smaller test_api files (get default args from test routines, not canned files).
 - fix template filters. **DONE**
 - create "Menu" button and hide "About".
-- create session library on first run.
+- create templates tab
+- create sessions tab
 - validate session name for chars not usable in file name. **DONE**
 - allow user to create multiple session libraries.
 - fix mailformed path from MDD.MultiDirDialog. **DONE**
@@ -120,6 +121,8 @@ CSV   | yes | yes
 - change copy_vector format from db2db to db->db or db_2_db
 - fix flicker on frame freeze **DONE**
 - save on close **DONE**
+- Table DDL export for Oracle **DONE**
+- add SQLServer
 
 #Does it work?
 yes, with some quirks and only for Oracle. 
