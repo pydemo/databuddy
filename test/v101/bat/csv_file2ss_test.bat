@@ -1,0 +1,13 @@
+echo y|dm.exe ^
+-w csv2ss ^
+-o 1 ^
+-r 1 ^
+-t "|" ^
+-i C:\Python27\datamule_1233\test\v101\data\ss_shard_0.data ^
+-y 100 ^
+-u sa ^
+-p test_pwd ^
+-d master ^
+-s ALEX_BUZ-PC\SQLEXPRESS ^
+-a dbo.Persons_pipe_datetime_1 ^
+-Z "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn"
