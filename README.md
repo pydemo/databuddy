@@ -3,7 +3,7 @@
 
 data-buddy (GUI) | QueryCopy (command line)
 ---- | -------------
-0.2.9 beta | 1.23.9 beta
+0.3.1 beta | 1.23.9 beta
 
 ##Purpose
 
