@@ -105,8 +105,8 @@ CSV   | yes | yes
 - smaller test_api files (get default args from test routines, not canned files).
 - fix template filters. **DONE**
 - create "Menu" button and hide "About".
-- create templates tab
-- create sessions tab
+- create templates tab **DONE**
+- create sessions tab **DONE**
 - validate session name for chars not usable in file name. **DONE**
 - allow user to create multiple session libraries.
 - fix mailformed path from MDD.MultiDirDialog. **DONE**
@@ -123,6 +123,9 @@ CSV   | yes | yes
 - save on close **DONE**
 - Table DDL export for Oracle **DONE**
 - add SQLServer
+- validate all path arguments before run
+- add create template menu
+- add "--host_map" arg to set hosts for each thread
 
 #Does it work?
 yes, with some quirks and only for Oracle. 
