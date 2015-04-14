@@ -90,13 +90,13 @@ CSV   | yes | yes
 
 #TODO
 - argument values reuse from existing session. **DONE**
-- clean uargs.db.
+- clean uargs.db. **DONE**
 - nls_format* duplication. **DONE**
 - test UI.
 - add --log_dir to backend. **DONE**
-- add "source" and "target" datasources to "New Session".
+- add "source" and "target" datasources to "New Session". **DONE**
 - Copy/Paste of argument values between sessions.
-- generic "New Session" so user not limited by source and target templates.
+- generic "New Session" so user not limited by source and target templates. **DONE**
 - history of values for each argument.
 - cleanup all other databases but Oracle.
 - more templates and better templates hierarchy.
@@ -108,11 +108,11 @@ CSV   | yes | yes
 - create templates tab **DONE**
 - create sessions tab **DONE**
 - validate session name for chars not usable in file name. **DONE**
-- allow user to create multiple session libraries.
+- allow user to create multiple session libraries. **DONE**
 - fix mailformed path from MDD.MultiDirDialog. **DONE**
 - make sure all paths are windows friendly.**DONE**
 - open dir and open file use stale values.**DONE**
-- filter control keys from ones affecting field value.
+- filter control keys from ones affecting field value. **DONE**
 - close all existing shells/shell groups upon exit.
 - highlight running sessions.**DONE**
 - beep on failing sessions.
@@ -125,7 +125,9 @@ CSV   | yes | yes
 - add SQLServer
 - validate all path arguments before run
 - add create template menu
-- add "--host_map" arg to set hosts for each thread
+- add "--host_map" arg to set hosts for each thread **DONE**
+- let user change host mapping
+- test ezconnect
 
 #Does it work?
 yes, with some quirks and only for Oracle. 
