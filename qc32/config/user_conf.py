@@ -89,6 +89,8 @@ if TIMESTAMPED_DEFAULT_SPOOL_DIR:
 if not os.path.isdir(to_dir):
 	os.makedirs(to_dir)	
 to_file=None
+
+
 if hasattr(args, 'to_file') and args.to_file:
 	to_file=args.to_file
 else:
@@ -102,7 +104,7 @@ else:
 		elif hasattr(args, 'from_partition') and args.from_partition:
 			to_file=os.path.join(to_dir,'%s_%s.%s.data' % (args.from_table,args.from_partition.replace('(','_').replace(')','_'),ts ))
 		elif hasattr(args, 'from_table') and args.from_table:
-			to_file=os.path.join(to_dir,'%s_%s.data' % (args.from_table,ts ))
+			to_file=os.path.join(to_dir,'%s_%s.data1' % (args.from_table,ts ))
 	else:
 		to_file=os.path.join(to_dir,'spool.data')
 		if hasattr(args, 'query_sql_file')and  args.query_sql_file:

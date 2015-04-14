@@ -1,0 +1,34 @@
+
+c:\Python27\data_migrator_1239_ddl>echo y  | c:\Python27\qc_dist_32\20150413_234559\qc32\qc32.exe -w ora11g2ora11g -o 1 -r 1 -t "|" -K 1 -M C:\Temp\qc_log -F C:\tmp\TEST_default_spool -B qc_job -Y 20150413_234559_569000 -C "C:\Python27\data_migrator_1239\config\loader\sqlloader.yaml" -5 ".\config\host_map.py" -c SCOTT.Date_test_from -j SCOTT -x tiger -b orcl_ol7 -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -u SCOTT -p tiger -d orcl_ol7 -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" 
+----------------------------------------------------------------------
+QueryCopy for Oracle 11G (v0.3.1, beta, 2015/04/13 23:45:59) [32bit]
+Copyright (c): 2014 Alex Buzunov, All rights reserved.
+Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
+----------------------------------------------------------------------
+c:\Python27\data_migrator_1239_ddl\config\host_map.py
+####################
+Performing data copy.
+		
+From Oracle 11G:	
+	from db: SCOTT@orcl_ol7
+	table: SCOTT.Date_test_from
+	shards:	1
+		
+default_spool_dir:
+	C:\tmp\TEST_default_spool\qc_job\20150413_234559_569000
+		
+	To Oracle:	
+		to db: SCOTT@orcl_ol7
+		to table: None
+		
+
+	Logging to:
+C:\Temp\qc_log\qc_job
+
+####################
+Are you sure you want to proceed?(y/n): 
+Traceback (most recent call last):
+  File "<string>", line 304, in <module>
+  File "c:\Python27\data_migrator_1239_ddl\build\qc32\out00-PYZ.pyz\template.v101.spool_and_load", line 193, in set_payload
+  File "c:\Python27\data_migrator_1239_ddl\build\qc32\out00-PYZ.pyz\pipeline.v101.to_oracle", line 156, in set_payload
+AssertionError: Query name should be set if table name is not defined.

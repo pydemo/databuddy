@@ -1,0 +1,63 @@
+
+c:\Python27\data_migrator_1239_ddl>python -c "print 'y\ny'"   | c:\Python27\qc_dist_32\20150413_234559\qc32\qc32.exe -w ora11g2ora11g -o 1 -r 1 -t "|" -K 1 -U 1 -E 1 -M C:\Temp\qc_log -F C:\tmp\TEST_default_spool -B qc_job -Y 20150413_234559_569000 -C "C:\Python27\data_migrator_1239\config\loader\sqlloader.yaml" -5 ".\config\host_map.py" -c SCOTT.Date_test_from -j SCOTT -x tiger -b orcl_ol7 -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -u SCOTT -p tiger -d orcl_ol7 -a SCOTT.Date_test_to -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" 
+----------------------------------------------------------------------
+QueryCopy for Oracle 11G (v0.3.1, beta, 2015/04/13 23:45:59) [32bit]
+Copyright (c): 2014 Alex Buzunov, All rights reserved.
+Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
+----------------------------------------------------------------------
+c:\Python27\data_migrator_1239_ddl\config\host_map.py
+####################
+Performing data copy.
+		
+From Oracle 11G:	
+	from db: SCOTT@orcl_ol7
+	table: SCOTT.Date_test_from
+	shards:	1
+		
+default_spool_dir:
+	C:\tmp\TEST_default_spool\qc_job\20150413_234559_569000
+		
+	To Oracle:	
+		to db: SCOTT@orcl_ol7
+		to table: SCOTT.Date_test_to
+		
+    TTTTTT  RRRRR   UU  UU  NN  NN   CCCCC    AA    TTTTTT  EEEEEE
+      TT    RR  RR  UU  UU  NNN NN  CC       AAAA     TT    EE
+      TT    RRRR    UU  UU  NN NNN  CC      AA  AA    TT    EEEE
+      TT    RR  RR  UU  UU  NN  NN  CC      AAAAAA    TT    EE
+      TT    RR  RR   UUUU   NN  NN   CCCCC  AA  AA    TT    EEEEEE
+
+	Logging to:
+C:\Temp\qc_log\qc_job
+
+####################
+Are you sure you want to proceed?(y/n): 
+Do you want to truncate table "SCOTT.DATE_TEST_TO"?(y/n): 
+
+Thread-0 (0, u'5017', 43)
+############################################################
+Copy stats (1 threads, 1 shards):
+############################################################
+2015-04-13 23:47:07,821 - ora11g2ora11g - WARNING - Source is table.
+2015-04-13 23:47:07,821 - ora11g2ora11g - WARNING - Target is table.
+2015-04-13 23:47:07,821 - ora11g2ora11g - WARNING - Truncating table SCOTT.Date_test_to
+2015-04-13 23:47:08,270 - ora11g2ora11g - INFO - Table truncated.
+2015-04-13 23:47:08,272 - ora11g2ora11g - INFO - Starting Thread-0
+2015-04-13 23:47:08,272 - ora11g2ora11g - INFO - Thread-0 processing Shard-0
+2015-04-13 23:47:08,272 - ora11g2ora11g - INFO - Extracting data...
+2015-04-13 23:47:08,272 - ora11g2ora11g - INFO - using host map ".\config\host_map.py"
+2015-04-13 23:47:08,273 - ora11g2ora11g - INFO - Starting remote spool...
+2015-04-13 23:47:08,273 - ora11g2ora11g - INFO - Done
+2015-04-13 23:47:08,802 - ora11g2ora11g - INFO - using non-default loader profile
+2015-04-13 23:47:08,805 - ora11g2ora11g - INFO - Loading data...
+2015-04-13 23:47:08,805 - ora11g2ora11g - INFO - using host map ".\config\host_map.py"
+2015-04-13 23:47:08,806 - ora11g2ora11g - INFO - Starting remote load.
+2015-04-13 23:47:16,920 - ora11g2ora11g - INFO - Done
+2015-04-13 23:47:16,920 - ora11g2ora11g - INFO - keeping spool file.
+2015-04-13 23:47:16,920 - ora11g2ora11g - INFO - Thread-0 exit status 0
+2015-04-13 23:47:16,920 - ora11g2ora11g - INFO - Exiting Thread-0
+2015-04-13 23:47:16,920 - ora11g2ora11g - INFO - Shard-0/0:          43 rows
+2015-04-13 23:47:16,920 - ora11g2ora11g - INFO - TOTAL Bytes:        5017 Bytes
+2015-04-13 23:47:16,920 - ora11g2ora11g - INFO - TOTAL Rows:           43 Rows
+2015-04-13 23:47:16,920 - ora11g2ora11g - INFO - Done.
+2015-04-13 23:47:16,920 - ora11g2ora11g - INFO - Elapsed: 00:00:09
