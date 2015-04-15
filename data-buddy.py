@@ -9,7 +9,7 @@ __copyright__ = "Copyright 2015, SequelWorks Inc."
 __credits__ = []
 __license__ = "GPL"
 __title__ = "Session Manager for QueryCopy"
-__version__ = "0.3.1"
+__version__ = "0.3.3"
 __maintainer__ = "Alex Buzunov"
 __email__ = "alexbuzunov@gmail.com"
 __status__ = "Development" 	
@@ -90,7 +90,7 @@ except ImportError: # if it's not there locally, try the wxPython lib.
 
 from qc32.config.include.oracle import target	
 ########################################################################
-exe=False
+exe=True
 
 e=sys.exit
 blog=cu.blog
@@ -485,7 +485,7 @@ class SessionList(wx.ListCtrl):
 		'images/database_black_16.png','images/file_16.png',]
 		self.images=[os.path.join(home,i) for i in images]
 		
-		pprint(self.images)
+		#pprint(self.images)
 		#e(0)
 		self.image_refs={}
 		self._bg='#e6f1f5'
@@ -500,7 +500,7 @@ class SessionList(wx.ListCtrl):
 		self.pos=pos
 		#slib_path, slib_name
 		self.save_to_dir=slib_path #self.getLibPath(slib_name)
-		print self.save_to_dir
+		#print self.save_to_dir
 		assert os.path.isdir(self.save_to_dir), 'Library does not exists.'
 		#	os.makedirs(self.save_to_dir)
 		#self.db= OracleDb(self,pos)
@@ -1088,7 +1088,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		self.RecreateList(None,(self.list,self.filter))
 	def OnAddSession(self, data, extra1, extra2=None):
 		(sname,cv,tmpl,dname,fname,lib_name) = data
-		print lib_name		
+		#print lib_name		
 		self.Freeze()
 		tmpl1,tmpl2=tmpl.split('.')
 		s=[sname.strip(' '),tmpl2,cv[0],cv[1],'Copy',tmpl1,dname,fname]
@@ -2948,13 +2948,13 @@ class SessionListCtrlPanelManager(wx.Panel):
 	def getActiveLibName(self):
 		return self.nb.GetPageText(self.nb.GetSelection())	
 	def onTabChanged(self, evt):
-		print 'onTabChanged'
+		#print 'onTabChanged'
 		#send('disable_all',())
 		slib_name=self.getActiveLibName()
-		print slib_name
+		#print slib_name
 		#list=self.lists[slib_name]
 		selected= self.lists[slib_name].GetSelected()
-		print selected
+		#print selected
 		#sel= self.lists[slib_name].GetSelectedItems()
 		#print sel
 		if selected:
@@ -3165,10 +3165,10 @@ class TemplateListCtrlPanelManager(wx.Panel):
 		#print 'onTabChanged'
 		#send('disable_all',())
 		slib_name=self.getActiveLibName()
-		print slib_name
+		#print slib_name
 		#list=self.lists[slib_name]
 		selected= self.lists[slib_name].GetSelected()
-		print selected
+		#print selected
 		#sel= self.lists[slib_name].GetSelectedItems()
 		#print sel
 		if selected:
@@ -3755,7 +3755,7 @@ class NewSessionDialog(wx.Dialog):
 				if not self.changed:
 					self.changed=True
 		
-			event.Skip()
+		event.Skip()
 		
 		
 	def OnTest(self,e):
@@ -4336,7 +4336,7 @@ class NewSessionLibraryDialog(wx.Dialog):
 				if not self.changed:
 					self.changed=True
 		
-			event.Skip()
+		event.Skip()
 		
 		
 	def OnTest(self,e):
@@ -4502,7 +4502,7 @@ class NewTemplateLibraryDialog(wx.Dialog):
 				if not self.changed:
 					self.changed=True
 		
-			event.Skip()
+		event.Skip()
 		
 		
 	def OnTest(self,e):
@@ -4588,7 +4588,7 @@ class pnl_args(wx.Panel):
 		self.tc_length=190
 		self.tfile={'target':os.path.join(home,'test','test_connnect','Target_connect_test_for_oracle.sql'),
 		'source':os.path.join(home,'test','test_connnect','Source_connect_test_for_oracle.sql')}
-		self.disabled=['copy_vector', 'time_stamp','keep_data_file', 'job_pre_etl','thread_pre_etl','loader_profile']
+		self.disabled=['copy_vector', 'time_stamp','keep_data_file', 'job_pre_etl','thread_pre_etl','loader_profile', 'host_map']
 		#self.Freeze()
 		if 0: #Src Timer
 			i=wx.NewId()			
@@ -4724,23 +4724,30 @@ class pnl_args(wx.Panel):
 		
 		
 		sub(self.onSetLoaderProfile, "set_loader_profile")
+		sub(self.onSetHostMap, "set_hostmap")
 		sub(self.onSetEtlEditorProfile, "set_etl_editor_profile")
-		
+	def onSetHostMap(self, data, extra1, extra2=None):
+		(hostmap_loc)=data
+		k='host_map'
+		if self.obj.has_key(k):
+			self.obj[k][1].SetValue(hostmap_loc)
+		send('save_args',())		
 	def onSetLoaderProfile(self, data, extra1, extra2=None):
 		(profile_loc)=data
 		k='loader_profile'
 		#print self.obj.keys()
 		if self.obj.has_key(k):
 			self.obj[k][1].SetValue(profile_loc)
+		send('save_args',())
 	def onSetEtlEditorProfile(self, data, extra1, extra2=None):
 		(etl_loc,k)=data
-		print 'onSetEtlEditorProfile',k
-		print etl_loc
+		#print 'onSetEtlEditorProfile',k
+		#print etl_loc
 		#k='loader_profile'
 		#print self.obj.keys()
 		if self.obj.has_key(k):
 			self.obj[k][1].SetValue(etl_loc)
-			
+		send('save_args',())	
 	def onKey(self, evt):
 		if evt.GetKeyCode() == wx.WXK_DOWN:
 			print "Down key pressed"
@@ -4755,7 +4762,7 @@ class pnl_args(wx.Panel):
 			self.frame.fSizer.Layout()
 			#self.frame.Fit()
 	def setLoaderButtons(self, panel):
-		print self.copy_vector[1].upper(),self.copy_vector[1].upper().startswith('ORA')
+		#print self.copy_vector[1].upper(),self.copy_vector[1].upper().startswith('ORA')
 		ora=self.copy_vector[1].upper().startswith('ORA')
 		if 1: #self.copy_vector[1].upper().startswith('ORA'):
 			empty=False
@@ -5359,7 +5366,7 @@ class pnl_args(wx.Panel):
 				bbox.Add(self.obj[k][3], 0, flag=wx.ALIGN_CENTER, border=5)						
 				#fgs.Add(self.obj[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	
 				panel.fgs.Add(bbox, pos=(i%bucket, col+1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)					
-			elif k in ['job_pre_etl','thread_pre_etl','loader_profile']:
+			elif k in ['job_pre_etl','thread_pre_etl','loader_profile', 'host_map']:
 				if 0:
 					imageFile = os.path.join(home,"images/refresh_icon_16_grey2.png")
 					image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
@@ -5404,16 +5411,32 @@ class pnl_args(wx.Panel):
 		panel.hbox.Layout()
 		#panel.Fit()		
 		#return core_args_panel
-	def OnEditPreEtlFile(self, evt,params):
-		print 'OnEditPreEtlFile'
+	def OnEditPyFile(self, evt,params):
+		print 'OnEditPyFile'
 		[file_obj] = params
 		val =file_obj.GetValue()
+		#import os
+		#print val
+		fname =os.path.realpath(val)
+		#print fname
+		
+		assert os.path.isfile(fname), 'File does not exists\n%s' % fname
+		#webbrowser.open(fname)
 		import os
+		os.startfile(fname)		
+	def OnEditPreEtlFile(self, evt,params):
+		print 'OnEditPreEtlFile'
+		import os
+		[file_obj] = params
+		val =file_obj.GetValue()
+		#print val
+		#import os
+		os.chdir(home)
 		fname =os.path.realpath(val)
 		#print fname
 		assert os.path.isfile(fname), 'File does not exists\n%s' % fname
 		#webbrowser.open(fname)
-		import os
+		
 		os.startfile(fname)
 		#file_to_open = "c:\path\to\file.txt"
 		#os.system ('cmd /c "notepad.exe %s"' % fname)
@@ -5478,6 +5501,18 @@ class pnl_args(wx.Panel):
 				#self.parent.nb.DeletePage(1)
 				#self.parent.nb.DisablePage(1)
 				self.parent.nb.EnableTab(1,False)
+		k='host_map'
+		if self.obj.has_key(k):
+			hostmap_loc = self.obj[k][1].GetValue()
+			self.parent.loader_panel.CreateNewSessionHostMap(hostmap_loc)
+			#self.obj[k][1].SetValue(new)
+			#e(0)
+		else:
+			print 'no host_map'
+		k='keep_data_file'
+		if self.obj.has_key(k):
+			val=self.obj[k][1].GetValue()
+			send('set_keep_data_file',(val))
 		if 1:
 			if 0:
 				k='job_pre_etl'
@@ -5578,7 +5613,10 @@ class pnl_args(wx.Panel):
 	def getLogDir(self):
 		job_dir=self.obj['log_dir'][1].GetValue()
 		job_name=self.obj['job_name'][1].GetValue()
-		time_stamp=self.obj['time_stamp'][1].GetValue()
+		
+		time_stamp=self.parent.ts 
+		if self.obj.has_key('time_stamp'):
+			time_stamp=self.obj['time_stamp'][1].GetValue()
 		return os.path.join(job_dir, job_name,time_stamp)
 	
 	def disableSqlLoaderButtons(self):
@@ -5845,7 +5883,7 @@ class pnl_args(wx.Panel):
 				#self.parent.changed=True
 				if not tc.Name in self.parent.changed:
 					self.parent.changed.append(tc.Name)		
-			event.Skip()
+		event.Skip()
 		#return
 
 			
@@ -6368,6 +6406,7 @@ with open('default_sqlloader.yaml', 'w') as f:
 			os.makedirs(dir)
 			shutil.copyfile(profile_loc,session_loc)
 		return session_loc
+		
 	def loadProfile(self, profile_loc):		
 		with open(profile_loc, 'r') as f:
 			return yaml.load(f)
@@ -6396,7 +6435,31 @@ with open('default_sqlloader.yaml', 'w') as f:
 		if not os.path.isdir(dir):
 			os.makedirs(dir)
 		with open(profile_loc, 'w') as f:
-			yaml.dump(profile, f, default_flow_style=False)					
+			yaml.dump(profile, f, default_flow_style=False)		
+	def CreateNewSessionHostMap(self, hostmap_loc):
+		#hostmap_loc=obj.GetValue()
+		#print 'existing hostmap: %s' % hostmap_loc
+		hostmap_name=os.path.basename(hostmap_loc)
+		session_dir=self.getSessionDir()
+		session_hostmap_loc=os.path.join(session_dir,hostmap_name)
+		#print session_hostmap_loc
+		if os.path.isfile(session_hostmap_loc):
+			#print 'session host map already exists'
+			pass
+		else:
+			os.chdir(home)
+			real_hostmap_loc=os.path.realpath(hostmap_loc)
+			assert os.path.isfile(real_hostmap_loc), 'host_map template does not exists at\n%s' % real_hostmap_loc
+			shutil.copyfile(real_hostmap_loc,session_hostmap_loc)
+			#obj.SetValue(session_hostmap_loc)
+			#self.Save()
+			#print 'created new session_hostmap at \n%s' % session_hostmap_loc
+			send('set_hostmap', (session_hostmap_loc))
+		#return session_hostmap_loc	
+	def getSessionDir(self):
+		session_dir=os.path.join(self.parent.save_to_dir,self.parent.getSessionName())
+		return session_dir
+		
 	def onKeyPress(self, event):
 		
 		tc = event.GetEventObject()
@@ -6420,7 +6483,7 @@ with open('default_sqlloader.yaml', 'w') as f:
 				if not self.changed:
 					self.changed=True
 					send('value_changed',())
-			event.Skip()		
+		event.Skip()		
 	def initPanel(self):
 		length=168
 		self.fgs = wx.GridBagSizer(2, 10) 
@@ -6489,7 +6552,7 @@ with open('default_sqlloader.yaml', 'w') as f:
 			i=0		
 			#print 'profile:',self.profile_loc
 			for k,v in self.profile.items():
-				print k
+				#print k
 				self.param[k]= [wx.StaticText(self, label=k), wx.TextCtrl(self,value=v, size=(length,22))]
 				self.fgs.Add(self.param[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				self.fgs.Add(self.param[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
@@ -6566,27 +6629,27 @@ class pnl_editor(wx.Panel):
 			if not self.etl_file_loc.has_key(k):
 				if os.path.isfile(self.default_etl_file_loc[k]):
 					self.etl_loc[k] = self.default_etl_file_loc[k]
-					print 'default etl file'
+					#print 'default etl file'
 			else:
 				
 				if self.etl_file_loc[k].startswith('.'):
-					print self.etl_file_loc[k]
+					#print self.etl_file_loc[k]
 					os.chdir(home)
 					tmpl_loc=os.path.realpath(self.etl_file_loc[k])
 					assert os.path.isfile(tmpl_loc), 'JOB-PRE-ETL template is missing\n%s' % tmpl_loc
 					self.etl_loc[k]= tmpl_loc
-					print 'template etl file'
+					#print 'template etl file'
 					#e(0)
 				else:
 					if not os.path.isfile(self.etl_file_loc[k]):
 						self.etl_loc[k] = self.default_etl_file_loc[k]
-						print 'test etl file, session file missing'
+						#print 'test etl file, session file missing'
 				#self.etl_loc[k]= os.path.join(home,self.etl_file_loc[k])
 				#print self.etl_loc[k]
-				print 'test etl file'
+				#print 'test etl file'
 
 	def initEtlEditor(self):	
-		print 'initEtlEditor'
+		#print 'initEtlEditor'
 		#pprint(self.etl_loc)
 		for k in self.etl_name:
 			session_loc=self.getSessionEtlFileLoc(k)
@@ -6610,7 +6673,7 @@ class pnl_editor(wx.Panel):
 	def CreateNewSessionEtlFile(self, etl_loc,k ): 
 		session_loc=self.getSessionEtlFileLoc(k)
 		if os.path.isfile(session_loc):
-			print 'session file exists'
+			#print 'session file exists'
 			pass
 		else:			
 			#print profile_loc
@@ -6626,7 +6689,7 @@ class pnl_editor(wx.Panel):
 				return f.read()
 		else:
 			print 'etl file does not exists'
-			print etl_loc
+			#print etl_loc
 
 	def Save(self):
 		out={}
@@ -6646,7 +6709,7 @@ class pnl_editor(wx.Panel):
 		tc = event.GetEventObject()
 		kc = event.GetKeyCode()
 		#print str(self.__class__) ,kc
-		print kc
+		#print kc
 		controlDown = event.CmdDown()
 		if controlDown:			
 			if kc == 1:
@@ -6667,7 +6730,7 @@ class pnl_editor(wx.Panel):
 					#send('value_changed',())
 		event.Skip()		
 	def initPanel(self):
-		print '-----------------initPanel'
+		#print '-----------------initPanel'
 		length=168
 		if not hasattr(self,'editor'):
 			self.editor = PythonEditor(self)
@@ -6690,7 +6753,7 @@ class pnl_editor(wx.Panel):
 		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)			
 	def setEditor(self,etl_name):		
 		#e(0)
-		print 'setEditor', etl_name, self.etl_loc
+		#print 'setEditor', etl_name, self.etl_loc
 		if not self.etl_loc:
 			self.Prepare()
 		else:
@@ -6749,24 +6812,24 @@ class etl_file(object):
 			if not self.etl_file_loc.has_key(k):
 				if os.path.isfile(self.default_etl_file_loc[k]):
 					self.etl_loc[k] = self.default_etl_file_loc[k]
-					print 'default etl file'
+					#print 'default etl file'
 			else:
 				
 				if self.etl_file_loc[k].startswith('.'):
-					print self.etl_file_loc[k]
+					#print self.etl_file_loc[k]
 					os.chdir(home)
 					tmpl_loc=os.path.realpath(self.etl_file_loc[k])
 					assert os.path.isfile(tmpl_loc), 'JOB-PRE-ETL template is missing\n%s' % tmpl_loc
 					self.etl_loc[k]= tmpl_loc
-					print 'template etl file'
+					#print 'template etl file'
 					#e(0)
 				else:
 					if not os.path.isfile(self.etl_file_loc[k]):
 						self.etl_loc[k] = self.default_etl_file_loc[k]
-						print 'test etl file, session file missing'
+						#print 'test etl file, session file missing'
 				#self.etl_loc[k]= os.path.join(home,self.etl_file_loc[k])
 				#print self.etl_loc[k]
-				print 'test etl file'
+				#print 'test etl file'
 
 	def initEtlEditor(self):	
 		#print 'initEtlEditor'
@@ -6793,7 +6856,7 @@ class etl_file(object):
 	def CreateNewSessionEtlFile(self, etl_loc,k ): 
 		session_loc=self.getSessionEtlFileLoc(k)
 		if os.path.isfile(session_loc):
-			print 'session file exists'
+			#print 'session file exists'
 			pass
 		else:			
 			#print profile_loc
@@ -6809,7 +6872,7 @@ class etl_file(object):
 		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)			
 	def setEditor(self,etl_name):		
 		#e(0)
-		print 'setEditor', etl_name, self.etl_loc
+		#print 'setEditor', etl_name, self.etl_loc
 		if not self.etl_loc:
 			self.Prepare()
 		else:
@@ -7192,6 +7255,7 @@ class DataBuddy(wx.Frame):
 		sub(self.onEnableAll, "enable_all")
 		sub(self.onShowNbTab, "show_nb_tab")
 		sub(self.onSaveArgs, "save_args")
+		sub(self.onSetKeepDumpFile, "set_keep_data_file")
 		
 		#self.SetSizeHints(250,300,500,400)
 		if 1:
@@ -7213,7 +7277,20 @@ class DataBuddy(wx.Frame):
 		#self.Fit()
 		self.Show(True)
 		self.generic_size=None
+		self.ts=datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')
 		#print self.GetSize()
+	def onSetKeepDumpFile(self, data, extra1, extra2=None):
+		print 'onSetKeepDumpFile'
+		(val)=data	
+		#print val
+		if  val in ['1'] or val ==1 :
+			self.keep_dump.SetValue(True)
+			self.EnableShowDumpButton()
+		else:
+			self.keep_dump.SetValue(False)	
+			self.EnableShowDumpButton()
+		
+
 	def getActiveLibName(self):
 		return self.sm.getActiveLibName() 
 	def OnEditSQL(self, evt,params):
@@ -7338,10 +7415,11 @@ class DataBuddy(wx.Frame):
 		else:
 			self.args_panel.obj[name][1].SetValue('0')
 			self.btn_show_dump.Enable(False)
-		self.updateCommand()
+		#self.updateCommand()
 	def EnableShowDumpButton(self):
 		#print 'EnableShowDumpButton'
-		if self.keep_dump.GetValue():
+		
+		if self.args_panel.obj.has_key('default_spool_dir') and self.keep_dump.GetValue():
 			#check if dump file exists
 			self.dump_dir=self.getDumpDir()
 			self.dump_file=os.path.join(self.dump_dir,'shard_0.data')
@@ -7350,6 +7428,8 @@ class DataBuddy(wx.Frame):
 				self.btn_show_dump.Enable(True)
 			else:
 				self.btn_show_dump.Enable(False)
+		else:
+			self.btn_show_dump.Enable(False)
 			
 	def onShowDump(self, evt):
 		if self.keep_dump.GetValue():
@@ -7360,13 +7440,16 @@ class DataBuddy(wx.Frame):
 			self.ShowLocation(dump_file)
 	def getDumpDir(self):
 		dump_dir=self.args_panel.obj['default_spool_dir'][1].GetValue()
+		#dump_dir=r'C:\tmp'
 		job_name=self.args_panel.obj['job_name'][1].GetValue()
-		time_stamp=self.args_panel.obj['time_stamp'][1].GetValue()
+		time_stamp=self.ts 
+		if self.args_panel.obj.has_key('time_stamp'):
+			time_stamp=self.args_panel.obj['time_stamp'][1].GetValue()
 		return os.path.join(dump_dir, job_name,time_stamp)			
 	def OnChangeEmailYesNo(self,evt):
 		print 'OnChangeEmailYesNo'
 		cb = evt.GetEventObject()		
-		self.updateCommand()
+		#self.updateCommand()
 	def if_send_email(self):
 		return self.send_email.GetValue()
 	def restore_changed_args(self):
@@ -7403,7 +7486,7 @@ class DataBuddy(wx.Frame):
 	def onTabChanged(self, evt):
 		#print 'onTabChanged'
 		self.nb_tab= self.nb.GetSelection()
-		print self.nb_tab
+		#print self.nb_tab
 		if self.nb_tab:
 			self.btn_clearall.Enable(False)
 		else:
@@ -7539,7 +7622,7 @@ class DataBuddy(wx.Frame):
 				self.btn_save.Enable(True)
 				if not tc.Name in self.changed:
 					self.changed.append(tc.Name)		
-			event.Skip()
+		event.Skip()
 
 
 			
@@ -8142,7 +8225,7 @@ class DataBuddy(wx.Frame):
 				self.nb_tab=nb_tab
 				
 				self.nb.SetSelection(self.nb_tab)
-				self.updateCommand(self.nb_tab)
+				#self.updateCommand(self.nb_tab)
 			else:
 				self.args_panel.open_session(self.copy_vector,self.tmpl,self.the_id,(self.cargs,self.fargs,self.targs))
 				self.nb.EnableTab(0,True)
@@ -8150,7 +8233,7 @@ class DataBuddy(wx.Frame):
 				self.nb.EnableTab(2,True)
 				#self.nb.EnableTab(1,True)
 				self.enableLoaderTab() 
-				self.EnableShowDumpButton()
+				
 				self.sizer.Layout()
 				self.sizer.Fit(self.panel)
 				self.panel.Layout()

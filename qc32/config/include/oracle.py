@@ -16,6 +16,7 @@ import shutil
 import re
 import pprint as pp
 import errno
+from common.v101.exceptions import RowCountError
 
 	
 class code_release(object):
@@ -29,9 +30,8 @@ class code_release(object):
 		home=self.conf.home
 		self.log_dir=self.conf.datadir
 		ts= self.conf.ts
-		self.remote_home='/tmp/qctest'
-		remote_home=self.remote_home
-		self.remote_home_ts='%s/%s/%s' % (self.remote_home,ts,'Shard-%s' % shard)
+		
+
 		self.R=False #if remote exec
 		self.S=False #if source 
 		if self.parent.__class__.__name__ in ['source']:
@@ -44,9 +44,8 @@ class code_release(object):
 		#print self.out_dir
 		#e(0)
 		self.remote_login={}
-		self.result_file='%s/spool.data' % self.remote_home_ts
-		if hasattr(self.args, 'to_file') and self.args.to_file:
-			self.result_file	= self.args.to_file		
+		self.remote_user='default'
+
 		if hasattr(self.args, 'host_map') and self.args.host_map:
 			
 			host_map_loc= self.args.host_map
@@ -80,7 +79,14 @@ class code_release(object):
 			if not host[0] in ['nt']:
 				self.R=True
 				self.remote_login=host[1:]
-				
+				self.remote_user=self.remote_login[1]
+				self.remote_home='/tmp/qctest/%s' % self.remote_user
+				remote_home=self.remote_home
+				self.remote_home_ts='%s/%s/%s' % (self.remote_home,ts,'Shard-%s' % shard)
+				self.result_file='%s/spool.data' % self.remote_home_ts
+				if hasattr(self.args, 'to_file') and self.args.to_file:
+					self.result_file	= self.args.to_file		
+			
 			#print self.R
 			#e(0)
 
@@ -227,7 +233,7 @@ export NLS_TIMESTAMP_TZ_FORMAT
 dt=`date`
 START=$(date +%%s.%%N)
 log "Load started at $dt" 
-$ORACLE_HOME/bin/sqlldr control=%s userid=$1 DATA=%s LOG=%s BAD=%s DISCARD=%s BINDSIZE=200010 ERRORS=10 SKIP_UNUSABLE_INDEXES=TRUE COLUMNARRAYROWS=10000 DIRECT=TRUE STREAMSIZE=500000 READSIZE=200000 MULTITHREADING=TRUE SKIP_INDEX_MAINTENANCE=TRUE PARALLEL=TRUE
+$ORACLE_HOME/bin/sqlldr control=%s userid=$2 DATA=%s LOG=%s BAD=%s DISCARD=%s BINDSIZE=200010 ERRORS=10 SKIP_UNUSABLE_INDEXES=TRUE COLUMNARRAYROWS=10000 DIRECT=TRUE STREAMSIZE=500000 READSIZE=200000 MULTITHREADING=TRUE SKIP_INDEX_MAINTENANCE=TRUE PARALLEL=TRUE
 RC=`echo $?`
 END=$(date +%%s.%%N)
 DIFF=$(echo "$END - $START" | bc)
@@ -307,7 +313,7 @@ export TNS_ADMIN
 		for dirname, subdirs, files in os.walk(src):
 			for filename in files:
 				absname = os.path.abspath(os.path.join(dirname, filename))
-				arcname = '/%s/Shard-%s/' % (self.conf.ts,self.shard) + absname[len(abs_src) + 1:]
+				arcname = 'qctest/%s/%s/Shard-%s/' % (self.remote_user,self.conf.ts,self.shard) + absname[len(abs_src) + 1:]
 				#print 'zipping %s as %s' % (os.path.join(dirname, filename), arcname)
 				zf.write(absname, arcname)
 			#zf.write('/%s/Shard-%s' % (self.conf.ts,self.shard))
@@ -317,13 +323,15 @@ export TNS_ADMIN
 		for l in dict:
 			if l.startswith(start):
 				return  l.split('=')[1].strip('"')
+	def get_dist_name(self):
+		return '%s_%s_%s_dist' % (self.remote_user,self.conf.ts, self.shard)
 	def release(self):
 		path_from =os.path.join(self.log_dir,'out',self.conf.ts,'Shard-%s' % self.shard)
 		self.conf.datadir
-		fname_to='%s_%s_dist' % (self.conf.ts, self.shard)
+		fname_to=self.get_dist_name()
 		path_to=os.path.join(self.log_dir,fname_to)
 		#origin='%s.zip' % path_to
-		dst='%s/%s.zip' % (self.remote_home, fname_to)
+		dst='/tmp/%s.zip' % ( fname_to)
 		#print path_to
 		#print path_from
 		assert os.path.isdir(path_from), 'path_from does not exists.'
@@ -342,7 +350,7 @@ export TNS_ADMIN
 		#e(0)
 		ssh.put('%s.zip' % path_to, dst)	
 		#e(0)
-	def execute(self,db_login):
+	def execute(self,db_login_from, db_login_to):
 		"""execute remote command"""
 		ssh_log_loc=os.path.join(self.log_dir,'ssh.log')
 		paramiko.util.log_to_file(ssh_log_loc)
@@ -352,27 +360,31 @@ export TNS_ADMIN
 		client.connect(host, username=username, password=pw)
 
 		ts=self.conf.ts
-		fname_to='%s_%s_dist' % (ts,self.shard)
-		dst='%s/%s.zip' % (self.remote_home, fname_to)
+		fname_to=self.get_dist_name()
+		dst='/tmp/%s.zip' % ( fname_to)
 		
 		from_zip='%s/%s_%s_log.zip' % (self.remote_home_ts,ts,self.shard)
 		#format login for sqlldr
-		user_pwd,conn =db_login.split('@')
-		login= """%s@'"%s"'""" % (user_pwd, conn.strip("'").strip('"'))
+		user_pwd,conn =db_login_from.split('@')
+		login_from= """%s@'"%s"'""" % (user_pwd, conn.strip("'").strip('"'))
+		user_pwd,conn =db_login_to.split('@')
+		login_to= """%s@'"%s"'""" % (user_pwd, conn.strip("'").strip('"'))
+		
 		#print db_login
 		
 		cmd="""
+cd /tmp
+unzip -o %s >/dev/null
 cd %s
-unzip -o %s
 rm %s
 cd %s
 chmod +x ./run.sh
-./run.sh %s
+./run.sh %s %s
 cd %s
-zip %s  %s/log.txt %s/sqlloader -r	
+zip %s  %s/log.txt %s/sqlloader -r	>/dev/null
 echo "log at %s/log.txt"
 echo "spool at %s"
-		""" % ( self.remote_home,  dst,dst, self.remote_home_ts, login,self.remote_home_ts,from_zip,self.remote_home_ts,self.remote_home_ts,self.remote_home_ts, self.result_file)
+		""" % (  dst,  self.remote_home, dst, self.remote_home_ts, login_from, login_to,self.remote_home_ts,from_zip,self.remote_home_ts,self.remote_home_ts,self.remote_home_ts, self.result_file)
 
 		#print cmd
 		#e(0)
@@ -383,12 +395,12 @@ echo "spool at %s"
 		while line:
 			line= stdout.readline()
 			out.append(line)
-			#print line
+			print str(line)
 		#print '-'*60
 		line =' '
 		while line:
 			line= stderr.readline()
-			print line 
+			print str(line)
 		client.close()
 		to_log_zip=os.path.join(self.in_dir,'%s_%s_log.zip' % (ts,self.shard))
 		#import time
@@ -602,7 +614,7 @@ exit;
 			self.cr[shard].release()
 			#print self.cr.shard
 			#e(0)
-			self.cr[shard].execute(db_login=self.login)
+			self.cr[shard].execute(db_login_from=self.login, db_login_to=self.login)
 
 
 		#e(0)
@@ -856,13 +868,17 @@ class target(common):
 		ts= self.conf.ts
 		out_dir=os.path.join(log_dir,'out',ts)
 		self.cr[shard].release()
-		out=self.cr[shard].execute(db_login=self.login)
+		#print (self.args.from_db)
+		
+		out=self.cr[shard].execute(db_login_from=self.args.from_db, db_login_to=self.login)
 		
 		#out,status,err,ins_cnt =([],0,None,-1)
 		ins_cnt=-1
 		spool_size=-1
 		spool_status, load_status = (99,99)
-		regexp1=re.compile(r'(\d+) Rows successfully loaded')
+		#regexp1=re.compile(r'(\d+) Rows successfully loaded')
+		regexp1=re.compile(r'Load completed - logical record count (\d+)')
+		
 		regexp2=re.compile(r'Spool file size (\d+)b')
 		regexp3=re.compile(r'Spool retcode = (\d+)')
 		regexp4=re.compile(r'Load retcode = (\d+)')
