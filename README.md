@@ -37,6 +37,7 @@ TimesTen|  | yes
 Format | GUI | Command line
 ---------|---- | -------------
 CSV   | yes | yes
+DDL   | yes | yes
 
 
 
