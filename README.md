@@ -81,7 +81,7 @@ TimesTen|  | yes  | yes
 ##Implementation
 
 - Wriiten using Python (command line) and wxPython (GUI).
-- Ciled with PyInstaller
+- Compiled with PyInstaller
  
 ##Execution
 
