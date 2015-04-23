@@ -155,6 +155,8 @@ TimesTen|  | yes  | yes
 - add Informix
 - add Sybase
 - add DB2
+- add dBase
+- add Access DB
 - add MariaDB
 - add Infobright
 - add TimesTen
@@ -188,7 +190,6 @@ TimesTen|  | yes  | yes
 - add Couchbase
 - add Aerospike
 - add InterSystems
-- add MDX (file format)
 - add QV (QlikView file format)
 
 
