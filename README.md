@@ -147,7 +147,7 @@ TimesTen|  | yes  | yes
 - make all paths relative to transport_home
 - create wizard for "New Session" template selection
 - distinguish A-Templates from B-Templates
-- let data copy execute on Linux **DONE**
+- let data copy to be executed on Linux **DONE**
 - add SQLServer
 - add MySQL
 - add PostgreSQL
