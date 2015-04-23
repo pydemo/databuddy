@@ -131,7 +131,6 @@ TimesTen|  | yes  | yes
 - fix flicker on frame freeze **DONE**
 - save on close **DONE**
 - Table DDL export for Oracle **DONE**
-- add SQLServer
 - validate all path arguments before run
 - add create template menu **DONE**
 - add "--host_map" arg to set hosts for each thread **DONE**
@@ -148,6 +147,7 @@ TimesTen|  | yes  | yes
 - make all paths relative to transport_home
 - create wizard for "New Session" template selection
 - distinguish A-Templates from B-Templates
+- add SQLServer
 - add MySQL
 - add PostgreSQL
 - add SQLite
