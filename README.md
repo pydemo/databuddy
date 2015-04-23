@@ -41,7 +41,7 @@ CSV   | yes | yes
 
 
 
-##Components
+##Conents
 - Fron end - data-buddy GUI (wxPython, PyInstaller).
 - Back end -[QueryCopy](https://github.com/QueryCopy/QueryCopy-for-Oracle/releases/tag/v1.23.9) (Python, PyInstaller).
   
@@ -72,7 +72,7 @@ CSV   | yes | yes
 ##Implementation
 
 - Wriiten using Python (command line) and wxPython (GUI).
-- Compiled with PyInstaller
+- Ciled with PyInstaller
  
 ##Execution
 
@@ -80,7 +80,7 @@ CSV   | yes | yes
 * data-buddy.exe
 
 #Templates v.s. free argument entry
-##Pros
+##Prosc
 -it's tested
 ##Cons
 -user has to create new session if new argument has to be added/removed
@@ -124,10 +124,26 @@ CSV   | yes | yes
 - Table DDL export for Oracle **DONE**
 - add SQLServer
 - validate all path arguments before run
-- add create template menu
+- add create template menu **DONE**
 - add "--host_map" arg to set hosts for each thread **DONE**
-- let user change host mapping
+- let user change host mapping **DONE**
 - test ezconnect
+- add "Output" tab
+- add '--compress_spool' arg to zip output
+- add MySQL
+- add PostgreSQL
+- add SQLite
+- add Informix
+- add Sybase
+- add DB2
+- add MariaDB
+- add Infobright
+- add TimesTen
+- add Taleo HR
+- add MongoDB
+- add Hadoop
+
+
 
 #Does it work?
 yes, with some quirks and only for Oracle. 
