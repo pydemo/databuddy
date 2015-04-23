@@ -188,7 +188,8 @@ TimesTen|  | yes  | yes
 - add Couchbase
 - add Aerospike
 - add InterSystems
-
+- add MDX (file format)
+- add QV (QlikView file format)
 
 
 
