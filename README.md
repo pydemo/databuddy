@@ -90,7 +90,7 @@ TimesTen|  | yes  | yes
 
 #Templates v.s. free argument entry
 ##Pros
--it's tested
+-all templates are tested with presets
 ##Cons
 -user has to create new session if new argument has to be added/removed
 
