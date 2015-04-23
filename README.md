@@ -51,7 +51,7 @@ TimesTen|  | yes  | yes
 
 
 ##Conents
-- Fron end - data-buddy GUI (wxPython, PyInstaller).
+- Front end - data-buddy GUI (wxPython, PyInstaller).
 - Back end -[QueryCopy](https://github.com/QueryCopy/QueryCopy-for-Oracle/releases/tag/v1.23.9) (Python, PyInstaller).
   
 ##Features:
@@ -89,7 +89,7 @@ TimesTen|  | yes  | yes
 * data-buddy.exe
 
 #Templates v.s. free argument entry
-##Prosc
+##Pros
 -it's tested
 ##Cons
 -user has to create new session if new argument has to be added/removed
