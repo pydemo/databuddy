@@ -16,6 +16,10 @@ __status__ = "Development"
 import sys,platform; 
 __platform__='32' #platform.architecture()[0]
 
+if __platform__ in ['32']:
+	from qc32.include.v101.host_map import host_map as hmap
+else:
+	from qc64.include.v101.host_map import host_map as hmap
 
 import wx.lib.inspection
 import wx.lib.mixins.inspection
@@ -34,6 +38,7 @@ import common_utils as cu
 import images
 import os, sys, time 
 from pprint import pprint
+import pprint as pp
 import webbrowser
 import wx.html 
 #from tc_lib import sub, send
@@ -90,7 +95,7 @@ except ImportError: # if it's not there locally, try the wxPython lib.
 
 from qc32.config.include.oracle import target	
 ########################################################################
-exe=True
+exe=False
 
 e=sys.exit
 blog=cu.blog
@@ -5059,6 +5064,7 @@ class pnl_args(wx.Panel):
 		sub(self.onSetLoaderProfile, "set_loader_profile")
 		sub(self.onSetHostMap, "set_hostmap")
 		sub(self.onSetEtlEditorProfile, "set_etl_editor_profile")
+		self.hm=None
 	def onSetHostMap(self, data, extra1, extra2=None):
 		(hostmap_loc)=data
 		k='host_map'
@@ -5861,9 +5867,12 @@ class pnl_args(wx.Panel):
 		k='host_map'
 		if self.obj.has_key(k):
 			hostmap_loc = self.obj[k][1].GetValue()
-			self.parent.loader_panel.CreateNewSessionHostMap(hostmap_loc)
+			host_map_loc=self.parent.loader_panel.CreateNewSessionHostMap(hostmap_loc)
 			#self.obj[k][1].SetValue(new)
 			#e(0)
+			
+			self.hm = hmap(conf,host_map_loc)
+			self.parent._hmMenu=None
 		else:
 			print 'no host_map'
 		k='keep_data_file'
@@ -5944,6 +5953,8 @@ class pnl_args(wx.Panel):
 		#self.Fit()	
 		self._sMenu = None #source popup menu
 		self._tMenu = None #target popup menu
+		self.T=False
+		self.Q=False
 		
 	def OnEditTestConnectSQL(self, evt):
 		print 'OnEditTestConnectSQL'
@@ -6107,22 +6118,48 @@ class pnl_args(wx.Panel):
 			
 			#dbf={'OR':'Oracle', 'SS':'SQLServer', 'MA':'MariaDB', 'MY': 'MySQL', 'PG':'PostgreSQL', 'DB':'DB2', 'TT':'TimesTen', 'SL':'SQLite', 'IN':'Informix', 'SY':'Sybase'}
 			tname=''
+			qfile=''
+			query=''			
 			if self.obj.has_key('from_table'):
 				tname=self.obj['from_table'][1].GetValue()
+				self.T=True
+			if self.obj.has_key('query_sql_file'):
+				qfile=self.obj['query_sql_file'][1].GetValue()				
+				
+				if not os.path.isfile(qfile):
+					qfile=''
+					self.Q=False
+				else:
+					query=open(qfile,'r').read().strip().strip(';')
+					self.Q=True
+				
 			mitems={0:'Open SQL*Plus'}
 			if tname:
 				mitems={0:'Open SQL*Plus', 1: 'count(*)', 2:'DESCRIBE %s' % tname}
+			if query:
+				mitems={0:'Open SQL*Plus', 1: 'count(*)'}
 
 			self.i=0
-			#print '-'*20, self.recent
-			for k,v in mitems.items():
-				self.i +=1
-				self.recentMenu = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(self._sMenu, 20000+self.i, v, '', wx.ITEM_NORMAL)
-				self._sMenu.AppendItem(menuItem)
-				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnSqpMenu,(True,k,tname))
-				if k==0 and tname:
-					self._sMenu.AppendSeparator()	
+			if self.T:
+				for k,v in mitems.items():
+					self.i +=1
+					self.recentMenu = FM.FlatMenu()
+					menuItem = FM.FlatMenuItem(self._sMenu, 20000+self.i, v, '', wx.ITEM_NORMAL)
+					self._sMenu.AppendItem(menuItem)
+					self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnSqpMenu,(True,k,tname))
+					if k==0 and tname:
+						self._sMenu.AppendSeparator()
+			if self.Q:
+				for k,v in mitems.items():
+					self.i +=1
+					self.recentMenu = FM.FlatMenu()
+					menuItem = FM.FlatMenuItem(self._sMenu, 20000+self.i, v, '', wx.ITEM_NORMAL)
+					self._sMenu.AppendItem(menuItem)
+					
+					self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnSqpMenu,(True,k, query))
+					if k==0 and tname:
+						self._sMenu.AppendSeparator()
+						
 	def CreatePopupMenuT(self):
 
 		if not self._tMenu:
@@ -6136,21 +6173,26 @@ class pnl_args(wx.Panel):
 			
 			#dbf={'OR':'Oracle', 'SS':'SQLServer', 'MA':'MariaDB', 'MY': 'MySQL', 'PG':'PostgreSQL', 'DB':'DB2', 'TT':'TimesTen', 'SL':'SQLite', 'IN':'Informix', 'SY':'Sybase'}
 			tname=''
+
 			if self.obj.has_key('to_table'):
 				tname=self.obj['to_table'][1].GetValue()
+			self.T=True
 			mitems={0:'Open SQL*Plus'}
 			if tname:
 				mitems={0:'Open SQL*Plus', 1: 'count(*)', 2:'DESCRIBE %s' % tname}
 			self.i=0
 			#print '-'*20, self.recent
-			for k,v in mitems.items():
-				self.i +=1
-				self.recentMenu = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(self._tMenu, 20000+self.i, v, '', wx.ITEM_NORMAL)
-				self._tMenu.AppendItem(menuItem)
-				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnSqpMenu,(False,k, tname))
-				if k==0 and tname:
-					self._tMenu.AppendSeparator()	
+			if self.T:
+				for k,v in mitems.items():
+					self.i +=1
+					self.recentMenu = FM.FlatMenu()
+					menuItem = FM.FlatMenuItem(self._tMenu, 20000+self.i, v, '', wx.ITEM_NORMAL)
+					self._tMenu.AppendItem(menuItem)
+					self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnSqpMenu,(False,k, tname))
+					if k==0 and tname:
+						self._tMenu.AppendSeparator()
+
+			
 				
 					
 	def OnSqpMenu(self, event,params):	
@@ -6202,13 +6244,13 @@ class pnl_args(wx.Panel):
 		dl,dw= self.GetSize()
 		window1.SetWindowPos(0, (x/2,y/2,dl,dw),0)	
 		return window1
-	def OpenCountStar(self, source, tname):
+	def OpenCountStar(self, source, q):
 		window1=self.OpenSqlPlus( source)
-		q='SELECT COUNT(*) FROM %s;' % tname
+		q='SELECT COUNT(*) FROM (%s);\n' % q
 		self.send_str( window1, q)
-	def OpenDescribe(self, source, tname):
+	def OpenDescribe(self, source, q):
 		window1=self.OpenSqlPlus( source)
-		q='DESCRIBE %s;' % tname
+		q='DESCRIBE %s;\n' % q
 		self.send_str( window1, q)		
 		
 	def send_str(self, window, q):		
@@ -6981,7 +7023,7 @@ with open('default_sqlloader.yaml', 'w') as f:
 			#self.Save()
 			#print 'created new session_hostmap at \n%s' % session_hostmap_loc
 			send('set_hostmap', (session_hostmap_loc))
-		#return session_hostmap_loc	
+		return session_hostmap_loc	
 	def getSessionDir(self):
 		session_dir=os.path.join(self.parent.save_to_dir,self.parent.getSessionName())
 		return session_dir
@@ -7422,7 +7464,7 @@ class DataBuddy(wx.Frame):
 		global app_title, home
 		wx.Frame.__init__(self, None, wx.ID_ANY, title=app_title, size=size)
 		self._vectMenu=None
-		self._popUpMenu = None
+		#self._popUpMenu = None
 		#self.splitter = wx.SplitterWindow(self, ID_SPLITTER, style=wx.SP_BORDER)
 		#self.splitter = MultiSplitterWindow(self, style=wx.SP_LIVE_UPDATE)
 		#s=self.splitter
@@ -7688,24 +7730,40 @@ class DataBuddy(wx.Frame):
 		self.btn_show.Bind(wx.EVT_BUTTON, self.OnButtonShowInFolder)
 		self.sizer.Add(self.btn_show, pos=(9, 1),flag=wx.TOP|wx.BOTTOM|wx.LEFT|wx.RIGHT, border=5)
 		self.btn_show.Enable(False)
-
-		self.btn_run = wx.Button(panel, label='Run', size=(110,30))
-		#self.btn_run = wx.ToggleButton(panel, -1, label='Run', size=(110,30))
-		self.c_ok='#00FF7F'
-		self.c_failed='#FF0000'
-		self.c_default=(240, 240, 240, 255)
-		self.btn_run.SetName('run')
-		#print self.btn_run.GetBackgroundColour()
-		#(240, 240, 240, 255)
-		self.btn_run.SetBackgroundColour(self.c_default) 
-		self.btn_run.Bind(wx.EVT_BUTTON, self.OnButtonRun)
-		self.sizer.Add(self.btn_run, pos=(9, 3),flag=wx.TOP|wx.BOTTOM|wx.LEFT|wx.RIGHT, border=5)
-		self.btn_run.Enable(False)
 		
+		if 1:
+			hm_sizer =  wx.BoxSizer(wx.HORIZONTAL)
+			self.btn_run = wx.Button(panel, label='Run', size=(110,30))
+			#self.btn_run = wx.ToggleButton(panel, -1, label='Run', size=(110,30))
+			self.c_ok='#00FF7F'
+			self.c_failed='#FF0000'
+			self.c_default=(240, 240, 240, 255)
+			self.btn_run.SetName('run')
+			#print self.btn_run.GetBackgroundColour()
+			#(240, 240, 240, 255)
+			self.btn_run.SetBackgroundColour(self.c_default) 
+			self.btn_run.Bind(wx.EVT_BUTTON, self.OnButtonRun)			
+			hm_sizer.Add(self.btn_run,0,wx.EXPAND|wx.TOP|wx.BOTTOM|wx.LEFT|wx.RIGHT, border=0)
+			self.btn_run.Enable(False)			
+			if 1:
+				#btn_sqp=wx.Button(panel, label=lbl, style=wx.BU_EXACTFIT)	
+				imageFile = os.path.join(home,"images/arrow_down_24.png")
+				image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+				host_map = wx.BitmapButton(panel, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6))
+				
+				#tc[sn]['source'][0]
+				host_map.SetName('host_map')
+				host_map.Bind(wx.EVT_BUTTON, self.OnOpenHostMapMenu)
+				#tcbox.Add(btn_sqp, flag=wx.LEFT|wx.TOP, border=5)
+				hm_sizer.Add(host_map,0,wx.TOP, border=0)
+			#self.host_map = wx.Button(panel, label=' ', size=(30,30))
+			#self.host_map.Enable(False)
+			#hm_sizer.Add(self.host_map,0,wx.EXPAND|wx.TOP|wx.BOTTOM|wx.LEFT|wx.RIGHT, border=0)
+			self.sizer.Add(hm_sizer, pos=(9, 3), span=(1, 1), flag=wx.TOP|wx.BOTTOM|wx.LEFT|wx.RIGHT, border=5)
 		button5 = wx.Button(panel, ID_EXIT, label="Cancel",size=(60,30))
 		#self.Bind(wx.EVT_BUTTON, self.onAboutHtmlDlg, aboutBtn)
 		self.sizer.Add(button5, pos=(9, 4), span=(1, 1), flag=wx.TOP|wx.BOTTOM|wx.LEFT|wx.RIGHT, border=5)
-
+		
 		#sizer.AddGrowableCol(2)
 		self.sizer.AddGrowableRow(7)
 				
@@ -7805,6 +7863,71 @@ class DataBuddy(wx.Frame):
 		self.generic_size=None
 		self.ts=datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')
 		#print self.GetSize()
+		self._hmMenu=None
+	def OnOpenHostMapMenu(self, event):
+		# Demonstrate using the wxFlatMenu without a menu bar
+		btn = event.GetEventObject()
+		#print 
+		if 1:
+			# Create the popup menu
+			self.CreatePopupMenu()
+			btnSize = btn.GetSize()
+			
+			btnPt = btn.GetPosition()
+			#print '1 btnPt.x, btnPt.y', btnPt.x, btnPt.y
+			btnPt = btn.GetParent().ClientToScreen(btnPt)
+			#print '2 btnPt.x, btnPt.y', btnPt.x, btnPt.y
+			#print 'btnSize.y', btnSize.y
+			self._hmMenu.SetOwnerHeight(btnSize.y)
+			#print 'btnPt.x, btnPt.y', btnPt.x, btnPt.y
+			self._hmMenu.Popup(wx.Point(btnPt.x, btnPt.y+50), self)
+			mpsn=self._hmMenu.GetScreenPosition()
+			#print 'mpsn', mpsn
+			#adjust
+			if btnPt.y<mpsn[1]:
+				self._hmMenu.Popup(wx.Point(btnPt.x, btnPt.y), self)
+			#print self._hmMenu.ClientToScreen(mpsn)
+			#print	dir(self._hmMenu)
+
+		
+	def CreatePopupMenu(self):
+		#global conf
+		if not self._hmMenu:
+		
+			self._hmMenu = FM.FlatMenu()
+			#mitems={0:'Open SQL*Plus', 1: 'count(*)', 2:'DESCRIBE'}
+			hm=self.args_panel.hm
+			(hmap, active_map) =hm.get_host_map()
+			print active_map
+			self.i=0
+			
+			for v in hmap.keys():
+				self.i +=1
+				self.recentMenu = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(self._hmMenu, 20000+self.i, v, '', wx.ITEM_RADIO)
+				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnHostMapMenu,(v,hm))
+				self._hmMenu.AppendItem(menuItem)
+				if v==active_map:
+					menuItem.Check(True)				
+			if 1:
+				self.i +=1
+				self._hmMenu.AppendSeparator()
+				menuItem = FM.FlatMenuItem(self._hmMenu, 20000+self.i, 'Edit host_map.py', '', wx.ITEM_NORMAL)
+				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnEditHostMap,(hm.host_map_loc))
+				self._hmMenu.AppendItem(menuItem)
+			
+	def OnEditHostMap(self, event,params):				
+		(host_map_loc)=params	
+		if not os.path.isfile(host_map_loc):
+			self.parent.Warn('Host map\n%s\ndoes not exests.' % host_map_loc)
+		else:
+			webbrowser.open(host_map_loc)
+					
+	def OnHostMapMenu(self, event,params):				
+		(v,hm)=params	
+		print v
+		self.args_panel.hm.set_active_mapping(v)
+		
 	def onSetKeepDumpFile(self, data, extra1, extra2=None):
 		print 'onSetKeepDumpFile'
 		(val)=data	
