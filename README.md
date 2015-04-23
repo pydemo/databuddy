@@ -127,9 +127,16 @@ CSV   | yes | yes
 - add create template menu **DONE**
 - add "--host_map" arg to set hosts for each thread **DONE**
 - let user change host mapping **DONE**
+- save as template **DONE**
+- save as **DONE**
 - test ezconnect
 - add "Output" tab
-- add '--compress_spool' arg to zip output
+- add '--compress_spool' arg for zipped output
+- add sqlloader.py
+- fix session sort
+- fix favorites
+- fix session refresh
+- make all paths relative to transport_home
 - add MySQL
 - add PostgreSQL
 - add SQLite
