@@ -137,6 +137,8 @@ CSV   | yes | yes
 - fix favorites
 - fix session refresh
 - make all paths relative to transport_home
+- create wizard for "New Session" template selection
+- distinguish A-Templates from B-Templates
 - add MySQL
 - add PostgreSQL
 - add SQLite
