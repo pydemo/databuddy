@@ -34,10 +34,10 @@ TimesTen|  | yes
 
 ##File formats
 
-Format | GUI | Command line
----------|---- | -------------
-CSV   | yes | yes
-DDL   | yes | yes
+Format | GUI | Command line | Databases
+---------|---- | ------------- | ---------
+CSV   | yes | yes | All
+DDL   | yes | yes | Oracle
 
 
 
