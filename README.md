@@ -181,8 +181,7 @@ TimesTen|  | yes  | yes
 - add Clustrix
 - add Orient
 - add Scribe
-- add 3PAP
-- add KDB
+- add KDB+
 - add Arango DB
 - add Foundation DB
 - add Enterprise DB
