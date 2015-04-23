@@ -158,9 +158,37 @@ TimesTen|  | yes  | yes
 - add MariaDB
 - add Infobright
 - add TimesTen
-- add Taleo HR
 - add MongoDB
 - add Hadoop
+- add Terradata
+- add Redshift
+- add Apache Hive
+- add Vertica
+- add Netezza
+- add Parstream
+- add ParAccel
+- add Twitter (extract)
+- add GA
+- add Facebook (extract)
+- add Taleo HR (extract) 
+- add Salesforce
+- add Greenplum
+- add Actian
+- add McObject
+- add NuiDB
+- add Clustrix
+- add Orient
+- add Scribe
+- add 3PAP
+- add KDB
+- add Arango DB
+- add Foundation DB
+- add Enterprise DB
+- add Altibase HDB
+- add Couchbase
+- add Aerospike
+- add InterSystems
+- 
 
 
 
