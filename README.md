@@ -50,7 +50,7 @@ TimesTen|  | yes  | yes
 
 
 
-##Conents
+##Contents
 - Front end - data-buddy GUI (wxPython, PyInstaller).
 - Back end -[QueryCopy](https://github.com/QueryCopy/QueryCopy-for-Oracle/releases/tag/v1.23.9) (Python, PyInstaller).
   
