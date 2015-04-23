@@ -34,10 +34,18 @@ TimesTen|  | yes
 
 ##File formats
 
-Format | GUI | Command line | Databases
----------|---- | ------------- | ---------
-CSV   | yes | yes | All
-DDL   | yes | yes | Oracle
+Database | DDL | CSV
+---------|---- | -------------
+DB2      |  | yes
+Informix |  | yes
+MariaDB    |  | yes
+MySQL    |  | yes
+**Oracle**   | yes | yes
+PostgreSQL|  | yes
+SQLite|  | yes
+SQLServer|   | yes
+Sybase   |  | yes
+TimesTen|  | yes
 
 
 
