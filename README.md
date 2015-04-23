@@ -34,18 +34,18 @@ TimesTen|  | yes
 
 ##File formats
 
-Database | DDL | CSV
----------|---- | -------------
-DB2      |  | yes
-Informix |  | yes
-MariaDB    |  | yes
-MySQL    |  | yes
-**Oracle**   | yes | yes
-PostgreSQL|  | yes
-SQLite|  | yes
-SQLServer|   | yes
-Sybase   |  | yes
-TimesTen|  | yes
+Database | Table DDL extract | CSV extract | CSV load
+---------|---- | ------------- | -------
+DB2      |  | yes  | yes
+Informix |  | yes  | yes
+MariaDB    |  | yes  | yes
+MySQL    |  | yes  | yes
+**Oracle**   | yes | yes  | yes
+PostgreSQL|  | yes  | yes
+SQLite|  | yes  | yes
+SQLServer|   | yes  | yes
+Sybase   |  | yes  | yes
+TimesTen|  | yes  | yes
 
 
 
