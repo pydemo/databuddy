@@ -80,7 +80,7 @@ TimesTen|  | yes  | yes
 
 ##Implementation
 
-- Wriiten using Python (command line) and wxPython (GUI).
+- Written using Python (command line) and wxPython (GUI).
 - Compiled with PyInstaller
  
 ##Execution
