@@ -90,12 +90,12 @@ TimesTen|  | yes  | yes
 
 #Templates v.s. free argument entry
 ##Pros
--all templates are tested with presets
+- all templates are tested with presets
 ##Cons
--user has to create new session if new argument has to be added/removed
+- user has to create new session if new argument has to be added/removed
 
 #SQL*Loader config
--Change SQL*Loader arguments and control file in ```qc32\config\include\oracle.py```
+- Change SQL*Loader arguments and control file in ```qc32\config\include\oracle.py```
 
 #Exec host config
 - Change host where physical copy is done in host_map.py ```qc32\include\v101\host_map.py```
@@ -202,7 +202,7 @@ TimesTen|  | yes  | yes
 
 
 #Does it work?
-yes, with some quirks and only for Oracle. 
+- yes, with some quirks and only for Oracle. 
 
 ##References
 * [QueryCopy for Oracle](https://github.com/QueryCopy/QueryCopy-for-Oracle) -- `qc32\qc32.exe`
