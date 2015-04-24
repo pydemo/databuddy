@@ -144,6 +144,7 @@ TimesTen|  | yes  | yes
 - fix session sort
 - fix favorites
 - fix session refresh
+- add sftp as file format
 - make all paths relative to transport_home
 - create wizard for "New Session" template selection
 - distinguish A-Templates from B-Templates
