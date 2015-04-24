@@ -97,6 +97,9 @@ TimesTen|  | yes  | yes
 #SQL*Loader config
 -Change SQL*Loader arguments and control file in ```qc32\config\include\oracle.py```
 
+#Exec host config
+- Change host where physical copy is done in host_map.py ```qc32\include\v101\host_map.py```
+
 #TODO
 - argument values reuse from existing session. **DONE**
 - clean uargs.db. **DONE**
