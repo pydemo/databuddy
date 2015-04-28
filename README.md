@@ -168,6 +168,7 @@ TimesTen|  | yes  | yes
 - add TimesTen
 - add MongoDB
 - add Hadoop
+- add Hive
 - add Terradata
 - add Redshift
 - add Apache Hive
