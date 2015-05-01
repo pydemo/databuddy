@@ -66,6 +66,8 @@ import shutil
 import wx.combo
 
 import yaml
+import re
+import wx.lib.scrolledpanel
 
 
 import shlex 
@@ -100,6 +102,11 @@ exe=False
 e=sys.exit
 blog=cu.blog
 home=os.path.dirname(os.path.abspath(__file__))
+tmpl_home=os.path.join(home,'templates')
+userhome = os.path.expanduser('~')
+session_home=os.path.join(userhome,'sessions')	
+default_tmpl_lib='My_Templates'	
+default_sess_lib='My_Sessions'	
 transport_home=r'C:\Python27\data_migrator_1239_ddl'
 if exe:
 	transport_home=os.path.join(home,'qc%d' % int(__platform__[:2]))
@@ -838,7 +845,7 @@ class SessionList(wx.ListCtrl):
 		self.pos=pos
 		#slib_path, slib_name
 		self.save_to_dir=slib_path #self.getLibPath(slib_name)
-		#print self.save_to_dir
+		print self.save_to_dir
 		assert os.path.isdir(self.save_to_dir), 'Library does not exists.'
 		#	os.makedirs(self.save_to_dir)
 		#self.db= OracleDb(self,pos)
@@ -1683,7 +1690,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		#print 'self.frame.changed', self.frame.changed
 		
 		if not self.frame.session_name==session[0]:
-			if self.frame.changed or self.frame.loader_panel.changed: #or self.frame.editor_panel.Changed():
+			if self.frame.changed: # or self.frame.output_panel.changed: #or self.frame.editor_panel.Changed():
 				if self.frame.if_yes('Save changes to %s?' % (self.frame.session_name)):
 					#,fname)=self.frame.saveSession() 
 					send('save_args',())
@@ -3202,12 +3209,14 @@ class SessionListCtrlPanelManager(wx.Panel):
 		#userhome = os.path.expanduser('~')
 		#sess_dir=os.path.join(userhome,'sessions')		
 		default_slib_name='My_Sessions'
+		self.slib_name=default_slib_name
 		self.home_dir=sess_dir
 		default_slib=os.path.join(self.home_dir,default_slib_name)
 		self.lists={}
+		self.slps={}
 		if os.path.isdir(default_slib):
 			slp=SessionListCtrlPanel(self,frame, pos,self.panel_pos, slib_path=default_slib)
-			self.slp=slp
+			self.slps[default_slib_name]=slp
 			self.list=slp.list
 			self.nb.AddPage(slp,'')
 			self.nb.SetPageText(0, default_slib_name)
@@ -3220,7 +3229,7 @@ class SessionListCtrlPanelManager(wx.Panel):
 		for i in range(len(dirs)):
 			d=dirs[i]
 			slp=SessionListCtrlPanel(self,frame, pos,self.panel_pos, slib_path=os.path.join(self.home_dir,d))
-			self.slp=slp
+			self.slps[d]=slp
 			self.lists[d]=slp.list
 			self.list=slp.list
 			self.nb.AddPage(slp,'')
@@ -3288,16 +3297,17 @@ class SessionListCtrlPanelManager(wx.Panel):
 	def onTabChanged(self, evt):
 		#print 'onTabChanged'
 		#send('disable_all',())
-		slib_name=self.getActiveLibName()
+		self.slib_name=self.getActiveLibName()
+		self.frame	.setLibHome(self.slib_name)
 		#print slib_name
 		#list=self.lists[slib_name]
-		selected= self.lists[slib_name].GetSelected()
+		selected= self.lists[self.slib_name].GetSelected()
 		#print selected
 		#sel= self.lists[slib_name].GetSelectedItems()
 		#print sel
 		if selected:
-			sel= self.lists[slib_name].GetSelectedItems()
-			self.lists[slib_name].parent.openSessionByItemId(sel[0])
+			sel= self.lists[self.slib_name].GetSelectedItems()
+			self.lists[self.slib_name].parent.openSessionByItemId(sel[0])
 		else:
 			send('disable_all',())
 		#else:
@@ -3381,6 +3391,8 @@ class SessionListCtrlPanelManager(wx.Panel):
 		"""
 		#panel_list = [TabPanelOne(self.nb)]
 		slib_path= os.path.join(self.home_dir, caption)
+		if not os.path.isdir(slib_path):
+			os.makedirs(slib_path)
 		page=SessionListCtrlPanel(self,self.frame, self.pos,self.panel_pos, slib_path=slib_path)
 		#page = TabPanelOne(self.nb)
 		#page = panel_list[0]
@@ -3419,9 +3431,10 @@ class TemplateListCtrlPanelManager(wx.Panel):
 		default_templates_name='My_Templates'
 		default_slib=os.path.join(self.home_dir,default_templates_name)
 		self.lists={}
+		self.slps={}
 		if os.path.isdir(os.path.join(self.home_dir, default_slib)):
 			slp=SessionListCtrlPanel(self,frame, pos,self.panel_pos, slib_path=default_slib)
-			self.slp=slp
+			self.slps[default_templates_name]=slp
 			self.list=slp.list
 			self.nb.AddPage(slp,'')
 			self.nb.SetPageText(0, default_templates_name)
@@ -3434,7 +3447,7 @@ class TemplateListCtrlPanelManager(wx.Panel):
 		for i in range(len(dirs)):
 			d=dirs[i]
 			slp=SessionListCtrlPanel(self,frame, pos,self.panel_pos, slib_path=os.path.join(self.home_dir,d))
-			self.slp=slp
+			self.slps[default_templates_name]=slp
 			self.lists[d]=slp.list
 			self.list=slp.list
 			self.nb.AddPage(slp,'')
@@ -4976,10 +4989,10 @@ class pnl_args(wx.Panel):
 			if 1:
 				#print self.copy_vector
 				#e(0)
-				self.loader_panel = wx.Panel(self, style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
-				self.setLoaderButtons(self.loader_panel)
+				self.output_panel = wx.Panel(self, style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+				self.setLoaderButtons(self.output_panel)
 			
-				boxsizer.Add(self.loader_panel, flag=wx.LEFT|wx.TOP, border=5)
+				boxsizer.Add(self.output_panel, flag=wx.LEFT|wx.TOP, border=5)
 				#self.sqldr_btns=(btn_ctl,btn_log,btn_discard,btn_bad)
 			
 			self.args_hbox.Add(boxsizer, 1, flag=wx.ALL|wx.EXPAND, border=5)
@@ -5065,12 +5078,44 @@ class pnl_args(wx.Panel):
 		sub(self.onSetHostMap, "set_hostmap")
 		sub(self.onSetEtlEditorProfile, "set_etl_editor_profile")
 		self.hm=None
+	def CreateNewSessionHostMap(self, hostmap_loc):
+		print 'CreateNewSessionHostMap'
+		#e(0)
+		#hostmap_loc=obj.GetValue()
+		#print 'existing hostmap: %s' % hostmap_loc
+		hostmap_name=os.path.basename(hostmap_loc)
+		session_dir=self.getSessionDir()
+		if not os.path.isdir(session_dir):
+			os.makedirs(session_dir)
+		session_hostmap_loc=os.path.join(session_dir,hostmap_name)
+		print session_hostmap_loc
+		print self.parent.save_to_dir
+		if os.path.isfile(session_hostmap_loc):
+			print 'session host map already exists'
+
+		else:
+			os.chdir(home)
+			real_hostmap_loc=os.path.realpath(hostmap_loc)
+			assert os.path.isfile(real_hostmap_loc), 'host_map template does not exists at\n%s' % real_hostmap_loc
+			print real_hostmap_loc
+			print session_hostmap_loc
+			shutil.copyfile(real_hostmap_loc,session_hostmap_loc)
+			#obj.SetValue(session_hostmap_loc)
+			#self.Save()
+			#print 'created new session_hostmap at \n%s' % session_hostmap_loc
+			send('set_hostmap', (session_hostmap_loc))
+		print session_hostmap_loc
+		#e(0)
+		return session_hostmap_loc		
+	def getSessionDir(self):
+		session_dir=os.path.join(self.parent.save_to_dir,self.parent.getSessionName())
+		return session_dir		
 	def onSetHostMap(self, data, extra1, extra2=None):
 		(hostmap_loc)=data
 		k='host_map'
 		if self.obj.has_key(k):
 			self.obj[k][1].SetValue(hostmap_loc)
-		send('save_args',())		
+		#send('save_args',())		
 	def onSetLoaderProfile(self, data, extra1, extra2=None):
 		(profile_loc)=data
 		k='loader_profile'
@@ -5108,7 +5153,7 @@ class pnl_args(wx.Panel):
 			#self.obj={}
 			if not hasattr(panel, 'hbox'):
 				empty=True
-				sb_from = wx.StaticBox(panel, label='SQL*Loader')
+				sb_from = wx.StaticBox(panel, label='Output')
 				
 				panel.hbox = wx.StaticBoxSizer(sb_from, wx.HORIZONTAL)
 			#if hasattr(panel, 'fgs'):
@@ -5838,40 +5883,25 @@ class pnl_args(wx.Panel):
 		self.tmpl=tmpl
 		#self.core_args_panel.Destroy()
 		self.obj={}
+		
 		self.setCommonArgs(self.core_args_panel)
 		#pprint(self.obj.keys())
 		self.setSourceArgs(self.from_args_panel)
 		#pprint(self.obj.keys())
 		self.setTargetArgs(self.to_args_panel)
 		#pprint(self.obj.keys())
-		self.setLoaderButtons(self.loader_panel)
-		#for c in self.args_hbox.GetChildren():
-		#	#c.Layout()
-		#	c.Fit()
-		
-		#if self.parent.nb.GetPageCount()==1:
-		#	self.parent.OpenLoaderTab()
-		#else:
-		if 1:
-			k='loader_profile'
-			#print self.obj.keys()
-			self.parent.loader_panel.changed=False
-			if self.obj.has_key(k):			
-				loader_profile=self.obj[k][1].GetValue()
-				self.parent.loader_panel.setLoaderArgs(loader_profile)
-			else:
-				#delete loader page
-				#self.parent.nb.DeletePage(1)
-				#self.parent.nb.DisablePage(1)
-				self.parent.nb.EnableTab(1,False)
+		self.setLoaderButtons(self.output_panel)
+
 		k='host_map'
+		
 		if self.obj.has_key(k):
 			hostmap_loc = self.obj[k][1].GetValue()
-			host_map_loc=self.parent.loader_panel.CreateNewSessionHostMap(hostmap_loc)
-			#self.obj[k][1].SetValue(new)
+			new_hostmap_loc=self.parent.args_panel.CreateNewSessionHostMap(hostmap_loc)
+			if new_hostmap_loc not in [hostmap_loc]:
+				self.obj[k][1].SetValue(new_hostmap_loc)
 			#e(0)
 			
-			self.hm = hmap(conf,host_map_loc)
+			self.hm = hmap('2'.join(self.copy_vector),new_hostmap_loc)
 			self.parent._hmMenu=None
 		else:
 			print 'no host_map'
@@ -5879,6 +5909,7 @@ class pnl_args(wx.Panel):
 		if self.obj.has_key(k):
 			val=self.obj[k][1].GetValue()
 			send('set_keep_data_file',(val))
+		
 		if 1:
 			if 0:
 				k='job_pre_etl'
@@ -5897,52 +5928,8 @@ class pnl_args(wx.Panel):
 			#pprint(self.obj.keys())
 			self.parent.etl_loc={}
 			#self.parent.editor_panel.etl_changed=False
-			if 1:
-				if self.obj.has_key(k):	
-					#print 'has key'
-					
-					self.parent.etl_file.setEditor(k)
-					
-					if 0: #hasattr(self.parent.editor_panel, 'editor'):
-						if self.parent.nb_tab==2:
-							self.parent.editor_panel.Show()
-							self.parent.editor_panel.editor.Refresh()
-							#not hasattr(self.parent.editor_panel, 'editor'):
-							#editor = PythonEditor(self)
-							#etl= self.parent.editor_panel.loadEtlFile(self.etl_loc[self.etl_name[0]])
-							#e(0)
-							#editor.AppendText(etl)
-							#editor.SetEditable(True)
-							#editor.Bind(wx.EVT_CHAR, self.onKeyPress)
 
-							#print dir(self.parent.editor_panel.ebox)
-							#self.parent.editor_panel.ebox.Add(self.parent.editor_panel.editor, 1, flag=wx.LEFT|wx.TOP|wx.EXPAND, border=0)
-							#self.parent.editor_panel.Fit()
-							#self.parent.editor_panel.editor=editor
-						
-							#self.parent.editor_panel.editor.Show()
-							#self.parent.editor_panel.ebox.Fit(self.parent.editor_panel)
-							self.parent.editor_panel.Layout()
-							#self.parent.args_pnl.Fit()
-							self.parent.args_panel.Layout()
-				#else: #else:
-					#delete loader page
-					#self.parent.nb.DeletePage(1)
-					#self.parent.nb.DisablePage(1)
-					#self.parent.editor_panel.
-					#self.parent.editor_panel.setEditor(k)
-					#self.parent.editor_panel.Hide()
-					#if hasattr(self.parent.editor_panel, 'editor'):
-					#	pass
-						#self.parent.editor_panel.ebox.Hide(0)
-						#self.parent.editor_panel.ebox.Remove(0)
-						#self.parent.editor_panel.editor.Hide()
-					#self.parent.nb.EnableTab(2,False)
-					#self.parent.editor_panel.ebox.Fit(self.parent.editor_panel)
-					#self.parent.editor_panel.Refresh()
-					#self.parent.editor_panel.Fit()
-					#e(0)
-				
+		self.parent.output_panel.setOutputArgs()		
 		self.sb_from.Layout()
 		#self.sb_from.Fit()
 		self.s_boxsizer.Layout()
@@ -5953,6 +5940,7 @@ class pnl_args(wx.Panel):
 		#self.Fit()	
 		self._sMenu = None #source popup menu
 		self._tMenu = None #target popup menu
+		self._saMenu = None #save as popup menu
 		self.T=False
 		self.Q=False
 		
@@ -6845,7 +6833,569 @@ maskText = ["Session Name", "C{90}", " ", 'F_', '^[a-zA-Z0-9_]+', '', '', '']
 maskLibName = ["Session Name", "C{40}", " ", 'F_', '^[a-zA-Z0-9_]+', '', '', '']
 #maskText = ["Session Name", "C{90}", " ", 'F_', '^[a-zA-Z0-9_]+', '', '', '']
 
+########################################################################
+class pnl_output(wx.Panel):
+	"""
+	"""
+	#----------------------------------------------------------------------
+	def __init__(self, parent, profile_loc, style):
+		""""""
+		wx.Panel.__init__(self, parent, id=wx.NewId(), style=style)
+		self.parent=parent
+		self.param={}
+		self.Prepare()
 
+	def Prepare(self):
+		self.initPanel()
+
+	def getSessionLoc(self):
+		session_loc=os.path.join(self.parent.save_to_dir,self.parent.getSessionName(),'loader', self.pname)
+		return session_loc
+		
+	def onKeyPress(self, event):
+		
+		tc = event.GetEventObject()
+		kc = event.GetKeyCode()
+
+		event.Skip()		
+	def initPanel(self):
+
+				
+		if 0:
+			self.sb_sql = wx.StaticBox(self, label="SQL Log")
+			self.vbox4 = wx.StaticBoxSizer(self.sb_sql, wx.VERTICAL)
+			
+			#self.p_sql = wx.lib.scrolledpanel.ScrolledPanel(self,-1, size=(screenWidth,400), pos=(0,28), style=wx.SIMPLE_BORDER)
+			self.p_sql = wx.lib.scrolledpanel.ScrolledPanel(self,-1,  pos=(0,28), style=wx.SIMPLE_BORDER)
+			self.p_sql.SetupScrolling()
+			self.p_sql.SetBackgroundColour('#FFFFFF')
+			self.sql={}	
+			self.vbox4.Add(self.p_sql, flag=wx.LEFT|wx.TOP, border=5)
+		if 0:
+			self.sb_data = wx.StaticBox(self, label="Data Spool")
+			self.vbox_dump = wx.StaticBoxSizer(self.sb_data, wx.VERTICAL)
+			
+			#self.p_sql = wx.lib.scrolledpanel.ScrolledPanel(self,-1, size=(screenWidth,400), pos=(0,28), style=wx.SIMPLE_BORDER)
+			self.p_dump = wx.lib.scrolledpanel.ScrolledPanel(self,-1, size=(397,170), pos=(0,28), )
+			self.p_dump.SetupScrolling()
+			self.p_dump.SetBackgroundColour('#FFFFFF')
+			self.sql={}	
+			self.vbox_dump.Add(self.p_dump, flag=wx.LEFT|wx.TOP, border=5)
+
+		self.setOutputArgs()
+		self.afgs = wx.GridBagSizer(3, 2)
+		self.afgs.Add(self.btnsizer, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)		
+		self.afgs.Add(self.vbox_alog, pos=(0, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)		
+		self.afgs.Add(self.vbox4, pos=(1, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)		
+		self.afgs.Add(self.vbox_dump, pos=(2, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)		
+		self.afgs.Add(self.vbox_ldr, pos=(1, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)		
+		self.SetSizer(self.afgs)
+
+				
+	def gen_bind(self, type, instance, handler, *args, **kwargs):
+		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)			
+	def setOutputArgs(self):
+		args_panel=self.parent.args_panel
+		self.out={}
+		if not hasattr(self, 'btnsizer'):
+			self.btnsizer = wx.BoxSizer(wx.VERTICAL)
+			
+		else:
+			self.btnsizer.Hide(0)
+			self.btnsizer.Remove(0)
+		fgs=wx.GridBagSizer(3, 4) 
+		length=287
+		#fgs={}
+		
+		log_items={'log_dir':'App Log','default_spool_dir':'Data Spool','sql_log_dir':'SQL log','sqloader_log_dir':'SQL*Loader log'}
+		 
+		i=0	
+		
+		
+		x='log_dir'
+		val=''
+		if args_panel.obj.has_key(x):			
+			#val=args_panel.obj[x][1].GetValue()
+			val=self.parent.getLogDir()
+		if 1:
+			items={x:val}
+			for k,v in items.items():
+				#fgs[k] = wx.GridBagSizer(2, 1)
+				self.out[k]= [wx.StaticText(self, label=log_items[k]), wx.TextCtrl(self,value=v, size=(length,22))]
+				fgs.Add(self.out[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				fgs.Add(self.out[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				self.out[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
+				imageFile = os.path.join(home,"images/folder_icon_16.png")
+				image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+				self.out[k].append(wx.BitmapButton(self, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6)))
+				if args_panel.obj.has_key(k):
+					self.gen_bind(wx.EVT_BUTTON,self.out[k][2], self.OnShowDir,[self.out[k][1]])								
+				else:
+					self.out[k][2].Enable(False)
+				fgs.Add(self.out[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				
+				i +=1
+		x='sql_log_dir'
+		val=''
+		if args_panel.obj.has_key('log_dir'):			
+			#val=args_panel.obj[x][1].GetValue()
+			val=os.path.join(self.parent.getLogDir(), 'sql')
+		if 1:
+			items={x:val}
+			for k,v in items.items():
+				#fgs[k] = wx.GridBagSizer(2, 1)
+				self.out[k]= [wx.StaticText(self, label=log_items[k]), wx.TextCtrl(self,value=v, size=(length,22))]
+				fgs.Add(self.out[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				fgs.Add(self.out[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				self.out[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
+				imageFile = os.path.join(home,"images/folder_icon_16.png")
+				image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+				self.out[k].append(wx.BitmapButton(self, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6)))
+				#if args_panel.obj.has_key(k):
+				self.gen_bind(wx.EVT_BUTTON,self.out[k][2], self.OnShowDir,[self.out[k][1]])								
+				#else:
+				#self.out[k][2].Enable(False)
+				fgs.Add(self.out[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				i +=1			
+
+		x='default_spool_dir'
+		val=''
+		if args_panel.obj.has_key(x):	
+			#val=args_panel.obj[x][1].GetValue()
+			val=self.parent.getDumpDir()
+		if 1:
+			items={x:val}
+			#items={'default_spool_dir':'test2'}
+			for k,v in items.items():
+				#fgs[k] = wx.GridBagSizer(2, 1)
+				self.out[k]= [wx.StaticText(self, label=log_items[k]), wx.TextCtrl(self,value=v, size=(length,22))]
+				fgs.Add(self.out[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				fgs.Add(self.out[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				self.out[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
+				imageFile = os.path.join(home,"images/folder_icon_16.png")
+				image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+				self.out[k].append(wx.BitmapButton(self, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6)))
+				if args_panel.obj.has_key(k):
+					self.gen_bind(wx.EVT_BUTTON,self.out[k][2], self.OnShowDir,[self.out[k][1]])							
+				else:
+					self.out[k][2].Enable(False)
+				fgs.Add(self.out[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				i +=1
+
+		if 1:		
+			val=''
+			if args_panel.obj.has_key('log_dir'):	
+				#val=args_panel.obj[x][1].GetValue()
+				val=os.path.join(self.parent.getLogDir(), 'sqlloader')
+				
+			items={'sqloader_log_dir':val}
+			for k,v in items.items():
+				#fgs[k] = wx.GridBagSizer(2, 1)
+				self.out[k]= [wx.StaticText(self, label=log_items[k]), wx.TextCtrl(self,value=v, size=(length,22))]
+				fgs.Add(self.out[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				fgs.Add(self.out[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				self.out[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
+				imageFile = os.path.join(home,"images/folder_icon_16.png")
+				image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+				self.out[k].append(wx.BitmapButton(self, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6)))
+				#if args_panel.obj.has_key(k):
+				self.gen_bind(wx.EVT_BUTTON,self.out[k][2], self.OnShowDir,[self.out[k][1]])				
+				#else:
+				#self.out[k][2].Enable(False)
+				fgs.Add(self.out[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				i +=1
+			if 1:
+				btn=wx.Button(self, label='Refresh', style=wx.BU_EXACTFIT)	
+				#tc[sn]['source'][0]
+				btn.SetName('Refresh')
+				fgs.Add(wx.StaticText(self, label=''), pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				fgs.Add(btn, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				btn.Bind(wx.EVT_BUTTON, self.OnRefreshOutput)	
+				i+=1
+			self.sb_d3 = wx.StaticBox(self, label="Logs")
+			vbox3 = wx.StaticBoxSizer(self.sb_d3, wx.VERTICAL)
+			vbox3.Add(fgs, flag=wx.LEFT|wx.TOP, border=5)
+			#sizer.Add(boxsizer, pos=(3, 0), span=(1, 3), flag=wx.TOP|wx.EXPAND, border=5)
+			self.btnsizer.Add(vbox3, flag=wx.LEFT|wx.TOP, border=0)
+			
+		if 1: #App log
+			length=255
+			self.alog={}	
+			if not hasattr(self, 'vbox_alog'):
+				#empty=True
+				self.sb_alog = wx.StaticBox(self, label="App log")
+				self.vbox_alog = wx.StaticBoxSizer(self.sb_alog, wx.VERTICAL)
+			else:
+				self.vbox_alog.Hide(0)
+				self.vbox_alog.Remove(0)
+			
+			if 1: #not hasattr(self, 'p_dump'):
+				self.p_alog = wx.lib.scrolledpanel.ScrolledPanel(self,-1, size=(397,133), pos=(0,28)) #, style=wx.SIMPLE_BORDER)
+				self.p_alog.SetupScrolling()
+				#self.p_sql.SetBackgroundColour('#FFFFFF')
+				#bSizer = wx.BoxSizer( wx.VERTICAL )
+				self.p_alog.fgs4=wx.GridBagSizer(3, 10)
+			
+			#self.p_sql.fgs4=wx.GridBagSizer(1, 10)
+			#self.vbox4.Add(self.p_sql, flag=wx.LEFT|wx.TOP, border=5)
+			i=0
+			#self.dump={}	
+			if args_panel.obj.has_key('log_dir'):
+				alogdir=self.parent.getLogDir()
+				if os.path.isdir(alogdir):
+					files=[d for d in os.listdir(alogdir) if os.path.isfile(os.path.join(alogdir,d))]
+					for k in files:
+						print k
+						lbl=''
+						if 1:
+							lbl='Log file'
+						self.alog[k]= [wx.StaticText(self.p_alog, label=lbl), wx.TextCtrl(self.p_alog,value=k,pos=(60,i*20), size=(length,22))]
+						self.p_alog.fgs4.Add(self.alog[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+						self.p_alog.fgs4.Add(self.alog[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+						self.alog[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
+						
+						imageFile = os.path.join(home,"images/editor_icon_16_2.png")
+						image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+						self.alog[k].append(wx.BitmapButton(self.p_alog, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6)))
+						self.p_alog.fgs4.Add(self.alog[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+						self.gen_bind(wx.EVT_BUTTON,self.alog[k][2], self.OnEditSqlFile,[os.path.join(alogdir,k)])
+								
+						
+						i +=1
+						#self.p_sql.SetSizer( bSizer )
+						self.p_alog.SetSizer( self.p_alog.fgs4 )
+			self.vbox_alog.Add(self.p_alog, flag=wx.LEFT|wx.TOP, border=5)
+			#self.tc_sloc.SetValue(self.getSessionLoc())
+			#self.tc_sloc.SetSize((len(self.profile_loc)*5.5,23))
+			#self.btnsizer.Layout()
+			self.vbox_alog.Layout()
+			#self.h_sizer.Layout()
+			
+				
+		if 1:
+			self.sql={}	
+			length=255
+			#self.obj={}
+			if not hasattr(self, 'vbox4'):
+				self.sb_sql = wx.StaticBox(self, label="SQL Log")
+				self.vbox4 = wx.StaticBoxSizer(self.sb_sql, wx.VERTICAL)
+			else:
+				self.vbox4.Hide(0)
+				self.vbox4.Remove(0)
+				
+			if 1: #not hasattr(self, 'p_sql'):
+				self.p_sql = wx.lib.scrolledpanel.ScrolledPanel(self,-1, size=(397,205), pos=(0,28)) #, style=wx.SIMPLE_BORDER)
+				self.p_sql.SetupScrolling()
+				#self.p_sql.SetBackgroundColour('#FFFFFF')
+				#bSizer = wx.BoxSizer( wx.VERTICAL )
+				self.p_sql.fgs4=wx.GridBagSizer(3, 10)
+			
+			#self.p_sql.fgs4=wx.GridBagSizer(1, 10)
+			#self.vbox4.Add(self.p_sql, flag=wx.LEFT|wx.TOP, border=5)
+			i=0		
+			#print 'profile:',self.profile_loc
+			
+			if self.parent.args_panel.obj.has_key('log_dir'):
+				#e(0)
+				sqldir=os.path.join(self.parent.getLogDir(),'sql')	
+				
+				if os.path.isdir(sqldir):
+					files=[d for d in os.listdir(sqldir) if os.path.isfile(os.path.join(sqldir,d))]
+					for k in files:
+						#print k
+						lbl=''
+						if 'query_columns' in k:
+							lbl='Query columns'
+						elif 'table_columns' in k:
+							lbl='Table columns'
+						elif 'table_spool' in k:
+							lbl='Table spool'						
+						elif 'truncate_partition' in k:
+							lbl='Truncate part'
+						elif 'truncate_sub_partition' in k:
+							lbl='Truncate sub-part'
+						elif 'truncate_table' in k:
+							lbl='Truncate table'						
+						elif 'query_spool' in k:
+							
+							print k
+							regexp1=re.compile(r'.*_(\d+)\.sql')
+							m= re.match(regexp1, k)
+							sid=''
+							print sid
+							if m:
+								lbl='Query spool (%s)' % m.groups()[0]
+						else:						
+							print k
+							regexp1=re.compile(r'.*\.(\d+)\.sql')
+							m= re.match(regexp1, k)
+							sid=''
+							print sid
+							if m:
+								lbl='Data load (%s)' % m.groups()[0]
+						self.sql[k]= [wx.StaticText(self.p_sql, label=lbl), wx.TextCtrl(self.p_sql,value=k,pos=(60,i*20), size=(length,22))]
+						self.p_sql.fgs4.Add(self.sql[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+						self.p_sql.fgs4.Add(self.sql[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+						self.sql[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
+						
+						imageFile = os.path.join(home,"images/editor_icon_16_2.png")
+						image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+						self.sql[k].append(wx.BitmapButton(self.p_sql, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6)))
+						self.p_sql.fgs4.Add(self.sql[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+						self.gen_bind(wx.EVT_BUTTON,self.sql[k][2], self.OnEditSqlFile,[os.path.join(sqldir,k)])
+								
+						
+						i +=1
+						#self.p_sql.SetSizer( bSizer )
+						self.p_sql.SetSizer( self.p_sql.fgs4 )
+			self.vbox4.Add(self.p_sql, flag=wx.LEFT|wx.TOP, border=5)
+			#self.tc_sloc.SetValue(self.getSessionLoc())
+			#self.tc_sloc.SetSize((len(self.profile_loc)*5.5,23))
+			#self.btnsizer.Layout()
+			self.vbox4.Layout()
+			#self.h_sizer.Layout()
+					#self.param={}
+		if 1:
+			length=255
+			self.dump={}	
+			if not hasattr(self, 'vbox_dump'):
+				#empty=True
+				self.sb_data = wx.StaticBox(self, label="Data Spool")
+				self.vbox_dump = wx.StaticBoxSizer(self.sb_data, wx.VERTICAL)
+			else:
+				self.vbox_dump.Hide(0)
+				self.vbox_dump.Remove(0)
+			
+			if 1: #not hasattr(self, 'p_dump'):
+				self.p_dump = wx.lib.scrolledpanel.ScrolledPanel(self,-1, size=(397,155), pos=(0,28)) #, style=wx.SIMPLE_BORDER)
+				self.p_dump.SetupScrolling()
+				#self.p_sql.SetBackgroundColour('#FFFFFF')
+				#bSizer = wx.BoxSizer( wx.VERTICAL )
+				self.p_dump.fgs4=wx.GridBagSizer(3, 10)
+			
+			#self.p_sql.fgs4=wx.GridBagSizer(1, 10)
+			#self.vbox4.Add(self.p_sql, flag=wx.LEFT|wx.TOP, border=5)
+			i=0
+			self.dump={}	
+			if args_panel.obj.has_key('default_spool_dir'):
+				dumpdir=self.parent.getDumpDir()
+				#os.path.isdir(dumpdir):
+				files=[d for d in os.listdir(dumpdir) if os.path.isfile(os.path.join(dumpdir,d))]
+				for k in files:
+					print k
+					lbl=''
+					if 1:
+						regexp1=re.compile(r'.*_(\d+)\.')
+						m= re.match(regexp1, k)
+						sid=''
+						print sid
+						if m:
+							lbl='Query %s' % m.groups()[0]
+					self.dump[k]= [wx.StaticText(self.p_dump, label=lbl), wx.TextCtrl(self.p_dump,value=k,pos=(60,i*20), size=(length,22))]
+					self.p_dump.fgs4.Add(self.dump[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+					self.p_dump.fgs4.Add(self.dump[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+					self.dump[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
+					
+					imageFile = os.path.join(home,"images/editor_icon_16_2.png")
+					image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+					self.dump[k].append(wx.BitmapButton(self.p_dump, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6)))
+					self.p_dump.fgs4.Add(self.dump[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+					self.gen_bind(wx.EVT_BUTTON,self.dump[k][2], self.OnEditSqlFile,[os.path.join(dumpdir,k)])
+							
+					
+					i +=1
+					#self.p_sql.SetSizer( bSizer )
+					self.p_dump.SetSizer( self.p_dump.fgs4 )
+			self.vbox_dump.Add(self.p_dump, flag=wx.LEFT|wx.TOP, border=5)
+			#self.tc_sloc.SetValue(self.getSessionLoc())
+			#self.tc_sloc.SetSize((len(self.profile_loc)*5.5,23))
+			#self.btnsizer.Layout()
+			self.vbox_dump.Layout()
+			#self.h_sizer.Layout()
+		if 1: #SQL*Loader log
+			length=255
+			self.ldr={}	
+			if not hasattr(self, 'vbox_ldr'):
+				#empty=True
+				self.sb_ldr = wx.StaticBox(self, label="SQL*Loader log")
+				self.vbox_ldr = wx.StaticBoxSizer(self.sb_ldr, wx.VERTICAL)
+			else:
+				self.vbox_ldr.Hide(0)
+				self.vbox_ldr.Remove(0)
+			
+			if 1: #not hasattr(self, 'p_dump'):
+				self.p_ldr = wx.lib.scrolledpanel.ScrolledPanel(self,-1, size=(397,205), pos=(0,28)) #, style=wx.SIMPLE_BORDER)
+				self.p_ldr.SetupScrolling()
+				#self.p_sql.SetBackgroundColour('#FFFFFF')
+				#bSizer = wx.BoxSizer( wx.VERTICAL )
+				self.p_ldr.fgs4=wx.GridBagSizer(3, 10)
+			
+			#self.p_sql.fgs4=wx.GridBagSizer(1, 10)
+			#self.vbox4.Add(self.p_sql, flag=wx.LEFT|wx.TOP, border=5)
+			i=0
+			#self.dump={}	
+			if args_panel.obj.has_key('log_dir'):
+				ldrdir=os.path.join(self.parent.getLogDir(), 'sqlloader')
+				if os.path.isdir(ldrdir):
+					files=[d for d in os.listdir(ldrdir) if os.path.isfile(os.path.join(ldrdir,d))]
+					for k in files:
+						print k
+						lbl=''
+						if 1:
+							regexp1=re.compile(r'.*(\d+)\.(\w+)')
+							m= re.match(regexp1, k)
+							sid=''
+							print sid
+							if m:
+								lbl='%s (%s)' % (m.groups()[1], m.groups()[0])
+						self.ldr[k]= [wx.StaticText(self.p_ldr, label=lbl), wx.TextCtrl(self.p_ldr,value=k,pos=(60,i*20), size=(length,22))]
+						self.p_ldr.fgs4.Add(self.ldr[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+						self.p_ldr.fgs4.Add(self.ldr[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+						self.ldr[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
+						
+						imageFile = os.path.join(home,"images/editor_icon_16_2.png")
+						image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+						self.ldr[k].append(wx.BitmapButton(self.p_ldr, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6)))
+						self.p_ldr.fgs4.Add(self.ldr[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+						self.gen_bind(wx.EVT_BUTTON,self.ldr[k][2], self.OnEditSqlFile,[os.path.join(ldrdir,k)])
+								
+						
+						i +=1
+						#self.p_sql.SetSizer( bSizer )
+						self.p_ldr.SetSizer( self.p_ldr.fgs4 )
+			self.vbox_ldr.Add(self.p_ldr, flag=wx.LEFT|wx.TOP, border=5)
+			#self.tc_sloc.SetValue(self.getSessionLoc())
+			#self.tc_sloc.SetSize((len(self.profile_loc)*5.5,23))
+			#self.btnsizer.Layout()
+			self.vbox_ldr.Layout()
+			#self.h_sizer.Layout()
+			
+		if hasattr(self, 'afgs'):
+			
+			#self.afgs.Refresh()
+			self.afgs.Layout()
+			#OnRefreshOutput
+	def OnRefreshOutput(self, evt):
+		self.setOutputArgs()
+	def OnShowDir(self, evt,params):
+		print 'OnShowDir'
+		[dir_obj] = params
+		dir_loc= dir_obj.GetValue()
+		if not os.path.isdir(dir_loc):
+			msg='Output dir\n%s\ndoes not exists.' % dir_loc
+			self.parent.Warn(msg)
+		else:
+			#print 'exists'
+			#file_loc 
+			self.parent.ShowLocation(dir_loc)
+			
+	def OnEditSqlFile(self, evt,params):
+		print 'OnEditSqlFile'		
+		(file_loc,) = params
+		print file_loc
+		#val =file_obj.GetValue()
+		#print val
+		#import os
+		os.chdir(home)
+		fname =os.path.realpath(file_loc)
+		#print fname
+		assert os.path.isfile(fname), 'File does not exists\n%s' % fname
+		#webbrowser.open(fname)
+		
+		os.startfile(fname)
+		
+	def setOutputArgs2(self):		
+		#print str(self.__class__) + ' - setOutputArgs'
+		items= ['log_dir','default_spool_dir']
+		for x in items:
+			val=''
+			
+			args_panel=self.parent.args_panel
+			if args_panel.obj.has_key(x):
+				if x in ['default_spool_dir']:
+					val=self.parent.getDumpDir()
+				elif x in ['log_dir']:
+					val=self.parent.getLogDir()
+			self.out[x][1].SetValue(val)
+			if os.path.isdir(val):
+				self.out[x][1].Enable(True)
+			else:
+				self.out[x][1].Enable(False)
+		
+		val=os.path.join(self.parent.getLogDir(),'sql')
+		x='sql_log_dir'
+		self.out[x][1].SetValue(val)
+		#args_panel=self.parent.args_panel
+		
+		
+		val=os.path.join(self.parent.getLogDir(),'sqlloader')
+		x='sqloader_log_dir'
+		args_panel=self.parent.args_panel
+		self.out[x][1].SetValue(val)	
+		sqldir=os.path.join(self.parent.getLogDir(),'sql')		
+		if 1:
+			#self.param={}
+			length=220
+			#self.obj={}
+			if not hasattr(self, 'vbox4'):
+				empty=True
+				self.vbox4 = wx.BoxSizer(wx.VERTICAL)
+			if hasattr(self, 'fgs4'):
+				#for c in panel.fgs.GetChildren():
+				#	print c.Destroy()
+				#panel.fgs.Destroy()
+				self.vbox4.Hide(0)
+				self.vbox4.Remove(0)
+			else:
+				self.fgs4=wx.GridBagSizer(1, 10) 
+			i=0		
+			#print 'profile:',self.profile_loc
+			if os.path.isdir(sqldir):
+				files=[d for d in os.listdir(sqldir) if os.path.isfile(os.path.join(sqldir,d))]
+				for k in files:
+					#print k
+					lbl=''
+					if 'query_columns' in k:
+						lbl='Query columns'
+					elif 'table_columns' in k:
+						lbl='Table columns'
+					elif 'table_spool' in k:
+						lbl='Table spool'						
+					elif 'truncate_partition' in k:
+						lbl='Truncate partition'
+					elif 'truncate_sub_partition' in k:
+						lbl='Truncate sub-partition'
+					elif 'truncate_table' in k:
+						lbl='Truncate table'						
+					elif 'query_spool' in k:
+						
+						print k
+						regexp1=re.compile(r'.*_(\d+)\.sql')
+						m= re.match(regexp1, k)
+						sid=''
+						print sid
+						if m:
+							lbl='Query spool (Shard-%s)' % m.groups()[0]
+					else:						
+						print k
+						regexp1=re.compile(r'.*\.(\d+)\.sql')
+						m= re.match(regexp1, k)
+						sid=''
+						print sid
+						if m:
+							lbl='Data load (Shard-%s)' % m.groups()[0]
+							
+					self.sql[k]= [wx.StaticText(self, label=lbl), wx.TextCtrl(self,value=k, size=(length,22))]
+					self.fgs4.Add(self.sql[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+					self.fgs4.Add(self.sql[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+					self.sql[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
+					i +=1
+			self.vbox4.Add(self.fgs4, flag=wx.LEFT|wx.TOP, border=5)
+			#self.tc_sloc.SetValue(self.getSessionLoc())
+			#self.tc_sloc.SetSize((len(self.profile_loc)*5.5,23))
+			#self.btnsizer.Layout()
+			self.vbox4.Layout()
+			self.h_sizer.Layout()			
 ########################################################################
 class pnl_loader(wx.Panel):
 	"""
@@ -7004,29 +7554,8 @@ with open('default_sqlloader.yaml', 'w') as f:
 			os.makedirs(dir)
 		with open(profile_loc, 'w') as f:
 			yaml.dump(profile, f, default_flow_style=False)		
-	def CreateNewSessionHostMap(self, hostmap_loc):
-		#hostmap_loc=obj.GetValue()
-		#print 'existing hostmap: %s' % hostmap_loc
-		hostmap_name=os.path.basename(hostmap_loc)
-		session_dir=self.getSessionDir()
-		session_hostmap_loc=os.path.join(session_dir,hostmap_name)
-		#print session_hostmap_loc
-		if os.path.isfile(session_hostmap_loc):
-			#print 'session host map already exists'
-			pass
-		else:
-			os.chdir(home)
-			real_hostmap_loc=os.path.realpath(hostmap_loc)
-			assert os.path.isfile(real_hostmap_loc), 'host_map template does not exists at\n%s' % real_hostmap_loc
-			shutil.copyfile(real_hostmap_loc,session_hostmap_loc)
-			#obj.SetValue(session_hostmap_loc)
-			#self.Save()
-			#print 'created new session_hostmap at \n%s' % session_hostmap_loc
-			send('set_hostmap', (session_hostmap_loc))
-		return session_hostmap_loc	
-	def getSessionDir(self):
-		session_dir=os.path.join(self.parent.save_to_dir,self.parent.getSessionName())
-		return session_dir
+
+
 		
 	def onKeyPress(self, event):
 		
@@ -7454,7 +7983,362 @@ class MessageBox(wx.Dialog):
         text.SetBackgroundColour(wx.SystemSettings.GetColour(4))
         self.ShowModal()
         self.Destroy()
+
+###################################################################################################
+class SaveAsDialog(wx.Dialog):
+	def __init__(
+			self, parent, ID, title, size, saveas_name='',pos=wx.DefaultPosition, 
+			style=wx.DEFAULT_DIALOG_STYLE,
+			useMetal=False 
+			):
+
+		# Instead of calling wx.Dialog.__init__ we precreate the dialog
+		# so we can set an extra style that must be set before
+		# creation, and then we create the GUI object using the Create
+		# method.
+		self.parent=parent
+
+		#print defaults
+		#pprint(data)
+		self._popUpMenu = None
+		#self.recent=[]
+		pre = wx.PreDialog()
+		pre.SetExtraStyle(wx.DIALOG_EX_CONTEXTHELP)
+		pre.Create(parent, ID, title, pos, size, style)
+	
+		# This next step is the most important, it turns this Python
+		# object into the real wrapper of the dialog (instead of pre)
+		# as far as the wxPython extension is concerned.
+		self.PostCreate(pre)
+
+		# This extra style can be set after the UI object has been created.
+		if 'wxMac' in wx.PlatformInfo and useMetal:
+			self.SetExtraStyle(wx.DIALOG_EX_METAL)
+
+
+		# Now continue with the normal construction of the dialog
+		# contents
+		#self.create_btn = wx.Button(self, wx.ID_OK, 'Create')
+		sizer = wx.BoxSizer(wx.VERTICAL)
+		self.userhome = os.path.expanduser('~')
+		self.session_dir=os.path.join(self.userhome,'sessions')		
+		self.changed=False
+		if 1:
+			#namesizer = wx.BoxSizer(wx.HORIZONTAL)
+			namesizer = wx.GridBagSizer(2, 4)			
 			
+			text1 = wx.StaticText(self, label="Session Name:")
+			#sizer.Add(text1, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
+			#self.tc_sname = wx.TextCtrl(self,size=(400,23))
+			self.tc_sname = masked.TextCtrl(self, -1, saveas_name,
+										mask         = maskText[1],
+										excludeChars = maskText[2],
+										formatcodes  = maskText[3],
+										includeChars = "_0123456789",
+										validRegex   = maskText[4],
+										validRange   = maskText[5],
+										choices      = maskText[6],
+										choiceRequired = False,
+										defaultValue = maskText[7])			
+			#namesizer.Add((3,3),0)
+			namesizer.Add(text1, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
+			
+			namesizer.Add(self.tc_sname, pos=(0, 1),  flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND|wx.GROW, border=10)
+			self.tc_sname.Bind(wx.EVT_CHAR, self.onKeyPress)
+			#namesizer.Add((60,3),pos=(0, 2),  flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND|wx.GROW, border=10)
+			#icon = wx.StaticBitmap(self, bitmap=wx.Bitmap(os.path.join(home,'images','exec.png')))
+			#namesizer.Add((3,3),0)
+			#namesizer.Add(icon, pos=(0, 3), flag=wx.TOP|wx.RIGHT|wx.ALIGN_RIGHT,border=6)
+			sizer.Add(namesizer, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP|wx.EXPAND, 5)
+			st_tlib = wx.StaticText(self, label="Session library:")
+			namesizer.Add(st_tlib, pos=(1, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
+			libs=self.getSessionLibNames()
+			#print libs
+			#e(0)
+			self.cb_tname= wx.ComboBox(self, id=wx.NewId(), value='My_Sessions', choices=libs, size=(100,30), style=0, name='tmpl_lib')
+			namesizer.Add(self.cb_tname, pos=(1, 1),  flag=wx.TOP|wx.ALIGN_LEFT|wx.BOTTOM, border=10)
+
+			
+		btnsizer = wx.BoxSizer(wx.HORIZONTAL)
+		self.create_btn = wx.Button(self, wx.ID_OK, 'Save')
+		self.create_btn.Enable(True)
+		btn_exit = wx.Button(self, wx.ID_CANCEL, "Cancel")
+		#btnsizer.Add(self.test, 0 , wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM)
+		btnsizer.Add((3,3),1)
+		btnsizer.Add(self.create_btn, 0 , wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM)
+		btnsizer.Add((40,5),0)
+		
+		btnsizer.Add(btn_exit, 0 , wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM)
+		
+		self.create_btn.Bind(wx.EVT_BUTTON, self.OnCreate)
+		#self.test.Bind(wx.EVT_BUTTON, self.OnTest)
+		btn_exit.Bind(wx.EVT_BUTTON, self.OnExit)
+		#self.Bind(wx.EVT_BUTTON, self.OnTrial, id=ID_TRIAL)
+		sizer.Add(btnsizer, 0, wx.EXPAND|wx.ALL, 5)
+		
+		self.SetSizer(sizer)
+			
+
+		self.Layout()
+		self.Fit()
+		#self.SetSize((-1,size[1]))
+	def setDefaultName(self, sname):
+		if not self.changed:
+			self.tc_sname.SetValue(sname.strip().strip(' ').replace(' ',''))
+	def onKeyPress(self, event):
+		#print str(self.__class__) + " - onKeyPress"
+		tc = event.GetEventObject()
+		#print 'name=',tc.Name
+		kc = event.GetKeyCode()
+		#print 'kc=', kc
+		controlDown = event.CmdDown()
+		if controlDown:
+			#print 'controlDown', kc
+			if kc == 1: #in ['a','A']:
+				#print 'Ctrl-A'
+				tc.SelectAll()				
+			if	kc == 4:
+				print 'Ctrl-D 1'
+				self.parent.tryToDelete()
+		else:
+			if kc<123 and not (kc == wx.WXK_SPACE): #(kc == wx.WXK_TAB or kc == wx.WXK_RETURN):
+				self.create_btn.Enable(True)
+				#self.parent.changed=True
+				#print 'changed'
+				if not self.changed:
+					self.changed=True
+		
+		event.Skip()
+		
+		
+	def OnTest(self,e):
+		[cn, cv, tmpl, args, reuse] = self.getConfig()		
+		#print len(args)	
+		#pprint(args[2])
+		#pprint(self.api_args[tmpl][0])
+
+	def getNewSessionName(self):
+		return self.tc_sname.GetValue().strip().strip(' ').replace(' ','')
+	def getNewSessionInfo(self):
+		return (self.getNewSessionName(),self.cb_tname.GetValue().strip().strip(' '))
+	def OnExit(self,e):	
+		pass
+		e.Skip()
+
+	def OnCreate(self,e):
+		print 'OnCreate'
+		
+		sname=self.tc_sname.GetValue().strip().strip(' ').replace(' ','')
+		if not sname:
+			self.Warn('Enter session library name.')
+			self.tc_sname.SetFocus()
+		elif self.if_duplicate_name(sname):
+			self.Warn('Duplicate session library name.')
+			self.tc_sname.SetFocus()
+
+		else:
+		
+			#self.writeRecent()
+		
+			e.Skip()
+
+	def Warn(self, message, caption = 'Warning!'):
+		dlg = wx.MessageDialog(self, message, caption, wx.OK | wx.ICON_WARNING)
+		dlg.ShowModal()
+		dlg.Destroy()	
+	def if_duplicate_name(self,name):
+		dir = os.path.join(self.session_dir, self.getNewSessionName())
+		if os.path.isdir(dir):
+			return True
+		else:
+			return False
+
+		
+
+	def gen_bind(self, type, instance, handler, *args, **kwargs):
+		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)
+	def getSessionLibNames(self):
+		global session_home
+		libs= [d for d in os.listdir(session_home) if os.path.isdir(os.path.join(session_home,d))]
+		return libs
+###################################################################################################
+class SaveAsTemplateDialog(wx.Dialog):
+	def __init__(
+			self, parent, ID, title, size, saveas_name='',pos=wx.DefaultPosition, 
+			style=wx.DEFAULT_DIALOG_STYLE,
+			useMetal=False 
+			):
+
+		# Instead of calling wx.Dialog.__init__ we precreate the dialog
+		# so we can set an extra style that must be set before
+		# creation, and then we create the GUI object using the Create
+		# method.
+		self.parent=parent
+
+		#print defaults
+		#pprint(data)
+		self._popUpMenu = None
+		#self.recent=[]
+		pre = wx.PreDialog()
+		pre.SetExtraStyle(wx.DIALOG_EX_CONTEXTHELP)
+		pre.Create(parent, ID, title, pos, size, style)
+	
+		# This next step is the most important, it turns this Python
+		# object into the real wrapper of the dialog (instead of pre)
+		# as far as the wxPython extension is concerned.
+		self.PostCreate(pre)
+
+		# This extra style can be set after the UI object has been created.
+		if 'wxMac' in wx.PlatformInfo and useMetal:
+			self.SetExtraStyle(wx.DIALOG_EX_METAL)
+
+
+		# Now continue with the normal construction of the dialog
+		# contents
+		#self.create_btn = wx.Button(self, wx.ID_OK, 'Create')
+		sizer = wx.BoxSizer(wx.VERTICAL)
+		self.userhome = os.path.expanduser('~')
+		self.session_dir=os.path.join(self.userhome,'sessions')		
+		self.changed=False
+		if 1:
+			#namesizer = wx.BoxSizer(wx.HORIZONTAL)
+			namesizer = wx.GridBagSizer(2, 4)			
+			
+			text1 = wx.StaticText(self, label="Template Name:")
+			#sizer.Add(text1, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
+			#self.tc_sname = wx.TextCtrl(self,size=(400,23))
+			self.tc_sname = masked.TextCtrl(self, -1, saveas_name,
+										mask         = maskText[1],
+										excludeChars = maskText[2],
+										formatcodes  = maskText[3],
+										includeChars = "_0123456789",
+										validRegex   = maskText[4],
+										validRange   = maskText[5],
+										choices      = maskText[6],
+										choiceRequired = False,
+										defaultValue = maskText[7])			
+			#namesizer.Add((3,3),0)
+			namesizer.Add(text1, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
+			
+			namesizer.Add(self.tc_sname, pos=(0, 1),  flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND|wx.GROW, border=10)
+			self.tc_sname.Bind(wx.EVT_CHAR, self.onKeyPress)
+			#namesizer.Add((60,3),pos=(0, 2),  flag=wx.TOP|wx.ALIGN_CENTER|wx.BOTTOM|wx.EXPAND|wx.GROW, border=10)
+			#icon = wx.StaticBitmap(self, bitmap=wx.Bitmap(os.path.join(home,'images','exec.png')))
+			#namesizer.Add((3,3),0)
+			#namesizer.Add(icon, pos=(0, 3), flag=wx.TOP|wx.RIGHT|wx.ALIGN_RIGHT,border=6)
+			sizer.Add(namesizer, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP|wx.EXPAND, 5)
+			st_tlib = wx.StaticText(self, label="Template library:")
+			namesizer.Add(st_tlib, pos=(1, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)
+			libs=self.getTmplLibNames()
+			#print libs
+			#e(0)
+			self.cb_tname= wx.ComboBox(self, id=wx.NewId(), value='My_Templates', choices=libs, size=(100,30), style=0, name='tmpl_lib')
+			namesizer.Add(self.cb_tname, pos=(1, 1),  flag=wx.TOP|wx.ALIGN_LEFT|wx.BOTTOM, border=10)
+		 
+		btnsizer = wx.BoxSizer(wx.HORIZONTAL)
+		self.create_btn = wx.Button(self, wx.ID_OK, 'Save')
+		self.create_btn.Enable(True)
+		btn_exit = wx.Button(self, wx.ID_CANCEL, "Cancel")
+		#btnsizer.Add(self.test, 0 , wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM)
+		btnsizer.Add((3,3),1)
+		btnsizer.Add(self.create_btn, 0 , wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM)
+		btnsizer.Add((40,5),0)
+		
+		btnsizer.Add(btn_exit, 0 , wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM)
+		
+		self.create_btn.Bind(wx.EVT_BUTTON, self.OnCreate)
+		#self.test.Bind(wx.EVT_BUTTON, self.OnTest)
+		btn_exit.Bind(wx.EVT_BUTTON, self.OnExit)
+		#self.Bind(wx.EVT_BUTTON, self.OnTrial, id=ID_TRIAL)
+		sizer.Add(btnsizer, 0, wx.EXPAND|wx.ALL, 5)
+		
+		self.SetSizer(sizer)
+			
+
+		self.Layout()
+		self.Fit()
+		#self.SetSize((-1,size[1]))
+	def getTmplLibNames(self):
+		#tmpl_home
+		libs= [d for d in os.listdir(tmpl_home) if os.path.isdir(os.path.join(tmpl_home,d))]
+		return libs
+	def setDefaultName(self, sname):
+		if not self.changed:
+			self.tc_sname.SetValue(sname.strip().strip(' ').replace(' ',''))
+	def onKeyPress(self, event):
+		#print str(self.__class__) + " - onKeyPress"
+		tc = event.GetEventObject()
+		#print 'name=',tc.Name
+		kc = event.GetKeyCode()
+		#print 'kc=', kc
+		controlDown = event.CmdDown()
+		if controlDown:
+			#print 'controlDown', kc
+			if kc == 1: #in ['a','A']:
+				#print 'Ctrl-A'
+				tc.SelectAll()				
+			if	kc == 4:
+				print 'Ctrl-D 1'
+				self.parent.tryToDelete()
+		else:
+			if kc<123 and not (kc == wx.WXK_SPACE): #(kc == wx.WXK_TAB or kc == wx.WXK_RETURN):
+				self.create_btn.Enable(True)
+				#self.parent.changed=True
+				#print 'changed'
+				if not self.changed:
+					self.changed=True
+		
+		event.Skip()
+		
+		
+	def OnTest(self,e):
+		[cn, cv, tmpl, args, reuse] = self.getConfig()		
+		#print len(args)	
+		#pprint(args[2])
+		#pprint(self.api_args[tmpl][0])
+
+	def getTemplateInfo(self):
+		tlib=self.cb_tname.GetValue().strip().strip(' ').replace(' ','')
+		return (self.tc_sname.GetValue().strip().strip(' ').replace(' ',''), tlib)
+
+	def OnExit(self,e):	
+		pass
+		e.Skip()
+
+	def OnCreate(self,e):
+		print 'OnCreate'
+		
+		tname=self.tc_sname.GetValue().strip().strip(' ').replace(' ','')
+		tlib=self.cb_tname.GetValue().strip().strip(' ').replace(' ','')
+		if not tname:
+			self.Warn('Enter session library name.')
+			self.tc_sname.SetFocus()
+		elif self.if_duplicate_name(tname,tlib):
+			self.Warn('Duplicate session library name.')
+			self.tc_sname.SetFocus()
+
+		else:
+		
+			#self.writeRecent()
+		
+			e.Skip()
+
+	def Warn(self, message, caption = 'Warning!'):
+		dlg = wx.MessageDialog(self, message, caption, wx.OK | wx.ICON_WARNING)
+		dlg.ShowModal()
+		dlg.Destroy()	
+	def if_duplicate_name(self, tname, tlib):
+		dir = os.path.join(tmpl_home, tlib, tname)
+		return os.path.isdir(dir)
+			
+
+		
+
+	def gen_bind(self, type, instance, handler, *args, **kwargs):
+		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)
+
+		
+		
 ###################################################################################################
 class DataBuddy(wx.Frame):
 	def __init__(self, parent, id, title, size):
@@ -7493,11 +8377,14 @@ class DataBuddy(wx.Frame):
 		self.q=[]
 		self.closing_in=6
 		(self.cargs,self.fargs,self.targs)=(None, None, None)
-		userhome = os.path.expanduser('~')
-		self.save_to_dir=os.path.join(userhome,'sessions','My_Sessions')
-		self.sess_home=os.path.join(userhome,'sessions')
-		if not os.path.isdir(self.save_to_dir):
-			os.makedirs(self.save_to_dir)
+		#userhome = os.path.expanduser('~')		
+		#self.sess_home=os.path.join(userhome,'sessions')
+		self.S=True
+		self.bT=False
+		self.setLibHome(default_sess_lib)
+		#self.save_to_dir=os.path.join(session_home,'My_Sessions')
+		#if not os.path.isdir(self.save_to_dir):
+		#	os.makedirs(self.save_to_dir)
 		platform=__platform__[:2]
 		self.transport=os.path.join(self.home,r'%s%s\%s%s.exe' % (tr,platform,tr,platform))
 		#self.args_panel =  dummy_args(panel,style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
@@ -7590,8 +8477,8 @@ class DataBuddy(wx.Frame):
 			loader_profile=None
 			if self.args_panel.obj.has_key(k):			
 				loader_profile=self.args_panel.obj[k][1].GetValue()
-			self.loader_panel = pnl_loader(self, loader_profile, style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
-			self.nb.AddPage(self.loader_panel, 'SQL*Loader' )
+			self.output_panel = pnl_output(self, loader_profile, style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+			self.nb.AddPage(self.output_panel, 'Output' )
 			self.nb.EnableTab(1,False)			
 			self.nb.SetSelection(self.nb_tab)
 			if 0:
@@ -7622,17 +8509,37 @@ class DataBuddy(wx.Frame):
 
 			#p=[wx.TextCtrl(panel_from), wx.TextCtrl(panel_from), wx.TextCtrl(panel_from)]
 			#pprint(dir(fgs))
-			self.btn_new=wx.Button(panel, label='New', size=(60,40))
+			self.btn_new=wx.Button(panel, label='New', size=(90,40))
 			self.btn_new.Enable(True)
-			self.btn_delete=wx.Button(panel, label="Delete", size=(60,40))
+			self.btn_delete=wx.Button(panel, label="Delete", size=(90,40))
 			self.btn_delete.Enable(False)
 			self.btn_clearall=wx.Button(panel, label="Clear All",size=(60,-1))
 			self.btn_clearall.Enable(False)
 			self.btn_save=wx.Button(panel, label="Save", size=(60,40))
 			self.btn_save.Enable(False)			
+			s_sizer =  wx.BoxSizer(wx.HORIZONTAL)	
+			if 1:
+							
+				s_sizer.Add(self.btn_save,0,wx.EXPAND|wx.TOP|wx.BOTTOM|wx.LEFT|wx.RIGHT, border=0)
+				#self.btn_run.Enable(False)	
+				#btn_sqp=wx.Button(panel, label=lbl, style=wx.BU_EXACTFIT)	
+				imageFile = os.path.join(home,"images/arrow_down_24.png")
+				image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+				self.save_as = wx.BitmapButton(panel, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6))
+				
+				#tc[sn]['source'][0]
+				self.save_as.SetName('save_as')
+				self.save_as.Bind(wx.EVT_BUTTON, self.OnSaveAsMenu)
+				#tcbox.Add(btn_sqp, flag=wx.LEFT|wx.TOP, border=5)
+				s_sizer.Add(self.save_as,0,wx.EXPAND|wx.TOP|wx.BOTTOM|wx.LEFT|wx.RIGHT, border=0)
+			#self.host_map = wx.Button(panel, label=' ', size=(30,30))
+			#self.host_map.Enable(False)
+			#hm_sizer.Add(self.host_map,0,wx.EXPAND|wx.TOP|wx.BOTTOM|wx.LEFT|wx.RIGHT, border=0)
+			#self.sizer.Add(s_sizer, pos=(9, 3), span=(1, 1), flag=wx.TOP|wx.BOTTOM|wx.LEFT|wx.RIGHT, border=5)
+			
 			#self.btn_log=wx.Button(panel, label="Log")
 			#self.btn_log.Enable(False)			
-			fgs.AddMany([(self.btn_new, 0),(self.btn_delete, 0),wx.StaticText(panel, label=' '),(self.btn_clearall, 0),wx.StaticText(panel, label=' \n'),(self.btn_save, 0)])
+			fgs.AddMany([(self.btn_new, 0),(self.btn_delete, 0),wx.StaticText(panel, label=' '),(self.btn_clearall, 0),wx.StaticText(panel, label=' \n'),(s_sizer, 0)])
 			self.btn_new.Bind(wx.EVT_BUTTON, self.OnNewButton)	
 			self.btn_delete.Bind(wx.EVT_BUTTON, self.OnDeleteButton)	
 			self.btn_clearall.Bind(wx.EVT_BUTTON, self.OnClearAllButton)	
@@ -7732,7 +8639,7 @@ class DataBuddy(wx.Frame):
 		self.btn_show.Enable(False)
 		
 		if 1:
-			hm_sizer =  wx.BoxSizer(wx.HORIZONTAL)
+			
 			self.btn_run = wx.Button(panel, label='Run', size=(110,30))
 			#self.btn_run = wx.ToggleButton(panel, -1, label='Run', size=(110,30))
 			self.c_ok='#00FF7F'
@@ -7742,7 +8649,8 @@ class DataBuddy(wx.Frame):
 			#print self.btn_run.GetBackgroundColour()
 			#(240, 240, 240, 255)
 			self.btn_run.SetBackgroundColour(self.c_default) 
-			self.btn_run.Bind(wx.EVT_BUTTON, self.OnButtonRun)			
+			self.btn_run.Bind(wx.EVT_BUTTON, self.OnButtonRun)
+			hm_sizer =  wx.BoxSizer(wx.HORIZONTAL)			
 			hm_sizer.Add(self.btn_run,0,wx.EXPAND|wx.TOP|wx.BOTTOM|wx.LEFT|wx.RIGHT, border=0)
 			self.btn_run.Enable(False)			
 			if 1:
@@ -7760,7 +8668,7 @@ class DataBuddy(wx.Frame):
 			#self.host_map.Enable(False)
 			#hm_sizer.Add(self.host_map,0,wx.EXPAND|wx.TOP|wx.BOTTOM|wx.LEFT|wx.RIGHT, border=0)
 			self.sizer.Add(hm_sizer, pos=(9, 3), span=(1, 1), flag=wx.TOP|wx.BOTTOM|wx.LEFT|wx.RIGHT, border=5)
-		button5 = wx.Button(panel, ID_EXIT, label="Cancel",size=(60,30))
+		button5 = wx.Button(panel, ID_EXIT, label="Cancel",size=(90,30))
 		#self.Bind(wx.EVT_BUTTON, self.onAboutHtmlDlg, aboutBtn)
 		self.sizer.Add(button5, pos=(9, 4), span=(1, 1), flag=wx.TOP|wx.BOTTOM|wx.LEFT|wx.RIGHT, border=5)
 		
@@ -7795,7 +8703,7 @@ class DataBuddy(wx.Frame):
 					snb.SetPageText(1, 'Templates')
 				
 				snb.SetSelection(0)
-
+				self.Bind(fnb.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.onLibTypeChanged, self.snb)
 		
 			self.hsizer = wx.BoxSizer(wx.HORIZONTAL)
 			vsizer.Add(snb,1,wx.EXPAND|wx.TOP|wx.BOTTOM|wx.LEFT|wx.RIGHT, border=5)
@@ -7838,8 +8746,11 @@ class DataBuddy(wx.Frame):
 		sub(self.onDisableAll, "disable_all")
 		sub(self.onEnableAll, "enable_all")
 		sub(self.onShowNbTab, "show_nb_tab")
-		sub(self.onSaveArgs, "save_args")
+		sub(self.onSaveArgs, 'save_args')
+		sub(self.onSaveSessionAs, 'save_session_as')
 		sub(self.onSetKeepDumpFile, "set_keep_data_file")
+		
+		sub(self.onSaveSessionAsTemplate, "save_as_template")
 		
 		#self.SetSizeHints(250,300,500,400)
 		if 1:
@@ -7864,6 +8775,173 @@ class DataBuddy(wx.Frame):
 		self.ts=datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')
 		#print self.GetSize()
 		self._hmMenu=None
+		self._saMenu=None
+
+	def setLibHome(self,lname):
+		print 'setLibHome', lname
+		if self.S:
+			self.save_to_dir=os.path.join(session_home,lname)
+			if not os.path.isdir(self.save_to_dir):
+				os.makedirs(self.save_to_dir)
+		elif self.bT:
+			self.save_to_dir=os.path.join(tmpl_home,lname)
+			if not os.path.isdir(self.save_to_dir):
+				os.makedirs(self.save_to_dir)
+		else:
+			assert 1==2, 'lib type is not set'
+	
+	def onSaveSessionAsTemplate(self, data, extra1, extra2=None):
+		
+		self.saveTemplate(data)
+	def saveTemplate(self,data):
+		(tname, tlib) = data
+		#sname=self.getSessionName() 
+		#save_as=self.session_name!=sname 
+		#print self.session_name, sname
+		save_as=True
+		sm=self.tm
+		if self.if_duplicate_tmpl_name(tname, tlib):
+			self.Warn('Duplicate template name.')
+			self.tc_session_name.SetFocus()
+		else:
+			#self.save_to_dir=os.path.join(tmpl_home,default_tmpl_lib)
+			(sname,cv,tmpl,dname,fname)=self.saveSession(sess_home=tmpl_home,slib_name=tlib, sname=tname)
+			if save_as:
+				session=[sname,cv[0],cv[1],'Copy',tmpl,dname,fname]
+				#print dname
+				#e(0)
+				list=sm.lists[tlib]
+				print tlib
+				print sm.slps.keys()
+				slp=sm.slps[tlib]
+				idx=slp.addSession(session)	
+				slp.list.set_data()
+				slp.RecreateList(None,(slp.list,slp.filter))
+				idx = slp.getIdFromText(sname)
+				if idx>-1:				
+					list.SetItemState(idx, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED) 
+					list.EnsureVisible(idx)
+			#self.output_panel.Save()
+			#self.editor_panel.Save()
+			#self.parent.btn_save.Enable(False)
+			print 'test'
+			self.args_panel._sMenu=None
+			self.args_panel._tMenu=None
+			#self.save_to_dir=os.path.join(session_home,default_sess_lib)
+	def if_duplicate_tmpl_name(self,tname,tlib='My_Templates'):
+		print 'if_duplicate_tmpl_name'
+		tmpl_loc=os.path.join(tmpl_home,tlib,tname)
+		print tmpl_loc, os.path.isdir(tmpl_loc)
+		return os.path.isdir(tmpl_loc)		
+	def OnSaveAsMenu(self, event):
+		# Demonstrate using the wxFlatMenu without a menu bar
+		btn = event.GetEventObject()
+		#print 
+		if 1:
+			# Create the popup menu
+			self.CreatePopupMenuSA()
+			btnSize = btn.GetSize()
+			
+			btnPt = btn.GetPosition()
+			#print '1 btnPt.x, btnPt.y', btnPt.x, btnPt.y
+			btnPt = btn.GetParent().ClientToScreen(btnPt)
+			#print '2 btnPt.x, btnPt.y', btnPt.x, btnPt.y
+			#print 'btnSize.y', btnSize.y
+			self._saMenu.SetOwnerHeight(btnSize.y)
+			#print 'btnPt.x, btnPt.y', btnPt.x, btnPt.y
+			self._saMenu.Popup(wx.Point(btnPt.x, btnPt.y+50), self)
+			mpsn=self._saMenu.GetScreenPosition()
+			#print 'mpsn', mpsn
+			#adjust
+			if btnPt.y<mpsn[1]:
+				self._saMenu.Popup(wx.Point(btnPt.x, btnPt.y), self)
+			#print self._hmMenu.ClientToScreen(mpsn)
+			#print	dir(self._hmMenu)
+
+		
+	def CreatePopupMenuSA(self):
+		#global conf
+		if not self._saMenu:
+		
+			self._saMenu = FM.FlatMenu()
+			mitems={0:'Save', 1: 'Save As', 2:'Save As Template'}
+			#hm=self.args_panel.hm
+			#(hmap, active_map) =hm.get_host_map()
+			#print active_map
+			self.i=0
+			
+			#for k,v in mitems.items():
+			if 1:
+				self.i +=1
+				self.recentMenu = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(self._saMenu, wx.NewId(), 'Save', '', wx.ITEM_NORMAL)
+				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnSaveSessionMenu,(self.getSessionName()))
+				self._saMenu.AppendItem(menuItem)
+				#if not self.changed:
+				#	menuItem.Enable(False)
+				self._saMenu.AppendSeparator()
+
+				self.i +=1
+				self.recentMenu = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(self._saMenu, wx.NewId(), 'Save As', '', wx.ITEM_NORMAL)
+				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnSaveAsSessionMenu,(self.getSessionName()))
+				self._saMenu.AppendItem(menuItem)
+				#self._saMenu.AppendSeparator()
+
+				self.i +=1
+				self.recentMenu = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(self._saMenu, wx.NewId(), 'Save As Template', '', wx.ITEM_NORMAL)
+				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnSaveAsTemplateMenu,(self.getSessionName()))
+				self._saMenu.AppendItem(menuItem)
+				#self._saMenu.AppendSeparator()
+	def OnSaveSessionMenu(self, event,params):				
+		(sname)=params
+		msg='Save session\n"%s"\nas\n"%s"' % (self.session_name, sname)
+		if (not  self.session_name==sname) and self.if_yes( msg, 'Save As'):
+			print 'saveas'
+			send('save_args',())
+		else:
+			send('save_args',())				
+	def OnSaveAsSessionMenu(self, event,params):				
+		(sname)=params
+		if 1:
+			dlg = SaveAsDialog(self, -1, 'Save As'  , saveas_name=sname,size=(-1, -1),				
+				 #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
+				 style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
+				 useMetal=False
+				 )
+			dlg.CenterOnScreen()
+			# this does not return until the dialog is closed.
+			val = dlg.ShowModal()
+			if val == wx.ID_OK:
+				(new_sname, sess_lib)= dlg.getNewSessionInfo()
+				old_sname=self.session_name
+				#self.setSessionName(new_sname)
+				#self.c
+				self.tc_session_name.SetValue(new_sname)
+				send('save_session_as',(new_sname, sess_lib))
+
+		
+	def OnSaveAsTemplateMenu(self, event,params):				
+		(sname)=params
+		if 1:
+			dlg = SaveAsTemplateDialog(self, -1, 'Save As Template'  , saveas_name=sname,size=(-1, -1),				
+				 #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
+				 style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
+				 useMetal=False
+				 )
+			dlg.CenterOnScreen()
+			# this does not return until the dialog is closed.
+			val = dlg.ShowModal()
+			if val == wx.ID_OK:
+				(tmpl_name,tmpl_lib)= dlg.getTemplateInfo()
+				#old_sname=self.session_name
+				#self.setSessionName(new_sname)
+				#self.c
+				#self.tc_session_name.SetValue(tmpl_name)
+				send('save_as_template',(tmpl_name,tmpl_lib))
+				
+						
 	def OnOpenHostMapMenu(self, event):
 		# Demonstrate using the wxFlatMenu without a menu bar
 		btn = event.GetEventObject()
@@ -8132,9 +9210,25 @@ class DataBuddy(wx.Frame):
 		#self.loader_panel.changed=False
 	def openDefault(self, sname):
 		print 'openDefault'
+	def onLibTypeChanged(self, evt):
+		print 'onTabChanged'
+		ltype=self.snb.GetPageText(self.snb.GetSelection())	
+		if ltype in ['Sessions']:
+			self.S=True
+			self.bT=False
+			self.setLibHome(default_sess_lib)
+		elif 'Templates' in ltype:
+			self.S=False
+			self.bT=True
+			self.setLibHome(default_tmpl_lib)
+		else:
+			assert 1==2, 'Unknown lib type "%s"' % ltype
+		
 	def onTabChanged(self, evt):
 		#print 'onTabChanged'
 		self.nb_tab= self.nb.GetSelection()
+		libname=self.nb.GetPageText(self.nb.GetSelection())	
+		#self.setLibHome(libname)
 		#print self.nb_tab
 		if self.nb_tab:
 			self.btn_clearall.Enable(False)
@@ -8202,6 +9296,7 @@ class DataBuddy(wx.Frame):
 		self.btn_new.Enable(False)
 		self.btn_clearall.Enable(False)
 		self.btn_save.Enable(False)
+		self.save_as.Enable(False)
 		self.btn_run.Enable(False)
 		self.btn_show.Enable(False)
 		
@@ -8232,6 +9327,7 @@ class DataBuddy(wx.Frame):
 		self.btn_new.Enable(True)
 		self.btn_clearall.Enable(True)
 		self.btn_save.Enable(True)
+		self.save_as.Enable(True)
 		self.btn_run.Enable(True)
 		self.btn_show.Enable(True)
 		self.btn_delete.Enable(True)
@@ -8269,6 +9365,7 @@ class DataBuddy(wx.Frame):
 		else:
 			if not (kc == wx.WXK_TAB or kc == wx.WXK_RETURN):
 				self.btn_save.Enable(True)
+				self.save_as.Enable(True)
 				if not tc.Name in self.changed:
 					self.changed.append(tc.Name)		
 		event.Skip()
@@ -8409,7 +9506,7 @@ class DataBuddy(wx.Frame):
 		else:
 			return 'Running...(%s)' % (elapsed)
 	def onOpenSession(self, data, extra1, extra2=None):
-		#print 'onOpenSession'
+		print 'onOpenSession'
 		#pprint(data)
 		#size=self.GetSize()
 		#pprint(data)
@@ -8421,9 +9518,11 @@ class DataBuddy(wx.Frame):
 		self.enableForm()
 		self.tmpl='.'.join([tmpl1,tmpl2])
 		self.open_session([sname,[cv_from,cv_to],type,self.tmpl,sdir,fname])
+		
 		self.btn_delete.Enable(True)
 		self.btn_new.Enable(True)
 		self.btn_save.Enable(False)
+		#self.save_as.Enable(False)
 		#pprint(self.args_panel.obj.keys())
 		ld=os.path.isdir(self.args_panel.getLogDir())
 		if (self.last_log_dir.has_key(self.session_name) and self.last_log_dir[self.session_name]) or ld:
@@ -8506,7 +9605,7 @@ class DataBuddy(wx.Frame):
 		self.btn_save.Enable(True)
 		self.btn_run.Enable(True)
 		self.btn_show.Enable(True)
-		
+		self.save_as.Enable(True)
 		self.st_session_name.Enable(True)
 		self.tc_session_name.Enable(True)
 		self.confirm_run.Enable(True)
@@ -8523,18 +9622,23 @@ class DataBuddy(wx.Frame):
 	def tryToDelete(self):
 		print  'tryToDelete'
 		items={}
-		data =self.sm.list.data[self.sm.list.current_list]
+		#self.lists[default_slib_name]
+		print self.sm.lists.keys()
+		print self.sm.slib_name
+		#e(0)
+		list=self.sm.lists[self.sm.slib_name]
+		data =list.data[list.current_list]
 		#pprint(data)
-		selected=self.sm.list.GetSelectedItems()
+		selected=list.GetSelectedItems()
 		#print selected
 		names=[]
 		for i in selected:
 			#print '$$$$$',i
-			ii=self.sm.list.getItemInfo(i)
+			ii=list.getItemInfo(i)
 			#print i, self.sm.list.getItemInfo(i)
 			#print data[i]
 			key = ii[1] #pprint  (data[i])
-			names.append(self.sm.list.GetItemText(i))
+			names.append(list.GetItemText(i))
 			items[key]=os.path.join(data[i][-2],data[i][-1])
 			#del data[i]
 		#pprint (names)	
@@ -8578,12 +9682,14 @@ class DataBuddy(wx.Frame):
 			#self.Refresh()
 	def onValueChanged(self, data, extra1, extra2=None):		
 		self.btn_save.Enable(True)
+		self.save_as.Enable(True)
 		
 	def setSessionName(self, sn):
 		self.tc_session_name.SetValue(sn)
 		#ORA11G_TimezoneQueryFile_to_ORA11G_Subpartitio
 		self.tc_session_name.Enable(True)
 		self.session_name=self.getSessionName()
+		self._saMenu = None #save as popup menu
 	def getSessionName(self):
 		return self.tc_session_name.GetValue().strip().strip(' ')
 	def getCopyVector(self):
@@ -8612,45 +9718,64 @@ class DataBuddy(wx.Frame):
 	def OnSaveButton(self, event):
 		self.saveArgs()
 	def onSaveArgs(self, data, extra1, extra2=None):
+		print 'onSaveArgs'
 		self.saveArgs()
-	def saveArgs(self):
+	def onSaveSessionAs(self, data, extra1, extra2=None):
+		(sname, lname) = data
+		print 'onSaveSessionAs', sname, lname
+		self.saveArgs(slib=lname)		
+		
+	def saveArgs(self, slib='My_Sessions'):
+		print 'saveArgs', slib
 		sname=self.getSessionName() 
 		save_as=self.session_name!=sname 
-		if save_as and self.if_duplicate_name(sname):
+		print self.session_name, sname
+		#a=1/0
+		if (save_as and self.if_duplicate_name(sname,slib)) or self.if_duplicate_name(sname,slib):
 			self.Warn('Duplicate session name.')
 			self.tc_session_name.SetFocus()
 		else:
-			(sname,cv,tmpl,dname,fname)=self.saveSession()
+			(sname,cv,tmpl,dname,fname)=self.saveSession(slib_name=slib)
 			if save_as:
 				session=[sname,cv[0],cv[1],'Copy',tmpl,dname,fname]
-				idx=self.sm.slp.addSession(session)	
-				self.sm.slp.list.set_data()
-				self.sm.slp.RecreateList(None,(self.sm.slp.list,self.sm.slp.filter))
-				idx = self.sm.slp.getIdFromText(sname)
+				#print dname
+				#e(0)
+				list=self.sm.lists[slib]
+				print slib
+				print self.sm.slps.keys()
+				slp=self.sm.slps[slib]
+				idx=slp.addSession(session)	
+				slp.list.set_data()
+				slp.RecreateList(None,(slp.list,slp.filter))
+				idx = slp.getIdFromText(sname)
 				if idx>-1:				
-					self.sm.list.SetItemState(idx, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED) 
-					self.sm.list.EnsureVisible(idx)
-		self.loader_panel.Save()
-		#self.editor_panel.Save()
-		#self.parent.btn_save.Enable(False)
-		print 'test'
-		self.args_panel._sMenu=None
-		self.args_panel._tMenu=None
+					list.SetItemState(idx, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED) 
+					list.EnsureVisible(idx)
+			#self.output_panel.Save()
+			#self.editor_panel.Save()
+			#self.parent.btn_save.Enable(False)
+			print 'test'
+			self.args_panel._sMenu=None
+			self.args_panel._tMenu=None
 		
 	def Warn(self, message, caption = 'Warning!'):
 		dlg = wx.MessageDialog(self, message, caption, wx.OK | wx.ICON_WARNING)
 		dlg.ShowModal()
 		dlg.Destroy()	
-	def if_duplicate_name(self,name):
-		for k,v in self.data.items():
-			if name == v[0]:
-				return True
-		return False
+	def if_duplicate_name(self,sname,slib='My_Sessions'):
+		print 'if_duplicate_name', slib
+		sfile_loc=os.path.join(session_home,slib,sname)
+		print session_home,slib,sname
+		print sfile_loc, os.path.isdir(sfile_loc)
+		#raise;
+		e(0)
+		return os.path.isdir(sfile_loc)
+		
 	def if_sname_changed(self):
 		print 'if_sname_changed'
 		#print self.tc_session_name.GetItemData()
 		
-	def saveSession(self, data=None,slib_name='My_Sessions'):
+	def saveSession(self, sess_home=session_home, slib_name='My_Sessions', sname=None, data=None):
 		
 		if data:
 			#it's a new session
@@ -8692,10 +9817,17 @@ class DataBuddy(wx.Frame):
 				#print reuse_targs
 				#pprint(targs)
 		else:
-			(sname,copy_vector,tmpl,args)=[self.getSessionName(), self.getCopyVector(), '.'.join(self.getTemplates()), self.args_panel.getArgs()]
-		if not os.path.isdir(self.sess_home):
-			os.makedirs(self.sess_home)
-		self.session_name=sname
+			if not sname:
+				sname=self.getSessionName()
+			(copy_vector,tmpl,args)=[ self.getCopyVector(), '.'.join(self.getTemplates()), self.args_panel.getArgs()]
+			#assert self.session_name==sname, 'session name changed!'
+		print sess_home
+		print self.save_to_dir
+		#e(0)
+		#if not os.path.isdir(sess_home):
+		#	os.makedirs(sess_home)
+		
+		
 		#sname=self.getSessionName()
 		#print self.tmpl
 		#print self.copy_vector
@@ -8708,7 +9840,9 @@ class DataBuddy(wx.Frame):
 		#print sname
 		
 		#print '#'*60
-		save_to_dir=os.path.join(self.sess_home,slib_name)
+		print sess_home
+		print slib_name
+		save_to_dir=os.path.join(sess_home,slib_name)
 		assert os.path.isdir(save_to_dir), 'Cannot save new session to\n%s' % save_to_dir
 		save_to_file=os.path.join(save_to_dir, fname)
 		
@@ -8722,7 +9856,20 @@ class DataBuddy(wx.Frame):
 		args=self.obfuscate(args)
 		import pickle
 		pickle.dump( [sname,copy_vector, tmpl, args], open( save_to_file, "wb" ) )
+		print save_to_dir
+		print self.save_to_dir
+		#e(0)
+		if (self.save_to_dir not in [save_to_dir]) or (sname not in [self.session_name] and self.session_name):
+			#copy session details
+			to_dir=os.path.join(save_to_dir,sname)
+			print self.save_to_dir,self.session_name
+			from_dir=os.path.join(self.save_to_dir,self.session_name)
+			#os.mkdir(to_dir)
+			print from_dir
+			print to_dir
+			shutil.copytree(from_dir, to_dir)
 		self.btn_save.Enable(False)	
+		self.session_name=sname
 		self.changed=[]
 		return (sname,copy_vector, tmpl,save_to_dir, fname)
 	def obfuscate(self, data):
@@ -8764,7 +9911,8 @@ class DataBuddy(wx.Frame):
 					#print '-----',self.tc_sname.GetValue(),self.copy_vector, tmpl
 					data=(sname,cv,tmpl,api_args,reuse)
 					slib_name=self.getActiveLibName()
-					(sname,cv,tmpl,dname,fname)=self.saveSession(data,slib_name)
+					(sname,cv,tmpl,dname,fname)=self.saveSession(data=data,slib_name=slib_name)
+					#sess_home=session_home, slib_name='My_Sessions', sname
 					#send("create_new_session", (sname,cv, tmpl,api_args,reuse) )
 					send('add_session',(sname,cv,tmpl,dname,fname,slib_name))
 
@@ -8831,7 +9979,7 @@ class DataBuddy(wx.Frame):
 			sess=self.get_session_args(os.path.join(self.sdir,self.fname))
 			#pprint(sess.keys())
 			(self.cargs,self.fargs,self.targs)=sess
-
+			
 			ids=None
 
 			if 1:
@@ -8880,6 +10028,7 @@ class DataBuddy(wx.Frame):
 				#self.updateCommand(self.nb_tab)
 			else:
 				self.args_panel.open_session(self.copy_vector,self.tmpl,self.the_id,(self.cargs,self.fargs,self.targs))
+				
 				self.nb.EnableTab(0,True)
 				self.nb.EnableTab(1,True)
 				self.nb.EnableTab(2,True)
@@ -8899,14 +10048,16 @@ class DataBuddy(wx.Frame):
 			#self.nb.SetSize((100,-1))
 			self.btn_show.Enable(True)
 			self.btn_run.Enable(True)
-			self.btn_save.Enable(True)	
+			self.btn_save.Enable(True)
+			self.save_as.Enable(True)			
 			self.btn_clearall.Enable(True)
-  
+			
+			
 	def updateCommand(self, page_id=1):
 		#print 'updateCommand', page_id
 		page_title=self.nb.GetPageText(page_id)
 		#print page_title
-		if page_title in ['SQL*Loader']:
+		if page_title in ['Output']:
 			#pprint(self.args_panel.get_cmd(self.transport))
 			self.editor.SetEditable(True)
 			self.editor.SetText(self.args_panel.get_cmd(self.transport))
@@ -9347,7 +10498,7 @@ class DataBuddy(wx.Frame):
 
 	def OnExit(self,e):
 		#print self.changed
-		if (self.changed or self.loader_panel.changed ) and self.if_yes('Do you want to save changes?','Application exit.'):
+		if (self.changed  ) and self.if_yes('Do you want to save changes?','Application exit.'):
 			send('save_args',())
 			#(sname,cv,tmpl,dname,fname)=self.saveSession()
 			#self.loader_panel.Save()
@@ -9448,7 +10599,7 @@ if __name__ == '__main__':
 			global imgs
 			imgs = i
 			self.Init()
-			self.frame = DataBuddy(None, -1,title=app_title, size=(1200,900))
+			self.frame = DataBuddy(None, -1,title=app_title, size=(1200,910))
 			if default_session:
 				self.frame.openDefault(default_session)
 			self.frame.Show(True)
