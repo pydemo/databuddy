@@ -194,6 +194,10 @@ TimesTen|  | yes  | yes
 - add Foundation DB
 - add Enterprise DB
 - add Altibase HDB
+- Kinesis
+- Redshift
+- RDS
+- DynamoDB
 - add Couchbase
 - add Aerospike
 - add InterSystems
