@@ -17,8 +17,26 @@ import re
 import pprint as pp
 import errno
 from common.v101.exceptions import RowCountError
+import imp
+def import_module(filepath):
+	class_inst = None
+	#expected_class = 'MyClass'
 
+	mod_name,file_ext = os.path.splitext(os.path.split(filepath)[-1])
+	assert os.path.isfile(filepath), 'File %s does not exists.' % filepath
+	if file_ext.lower() == '.py':
+		py_mod = imp.load_source(mod_name, filepath)
+
+	elif file_ext.lower() == '.pyc':
+		py_mod = imp.load_compiled(mod_name, filepath)
+	return py_mod
 	
+d=os.path.split(os.path.split(os.path.dirname( __file__))[0])[0]
+#os.chdir(d)
+#print '##########',os.getcwd()
+#from include.v101.host_map import host_map as hmap
+hmap=import_module(os.path.join(d,'include','v101','host_map.py'))
+hmap= hmap.host_map
 class code_release(object):
 	"""Code Release object"""
 	def __init__(self,log,parent,conf, args, spConf, shard):
@@ -30,8 +48,6 @@ class code_release(object):
 		home=self.conf.home
 		self.log_dir=self.conf.datadir
 		ts= self.conf.ts
-		
-
 		self.R=False #if remote exec
 		self.S=False #if source 
 		if self.parent.__class__.__name__ in ['source']:
@@ -45,40 +61,16 @@ class code_release(object):
 		#e(0)
 		self.remote_login={}
 		self.remote_user='default'
-
+		
 		if hasattr(self.args, 'host_map') and self.args.host_map:
 			
 			host_map_loc= self.args.host_map
-			if os.path.exists(host_map_loc):
-				host_map_loc=os.path.realpath(host_map_loc)
-			assert os.path.isfile(host_map_loc), 'Host mapping file "%s" does not exists.' % self.args.host_map
-			self.log.info('using host map "%s"' % self.args.host_map)
-			#print host_map_loc, os.path.exists(host_map_loc), os.path.realpath(host_map_loc)
-			hm=self.conf.import_module(host_map_loc)
-			#pp = pprint.PrettyPrinter(depth=6)
-			conf=hm.mapping
-			#print host_map_loc
-			#code=pp.pprint(conf)
-			#print code			
-			h2s_map={}
-			for host_map in conf['host_map'][conf['active_mapping']]:
-				#host_map=host_map_list[0]
-				shard_range, host= (host_map['shards'], host_map['host'])
-				
-				a,b=map(int,shard_range.split(':'))
-				#print a,b
-				#print conf
-				#print list(range(a,b))
-				
-				for s in range(a,b):
-					h2s_map[s]= int(host)
-			#print h2s_map
-			assert int(self.shard) in h2s_map.keys(), 'Host mapping for shard %s is not set.' % self.shard
-			host =conf['host_list'] [h2s_map[int(self.shard)]]
+			hm = hmap(self.args.copy_vector,host_map_loc,shard)
 			
-			if not host[0] in ['nt']:
+			
+			if hm.R:
 				self.R=True
-				self.remote_login=host[1:]
+				self.remote_login=hm.host['login']
 				self.remote_user=self.remote_login[1]
 				self.remote_home='/tmp/qctest/%s' % self.remote_user
 				remote_home=self.remote_home
@@ -136,7 +128,8 @@ class code_release(object):
 					#print run_fname
 					#assert not os.path.isfile(run_fname), 'local run.sh already exists.'
 					spooldir=os.path.dirname(self.result_file)
-					
+					#print spooldir
+					#e(0)
 					#print self.result_file
 					#print '-->',spooldir
 					#e(0)
@@ -252,7 +245,7 @@ log "Spool file size ${SIZE}b"
 					#e(0)
 				self.op_file_from=os.path.join(self.out_dir,'.from_ora_profile')
 				
-				if self.S and not os.path.isfile(self.op_file_from):
+				if self.S:
 					#source tnsnames.ora
 					#print self.parent.db_client_dbshell
 					admin_loc= os.path.join(os.path.dirname(self.parent.db_client_dbshell)[:-3],'network','admin')
@@ -260,11 +253,14 @@ log "Spool file size ${SIZE}b"
 					tns_loc= os.path.join(admin_loc,'tnsnames.ora')
 					assert os.path.isfile(tns_loc),'"tnsnames.ora" file is missing for loader\n%s' % self.parent.db_client_dbshell
 					out_tns_dir =  os.path.join(self.out_dir,'tnsnames_from')
-					os.mkdir(out_tns_dir)
+					if not os.path.isdir(out_tns_dir):
+						os.mkdir(out_tns_dir)
 					#e(0)
 					out_tns_loc=os.path.join(out_tns_dir,'tnsnames.ora')
 					shutil.copyfile(tns_loc,out_tns_loc)
-					ora_home='/home/oracle/app/oracle/product/12.1.0/dbhome_1'
+					ora_home='/tmp/home/oracle/app/oracle/product/12.1.0/dbhome_1'
+					#print hm.mapping
+					#e(0)
 					#tns_admin ='/home/oracle/app/oracle/product/12.1.0/dbhome_1/network/admin'
 					tns_admin ='%s/tnsnames_from' % (self.remote_home_ts)
 					ora_profile="""
@@ -279,8 +275,9 @@ export TNS_ADMIN
 					""" % (ora_home,tns_admin)
 					with open(self.op_file_from, 'wb') as file_:
 						file_.write(ora_profile.replace(r'\r\n',r'\n'))
+					#pprint(ora_profile)
 				self.op_file_to=os.path.join(self.out_dir,'.to_ora_profile')
-				if (not self.S) and not os.path.isfile(self.op_file_to):
+				if (not self.S):
 					#source tnsnames.ora
 					#print self.parent.db_client_dbshell
 					admin_loc= os.path.join(os.path.dirname(self.parent.db_client_dbshell)[:-3],'network','admin')
@@ -288,11 +285,12 @@ export TNS_ADMIN
 					tns_loc= os.path.join(admin_loc,'tnsnames.ora')
 					assert os.path.isfile(tns_loc),'"tnsnames.ora" file is missing for loader\n%s' % self.parent.db_client_dbshell
 					out_tns_dir =  os.path.join(self.out_dir,'tnsnames_to')
-					os.mkdir(out_tns_dir)
+					if not os.path.isdir(out_tns_dir):
+						os.mkdir(out_tns_dir)
 					#e(0)
 					out_tns_loc=os.path.join(out_tns_dir,'tnsnames.ora')
 					shutil.copyfile(tns_loc,out_tns_loc)
-					ora_home='/home/oracle/app/oracle/product/12.1.0/dbhome_1'
+					ora_home='/tmp/home/oracle/app/oracle/product/12.1.0/dbhome_1'
 					#tns_admin ='/home/oracle/app/oracle/product/12.1.0/dbhome_1/network/admin'
 					tns_admin ='%s/tnsnames_to' % (self.remote_home_ts)
 					ora_profile="""
@@ -305,6 +303,7 @@ export PATH
 TNS_ADMIN=%s
 export TNS_ADMIN
 					""" % (ora_home,tns_admin)
+					#pprint(ora_home)
 					with open(self.op_file_to, 'wb') as file_:
 						file_.write(ora_profile.replace(r'\r\n',r'\n'))	
 	def zip(self, src, dst):
@@ -420,6 +419,9 @@ class common(base):
 		#self.db=db
 		self.args=conf.args
 		self.cr={} #code_release(self.conf, self.args)
+		host_map_loc= self.args.host_map
+		self.hm = hmap(self.args.copy_vector,host_map_loc,0)
+			
 	def get_table_columns(self,  tab_name):
 		if self.tab_cols.has_key(tab_name):
 			return self.tab_cols[tab_name]
@@ -543,12 +545,17 @@ class source(common):
 		if self.db_client_dbshell:
 			return self.db_client_dbshell
 		loader= os.path.basename(self.conf.dbtools['DBSHELL'][self.db])
-		if self.args.source_client_home:
-			self.db_client_dbshell=(r'%s\%s' % (self.args.source_client_home, loader)).strip("'").strip('\\').strip('\\')
+		if self.hm.local_source_client_home: #self.args.source_client_home:
+			print self.hm.local_source_client_home
+			
+			self.db_client_dbshell=(r'%s\%s' % (self.hm.local_source_client_home, loader)).strip("'").strip('\\').strip('\\')
+			
 		else:
 			self.db_client_dbshell=self.conf.dbtools['DBSHELL'][self.db]
 			if not os.path.isfile(self.db_client_dbshell):
-				self.log.warn('Path to source loader is not set. Defaulting to %' % loader)	
+				self.log.warn('Path to source loader is not set. Defaulting to %' % loader)
+		#print self.db_client_dbshell
+		#e(0)
 		return self.db_client_dbshell
 	def get_ddl_sppol_query(self):
 		schema,tab= self.from_table.split('.')
@@ -584,7 +591,7 @@ exit;
 		self.cr[shard]=code_release(self.log,self, self.conf, self.args, spConf, shard)
 		#print self.args.host_map
 		#pprint(payload)
-		#print self.cr.R
+		#print self.cr[shard].R
 		#e(0)
 		#print '-----%s--%s--%s' % (self.cr.shard, self.shard,payload[0].split('-')[1])
 		if self.cr[shard].R:		
@@ -716,14 +723,19 @@ exit;
 				else:
 					last_line=''.join(out[::-1])
 					#print last line
+					print ':::',last_line
 					raise RowCountError(last_line)
 			else:
 				
-				self.log.error('Cannot get row count.')
+				#self.log.error('Cannot get row count.')
 				last_line=''.join(out[::-1])
 				#print last line
-				print open(outfn).read(4000)
-				raise RowCountError(last_line)
+				tail=open(outfn).read(4000).strip()
+				if 'no rows selected' in tail:
+					print tail
+					return (0, status)			
+				else:
+					raise RowCountError(last_line)
 				
 			file.close()
 
@@ -831,16 +843,16 @@ class target(common):
 		return tmpl	
 		
 	def get_db_client_dbshell(self):
-		assert self.args.target_client_home, 'self.args.target_client_home is not set'
+		assert self.hm.local_target_client_home, 'self.args.target_client_home is not set'
 		if self.db_client_dbshell:
 			return self.db_client_dbshell
 		loader= os.path.basename(self.conf.dbtools['DBSHELL'][self.db])
-		if self.args.target_client_home:
-			self.db_client_dbshell=(r'%s\%s' % (self.args.target_client_home, loader)).strip("'").strip('\\').strip('\\')
+		if self.hm.local_target_client_home:
+			self.db_client_dbshell=(r'%s\%s' % (self.hm.local_target_client_home, loader)).strip("'").strip('\\').strip('\\')
 		else:
 			self.db_client_dbshell=self.conf.dbtools['DBSHELL'][self.db]
 			print self.db_client_dbshell,self.db
-			print self.args.target_client_home
+			print self.hm.local_target_client_home
 			e(0)
 			
 			if not os.path.isfile(self.db_client_dbshell):

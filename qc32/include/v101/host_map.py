@@ -5,7 +5,7 @@ from common.v101.loaders import import_module
 class base_host_map(object):
 	def __init__(self,copy_vector, host_map_loc,shard):
 		self.host_map_loc=host_map_loc
-		print host_map_loc
+		#print host_map_loc
 		#self.conf=conf
 		self.copy_vector=copy_vector
 		self.shard=shard
@@ -22,7 +22,7 @@ class base_host_map(object):
 		env=self.mapping['host_list'][self.mapping['local_host']]['db_env']
 		#pprint(env)
 		#print from_db, to_db
-		return (env[from_db]['source_client_home'], env[to_db]['target_client_home'])
+		return (env[from_db]['source'], env[to_db]['target'])
 	def set_host_map(self):
 		self.remote_user='default'
 		#obj=self.args_panel.obj
@@ -79,7 +79,7 @@ class host_map_v1( base_host_map):
 		self.h2s_map=self.get_h2s_map()
 		assert int(shard) in self.h2s_map.keys(), 'Host mapping for shard %s is not set.' % shard
 		self.host =self.mapping['host_list'] [self.h2s_map[int(shard)]]
-		pprint(self.host)
+		#pprint(self.host)
 		if not self.host['env'][0] in ['nt']:
 			return True
 		else:
