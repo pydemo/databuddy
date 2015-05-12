@@ -145,9 +145,9 @@ TimesTen|  | yes  | yes
 - add "Output" tab
 - add '--compress_spool' arg for zipped output
 - add sqlloader.py
-- fix session sort
-- fix favorites
-- fix session refresh
+- fix session sort **DONE**
+- fix session refresh **DONE**
+- let user set primary dbs, source/target dbs
 - add scp/ftp/sftp as data source/target
 - make all paths relative to transport_home
 - create wizard for "New Session" template selection
