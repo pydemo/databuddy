@@ -1,0 +1,63 @@
+
+C:\Python27\data_migrator_1239_ddl>echo y  | C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe -w ssexp2ddl -o 3 -r 3 -t "|" -l 50 -K 1 -M C:\Temp\qc_log -F C:\tmp\TEST_default_spool -B qc_job -Y 20150513_113155_399000 -5 ".\config\host_map_v2.py" -c Timestamp_test_from -j sa -x 198Morgan -b master -n ALEX_BUZ-PC\SQLEXPRESS -z "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn" -D C:\Python27\data_migrator_1239_ddl\DDL_OUT 
+----------------------------------------------------------------------
+QueryCopy for SQL Server Express (v0.3.3, beta, 2015/05/13 11:31:54) [32bit]
+Copyright (c): 2014 Alex Buzunov, All rights reserved.
+Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
+----------------------------------------------------------------------
+####################
+Performing DDL extraction.
+		
+	From SQL Server Express:	
+		from db: sa/master/ALEX_BUZ-PC\SQLEXPRESS
+		table: Timestamp_test_from
+		shards:	3
+		
+		
+To DDL:
+	C:\Python27\data_migrator_1239_ddl\DDL_OUT\Timestamp_test_from_20150513_113155_399000.Shard-0.data1
+	C:\Python27\data_migrator_1239_ddl\DDL_OUT\Timestamp_test_from_20150513_113155_399000.Shard-1.data1
+	C:\Python27\data_migrator_1239_ddl\DDL_OUT\Timestamp_test_from_20150513_113155_399000.Shard-2.data1
+
+####################
+Are you sure you want to proceed?(y/n): 
+
+Thread-1 (-1, -1, -1)
+Thread-0 (-1, -1, -1)
+Thread-2 (-1, -1, -1)
+############################################################
+Copy stats (3 threads, 3 shards):
+############################################################
+2015-05-13 11:32:21,697 - ssexp2ddl - INFO - Counting rows...
+2015-05-13 11:32:21,697 - ssexp2ddl - INFO - Counting rows in source...
+2015-05-13 11:32:21,775 - ssexp2ddl - INFO - Fetching table columns...
+2015-05-13 11:32:21,836 - ssexp2ddl - INFO - Done.
+2015-05-13 11:32:21,836 - ssexp2ddl - INFO - Sharding query by Id
+2015-05-13 11:32:21,836 - ssexp2ddl - INFO - Starting Thread-0
+2015-05-13 11:32:21,836 - ssexp2ddl - INFO - Starting Thread-1
+2015-05-13 11:32:21,836 - ssexp2ddl - INFO - Starting Thread-2
+2015-05-13 11:32:21,836 - ssexp2ddl - INFO - Thread-1 processing Shard-0
+2015-05-13 11:32:21,836 - ssexp2ddl - INFO - Thread-0 processing Shard-1
+2015-05-13 11:32:21,836 - ssexp2ddl - INFO - Extracting ddl...
+2015-05-13 11:32:21,836 - ssexp2ddl - INFO - Thread-2 processing Shard-2
+2015-05-13 11:32:21,836 - ssexp2ddl - INFO - Extracting ddl...
+2015-05-13 11:32:21,836 - ssexp2ddl - ERROR - DDL extract is not supported
+2015-05-13 11:32:21,836 - ssexp2ddl - INFO - Extracting ddl...
+2015-05-13 11:32:21,836 - ssexp2ddl - ERROR - DDL extract is not supported
+2015-05-13 11:32:21,836 - ssexp2ddl - INFO - Done.
+2015-05-13 11:32:21,836 - ssexp2ddl - ERROR - DDL extract is not supported
+2015-05-13 11:32:21,836 - ssexp2ddl - INFO - Done.
+2015-05-13 11:32:21,836 - ssexp2ddl - INFO - Thread-1 exit status -1
+2015-05-13 11:32:21,836 - ssexp2ddl - INFO - Done.
+2015-05-13 11:32:21,836 - ssexp2ddl - INFO - Exiting Thread-1
+2015-05-13 11:32:21,836 - ssexp2ddl - INFO - Thread-0 exit status -1
+2015-05-13 11:32:21,836 - ssexp2ddl - INFO - Thread-2 exit status -1
+2015-05-13 11:32:21,836 - ssexp2ddl - INFO - Exiting Thread-0
+2015-05-13 11:32:21,836 - ssexp2ddl - INFO - Exiting Thread-2
+2015-05-13 11:32:21,836 - ssexp2ddl - INFO - Shard-0/-1:		n/a
+2015-05-13 11:32:21,836 - ssexp2ddl - INFO - Shard-1/-1:		n/a
+2015-05-13 11:32:21,836 - ssexp2ddl - INFO - Shard-2/-1:		n/a
+2015-05-13 11:32:21,836 - ssexp2ddl - INFO - TOTAL Bytes:	n/a
+2015-05-13 11:32:21,852 - ssexp2ddl - INFO - TOTAL Rows:		n/a
+2015-05-13 11:32:21,852 - ssexp2ddl - ERROR - Copy failed.
+2015-05-13 11:32:21,852 - ssexp2ddl - INFO - Elapsed: 00:00:00

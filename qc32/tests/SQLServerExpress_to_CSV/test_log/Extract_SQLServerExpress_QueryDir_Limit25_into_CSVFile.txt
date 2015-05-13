@@ -1,0 +1,12 @@
+
+C:\Python27\data_migrator_1239_ddl>echo y  | C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe -w ssexp2csv -o 1 -r 1 -t "|" -l 25 -K 1 -M C:\Temp\qc_log -F C:\tmp\TEST_default_spool -B qc_job -Y 20150513_113154_790000 -5 ".\config\host_map_v2.py" -Q C:\Python27\data_migrator_1239_ddl\test\v101\query\query_dir_ss -j sa -x 198Morgan -b master -n ALEX_BUZ-PC\SQLEXPRESS -z "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn" -g C:\Python27\data_migrator_1239_ddl\CSV_OUT\testSSEXP_QueryDir_Limit25.data 
+----------------------------------------------------------------------
+QueryCopy for SQL Server Express (v0.3.3, beta, 2015/05/13 11:31:54) [32bit]
+Copyright (c): 2014 Alex Buzunov, All rights reserved.
+Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
+----------------------------------------------------------------------
+2015-05-13 11:32:07,160 - ssexp2csv - WARNING - Overriding num_of_shards (1) to be equal number of queries (3).
+Traceback (most recent call last):
+  File "<string>", line 240, in <module>
+AssertionError: Cannot export to file if num_of_shards>1
+ Use "-D" (-to_dir) instead 

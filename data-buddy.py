@@ -97,7 +97,7 @@ except ImportError: # if it's not there locally, try the wxPython lib.
 
 from qc32.config.include.oracle import target	
 ########################################################################
-exe=False
+exe=True
 
 e=sys.exit
 blog=cu.blog
@@ -1025,7 +1025,7 @@ class SessionList(wx.ListCtrl):
 		self.InsertColumn(6, 'From_Template')
 		#self.InsertColumn(4, 'Desription')
 
-		self.SetColumnWidth(0, 350)
+		self.SetColumnWidth(0, 270)
 		self.SetColumnWidth(1, 120)
 		self.SetColumnWidth(2, 130)
 		self.SetColumnWidth(3, 60)
@@ -1069,6 +1069,7 @@ class SessionList(wx.ListCtrl):
 			flist[i] = [name.strip(' '),dt,tmpl.split('.')[1],cv.split('.')[0],cv.split('.')[1],type,tmpl.split('.')[0],self.save_to_dir,f]
 			i +=1
 		self.data[self.current_list]= flist
+		self.parent.itemDataMap=self.data[self.current_list]
 
 	def getList(self):
 		#print 'getlist'
@@ -1199,6 +1200,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		self._favMenu=None
 		self._popUpMenu = {}
 		self._recentMenu = {}
+		self.slib=os.path.split(slib_path)[-1]
 		(self.row, self.col) =pos
 		self.pos=pos
 		self.panel_pos=panel_pos
@@ -1249,8 +1251,8 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 
 			imageFile = os.path.join(home,"images/arrow_back_dgrey_16x2.png")
 			image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
-				
-			self.btnFav = wx.Button(self, -1, "Fav", style=wx.BU_EXACTFIT, size=(30,20))
+			if 0:	
+				self.btnFav = wx.Button(self, -1, 'Fav', style=wx.BU_EXACTFIT, size=(30,20))
 			#self.btnHist = wx.Button(self, -1, "Hist", style=wx.BU_EXACTFIT, size=(30,20))	
 			imageFile = os.path.join(home,"images/refresh_icon_16_grey2.png")
 			image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
@@ -1260,7 +1262,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			#self.sPanel.statusbar.Add([self.gauge[pos],self.btn_stop[pos]], 1, wx.EXPAND,1)
 			#self.btn_stop[pos].Hide()
 			#self.btn_refresh.SetPosition((1,1))
-			#self.gen_bind(wx.EVT_BUTTON,self.btn_refresh, self.OnRefreshList,(self.pos))
+			self.gen_bind(wx.EVT_BUTTON,self.btn_refresh, self.OnBtnRefreshList,(self.pos))
 			#self.btnFwd = wx.Button(self, -1, "Forward", style=wx.BU_EXACTFIT)
 			navig = wx.BoxSizer(wx.HORIZONTAL)
 			
@@ -1276,7 +1278,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			navig.Add(self.filter, 1, wx.EXPAND)
 			
 			#navig.Add(self.btnHist, 0, wx.LEFT)		
-			navig.Add(self.btnFav, 0, wx.LEFT)
+			#navig.Add(self.btnFav, 0, wx.LEFT)
 			navig.Add(self.btn_refresh, 0, wx.LEFT)
 			
 
@@ -1334,12 +1336,16 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 
 		self.list.setEnvironmentList(('configDirLoc','ConfigList',))
 		sub(self.onRefreshList, "refresh_list")
-		sub(self.OnAddSession, "add_session")
+		sub(self.OnAddSession, 'add_session')
 		sub(self.onHighlightSession, "highlight_session")
 		sub(self.onLowlightSession, "lowlight_session")
 		sub(self.onDeleteSessions, "delete_sessions")
 
-			
+	def OnBtnRefreshList(self, event, params):
+		print 'OnBtnRefreshList'
+		self.list.set_data()
+		self.RecreateList(None,(self.list,self.filter))
+		
 	def onHighlightSession(self, data, extra1, extra2=None):
 		#print 'onHighlightSession'
 		(sname,color) = data
@@ -1433,29 +1439,32 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		self.RecreateList(None,(self.list,self.filter))
 	def OnAddSession(self, data, extra1, extra2=None):
 		(sname,cv,tmpl,dname,fname,lib_name) = data
-		#print lib_name		
-		self.Freeze()
-		tmpl1,tmpl2=tmpl.split('.')
-		s=[sname.strip(' '),tmpl2,cv[0],cv[1],'Copy',tmpl1,dname,fname]
-		#add
-		dt=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-		idx= self.addSession(s[:1]+[dt]+s[1:]) 
-		#deselect
-		index = self.list.GetFirstSelected()
-		while index != -1:
-			self.list.SetItemState(index, 0, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED)
-			index = self.list.GetNextSelected(index)
-		#select
-		#print 'selecting %s' % idx
-		self.list.SetItemState(idx, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED) 
-		self.list.EnsureVisible(idx) 
+		#print lib_name	
+		if lib_name in [self.slib]:
 		
-		#ss=(sname,tmpl2,cv[0],cv[1],'Copy',tmpl1,dname,fname)
-		
-		send('open_session',(s))
-		self.parent.active_list= self.parent.nb.GetSelection()
-		#self.SetItemState(idx, 0, wxLIST_STATE_SELECTED)
-		self.Thaw()
+			self.Freeze()
+			tmpl1,tmpl2=tmpl.split('.')
+			s=[sname.strip(' '),tmpl2,cv[0],cv[1],'Copy',tmpl1,dname,fname]
+			#add
+			dt=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+			idx= self.addSession(s[:1]+[dt]+s[1:]) 
+			#deselect
+			index = self.list.GetFirstSelected()
+			while index != -1:
+				self.list.SetItemState(index, 0, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED)
+				index = self.list.GetNextSelected(index)
+			#select
+			#print 'selecting %s' % idx
+			self.list.SetItemState(idx, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED) 
+			self.list.EnsureVisible(idx) 
+			
+			#ss=(sname,tmpl2,cv[0],cv[1],'Copy',tmpl1,dname,fname)
+			
+			send('open_session',(s))
+			self.parent.active_list= self.parent.nb.GetSelection()
+			#self.SetItemState(idx, 0, wxLIST_STATE_SELECTED)
+			self.Thaw()
+			
 
 	def OnUseCache(self, event):
 		#print 'use cache', self.pos
@@ -3205,7 +3214,7 @@ class SessionListCtrlPanelManager(wx.Panel):
 		self.parent=parent
 		self.frame=frame
 		self.createRightClickMenu()
-		self.nb = fnb.FlatNotebook(self, -1, size=(400,-1), agwStyle=fnb.FNB_DROPDOWN_TABS_LIST|fnb.FNB_COLOURFUL_TABS|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_SMART_TABS) #|fnb.FNB_DCLICK_CLOSES_TABS|fnb.FNB_X_ON_TAB|fnb.FNB_X|fnb.FNB_TAB_X|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_BTN_NONE|fnb.FNB_BTN_PRESSED|fnb.FNB_COLOURFUL_TABS|fnb.FNB_BOTTOM|fnb.FNB_SMART_TABS|fnb.FNB_DROPDOWN_TABS_LIST|fnb.FNB_DROP_DOWN_ARROW|fnb.FNB_BTN_HOVER|fnb.FNB_NO_X_BUTTON) #|fnb.FNB_HIDE_ON_SINGLE_TAB)
+		self.nb = fnb.FlatNotebook(self, -1, size=(200,-1), agwStyle=fnb.FNB_DROPDOWN_TABS_LIST|fnb.FNB_COLOURFUL_TABS|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_SMART_TABS) #|fnb.FNB_DCLICK_CLOSES_TABS|fnb.FNB_X_ON_TAB|fnb.FNB_X|fnb.FNB_TAB_X|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_BTN_NONE|fnb.FNB_BTN_PRESSED|fnb.FNB_COLOURFUL_TABS|fnb.FNB_BOTTOM|fnb.FNB_SMART_TABS|fnb.FNB_DROPDOWN_TABS_LIST|fnb.FNB_DROP_DOWN_ARROW|fnb.FNB_BTN_HOVER|fnb.FNB_NO_X_BUTTON) #|fnb.FNB_HIDE_ON_SINGLE_TAB)
 		#userhome = os.path.expanduser('~')
 		#sess_dir=os.path.join(userhome,'sessions')		
 		default_slib_name='My_Sessions'
@@ -3295,10 +3304,12 @@ class SessionListCtrlPanelManager(wx.Panel):
 	def getActiveLibName(self):
 		return self.nb.GetPageText(self.nb.GetSelection())	
 	def onTabChanged(self, evt):
-		#print 'onTabChanged'
+		print str(self.__class__) +' - onTabChanged'
 		#send('disable_all',())
+		self.setTab()
+	def setTab(self):
 		self.slib_name=self.getActiveLibName()
-		self.frame	.setLibHome(self.slib_name)
+		#
 		#print slib_name
 		#list=self.lists[slib_name]
 		selected= self.lists[self.slib_name].GetSelected()
@@ -3308,6 +3319,7 @@ class SessionListCtrlPanelManager(wx.Panel):
 		if selected:
 			sel= self.lists[self.slib_name].GetSelectedItems()
 			self.lists[self.slib_name].parent.openSessionByItemId(sel[0])
+			self.frame.setLibHome(self.slib_name)
 		else:
 			send('disable_all',())
 		#else:
@@ -3317,8 +3329,7 @@ class SessionListCtrlPanelManager(wx.Panel):
 				self.btn_clearall.Enable(False)
 			else:
 				self.btn_clearall.Enable(True)
-			#self.updateCommand(self.nb_tab)
-
+			#self.updateCommand(self.nb_tab)	
 			
 	def createRightClickMenu(self):
 		"""
@@ -3424,7 +3435,7 @@ class TemplateListCtrlPanelManager(wx.Panel):
 		self.parent=parent
 		self.frame=frame
 		self.createRightClickMenu()
-		self.nb = fnb.FlatNotebook(self, -1, size=(400,-1), agwStyle=fnb.FNB_DROPDOWN_TABS_LIST|fnb.FNB_COLOURFUL_TABS|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_SMART_TABS) #|fnb.FNB_DCLICK_CLOSES_TABS|fnb.FNB_X_ON_TAB|fnb.FNB_X|fnb.FNB_TAB_X|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_BTN_NONE|fnb.FNB_BTN_PRESSED|fnb.FNB_COLOURFUL_TABS|fnb.FNB_BOTTOM|fnb.FNB_SMART_TABS|fnb.FNB_DROPDOWN_TABS_LIST|fnb.FNB_DROP_DOWN_ARROW|fnb.FNB_BTN_HOVER|fnb.FNB_NO_X_BUTTON) #|fnb.FNB_HIDE_ON_SINGLE_TAB)
+		self.nb = fnb.FlatNotebook(self, -1, size=(200,-1), agwStyle=fnb.FNB_DROPDOWN_TABS_LIST|fnb.FNB_COLOURFUL_TABS|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_SMART_TABS) #|fnb.FNB_DCLICK_CLOSES_TABS|fnb.FNB_X_ON_TAB|fnb.FNB_X|fnb.FNB_TAB_X|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_BTN_NONE|fnb.FNB_BTN_PRESSED|fnb.FNB_COLOURFUL_TABS|fnb.FNB_BOTTOM|fnb.FNB_SMART_TABS|fnb.FNB_DROPDOWN_TABS_LIST|fnb.FNB_DROP_DOWN_ARROW|fnb.FNB_BTN_HOVER|fnb.FNB_NO_X_BUTTON) #|fnb.FNB_HIDE_ON_SINGLE_TAB)
 		#userhome = os.path.expanduser('~')
 		#sess_dir=os.path.join(userhome,'sessions')	
 		self.home_dir=sess_dir		
@@ -3513,7 +3524,9 @@ class TemplateListCtrlPanelManager(wx.Panel):
 	def getActiveLibName(self):
 		return self.nb.GetPageText(self.nb.GetSelection())	
 	def onTabChanged(self, evt):
-		#print 'onTabChanged'
+		print str(self.__class__) +' - onTabChanged'
+		self.setTab()
+	def setTab(self):
 		#send('disable_all',())
 		slib_name=self.getActiveLibName()
 		#print slib_name
@@ -3525,6 +3538,7 @@ class TemplateListCtrlPanelManager(wx.Panel):
 		if selected:
 			sel= self.lists[slib_name].GetSelectedItems()
 			self.lists[slib_name].parent.openSessionByItemId(sel[0])
+			self.frame.setLibHome(self.slib_name)
 		else:
 			send('disable_all',())
 		#else:
@@ -3742,7 +3756,7 @@ class CheckListBoxComboPopup(wx.CheckListBox, wx.combo.ComboPopup):
         wx.combo.ComboPopup.OnDismiss(self)
 class NewSessionDialog(wx.Dialog):
 	def __init__(
-			self, parent, ID, title, size,data, values_source,defaults, pos=wx.DefaultPosition, 
+			self, parent, ID, title, size,data,  values_source,defaults, slib='My_Sessions',pos=wx.DefaultPosition, 
 			style=wx.DEFAULT_DIALOG_STYLE,
 			useMetal=False 
 			):
@@ -3753,6 +3767,7 @@ class NewSessionDialog(wx.Dialog):
 		# method.
 		self.parent=parent
 		self.data=data
+		self.slib=slib
 		self.values_source=values_source
 		self.def_cv,self.def_tmpl=(None,None)
 		self.tobjects=['All', 'Query', 'Table', 'Partition', 'Subpartition']
@@ -3822,7 +3837,7 @@ class NewSessionDialog(wx.Dialog):
 			sizer.Add(namesizer, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP|wx.EXPAND, 5)
 
 			
-		line = wx.StaticLine(self, -1, size=(20,-1), style=wx.LI_HORIZONTAL)
+		line = wx.StaticLine(self, -1, size=(20,-1), style=wx.LI_HORIZONTAL)  
 		sizer.Add(line, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)			
 		if 1: #Source tmpl
 			self.listCtrl = wx.ListCtrl(self, -1, style=wx.LC_REPORT|wx.LC_VRULES|wx.LC_HRULES)
@@ -3984,7 +3999,7 @@ class NewSessionDialog(wx.Dialog):
 			boxsizer.Add(self.rb_set_manually, flag=wx.LEFT|wx.TOP, border=5)
 			self.rb_use_templates.Bind(wx.EVT_RADIOBUTTON, self.onUseRbButton)
 			self.rb_set_manually.Bind(wx.EVT_RADIOBUTTON, self.onUseRbButton)
-			btnsizer.Add(boxsizer, 0 , wx.TOP|wx.BOTTOM|wx.LEFT)
+			btnsizer.Add(boxsizer, 0 , wx.TOP|wx.BOTTOM|wx.LEFT|wx.EXPAND)
 		if 0: #checkbox
 			sb = wx.StaticBox(self, label='Source Values')
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
@@ -4015,8 +4030,21 @@ class NewSessionDialog(wx.Dialog):
 				boxsizer.Add(self.rb_r1, flag=wx.LEFT|wx.TOP, border=5)
 				#boxsizer.Add(self.rb_r2, flag=wx.LEFT|wx.TOP, border=5)
 				
-				btnsizer.Add(boxsizer, 0 , wx.TOP|wx.BOTTOM|wx.LEFT)			
+				btnsizer.Add(boxsizer, 0 , wx.TOP|wx.BOTTOM|wx.LEFT|wx.EXPAND)			
 		#self.test = wx.Button(self, wx.NewId(), 'Test')
+		if 1:
+			#btnsizer = wx.BoxSizer(wx.HORIZONTAL)
+			#st_tlib = wx.StaticText(self, label="Session library:")
+			#namesizer.Add(st_tlib, pos=(1, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=10)			
+			sb = wx.StaticBox(self, label='Session Library')
+			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
+			libs=self.getSessionLibNames()
+			#print libs
+			#e(0)
+			self.cb_tname= wx.ComboBox(self, id=wx.NewId(), value=self.slib, choices=libs, size=(100,30), style=0, name='tmpl_lib')
+			boxsizer.Add(self.cb_tname, flag=wx.LEFT|wx.TOP, border=1)
+			#namesizer.Add(self.cb_tname, pos=(1, 1),  flag=wx.TOP|wx.ALIGN_LEFT|wx.BOTTOM, border=10)
+			btnsizer.Add(boxsizer, 0 , wx.TOP|wx.LEFT)	
 		self.create_btn = wx.Button(self, wx.ID_OK, 'Create')
 		self.create_btn.Enable(False)
 		btn_exit = wx.Button(self, wx.ID_CANCEL, "Cancel")
@@ -4080,6 +4108,10 @@ class NewSessionDialog(wx.Dialog):
 		self.Layout()
 		self.Fit()
 		self.SetSize((-1,size[1]))
+	def getSessionLibNames(self):
+		global session_home
+		libs= [d for d in os.listdir(session_home) if os.path.isdir(os.path.join(session_home,d))]
+		return libs		
 	def setDefaultName(self, sname):
 		if not self.changed:
 			self.tc_sname.SetValue(sname.strip().strip(' ').replace(' ',''))
@@ -4110,7 +4142,7 @@ class NewSessionDialog(wx.Dialog):
 		
 		
 	def OnTest(self,e):
-		[cn, cv, tmpl, args, reuse] = self.getConfig()		
+		[cn, slib, cv, tmpl, args, reuse] = self.getConfig()		
 		#print len(args)	
 		#pprint(args[2])
 		#pprint(self.api_args[tmpl][0])
@@ -4124,6 +4156,7 @@ class NewSessionDialog(wx.Dialog):
 	def getConfig(self):
 		tmpl=self.get_template()
 		reuse=None
+		slib=self.cb_tname.GetValue()
 		#print(self.api_args['default'])
 		if self.values_source:
 			reuse=(self.rb_r0.GetValue(),self.rb_r1.GetValue() ) #,self.rb_r2.GetValue())
@@ -4131,9 +4164,9 @@ class NewSessionDialog(wx.Dialog):
 			default_args=self.api_args['default']
 			#print self.copy_vector
 			default_args[0]['copy_vector'][2]='2'.join(self.copy_vector)
-			return [self.getSessionName(), self.copy_vector, tmpl, default_args, reuse]
+			return [self.getSessionName(), slib, self.copy_vector, tmpl, default_args, reuse]
 		else:
-			return [self.getSessionName(), self.copy_vector, tmpl, self.api_args[tmpl], reuse]
+			return [self.getSessionName(), slib, self.copy_vector, tmpl, self.api_args[tmpl], reuse]
 	def getSessionName(self):
 		return self.tc_sname.GetValue().strip().strip(' ').replace(' ','')
 	def onSourceObjButton(self, event): 
@@ -4349,13 +4382,13 @@ class NewSessionDialog(wx.Dialog):
 		return self.recent
 	def OnCreate(self,e):
 		print 'OnCreate'
-		
+		libname=self.cb_tname.GetValue()
 		sname=self.tc_sname.GetValue().strip().strip(' ').replace(' ','')
 		if not sname:
 			self.Warn('Enter session name.')
 			self.tc_sname.SetFocus()
-		elif self.if_duplicate_name(sname):
-			self.Warn('Duplicate session name.')
+		elif self.if_duplicate_name(libname,sname):
+			self.Warn('CREATE: Duplicate session name.')
 			self.tc_sname.SetFocus()
 
 		else:
@@ -4368,11 +4401,13 @@ class NewSessionDialog(wx.Dialog):
 		dlg = wx.MessageDialog(self, message, caption, wx.OK | wx.ICON_WARNING)
 		dlg.ShowModal()
 		dlg.Destroy()	
-	def if_duplicate_name(self,name):
-		for k,v in self.data.items():
-			if name == v[0]:
-				return True
-		return False
+	def if_duplicate_name(self, slib, sname):
+		print 'if_duplicate_name', slib, sname
+		sfile_loc=os.path.join(session_home,slib,sname)
+		#print session_home,slib,sname
+		#print sfile_loc, os.path.isdir(sfile_loc)
+
+		return os.path.isdir(sfile_loc)
 	def OnCVClicked(self, event):
 		#print self.recent
 		#e(0)
@@ -6197,21 +6232,22 @@ class pnl_args(wx.Panel):
 		
 		ts=datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')
 		title='SQL*Plus/%s' % ts
+		#self.hm.local_source_client_home, self.hm.local_target_client_home 
 		if source:
-			assert self.obj.has_key('source_client_home')
-			client_loc=self.obj['source_client_home'][1].GetValue()
+			#assert self.obj.has_key('source_client_home')
+			client_loc=self.hm.local_source_client_home #self.obj['source_client_home'][1].GetValue()
 			assert self.obj.has_key('from_user')
 			assert self.obj.has_key('from_passwd')
 			assert self.obj.has_key('from_db_name')
 			login='%s/%s@%s' % (self.obj['from_user'][1].GetValue(),self.obj['from_passwd'][1].GetValue(),self.obj['from_db_name'][1].GetValue())
 			title='%s/source' % title
 		else:
-			assert self.obj.has_key('target_client_home')
+			#assert self.obj.has_key('target_client_home')
 			assert self.obj.has_key('to_user')
 			assert self.obj.has_key('to_passwd')
 			assert self.obj.has_key('to_db_name')
 			login='%s/%s@%s' % (self.obj['to_user'][1].GetValue(),self.obj['to_passwd'][1].GetValue(),self.obj['to_db_name'][1].GetValue())
-			client_loc=self.obj['target_client_home'][1].GetValue()
+			client_loc=self.hm.local_target_client_home  #self.obj['target_client_home'][1].GetValue()
 			title='%s/target' % title
 		
 		cfg=[os.path.join(client_loc,'sqlplus.exe'),login]
@@ -6277,9 +6313,11 @@ class pnl_args(wx.Panel):
 		spooler=None
 		path_to_db_client=None
 		
+		print self.hm
+		print self.hm.local_source_client_home, self.hm.local_target_client_home 
 		if tc.Name=='source':
 			spooler=conf.dbtools['SPOOLER'][self.copy_vector[0]]
-			path_to_db_client=self.obj['source_client_home'][1].GetValue()
+			path_to_db_client=self.hm.local_source_client_home #self.obj['source_client_home'][1].GetValue()
 			title='%s (%s) connection test.' % (conf.dbs[self.copy_vector[0]],tc.Name)
 			tspooler=os.path.join(path_to_db_client,spooler )
 			cmd=r"'%s' %s/%s@%s @'%s'" % (
@@ -6292,7 +6330,7 @@ class pnl_args(wx.Panel):
 			#print cmd
 		if tc.Name=='target':
 			spooler=conf.dbtools['SPOOLER'][self.copy_vector[1]]
-			path_to_db_client=self.obj['target_client_home'][1].GetValue()
+			path_to_db_client=self.hm.local_target_client_home #self.obj['target_client_home'][1].GetValue()
 			title='%s (%s) connection test.' % (conf.dbs[self.copy_vector[1]],tc.Name)
 			tspooler=os.path.join(path_to_db_client,spooler )
 			cmd=r"'%s' %s/%s@%s @'%s'" % (
@@ -8356,7 +8394,7 @@ class DataBuddy(wx.Frame):
 		#panel layout
 		self.panel_pos=[(0,i) for i in range(3)]
 		#print self.panel_pos
-		self.panel = wx.Panel(self, style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+		self.panel = wx.Panel(self, size=(935,-1),style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 		panel=self.panel
 		self.panel.sizer = wx.GridBagSizer(5, 5)
 		self.sizer=self.panel.sizer
@@ -8462,7 +8500,7 @@ class DataBuddy(wx.Frame):
 		self.sizer.Add(self.panel1, pos=(2, 0), span=(1,4),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=1)	
 			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))				
 	
-		self.args_panel= pnl_args(self,self.copy_vector,self.tmpl,self.the_id,(self.cargs,self.fargs,self.targs),size=(900,-1),style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+		self.args_panel= pnl_args(self,self.copy_vector,self.tmpl,self.the_id,(self.cargs,self.fargs,self.targs),size=(400,-1),style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 		self.preetl='not set'
 		if 1:
 			
@@ -8676,7 +8714,7 @@ class DataBuddy(wx.Frame):
 		self.sizer.AddGrowableRow(7)
 				
 		if 1:
-			self.panel2 = wx.Panel(self, wx.ID_ANY, style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
+			self.panel2 = wx.Panel(self, wx.ID_ANY, size=(500,-1), style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			panel2=self.panel2
 			vsizer =  wx.BoxSizer(wx.VERTICAL)
 			#wx.BoxSizer(wx.VERTICAL)
@@ -8687,7 +8725,7 @@ class DataBuddy(wx.Frame):
 			self.sm=SessionListCtrlPanelManager(panel2,self,(0,0),self.panel_pos,sess_dir)
 			if 1:
 			
-				self.snb = fnb.FlatNotebook(panel2, -1, size=(400,-1), agwStyle=fnb.FNB_BOTTOM|fnb.FNB_COLOURFUL_TABS|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_SMART_TABS|fnb.FNB_NO_X_BUTTON|fnb.FNB_NO_NAV_BUTTONS) #|fnb.FNB_DCLICK_CLOSES_TABS|fnb.FNB_X_ON_TAB|fnb.FNB_X|fnb.FNB_TAB_X|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_BTN_NONE|fnb.FNB_BTN_PRESSED|fnb.FNB_COLOURFUL_TABS|fnb.FNB_BOTTOM|fnb.FNB_SMART_TABS|fnb.FNB_DROPDOWN_TABS_LIST|fnb.FNB_DROP_DOWN_ARROW|fnb.FNB_BTN_HOVER|fnb.FNB_NO_X_BUTTON) #|fnb.FNB_HIDE_ON_SINGLE_TAB)
+				self.snb = fnb.FlatNotebook(panel2, -1, size=(200,-1), agwStyle=fnb.FNB_BOTTOM|fnb.FNB_COLOURFUL_TABS|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_SMART_TABS|fnb.FNB_NO_X_BUTTON|fnb.FNB_NO_NAV_BUTTONS) #|fnb.FNB_DCLICK_CLOSES_TABS|fnb.FNB_X_ON_TAB|fnb.FNB_X|fnb.FNB_TAB_X|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_BTN_NONE|fnb.FNB_BTN_PRESSED|fnb.FNB_COLOURFUL_TABS|fnb.FNB_BOTTOM|fnb.FNB_SMART_TABS|fnb.FNB_DROPDOWN_TABS_LIST|fnb.FNB_DROP_DOWN_ARROW|fnb.FNB_BTN_HOVER|fnb.FNB_NO_X_BUTTON) #|fnb.FNB_HIDE_ON_SINGLE_TAB)
 				snb=self.snb
 				snb.AddPage(self.sm,'')
 				snb.SetPageText(0, 'Sessions')
@@ -8706,7 +8744,7 @@ class DataBuddy(wx.Frame):
 				self.Bind(fnb.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.onLibTypeChanged, self.snb)
 		
 			self.hsizer = wx.BoxSizer(wx.HORIZONTAL)
-			vsizer.Add(snb,1,wx.EXPAND|wx.TOP|wx.BOTTOM|wx.LEFT|wx.RIGHT, border=5)
+			vsizer.Add(snb,1,wx.EXPAND|wx.GROW|wx.TOP|wx.BOTTOM|wx.LEFT|wx.RIGHT, border=5)
 			self.data =self.sm.list.data[self.sm.list.current_list]
 
 			#self.vsizer.Add(self.sizer,pos=(0,1),flag=wx.EXPAND)
@@ -8799,7 +8837,7 @@ class DataBuddy(wx.Frame):
 		#save_as=self.session_name!=sname 
 		#print self.session_name, sname
 		save_as=True
-		sm=self.tm
+		#sm=self.tm
 		if self.if_duplicate_tmpl_name(tname, tlib):
 			self.Warn('Duplicate template name.')
 			self.tc_session_name.SetFocus()
@@ -8810,10 +8848,10 @@ class DataBuddy(wx.Frame):
 				session=[sname,cv[0],cv[1],'Copy',tmpl,dname,fname]
 				#print dname
 				#e(0)
-				list=sm.lists[tlib]
+				list=self.tm.lists[tlib]
 				print tlib
-				print sm.slps.keys()
-				slp=sm.slps[tlib]
+				print self.tm.slps.keys()
+				slp=self.tm.slps[tlib]
 				idx=slp.addSession(session)	
 				slp.list.set_data()
 				slp.RecreateList(None,(slp.list,slp.filter))
@@ -9019,7 +9057,11 @@ class DataBuddy(wx.Frame):
 		
 
 	def getActiveLibName(self):
-		return self.sm.getActiveLibName() 
+		type= self.snb.GetSelection()
+		lib_types=('Session','Template')
+		lib_mans=(self.sm,self.tm)
+		assert lib_types[type], 'Lib type is not defined.'
+		return '|'.join([lib_types[type],lib_mans[type].getActiveLibName()]) 
 	def OnEditSQL(self, evt,params):
 		#print 'OnEditSQL'
 		(obj) = params
@@ -9211,7 +9253,7 @@ class DataBuddy(wx.Frame):
 	def openDefault(self, sname):
 		print 'openDefault'
 	def onLibTypeChanged(self, evt):
-		print 'onTabChanged'
+		print str(self.__class__) +' - onLibTypeChanged'
 		ltype=self.snb.GetPageText(self.snb.GetSelection())	
 		if ltype in ['Sessions']:
 			self.S=True
@@ -9223,9 +9265,14 @@ class DataBuddy(wx.Frame):
 			self.setLibHome(default_tmpl_lib)
 		else:
 			assert 1==2, 'Unknown lib type "%s"' % ltype
-		
+
+		type= self.snb.GetSelection()
+		#lib_types=('Session','Template')
+		lib_mans=(self.sm,self.tm)
+		assert lib_mans[type], 'Lib type is not defined.'
+		lib_mans[type].setTab()		
 	def onTabChanged(self, evt):
-		#print 'onTabChanged'
+		print str(self.__class__) +' - onTabChanged'
 		self.nb_tab= self.nb.GetSelection()
 		libname=self.nb.GetPageText(self.nb.GetSelection())	
 		#self.setLibHome(libname)
@@ -9235,43 +9282,7 @@ class DataBuddy(wx.Frame):
 		else:
 			self.btn_clearall.Enable(True)
 		#self.updateCommand(self.nb_tab)
-		if 0:
-			if self.nb_tab==2:
-				#print 
-				k='job_pre_etl'
-				if self.args_panel.obj.has_key(k):
-					#self.editor_panel.setEditor(k)
-					#etl=self.editor_panel.loadEtlFile(self.editor_panel.etl_loc[k])
-					#self.editor_panel.editor.SetText(etl)
-					#self.sizer.SetItemSpan(self.nb,(5,4))
-					self.editor_panel.editor.Refresh()
-					#self.editor_panel.Fit()
-					self.editor_panel.Refresh()
-					self.panel.Fit()
-					self.Layout()
-				else:
-					self.editor_panel.etl_loc={}
-					#self.editor_panel.setEditor(k)
-					#self.editor_panel.editor.SetValue('')
-					#self.editor_panel.Refresh()
-					#self.Layout()
-			elif self.nb_tab==0:
-				#self.nb.Freeze()
-				self.sizer.SetItemSpan(self.nb,(4,4))
-				#self.panel.Fit()
-				#self.Layout()
-				#self.sizer.Refresh() #Fit(self.panel)
-				#self.args_panel.Freeze()
-				self.args_panel.Freeze()
-				self.nb.Refresh()
-				
-				self.args_panel.Fit()
-				self.args_panel.Thaw()
-				#self.args_panel.Layout()
-				#self.args_panel.Thaw()
-				#x,y=self.args_panel.GetSize()
-				#self.args_panel.SetSize((x-1,y))
-			#self.nb_tab=
+
 		
 				
 	def onDeleteSessions_(self,  data, extra1, extra2=None):
@@ -9842,6 +9853,7 @@ class DataBuddy(wx.Frame):
 		#print '#'*60
 		print sess_home
 		print slib_name
+		#a=1/0
 		save_to_dir=os.path.join(sess_home,slib_name)
 		assert os.path.isdir(save_to_dir), 'Cannot save new session to\n%s' % save_to_dir
 		save_to_file=os.path.join(save_to_dir, fname)
@@ -9859,15 +9871,16 @@ class DataBuddy(wx.Frame):
 		print save_to_dir
 		print self.save_to_dir
 		#e(0)
-		if (self.save_to_dir not in [save_to_dir]) or (sname not in [self.session_name] and self.session_name):
-			#copy session details
-			to_dir=os.path.join(save_to_dir,sname)
-			print self.save_to_dir,self.session_name
-			from_dir=os.path.join(self.save_to_dir,self.session_name)
-			#os.mkdir(to_dir)
-			print from_dir
-			print to_dir
-			shutil.copytree(from_dir, to_dir)
+		if self.session_name:
+			if (self.save_to_dir not in [save_to_dir]) or (sname not in [self.session_name] and self.session_name):
+				#copy session details
+				to_dir=os.path.join(save_to_dir,sname)
+				print self.save_to_dir,self.session_name
+				from_dir=os.path.join(self.save_to_dir,self.session_name)
+				#os.mkdir(to_dir)
+				print from_dir
+				print to_dir
+				shutil.copytree(from_dir, to_dir)
 		self.btn_save.Enable(False)	
 		self.session_name=sname
 		self.changed=[]
@@ -9891,10 +9904,12 @@ class DataBuddy(wx.Frame):
 			defaults=None
 			if self.copy_vector and self.tmpl:
 				defaults=(self.copy_vector, self.tmpl)
-			dlg = NewSessionDialog(self, -1, "Defaults for new session.", size=(750, 500),				
+			#print self.sm.slib_name
+			#e(0)
+			dlg = NewSessionDialog(self, -1, "Create new session.", size=(750, 500),				
 							 #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
 							 style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
-							 useMetal=False, data=self.data, values_source=self.session_name,
+							 useMetal=False, data=self.data, slib=self.sm.slib_name, values_source=self.session_name,
 							 defaults=defaults
 							 )
 			#dlg.CenterOnScreen()
@@ -9903,14 +9918,14 @@ class DataBuddy(wx.Frame):
 			#print wx.ID_OK, ID_EXIT, val
 			if val == wx.ID_OK:
 				if 1:					
-					(sname,cv,tmpl,api_args,reuse)= dlg.getConfig()
+					(sname,slib, cv,tmpl,api_args,reuse)= dlg.getConfig()
 					#print tmpl
 					#e(0)
 					#tmpl=self.get_template()
 					#api_args=self.api_args[tmpl]
 					#print '-----',self.tc_sname.GetValue(),self.copy_vector, tmpl
 					data=(sname,cv,tmpl,api_args,reuse)
-					slib_name=self.getActiveLibName()
+					slib_name=slib #self.getActiveLibName()
 					(sname,cv,tmpl,dname,fname)=self.saveSession(data=data,slib_name=slib_name)
 					#sess_home=session_home, slib_name='My_Sessions', sname
 					#send("create_new_session", (sname,cv, tmpl,api_args,reuse) )
@@ -10599,7 +10614,7 @@ if __name__ == '__main__':
 			global imgs
 			imgs = i
 			self.Init()
-			self.frame = DataBuddy(None, -1,title=app_title, size=(1200,910))
+			self.frame = DataBuddy(None, -1,title=app_title, size=(1350,927))
 			if default_session:
 				self.frame.openDefault(default_session)
 			self.frame.Show(True)

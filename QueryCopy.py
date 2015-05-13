@@ -1025,7 +1025,7 @@ class SessionList(wx.ListCtrl):
 		self.InsertColumn(6, 'From_Template')
 		#self.InsertColumn(4, 'Desription')
 
-		self.SetColumnWidth(0, 150)
+		self.SetColumnWidth(0, 270)
 		self.SetColumnWidth(1, 120)
 		self.SetColumnWidth(2, 130)
 		self.SetColumnWidth(3, 60)

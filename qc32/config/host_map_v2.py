@@ -51,7 +51,12 @@ mapping={'active_mapping': 'local_nt/20', 'local_host': 0,
                               'INFOB': {'source': r'C:\Program Files\PostgreSQL\9.4\bin',
 							            'target': r'C:\Program Files\PostgreSQL\9.4\bin'},
                               'DBTUDB': {'source': r'C:\Program Files\PostgreSQL\9.4\bin',
-							            'target': r'C:\Program Files\PostgreSQL\9.4\bin'}
+							            'target': r'C:\Program Files\PostgreSQL\9.4\bin'
+										},
+                              'CSV': {'source': r'',
+							            'target': r''},										
+                              'DDL': {'source': r'',
+							            'target': r''},										
 										},
                    'env': ['nt', None],
                    'login': ['localhost', None, None]},
