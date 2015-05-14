@@ -78,6 +78,11 @@ TimesTen|  | yes  | yes
 - Supports CSV file load from multiple dirs.
 - --exit_on_key - let's you keep exec window open after load job is done
 
+##How it works.
+
+1. Data extracted to temp file from source.
+2. Temp file loaded to target using bulk loader.
+
 ##Implementation
 
 - Written using Python (command line) and wxPython (GUI).
