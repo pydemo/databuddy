@@ -208,7 +208,7 @@ TimesTen|  | yes  | yes
 
 
 #Does it work?
-- yes, with some quirks and only for Oracle. 
+- yes, with some quirks and only for Oracle and SQLServer. 
 
 ##References
 * [QueryCopy for Oracle](https://github.com/QueryCopy/QueryCopy-for-Oracle) -- `qc32\qc32.exe`
