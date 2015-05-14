@@ -1,6 +1,6 @@
 default_args=[{'copy_vector': ('-w',
 				  '--copy_vector',
-				  'ora11g2ora11g',
+				  'ora11g-ora11g',
 				  'Data copy direction.'),
   'field_term': ('-t', '--field_term', '', 'Field terminator.'),
   'num_of_shards': ('-r', '--num_of_shards', '', 'Number of shards.'),  

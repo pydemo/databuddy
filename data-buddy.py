@@ -4,13 +4,12 @@
 # Environment:
 #			Python 2.7 and wxPython 2.8		
 #
-__author__ = "METRICS TECH"
+__author__ = "Alex Buzunov"
 __copyright__ = "Copyright 2015, SequelWorks Inc."
 __credits__ = []
 __license__ = "GPL"
 __title__ = "Session Manager for QueryCopy"
 __version__ = "0.3.3"
-__maintainer__ = "Alex Buzunov"
 __email__ = "alexbuzunov@gmail.com"
 __status__ = "Development" 	
 import sys,platform; 
@@ -75,7 +74,7 @@ import shlex
 __builtin__.copy_vector = None
 __builtin__.cvarg = None
 
-import common.v101.config as conf
+import qc32.common.v101.config as conf
 import argparse
 
 try:
@@ -107,7 +106,7 @@ userhome = os.path.expanduser('~')
 session_home=os.path.join(userhome,'sessions')	
 default_tmpl_lib='My_Templates'	
 default_sess_lib='My_Sessions'	
-transport_home=r'C:\Python27\data_migrator_1239_ddl'
+transport_home=r'C:\Python27\data_migrator_1239_12c'
 if exe:
 	transport_home=os.path.join(home,'qc%d' % int(__platform__[:2]))
 aa_dir='args_api'
@@ -4078,10 +4077,11 @@ class NewSessionDialog(wx.Dialog):
 		if 1:
 			apidir= os.path.join(home,aa_dir)
 			self.api_from = [ f for f in os.listdir(apidir) if os.path.isdir(os.path.join(apidir,f)) and f not in conf.ff ]
-			print api_from
-			e(0)
+			print self.api_from
+			#e(0)
 			self.api2= list({ f[:2] for f in self.api_from})
 			self.api2.sort()
+			print self.api2
 			self.api_menu={}
 			for m in self.api_from:
 				#print m
@@ -4164,7 +4164,7 @@ class NewSessionDialog(wx.Dialog):
 		if tmpl in ['generic.generic']:
 			default_args=self.api_args['default']
 			#print self.copy_vector
-			default_args[0]['copy_vector'][2]='2'.join(self.copy_vector)
+			default_args[0]['copy_vector'][2]=conf._to.join(self.copy_vector)
 			return [self.getSessionName(), slib, self.copy_vector, tmpl, default_args, reuse]
 		else:
 			return [self.getSessionName(), slib, self.copy_vector, tmpl, self.api_args[tmpl], reuse]
@@ -4480,8 +4480,8 @@ class NewSessionDialog(wx.Dialog):
 				Menu1 = FM.FlatMenu()
 				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, 'From %s' % dbf[k], '', wx.ITEM_NORMAL, Menu1)
 				self._popUpMenu.AppendItem(menuItem)
-				if not k in ['OR']:
-					menuItem.Enable(False)
+				#if not k in ['OR']:
+				#	menuItem.Enable(False)
 				
 				for sm in self.api_menu[k]:
 					if len(self.api_menu[k])>1:
@@ -4548,8 +4548,8 @@ class NewSessionDialog(wx.Dialog):
 		Menu3 = FM.FlatMenu()
 		menuItem = FM.FlatMenuItem(Menu2, 20000+self.i, "%s %s" % (from_to, dbf[k2]), "", wx.ITEM_NORMAL, Menu3)
 		Menu2.AppendItem(menuItem)
-		if not k2 in ['OR']:
-			menuItem.Enable(False)
+		#if not k2 in ['OR']:
+		#	menuItem.Enable(False)
 		for sm2 in self.api_menu[k2]:
 			self.i +=1
 			self.create_Menu4(Menu3,sm2,from_db,from_to)	
@@ -4563,8 +4563,8 @@ class NewSessionDialog(wx.Dialog):
 		#print from_db,sm2
 		self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(from_db,sm2))
 		Menu3.AppendItem(menuItem)
-		if not sm2 in self.api_menu['OR']:
-			menuItem.Enable(False)
+		#if not sm2 in self.api_menu['OR']:
+		#	menuItem.Enable(False)
 		#self.set_sub_submenu(subSubMenu,1, 'CSV')
 			
 
@@ -5289,8 +5289,10 @@ class pnl_args(wx.Panel):
 		#print args
 		#print args.copy_vector
 		#e(0)
+		#print conf._to
 		import __builtin__
 		__builtin__.args = args
+		__builtin__._to = conf._to
 		uargs = import_module(os.path.join(conf.abspath,'qc%d' % int(__platform__[:2]),'config','user_conf.py'))
 		(_,to_tmpl)=self.tmpl.split('.')
 		if to_tmpl in ['CSV_Default']:
@@ -5936,8 +5938,9 @@ class pnl_args(wx.Panel):
 			if new_hostmap_loc not in [hostmap_loc]:
 				self.obj[k][1].SetValue(new_hostmap_loc)
 			#e(0)
+			#print conf._to.join(self.copy_vector)
 			
-			self.hm = hmap('2'.join(self.copy_vector),new_hostmap_loc)
+			self.hm = hmap(self.copy_vector,new_hostmap_loc)
 			self.parent._hmMenu=None
 		else:
 			print 'no host_map'
@@ -8500,7 +8503,7 @@ class DataBuddy(wx.Frame):
 		self.refreshType()
 		self.sizer.Add(self.panel1, pos=(2, 0), span=(1,4),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=1)	
 			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))				
-	
+		print self.copy_vector
 		self.args_panel= pnl_args(self,self.copy_vector,self.tmpl,self.the_id,(self.cargs,self.fargs,self.targs),size=(400,-1),style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 		self.preetl='not set'
 		if 1:
@@ -10533,7 +10536,7 @@ class DataBuddy(wx.Frame):
 			'Manages QueryCopy spool/load/copy sessions.',
 			350, wx.ClientDC(self.panel))
 		#info.WebSite = ("https://github.com/alexbuz", "My Github")
-		info.Developers = ["Alex Buzunov"]
+		info.Developers = [__author__]
 		#info.License = wordwrap("Open source", 500, wx.ClientDC(self.panel))
 		# Show the wx.AboutBox
 		wx.AboutBox(info)	

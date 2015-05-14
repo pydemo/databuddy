@@ -7,6 +7,7 @@ class base_host_map(object):
 		self.host_map_loc=host_map_loc
 		#print host_map_loc
 		#self.conf=conf
+		#print copy_vector
 		self.copy_vector=copy_vector
 		self.shard=shard
 		#print dir(conf)
@@ -17,12 +18,12 @@ class base_host_map(object):
 		(self.local_source_client_home, self.local_target_client_home) = self.get_local_client_home()
 	def get_local_client_home(self):
 		#print self.conf.uargs.copy_vector
-		(from_db, to_db)=self.copy_vector.upper().split('2')
+		(from_db, to_db)=self.copy_vector #.upper().split('2')
 		#pprint(self.mapping)
 		env=self.mapping['host_list'][self.mapping['local_host']]['db_env']
 		#pprint(env)
 		#print from_db, to_db
-		return (env[from_db]['source'], env[to_db]['target'])
+		return (env[from_db.upper()]['source'], env[to_db.upper()]['target'])
 	def set_host_map(self):
 		self.remote_user='default'
 		#obj=self.args_panel.obj

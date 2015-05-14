@@ -65,7 +65,7 @@ class code_release(object):
 		if hasattr(self.args, 'host_map') and self.args.host_map:
 			
 			host_map_loc= self.args.host_map
-			hm = hmap.host_map(self.args.copy_vector,host_map_loc,shard)
+			hm = hmap.host_map(self.args.copy_vector.split(self.conf._to),host_map_loc,shard)
 			
 			
 			if hm.R:
@@ -421,7 +421,7 @@ class common(base):
 		self.cr={} #code_release(self.conf, self.args)
 		host_map_loc= self.args.host_map
 		#print host_map_loc
-		self.hm = hmap.host_map(self.args.copy_vector,host_map_loc,0)
+		self.hm = hmap.host_map(self.args.copy_vector.split(self.conf._to),host_map_loc,0)
 			
 	def get_table_columns(self,  tab_name):
 		if self.tab_cols.has_key(tab_name):
@@ -534,7 +534,7 @@ class source(common):
 		common.__init__(self,datadir,login,conf)
 		#self.datadir=datadir
 		#self.login=login
-		#self.conf=conf
+		self.conf=conf
 		self.log=log
 		self.db=db
 		self.from_table=from_table
@@ -616,7 +616,7 @@ exit;
 		#print self.args.copy_vector
 		#e(0)
 		#print '-----%s' % self.cr.shard
-		if self.args.copy_vector.upper().split('2')[1] in self.conf.ff:
+		if self.args.copy_vector.upper().split(self.conf._to)[1] in self.conf.ff:
 			
 		
 			self.cr[shard].release()
@@ -752,7 +752,7 @@ class target(common):
 		common.__init__(self,datadir,login,conf)
 		#self.datadir=datadir
 		#self.login=login
-		#self.conf=conf
+		self.conf=conf
 		self.log=log
 		self.db=db.upper()
 		self.to_table=to_table
@@ -764,7 +764,7 @@ class target(common):
 			os.makedirs(self.ctldir)
 		#self.cr={} #code release
 	def get_load_config(self, db_loader_loc,shard_name, row_from, row_to,ctlfn,outfn, datadir):
-		to_db=self.args.copy_vector.split('2')[1].upper()
+		to_db=self.args.copy_vector.split(self.conf._to)[1].upper()
 		loader_profile= self.conf.dlp[to_db].strip('"')
 		if hasattr(self.args, 'loader_profile') and self.args.loader_profile:
 			self.log.info('using non-default loader profile')

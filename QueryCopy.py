@@ -75,7 +75,7 @@ import shlex
 __builtin__.copy_vector = None
 __builtin__.cvarg = None
 
-import common.v101.config as conf
+import qc32.common.v101.config as conf
 import argparse
 
 try:
@@ -107,7 +107,7 @@ userhome = os.path.expanduser('~')
 session_home=os.path.join(userhome,'sessions')	
 default_tmpl_lib='My_Templates'	
 default_sess_lib='My_Sessions'	
-transport_home=r'C:\Python27\data_migrator_1239_ddl'
+transport_home=r'C:\Python27\data_migrator_1239_12c'
 if exe:
 	transport_home=os.path.join(home,'qc%d' % int(__platform__[:2]))
 aa_dir='args_api'
@@ -4165,7 +4165,7 @@ class NewSessionDialog(wx.Dialog):
 		if tmpl in ['generic.generic']:
 			default_args=self.api_args['default']
 			#print self.copy_vector
-			default_args[0]['copy_vector'][2]='2'.join(self.copy_vector)
+			default_args[0]['copy_vector'][2]=conf._to.join(self.copy_vector)
 			return [self.getSessionName(), slib, self.copy_vector, tmpl, default_args, reuse]
 		else:
 			return [self.getSessionName(), slib, self.copy_vector, tmpl, self.api_args[tmpl], reuse]
@@ -5290,8 +5290,10 @@ class pnl_args(wx.Panel):
 		#print args
 		#print args.copy_vector
 		#e(0)
+		#print conf._to
 		import __builtin__
 		__builtin__.args = args
+		__builtin__._to = conf._to
 		uargs = import_module(os.path.join(conf.abspath,'qc%d' % int(__platform__[:2]),'config','user_conf.py'))
 		(_,to_tmpl)=self.tmpl.split('.')
 		if to_tmpl in ['CSV_Default']:
@@ -5937,8 +5939,9 @@ class pnl_args(wx.Panel):
 			if new_hostmap_loc not in [hostmap_loc]:
 				self.obj[k][1].SetValue(new_hostmap_loc)
 			#e(0)
+			#print conf._to.join(self.copy_vector)
 			
-			self.hm = hmap('2'.join(self.copy_vector),new_hostmap_loc)
+			self.hm = hmap(self.copy_vector,new_hostmap_loc)
 			self.parent._hmMenu=None
 		else:
 			print 'no host_map'
@@ -8501,7 +8504,7 @@ class DataBuddy(wx.Frame):
 		self.refreshType()
 		self.sizer.Add(self.panel1, pos=(2, 0), span=(1,4),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=1)	
 			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))				
-	
+		print self.copy_vector
 		self.args_panel= pnl_args(self,self.copy_vector,self.tmpl,self.the_id,(self.cargs,self.fargs,self.targs),size=(400,-1),style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 		self.preetl='not set'
 		if 1:
