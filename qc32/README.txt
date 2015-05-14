@@ -3,7 +3,7 @@
 
 Press any key to continue . . . 
 ----------------------------------------------------------------------
-QueryCopy for SQL Server Express (v0.3.3, beta, 2015/05/13 11:31:54) [32bit]
+QueryCopy for SQL Server Express (v0.3.3, beta, 2015/05/13 19:24:38) [32bit]
 Copyright (c): 2014 Alex Buzunov, All rights reserved.
 Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
 ----------------------------------------------------------------------
@@ -232,7 +232,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w csv2ssexp ^
   -o 1 ^
   -r 1 ^
@@ -240,7 +240,7 @@ Example:
   -K 1 ^
   -M C:\Temp\qc_log ^
   -B qc_job ^
-  -Y 20150513_113155_665000 ^
+  -Y 20150513_192439_603000 ^
   -5 ".\config\host_map_v2.py" ^
   -i C:\Python27\data_migrator_1239_ddl\test\v101\data\ss_shard_0.data ^
   -y 1000 ^
@@ -273,7 +273,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w csv2ssexp ^
   -o 1 ^
   -r 1 ^
@@ -281,7 +281,7 @@ Example:
   -K 1 ^
   -M C:\Temp\qc_log ^
   -B qc_job ^
-  -Y 20150513_113155_727000 ^
+  -Y 20150513_192439_665000 ^
   -5 ".\config\host_map_v2.py" ^
   -i C:\Python27\data_migrator_1239_ddl\test\v101\data\ss_shard_0.data;C:\Python27\data_migrator_1239_ddl\test\v101\data\ss_shard_0.data ^
   -y 1000 ^
@@ -316,7 +316,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w csv2ssexp ^
   -o 1 ^
   -r 1 ^
@@ -324,7 +324,7 @@ Example:
   -K 1 ^
   -M C:\Temp\qc_log ^
   -B qc_job ^
-  -Y 20150513_113155_961000 ^
+  -Y 20150513_192439_712000 ^
   -5 ".\config\host_map_v2.py" ^
   -I C:\Python27\data_migrator_1239_ddl\test\v101\data\ss_data_dir ^
   -k 1 ^
@@ -360,7 +360,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w csv2ssexp ^
   -o 1 ^
   -r 1 ^
@@ -369,7 +369,7 @@ Example:
   -K 1 ^
   -M C:\Temp\qc_log ^
   -B qc_job ^
-  -Y 20150513_113155_618000 ^
+  -Y 20150513_192439_571000 ^
   -5 ".\config\host_map_v2.py" ^
   -I C:\Python27\data_migrator_1239_ddl\test\v101\data\ss_data_dir ^
   -y 1000 ^
@@ -403,7 +403,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w csv2ssexp ^
   -o 1 ^
   -r 1 ^
@@ -411,7 +411,7 @@ Example:
   -K 1 ^
   -M C:\Temp\qc_log ^
   -B qc_job ^
-  -Y 20150513_113155_602000 ^
+  -Y 20150513_192439_540000 ^
   -5 ".\config\host_map_v2.py" ^
   -I C:\Python27\data_migrator_1239_ddl\test\v101\data\ss_data_dir ^
   -y 1000 ^
@@ -445,7 +445,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w csv2ssexp ^
   -o 1 ^
   -r 1 ^
@@ -453,7 +453,7 @@ Example:
   -K 1 ^
   -M C:\Temp\qc_log ^
   -B qc_job ^
-  -Y 20150513_113155_712000 ^
+  -Y 20150513_192439_634000 ^
   -5 ".\config\host_map_v2.py" ^
   -i C:\Python27\data_migrator_1239_ddl\test\v101\data\ss_shard_0.data ^
   -k 1 ^
@@ -488,7 +488,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w csv2ssexp ^
   -o 1 ^
   -r 1 ^
@@ -497,7 +497,7 @@ Example:
   -K 1 ^
   -M C:\Temp\qc_log ^
   -B qc_job ^
-  -Y 20150513_113155_634000 ^
+  -Y 20150513_192439_571000 ^
   -5 ".\config\host_map_v2.py" ^
   -i C:\Python27\data_migrator_1239_ddl\test\v101\data\ss_shard_0.data ^
   -y 1000 ^
@@ -534,7 +534,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w csv2ssexp ^
   -o 3 ^
   -r 3 ^
@@ -542,7 +542,7 @@ Example:
   -K 1 ^
   -M C:\Temp\qc_log ^
   -B qc_job ^
-  -Y 20150513_113155_712000 ^
+  -Y 20150513_192439_649000 ^
   -5 ".\config\host_map_v2.py" ^
   -I C:\Python27\data_migrator_1239_ddl\test\v101\data\ss_data_dir ^
   -k 1 ^
@@ -580,7 +580,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w csv2ssexp ^
   -o 3 ^
   -r 3 ^
@@ -589,7 +589,7 @@ Example:
   -K 1 ^
   -M C:\Temp\qc_log ^
   -B qc_job ^
-  -Y 20150513_113155_696000 ^
+  -Y 20150513_192439_618000 ^
   -5 ".\config\host_map_v2.py" ^
   -I C:\Python27\data_migrator_1239_ddl\test\v101\data\ss_data_dir ^
   -y 50 ^
@@ -625,7 +625,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w csv2ssexp ^
   -o 3 ^
   -r 3 ^
@@ -633,7 +633,7 @@ Example:
   -K 1 ^
   -M C:\Temp\qc_log ^
   -B qc_job ^
-  -Y 20150513_113155_774000 ^
+  -Y 20150513_192439_696000 ^
   -5 ".\config\host_map_v2.py" ^
   -I C:\Python27\data_migrator_1239_ddl\test\v101\data\ss_data_dir ^
   -y 50 ^
@@ -669,7 +669,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w csv2ssexp ^
   -o 3 ^
   -r 3 ^
@@ -677,7 +677,7 @@ Example:
   -K 1 ^
   -M C:\Temp\qc_log ^
   -B qc_job ^
-  -Y 20150513_113155_649000 ^
+  -Y 20150513_192439_587000 ^
   -5 ".\config\host_map_v2.py" ^
   -i C:\Python27\data_migrator_1239_ddl\test\v101\data\ss_shard_0.data ^
   -k 1 ^
@@ -714,7 +714,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w csv2ssexp ^
   -o 3 ^
   -r 3 ^
@@ -723,7 +723,7 @@ Example:
   -K 1 ^
   -M C:\Temp\qc_log ^
   -B qc_job ^
-  -Y 20150513_113155_743000 ^
+  -Y 20150513_192439_681000 ^
   -5 ".\config\host_map_v2.py" ^
   -i C:\Python27\data_migrator_1239_ddl\test\v101\data\ss_shard_0.data ^
   -y 10 ^
@@ -758,7 +758,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w csv2ssexp ^
   -o 3 ^
   -r 3 ^
@@ -766,7 +766,7 @@ Example:
   -K 1 ^
   -M C:\Temp\qc_log ^
   -B qc_job ^
-  -Y 20150513_113155_602000 ^
+  -Y 20150513_192439_556000 ^
   -5 ".\config\host_map_v2.py" ^
   -i C:\Python27\data_migrator_1239_ddl\test\v101\data\ss_shard_0.data ^
   -y 10 ^
@@ -799,7 +799,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w csv2ssexp ^
   -o 1 ^
   -r 1 ^
@@ -807,7 +807,7 @@ Example:
   -K 1 ^
   -M C:\Temp\qc_log ^
   -B qc_job ^
-  -Y 20150513_113155_758000 ^
+  -Y 20150513_192439_696000 ^
   -5 ".\config\host_map_v2.py" ^
   -i C:\Python27\data_migrator_1239_ddl\test\v101\data\ss_shard_0.data ^
   -y 1000 ^
@@ -840,7 +840,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w csv2ssexp ^
   -o 1 ^
   -r 1 ^
@@ -848,7 +848,7 @@ Example:
   -K 1 ^
   -M C:\Temp\qc_log ^
   -B qc_job ^
-  -Y 20150513_113155_680000 ^
+  -Y 20150513_192439_618000 ^
   -5 ".\config\host_map_v2.py" ^
   -i C:\Python27\data_migrator_1239_ddl\test\v101\data\ss_shard_0.data ^
   -y 1000 ^
@@ -882,7 +882,7 @@ Arguments:
   -n[--from_db_server] is "SQL Server Express source instance name."
   -z[--source_client_home] is "Path to SQL Server Express client home."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2csv ^
   -o 1 ^
   -r 1 ^
@@ -892,7 +892,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113154_759000 ^
+  -Y 20150513_192438_738000 ^
   -5 ".\config\host_map_v2.py" ^
   -Q C:\Python27\data_migrator_1239_ddl\test\v101\query\query_dir_ss ^
   -j sa ^
@@ -925,7 +925,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -D[--to_dir] is "To directory."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2csv ^
   -o 1 ^
   -r 1 ^
@@ -935,7 +935,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113154_712000 ^
+  -Y 20150513_192438_707000 ^
   -5 ".\config\host_map_v2.py" ^
   -Q C:\Python27\data_migrator_1239_ddl\test\v101\query\query_dir_ss ^
   -j sa ^
@@ -969,7 +969,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -g[--to_file] is "To CSV file."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2csv ^
   -o 1 ^
   -r 1 ^
@@ -979,7 +979,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113154_790000 ^
+  -Y 20150513_192438_769000 ^
   -5 ".\config\host_map_v2.py" ^
   -Q C:\Python27\data_migrator_1239_ddl\test\v101\query\query_dir_ss ^
   -j sa ^
@@ -1011,7 +1011,7 @@ Arguments:
   -n[--from_db_server] is "SQL Server Express source instance name."
   -z[--source_client_home] is "Path to SQL Server Express client home."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2csv ^
   -o 1 ^
   -r 1 ^
@@ -1020,7 +1020,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113154_853000 ^
+  -Y 20150513_192438_816000 ^
   -5 ".\config\host_map_v2.py" ^
   -Q C:\Python27\data_migrator_1239_ddl\test\v101\query\query_dir_ss ^
   -j sa ^
@@ -1052,7 +1052,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -D[--to_dir] is "To directory."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2csv ^
   -o 1 ^
   -r 1 ^
@@ -1061,7 +1061,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113154_821000 ^
+  -Y 20150513_192438_800000 ^
   -5 ".\config\host_map_v2.py" ^
   -Q C:\Python27\data_migrator_1239_ddl\test\v101\query\query_dir_ss ^
   -j sa ^
@@ -1094,7 +1094,7 @@ Arguments:
   -n[--from_db_server] is "SQL Server Express source instance name."
   -z[--source_client_home] is "Path to SQL Server Express client home."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2csv ^
   -o 1 ^
   -r 1 ^
@@ -1104,7 +1104,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_055000 ^
+  -Y 20150513_192439_007000 ^
   -5 ".\config\host_map_v2.py" ^
   -q C:\Python27\data_migrator_1239_ddl\test\v101\query\ss_query.sql ^
   -j sa ^
@@ -1137,7 +1137,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -D[--to_dir] is "To directory."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2csv ^
   -o 1 ^
   -r 1 ^
@@ -1147,7 +1147,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_040000 ^
+  -Y 20150513_192438_995000 ^
   -5 ".\config\host_map_v2.py" ^
   -q C:\Python27\data_migrator_1239_ddl\test\v101\query\ss_query.sql ^
   -j sa ^
@@ -1181,7 +1181,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -g[--to_file] is "To CSV file."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2csv ^
   -o 1 ^
   -r 1 ^
@@ -1191,7 +1191,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_071000 ^
+  -Y 20150513_192439_019000 ^
   -5 ".\config\host_map_v2.py" ^
   -q C:\Python27\data_migrator_1239_ddl\test\v101\query\ss_query.sql ^
   -j sa ^
@@ -1223,7 +1223,7 @@ Arguments:
   -n[--from_db_server] is "SQL Server Express source instance name."
   -z[--source_client_home] is "Path to SQL Server Express client home."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2csv ^
   -o 1 ^
   -r 1 ^
@@ -1232,7 +1232,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113154_899000 ^
+  -Y 20150513_192438_831000 ^
   -5 ".\config\host_map_v2.py" ^
   -q C:\Python27\data_migrator_1239_ddl\test\v101\query\ss_query.sql ^
   -j sa ^
@@ -1264,7 +1264,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -D[--to_dir] is "To directory."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2csv ^
   -o 1 ^
   -r 1 ^
@@ -1273,7 +1273,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113154_884000 ^
+  -Y 20150513_192438_816000 ^
   -5 ".\config\host_map_v2.py" ^
   -q C:\Python27\data_migrator_1239_ddl\test\v101\query\ss_query.sql ^
   -j sa ^
@@ -1306,7 +1306,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -g[--to_file] is "To CSV file."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2csv ^
   -o 1 ^
   -r 1 ^
@@ -1315,7 +1315,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113154_915000 ^
+  -Y 20150513_192438_847000 ^
   -5 ".\config\host_map_v2.py" ^
   -q C:\Python27\data_migrator_1239_ddl\test\v101\query\ss_query.sql ^
   -j sa ^
@@ -1349,7 +1349,7 @@ Arguments:
   -n[--from_db_server] is "SQL Server Express source instance name."
   -z[--source_client_home] is "Path to SQL Server Express client home."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2csv ^
   -o 3 ^
   -r 3 ^
@@ -1358,7 +1358,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113154_681000 ^
+  -Y 20150513_192438_660000 ^
   -5 ".\config\host_map_v2.py" ^
   -q C:\Python27\data_migrator_1239_ddl\test\v101\query\ss_query.sql ^
   -j sa ^
@@ -1392,7 +1392,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -D[--to_dir] is "To directory."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2csv ^
   -o 3 ^
   -r 3 ^
@@ -1401,7 +1401,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113154_665000 ^
+  -Y 20150513_192438_644000 ^
   -5 ".\config\host_map_v2.py" ^
   -q C:\Python27\data_migrator_1239_ddl\test\v101\query\ss_query.sql ^
   -j sa ^
@@ -1435,7 +1435,7 @@ Arguments:
   -n[--from_db_server] is "SQL Server Express source instance name."
   -z[--source_client_home] is "Path to SQL Server Express client home."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2csv ^
   -o 3 ^
   -r 3 ^
@@ -1445,7 +1445,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_040000 ^
+  -Y 20150513_192438_972000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -1479,7 +1479,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -D[--to_dir] is "To directory."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2csv ^
   -o 3 ^
   -r 3 ^
@@ -1489,7 +1489,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_024000 ^
+  -Y 20150513_192438_956000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -1522,7 +1522,7 @@ Arguments:
   -n[--from_db_server] is "SQL Server Express source instance name."
   -z[--source_client_home] is "Path to SQL Server Express client home."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2csv ^
   -o 3 ^
   -r 3 ^
@@ -1531,7 +1531,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113154_977000 ^
+  -Y 20150513_192438_909000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -1564,7 +1564,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -D[--to_dir] is "To directory."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2csv ^
   -o 3 ^
   -r 3 ^
@@ -1573,7 +1573,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113154_962000 ^
+  -Y 20150513_192438_894000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -1605,7 +1605,7 @@ Arguments:
   -n[--from_db_server] is "SQL Server Express source instance name."
   -z[--source_client_home] is "Path to SQL Server Express client home."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2csv ^
   -o 1 ^
   -r 1 ^
@@ -1615,7 +1615,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113154_993000 ^
+  -Y 20150513_192438_941000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -1647,7 +1647,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -D[--to_dir] is "To directory."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2csv ^
   -o 1 ^
   -r 1 ^
@@ -1657,7 +1657,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113154_977000 ^
+  -Y 20150513_192438_925000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -1690,7 +1690,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -g[--to_file] is "To CSV file."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2csv ^
   -o 1 ^
   -r 1 ^
@@ -1700,7 +1700,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_009000 ^
+  -Y 20150513_192438_956000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -1731,7 +1731,7 @@ Arguments:
   -n[--from_db_server] is "SQL Server Express source instance name."
   -z[--source_client_home] is "Path to SQL Server Express client home."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2csv ^
   -o 1 ^
   -r 1 ^
@@ -1740,7 +1740,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113154_931000 ^
+  -Y 20150513_192438_878000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -1771,7 +1771,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -D[--to_dir] is "To directory."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2csv ^
   -o 1 ^
   -r 1 ^
@@ -1780,7 +1780,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113154_915000 ^
+  -Y 20150513_192438_863000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -1812,7 +1812,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -g[--to_file] is "To CSV file."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2csv ^
   -o 1 ^
   -r 1 ^
@@ -1821,7 +1821,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113154_946000 ^
+  -Y 20150513_192438_878000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -1854,7 +1854,7 @@ Arguments:
   -n[--from_db_server] is "SQL Server Express source instance name."
   -z[--source_client_home] is "Path to SQL Server Express client home."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 1 ^
   -r 1 ^
@@ -1864,7 +1864,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_133000 ^
+  -Y 20150513_192439_071000 ^
   -5 ".\config\host_map_v2.py" ^
   -Q C:\Python27\data_migrator_1239_ddl\test\v101\query\query_dir_ss ^
   -j sa ^
@@ -1897,7 +1897,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -D[--to_dir] is "To directory."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 1 ^
   -r 1 ^
@@ -1907,7 +1907,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_149000 ^
+  -Y 20150513_192439_087000 ^
   -5 ".\config\host_map_v2.py" ^
   -Q C:\Python27\data_migrator_1239_ddl\test\v101\query\query_dir_ss ^
   -j sa ^
@@ -1941,7 +1941,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -g[--to_file] is "To DDL file."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 1 ^
   -r 1 ^
@@ -1951,7 +1951,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_118000 ^
+  -Y 20150513_192439_071000 ^
   -5 ".\config\host_map_v2.py" ^
   -Q C:\Python27\data_migrator_1239_ddl\test\v101\query\query_dir_ss ^
   -j sa ^
@@ -1983,7 +1983,7 @@ Arguments:
   -n[--from_db_server] is "SQL Server Express source instance name."
   -z[--source_client_home] is "Path to SQL Server Express client home."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 1 ^
   -r 1 ^
@@ -1992,7 +1992,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_165000 ^
+  -Y 20150513_192439_102000 ^
   -5 ".\config\host_map_v2.py" ^
   -Q C:\Python27\data_migrator_1239_ddl\test\v101\query\query_dir_ss ^
   -j sa ^
@@ -2024,7 +2024,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -D[--to_dir] is "To directory."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 1 ^
   -r 1 ^
@@ -2033,7 +2033,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_165000 ^
+  -Y 20150513_192439_118000 ^
   -5 ".\config\host_map_v2.py" ^
   -Q C:\Python27\data_migrator_1239_ddl\test\v101\query\query_dir_ss ^
   -j sa ^
@@ -2066,7 +2066,7 @@ Arguments:
   -n[--from_db_server] is "SQL Server Express source instance name."
   -z[--source_client_home] is "Path to SQL Server Express client home."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 1 ^
   -r 1 ^
@@ -2076,7 +2076,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_415000 ^
+  -Y 20150513_192439_368000 ^
   -5 ".\config\host_map_v2.py" ^
   -q C:\Python27\data_migrator_1239_ddl\test\v101\query\ss_query.sql ^
   -j sa ^
@@ -2109,7 +2109,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -D[--to_dir] is "To directory."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 1 ^
   -r 1 ^
@@ -2119,7 +2119,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_431000 ^
+  -Y 20150513_192439_383000 ^
   -5 ".\config\host_map_v2.py" ^
   -q C:\Python27\data_migrator_1239_ddl\test\v101\query\ss_query.sql ^
   -j sa ^
@@ -2153,7 +2153,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -g[--to_file] is "To DDL file."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 1 ^
   -r 1 ^
@@ -2163,7 +2163,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_399000 ^
+  -Y 20150513_192439_352000 ^
   -5 ".\config\host_map_v2.py" ^
   -q C:\Python27\data_migrator_1239_ddl\test\v101\query\ss_query.sql ^
   -j sa ^
@@ -2195,7 +2195,7 @@ Arguments:
   -n[--from_db_server] is "SQL Server Express source instance name."
   -z[--source_client_home] is "Path to SQL Server Express client home."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 1 ^
   -r 1 ^
@@ -2204,7 +2204,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_196000 ^
+  -Y 20150513_192439_149000 ^
   -5 ".\config\host_map_v2.py" ^
   -q C:\Python27\data_migrator_1239_ddl\test\v101\query\ss_query.sql ^
   -j sa ^
@@ -2236,7 +2236,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -D[--to_dir] is "To directory."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 1 ^
   -r 1 ^
@@ -2245,7 +2245,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_211000 ^
+  -Y 20150513_192439_149000 ^
   -5 ".\config\host_map_v2.py" ^
   -q C:\Python27\data_migrator_1239_ddl\test\v101\query\ss_query.sql ^
   -j sa ^
@@ -2278,7 +2278,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -g[--to_file] is "To DDL file."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 1 ^
   -r 1 ^
@@ -2287,7 +2287,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_180000 ^
+  -Y 20150513_192439_134000 ^
   -5 ".\config\host_map_v2.py" ^
   -q C:\Python27\data_migrator_1239_ddl\test\v101\query\ss_query.sql ^
   -j sa ^
@@ -2321,7 +2321,7 @@ Arguments:
   -n[--from_db_server] is "SQL Server Express source instance name."
   -z[--source_client_home] is "Path to SQL Server Express client home."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 3 ^
   -r 3 ^
@@ -2330,7 +2330,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_102000 ^
+  -Y 20150513_192439_040000 ^
   -5 ".\config\host_map_v2.py" ^
   -q C:\Python27\data_migrator_1239_ddl\test\v101\query\ss_query.sql ^
   -j sa ^
@@ -2364,7 +2364,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -D[--to_dir] is "To directory."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 3 ^
   -r 3 ^
@@ -2373,7 +2373,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_102000 ^
+  -Y 20150513_192439_056000 ^
   -5 ".\config\host_map_v2.py" ^
   -q C:\Python27\data_migrator_1239_ddl\test\v101\query\ss_query.sql ^
   -j sa ^
@@ -2408,7 +2408,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -g[--to_file] is "To DDL file."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 3 ^
   -r 3 ^
@@ -2417,7 +2417,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_087000 ^
+  -Y 20150513_192439_024000 ^
   -5 ".\config\host_map_v2.py" ^
   -q C:\Python27\data_migrator_1239_ddl\test\v101\query\ss_query.sql ^
   -j sa ^
@@ -2451,7 +2451,7 @@ Arguments:
   -n[--from_db_server] is "SQL Server Express source instance name."
   -z[--source_client_home] is "Path to SQL Server Express client home."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 3 ^
   -r 3 ^
@@ -2461,7 +2461,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_383000 ^
+  -Y 20150513_192439_336000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -2495,7 +2495,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -D[--to_dir] is "To directory."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 3 ^
   -r 3 ^
@@ -2505,7 +2505,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_399000 ^
+  -Y 20150513_192439_336000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -2540,7 +2540,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -g[--to_file] is "To DDL file."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 3 ^
   -r 3 ^
@@ -2550,7 +2550,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_367000 ^
+  -Y 20150513_192439_321000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -2583,7 +2583,7 @@ Arguments:
   -n[--from_db_server] is "SQL Server Express source instance name."
   -z[--source_client_home] is "Path to SQL Server Express client home."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 3 ^
   -r 3 ^
@@ -2592,7 +2592,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_274000 ^
+  -Y 20150513_192439_212000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -2625,7 +2625,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -D[--to_dir] is "To directory."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 3 ^
   -r 3 ^
@@ -2634,7 +2634,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_274000 ^
+  -Y 20150513_192439_227000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -2668,7 +2668,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -g[--to_file] is "To DDL file."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 3 ^
   -r 3 ^
@@ -2677,7 +2677,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_258000 ^
+  -Y 20150513_192439_196000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -2708,7 +2708,7 @@ Arguments:
   -n[--from_db_server] is "SQL Server Express source instance name."
   -z[--source_client_home] is "Path to SQL Server Express client home."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 1 ^
   -r 1 ^
@@ -2717,7 +2717,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_305000 ^
+  -Y 20150513_192439_258000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -2748,7 +2748,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -D[--to_dir] is "To directory."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 1 ^
   -r 1 ^
@@ -2757,7 +2757,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_321000 ^
+  -Y 20150513_192439_274000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -2789,7 +2789,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -g[--to_file] is "To DDL file."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 1 ^
   -r 1 ^
@@ -2798,7 +2798,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_289000 ^
+  -Y 20150513_192439_243000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -2830,7 +2830,7 @@ Arguments:
   -n[--from_db_server] is "SQL Server Express source instance name."
   -z[--source_client_home] is "Path to SQL Server Express client home."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 1 ^
   -r 1 ^
@@ -2840,7 +2840,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_336000 ^
+  -Y 20150513_192439_290000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -2872,7 +2872,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -D[--to_dir] is "To directory."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 1 ^
   -r 1 ^
@@ -2882,7 +2882,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_352000 ^
+  -Y 20150513_192439_305000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -2915,7 +2915,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -g[--to_file] is "To DDL file."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 1 ^
   -r 1 ^
@@ -2925,7 +2925,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_336000 ^
+  -Y 20150513_192439_274000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -2956,7 +2956,7 @@ Arguments:
   -n[--from_db_server] is "SQL Server Express source instance name."
   -z[--source_client_home] is "Path to SQL Server Express client home."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 1 ^
   -r 1 ^
@@ -2965,7 +2965,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_227000 ^
+  -Y 20150513_192439_180000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -2996,7 +2996,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -D[--to_dir] is "To directory."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 1 ^
   -r 1 ^
@@ -3005,7 +3005,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_243000 ^
+  -Y 20150513_192439_196000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -3037,7 +3037,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -g[--to_file] is "To DDL file."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 1 ^
   -r 1 ^
@@ -3046,7 +3046,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_211000 ^
+  -Y 20150513_192439_165000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -3085,7 +3085,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ssexp ^
   -o 1 ^
   -r 1 ^
@@ -3095,7 +3095,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_462000 ^
+  -Y 20150513_192439_414000 ^
   -5 ".\config\host_map_v2.py" ^
   -Q C:\Python27\data_migrator_1239_ddl\test\v101\query\query_dir_ss ^
   -j sa ^
@@ -3138,7 +3138,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ssexp ^
   -o 1 ^
   -r 1 ^
@@ -3147,7 +3147,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_478000 ^
+  -Y 20150513_192439_430000 ^
   -5 ".\config\host_map_v2.py" ^
   -Q C:\Python27\data_migrator_1239_ddl\test\v101\query\query_dir_ss ^
   -j sa ^
@@ -3191,7 +3191,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ssexp ^
   -o 1 ^
   -r 1 ^
@@ -3201,7 +3201,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_571000 ^
+  -Y 20150513_192439_524000 ^
   -5 ".\config\host_map_v2.py" ^
   -q C:\Python27\data_migrator_1239_ddl\test\v101\query\ss_query.sql ^
   -j sa ^
@@ -3244,7 +3244,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ssexp ^
   -o 1 ^
   -r 1 ^
@@ -3253,7 +3253,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_493000 ^
+  -Y 20150513_192439_446000 ^
   -5 ".\config\host_map_v2.py" ^
   -q C:\Python27\data_migrator_1239_ddl\test\v101\query\ss_query.sql ^
   -j sa ^
@@ -3298,7 +3298,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ssexp ^
   -o 3 ^
   -r 3 ^
@@ -3307,7 +3307,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_446000 ^
+  -Y 20150513_192439_399000 ^
   -5 ".\config\host_map_v2.py" ^
   -q C:\Python27\data_migrator_1239_ddl\test\v101\query\ss_query.sql ^
   -j sa ^
@@ -3352,7 +3352,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ssexp ^
   -o 3 ^
   -r 3 ^
@@ -3362,7 +3362,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_571000 ^
+  -Y 20150513_192439_508000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -3406,7 +3406,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ssexp ^
   -o 3 ^
   -r 3 ^
@@ -3415,7 +3415,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_524000 ^
+  -Y 20150513_192439_461000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -3457,7 +3457,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ssexp ^
   -o 1 ^
   -r 1 ^
@@ -3466,7 +3466,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_540000 ^
+  -Y 20150513_192439_477000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -3509,7 +3509,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ssexp ^
   -o 1 ^
   -r 1 ^
@@ -3519,7 +3519,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_556000 ^
+  -Y 20150513_192439_492000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^
@@ -3561,7 +3561,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ssexp ^
   -o 1 ^
   -r 1 ^
@@ -3570,7 +3570,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_509000 ^
+  -Y 20150513_192439_461000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^

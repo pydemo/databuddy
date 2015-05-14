@@ -1,0 +1,21 @@
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\qc32\qc32.exe ^
+-t | ^
+-r 1 ^
+-o 1 ^
+-w ssexp2ssexp ^
+-K 1 ^
+-F C:\tmp\TEST_default_spool ^
+-Y 20150513_192624_446000 ^
+-5 C:\Users\alex_buz\sessions\My_Sessions\SSEXP_Table_to_SSEXP_Table\host_map_v2.py ^
+-B qc_job ^
+-M C:\Temp\qc_log ^
+-b master ^
+-c Timestamp_test_from ^
+-z "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn" ^
+-j sa ^
+-n ALEX_BUZ-PC\SQLEXPRESS ^
+-d master ^
+-Z "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn" ^
+-u sa ^
+-s ALEX_BUZ-PC\SQLEXPRESS ^
+-a Timestamp_test_to 

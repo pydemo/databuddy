@@ -1,0 +1,68 @@
+
+C:\Python27\data_migrator_1239_ddl>echo y  | C:\Python27\qc_dist_32\20150513_194648\qc32\qc32.exe -w ora11g2csv -o 3 -r 3 -t "|" -K 1 -M C:\Temp\qc_log -F C:\tmp\TEST_default_spool -B qc_job -Y 20150513_194648_315000 -5 ".\config\host_map_v2.py" -c SCOTT.Timestamp_test_from -j SCOTT -x tiger -b orcl -e "YYYY/MM/DD" -m "YYYY-MM-DD-HH24.MI.SS.FF" -O "YYYY-MM-DD-HH24:MI:SS.FF" 
+----------------------------------------------------------------------
+QueryCopy for Oracle 11G (v0.3.3, beta, 2015/05/13 19:46:48) [32bit]
+Copyright (c): 2014 Alex Buzunov, All rights reserved.
+Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
+----------------------------------------------------------------------
+.\config\host_map_v2.py
+.\config\host_map_v2.py
+C:\app\alex_buz\product\11.2.0\dbhome_2\BIN
+.\config\host_map_v2.py
+.\config\host_map_v2.py
+C:\app\alex_buz\product\11.2.0\dbhome_2\BIN
+####################
+Performing CSV data extraction.
+		
+From Oracle 11G:	
+	from db: SCOTT@orcl
+	table: SCOTT.Timestamp_test_from
+	shards:	3
+		
+default_spool_dir:
+	C:\tmp\TEST_default_spool\qc_job\20150513_194648_315000
+		
+To CSV:
+	C:\tmp\TEST_default_spool\qc_job\20150513_194648_315000\SCOTT.Timestamp_test_from_20150513_194648_315000.Shard-0.data1
+	C:\tmp\TEST_default_spool\qc_job\20150513_194648_315000\SCOTT.Timestamp_test_from_20150513_194648_315000.Shard-1.data1
+	C:\tmp\TEST_default_spool\qc_job\20150513_194648_315000\SCOTT.Timestamp_test_from_20150513_194648_315000.Shard-2.data1
+
+####################
+Are you sure you want to proceed?(y/n): 
+no rows selected
+Thread-0 (0, 22L, 0)
+no rows selected
+Thread-2 (0, 22L, 0)
+no rows selected
+Thread-1 (0, 22L, 0)
+############################################################
+Copy stats (3 threads, 3 shards):
+############################################################
+2015-05-13 19:47:23,219 - ora11g2csv - INFO - Starting Thread-0
+2015-05-13 19:47:23,219 - ora11g2csv - INFO - Starting Thread-1
+2015-05-13 19:47:23,219 - ora11g2csv - INFO - Starting Thread-2
+2015-05-13 19:47:23,219 - ora11g2csv - INFO - Thread-0 processing Shard-0
+2015-05-13 19:47:23,219 - ora11g2csv - INFO - Thread-1 processing Shard-1
+2015-05-13 19:47:23,219 - ora11g2csv - INFO - Thread-2 processing Shard-2
+2015-05-13 19:47:23,219 - ora11g2csv - INFO - Extracting data...
+2015-05-13 19:47:23,219 - ora11g2csv - INFO - Extracting data...
+2015-05-13 19:47:23,219 - ora11g2csv - INFO - Extracting data...
+2015-05-13 19:47:23,219 - ora11g2csv - INFO - Starting local spool...
+2015-05-13 19:47:23,219 - ora11g2csv - INFO - Starting local spool...
+2015-05-13 19:47:23,219 - ora11g2csv - INFO - Starting local spool...
+2015-05-13 19:47:23,312 - ora11g2csv - INFO - Done.
+2015-05-13 19:47:23,312 - ora11g2csv - INFO - Thread-0 exit status 0
+2015-05-13 19:47:23,312 - ora11g2csv - INFO - Exiting Thread-0
+2015-05-13 19:47:23,405 - ora11g2csv - INFO - Done.
+2015-05-13 19:47:23,405 - ora11g2csv - INFO - Thread-2 exit status 0
+2015-05-13 19:47:23,405 - ora11g2csv - INFO - Exiting Thread-2
+2015-05-13 19:47:23,453 - ora11g2csv - INFO - Done.
+2015-05-13 19:47:23,453 - ora11g2csv - INFO - Thread-1 exit status 0
+2015-05-13 19:47:23,453 - ora11g2csv - INFO - Exiting Thread-1
+2015-05-13 19:47:23,453 - ora11g2csv - INFO - Shard-0/0:           0 rows
+2015-05-13 19:47:23,453 - ora11g2csv - INFO - Shard-1/0:           0 rows
+2015-05-13 19:47:23,453 - ora11g2csv - INFO - Shard-2/0:           0 rows
+2015-05-13 19:47:23,453 - ora11g2csv - INFO - TOTAL Bytes:          66 Bytes
+2015-05-13 19:47:23,453 - ora11g2csv - INFO - TOTAL Rows:            0 Rows
+2015-05-13 19:47:23,453 - ora11g2csv - INFO - Done.
+2015-05-13 19:47:23,453 - ora11g2csv - INFO - Elapsed: 00:00:01

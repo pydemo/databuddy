@@ -4078,9 +4078,11 @@ class NewSessionDialog(wx.Dialog):
 		if 1:
 			apidir= os.path.join(home,aa_dir)
 			self.api_from = [ f for f in os.listdir(apidir) if os.path.isdir(os.path.join(apidir,f)) and f not in conf.ff ]
-			#print api_from
+			print self.api_from
+			#e(0)
 			self.api2= list({ f[:2] for f in self.api_from})
 			self.api2.sort()
+			print self.api2
 			self.api_menu={}
 			for m in self.api_from:
 				#print m
@@ -4479,8 +4481,8 @@ class NewSessionDialog(wx.Dialog):
 				Menu1 = FM.FlatMenu()
 				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, 'From %s' % dbf[k], '', wx.ITEM_NORMAL, Menu1)
 				self._popUpMenu.AppendItem(menuItem)
-				if not k in ['OR']:
-					menuItem.Enable(False)
+				#if not k in ['OR']:
+				#	menuItem.Enable(False)
 				
 				for sm in self.api_menu[k]:
 					if len(self.api_menu[k])>1:
@@ -4547,8 +4549,8 @@ class NewSessionDialog(wx.Dialog):
 		Menu3 = FM.FlatMenu()
 		menuItem = FM.FlatMenuItem(Menu2, 20000+self.i, "%s %s" % (from_to, dbf[k2]), "", wx.ITEM_NORMAL, Menu3)
 		Menu2.AppendItem(menuItem)
-		if not k2 in ['OR']:
-			menuItem.Enable(False)
+		#if not k2 in ['OR']:
+		#	menuItem.Enable(False)
 		for sm2 in self.api_menu[k2]:
 			self.i +=1
 			self.create_Menu4(Menu3,sm2,from_db,from_to)	
@@ -4562,8 +4564,8 @@ class NewSessionDialog(wx.Dialog):
 		#print from_db,sm2
 		self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(from_db,sm2))
 		Menu3.AppendItem(menuItem)
-		if not sm2 in self.api_menu['OR']:
-			menuItem.Enable(False)
+		#if not sm2 in self.api_menu['OR']:
+		#	menuItem.Enable(False)
 		#self.set_sub_submenu(subSubMenu,1, 'CSV')
 			
 

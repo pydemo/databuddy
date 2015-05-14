@@ -18,7 +18,7 @@ Arguments:
   -n[--from_db_server] is "SQL Server Express source instance name."
   -z[--source_client_home] is "Path to SQL Server Express client home."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 1 ^
   -r 1 ^
@@ -27,7 +27,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_227000 ^
+  -Y 20150513_192439_180000 ^
   -5 ".\config\host_map_v2.py" ^
   -c Timestamp_test_from ^
   -j sa ^

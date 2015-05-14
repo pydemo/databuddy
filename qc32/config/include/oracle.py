@@ -36,7 +36,7 @@ d=os.path.split(os.path.split(os.path.dirname( __file__))[0])[0]
 #print '##########',os.getcwd()
 #from include.v101.host_map import host_map as hmap
 hmap=import_module(os.path.join(d,'include','v101','host_map.py'))
-hmap= hmap.host_map
+#hmap= hmap.host_map
 class code_release(object):
 	"""Code Release object"""
 	def __init__(self,log,parent,conf, args, spConf, shard):
@@ -65,7 +65,7 @@ class code_release(object):
 		if hasattr(self.args, 'host_map') and self.args.host_map:
 			
 			host_map_loc= self.args.host_map
-			hm = hmap(self.args.copy_vector,host_map_loc,shard)
+			hm = hmap.host_map(self.args.copy_vector,host_map_loc,shard)
 			
 			
 			if hm.R:
@@ -420,7 +420,8 @@ class common(base):
 		self.args=conf.args
 		self.cr={} #code_release(self.conf, self.args)
 		host_map_loc= self.args.host_map
-		self.hm = hmap(self.args.copy_vector,host_map_loc,0)
+		#print host_map_loc
+		self.hm = hmap.host_map(self.args.copy_vector,host_map_loc,0)
 			
 	def get_table_columns(self,  tab_name):
 		if self.tab_cols.has_key(tab_name):
@@ -546,7 +547,7 @@ class source(common):
 			return self.db_client_dbshell
 		loader= os.path.basename(self.conf.dbtools['DBSHELL'][self.db])
 		if self.hm.local_source_client_home: #self.args.source_client_home:
-			print self.hm.local_source_client_home
+			#print self.hm.local_source_client_home
 			
 			self.db_client_dbshell=(r'%s\%s' % (self.hm.local_source_client_home, loader)).strip("'").strip('\\').strip('\\')
 			

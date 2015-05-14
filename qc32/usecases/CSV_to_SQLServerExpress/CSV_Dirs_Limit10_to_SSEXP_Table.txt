@@ -21,7 +21,7 @@ Arguments:
   -a[--to_table] is "To table."
   -Z[--target_client_home] is "Path to SQL Server Express client home bin dir."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w csv2ssexp ^
   -o 1 ^
   -r 1 ^
@@ -30,7 +30,7 @@ Example:
   -K 1 ^
   -M C:\Temp\qc_log ^
   -B qc_job ^
-  -Y 20150513_113155_618000 ^
+  -Y 20150513_192439_571000 ^
   -5 ".\config\host_map_v2.py" ^
   -I C:\Python27\data_migrator_1239_ddl\test\v101\data\ss_data_dir ^
   -y 1000 ^

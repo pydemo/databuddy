@@ -1,0 +1,46 @@
+
+C:\Python27\data_migrator_1239_ddl>echo y  | C:\Python27\qc_dist_32\20150513_194648\qc32\qc32.exe -w ora11g2csv -o 1 -r 1 -t "|" -K 1 -M C:\Temp\qc_log -F C:\tmp\TEST_default_spool -B qc_job -Y 20150513_194648_191000 -5 ".\config\host_map_v2.py" -c SCOTT.Partitioned_test_from -P part_15 -j SCOTT -x tiger -b orcl -e "YYYY/MM/DD" -m "YYYY-MM-DD-HH24.MI.SS.FF" -O "YYYY-MM-DD-HH24:MI:SS.FF" -A 1 -D C:\Python27\data_migrator_1239_ddl\CSV_OUT 
+----------------------------------------------------------------------
+QueryCopy for Oracle 11G (v0.3.3, beta, 2015/05/13 19:46:48) [32bit]
+Copyright (c): 2014 Alex Buzunov, All rights reserved.
+Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
+----------------------------------------------------------------------
+.\config\host_map_v2.py
+.\config\host_map_v2.py
+C:\app\alex_buz\product\11.2.0\dbhome_2\BIN
+.\config\host_map_v2.py
+.\config\host_map_v2.py
+C:\app\alex_buz\product\11.2.0\dbhome_2\BIN
+####################
+Performing CSV data extraction.
+		
+From Oracle 11G:	
+	from db: SCOTT@orcl
+	table: SCOTT.Partitioned_test_from
+	partition: part_15
+	shards:	1
+		
+default_spool_dir:
+	C:\tmp\TEST_default_spool\qc_job\20150513_194648_191000
+		
+To CSV:
+	C:\Python27\data_migrator_1239_ddl\CSV_OUT\SCOTT.Partitioned_test_from_part_15.20150513_194648_191000.data
+
+####################
+Are you sure you want to proceed?(y/n): 
+Thread-0 (0, 5417L, 43)
+############################################################
+Copy stats (1 threads, 1 shards):
+############################################################
+2015-05-13 19:47:17,846 - ora11g2csv - INFO - Starting Thread-0
+2015-05-13 19:47:17,846 - ora11g2csv - INFO - Thread-0 processing Shard-0
+2015-05-13 19:47:17,846 - ora11g2csv - INFO - Extracting data...
+2015-05-13 19:47:17,846 - ora11g2csv - INFO - Starting local spool...
+2015-05-13 19:47:18,128 - ora11g2csv - INFO - Done.
+2015-05-13 19:47:18,128 - ora11g2csv - INFO - Thread-0 exit status 0
+2015-05-13 19:47:18,128 - ora11g2csv - INFO - Exiting Thread-0
+2015-05-13 19:47:18,128 - ora11g2csv - INFO - Shard-0/0:          43 rows
+2015-05-13 19:47:18,128 - ora11g2csv - INFO - TOTAL Bytes:        5417 Bytes
+2015-05-13 19:47:18,128 - ora11g2csv - INFO - TOTAL Rows:           43 Rows
+2015-05-13 19:47:18,128 - ora11g2csv - INFO - Done.
+2015-05-13 19:47:18,128 - ora11g2csv - INFO - Elapsed: 00:00:00

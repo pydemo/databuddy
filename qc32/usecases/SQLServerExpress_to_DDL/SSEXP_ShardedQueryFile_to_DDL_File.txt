@@ -22,7 +22,7 @@ Arguments:
   -z[--source_client_home] is "Path to SQL Server Express client home."
   -g[--to_file] is "To DDL file."	
 Example: 
-  echo y|C:\Python27\qc_dist_32\20150513_113154\qc32\qc32.exe ^
+  echo y|C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe ^
   -w ssexp2ddl ^
   -o 3 ^
   -r 3 ^
@@ -31,7 +31,7 @@ Example:
   -M C:\Temp\qc_log ^
   -F C:\tmp\TEST_default_spool ^
   -B qc_job ^
-  -Y 20150513_113155_087000 ^
+  -Y 20150513_192439_024000 ^
   -5 ".\config\host_map_v2.py" ^
   -q C:\Python27\data_migrator_1239_ddl\test\v101\query\ss_query.sql ^
   -j sa ^

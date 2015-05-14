@@ -3,7 +3,7 @@
 ##
 Press any key to continue . . . 
 ----------------------------------------------------------------------
-QueryCopy for SQL Server Express (v0.3.3, beta, 2015/05/13 11:31:54) [32bit]
+QueryCopy for SQL Server Express (v0.3.3, beta, 2015/05/13 19:24:38) [32bit]
 Copyright (c): 2014 Alex Buzunov, All rights reserved.
 Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
 ----------------------------------------------------------------------

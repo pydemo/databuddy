@@ -1,0 +1,58 @@
+
+C:\Python27\data_migrator_1239_ddl>echo y  | C:\Python27\qc_dist_32\20150513_192438\qc32\qc32.exe -w ssexp2ssexp -o 1 -r 1 -t "|" -l 10 -K 1 -M C:\Temp\qc_log -F C:\tmp\TEST_default_spool -B qc_job -Y 20150513_192439_492000 -5 ".\config\host_map_v2.py" -c Timestamp_test_from -j sa -x 198Morgan -b master -n ALEX_BUZ-PC\SQLEXPRESS -z "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn" -u sa -p 198Morgan -d master -s ALEX_BUZ-PC\SQLEXPRESS -a dbo.Timestamp_test_to -Z "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn" 
+----------------------------------------------------------------------
+QueryCopy for SQL Server Express (v0.3.3, beta, 2015/05/13 19:24:38) [32bit]
+Copyright (c): 2014 Alex Buzunov, All rights reserved.
+Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
+----------------------------------------------------------------------
+####################
+Performing data copy.
+		
+	From SQL Server Express:	
+		from db: sa/master/ALEX_BUZ-PC\SQLEXPRESS
+		table: Timestamp_test_from
+		shards:	1
+		
+		
+	To SQLServer:	
+		to db: sa/master/ALEX_BUZ-PC\SQLEXPRESS
+		to table: dbo.Timestamp_test_to
+		
+####################
+Are you sure you want to proceed?(y/n): 
+
+['C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\110\\Tools\\Binn\\sqlcmd.exe', '-h', '-1', '-s', '^|', '-W', '-U', 'sa', '-P', '198Morgan', '-d', 'master', '-S', 'ALEX_BUZ-PC\\SQLEXPRESS']
+ROW COUNT:|10
+
+None
+['C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\110\\Tools\\Binn\\sqlcmd.exe', '-h', '1', '-s', '^|', '-W', '-U', 'sa', '-P', '198Morgan', '-d', 'master', '-S', 'ALEX_BUZ-PC\\SQLEXPRESS']
+Id|Title|Isin|Country|Descr|SecurityType|CreateDt
+--|-----|----|-------|-----|------------|--------
+
+(0 rows affected)
+
+None
+['C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\110\\Tools\\Binn\\sqlcmd', '-s', '|', '-W', '-i', 'C:\\Temp\\qc_log\\qc_job\\20150513_192439_492000\\sql\\spool_table_0.sql', '-U', 'sa', '-P', '198Morgan', '-S', 'ALEX_BUZ-PC\\SQLEXPRESS', '-d', 'master', '-h', '-1']
+Thread-0 (0, 1143L, 10)
+############################################################
+Copy stats (1 threads, 1 shards):
+############################################################
+2015-05-13 19:25:11,029 - ssexp2ssexp - INFO - Counting rows...
+2015-05-13 19:25:11,029 - ssexp2ssexp - INFO - Counting rows in source...
+2015-05-13 19:25:11,108 - ssexp2ssexp - INFO - Fetching table columns...
+2015-05-13 19:25:11,171 - ssexp2ssexp - INFO - Done.
+2015-05-13 19:25:11,171 - ssexp2ssexp - INFO - Starting Thread-0
+2015-05-13 19:25:11,171 - ssexp2ssexp - INFO - Thread-0 processing Shard-0
+2015-05-13 19:25:11,171 - ssexp2ssexp - INFO - Extracting data...
+2015-05-13 19:25:11,233 - ssexp2ssexp - INFO - Done
+2015-05-13 19:25:11,233 - ssexp2ssexp - INFO - Loading data...
+2015-05-13 19:25:11,295 - ssexp2ssexp - INFO - sqlcmd status =0
+2015-05-13 19:25:11,295 - ssexp2ssexp - INFO - Done
+2015-05-13 19:25:11,295 - ssexp2ssexp - INFO - keeping spool file.
+2015-05-13 19:25:11,295 - ssexp2ssexp - INFO - Thread-0 exit status 0
+2015-05-13 19:25:11,295 - ssexp2ssexp - INFO - Exiting Thread-0
+2015-05-13 19:25:11,295 - ssexp2ssexp - INFO - Shard-0/0:          10 rows
+2015-05-13 19:25:11,295 - ssexp2ssexp - INFO - TOTAL Bytes:        1143 Bytes
+2015-05-13 19:25:11,295 - ssexp2ssexp - INFO - TOTAL Rows:           10 Rows
+2015-05-13 19:25:11,295 - ssexp2ssexp - INFO - Done.
+2015-05-13 19:25:11,295 - ssexp2ssexp - INFO - Elapsed: 00:00:00

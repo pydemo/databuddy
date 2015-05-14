@@ -4078,7 +4078,8 @@ class NewSessionDialog(wx.Dialog):
 		if 1:
 			apidir= os.path.join(home,aa_dir)
 			self.api_from = [ f for f in os.listdir(apidir) if os.path.isdir(os.path.join(apidir,f)) and f not in conf.ff ]
-			#print api_from
+			print api_from
+			e(0)
 			self.api2= list({ f[:2] for f in self.api_from})
 			self.api2.sort()
 			self.api_menu={}
