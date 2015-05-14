@@ -154,7 +154,7 @@ TimesTen|  | yes  | yes
 - distinguish A-Templates from B-Templates
 - let data copy to be executed on Linux (bash via ssh)**DONE**
 - let data spool/load to be executed on Linux (bash via ssh)
-- add SQLServer
+- add SQLServer **DONE**
 - add MySQL
 - add PostgreSQL
 - add SQLite
