@@ -22,8 +22,8 @@ Database | GUI (data-buddy) | Command line (QueryCopy)
 ---------|---- | -------------
 DB2      |  | yes
 Informix |  | yes
-MariaDB    |  | yes
-MySQL    |  | yes
+MariaDB    | yes | yes
+MySQL    | yes | yes
 **Oracle**   |[yes](https://github.com/data-buddy/DataBuddy/releases/tag/v0.2.9)   | [yes](https://github.com/QueryCopy/QueryCopy-for-Oracle/releases/tag/v1.23.9)
 PostgreSQL|  | yes
 SQLite|  | yes
