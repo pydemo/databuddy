@@ -27,7 +27,7 @@ MySQL    |  | yes
 **Oracle**   |[yes](https://github.com/data-buddy/DataBuddy/releases/tag/v0.2.9)   | [yes](https://github.com/QueryCopy/QueryCopy-for-Oracle/releases/tag/v1.23.9)
 PostgreSQL|  | yes
 SQLite|  | yes
-SQLServer|   | yes
+SQLServer| [yes](https://github.com/data-buddy/DataBuddy/releases/tag/v0.3.3)  | yes
 Sybase   |  | yes
 TimesTen|  | yes
 
