@@ -81,7 +81,7 @@ TimesTen|  | yes  | yes
 1. Data extracted to temp file from source.
 2. Temp file loaded to target using bulk loader.
 
-###Data tools
+###Tools used to extract, load, and query data
 DataStore | Spooler | Loader | DbShell
 ----------|-------- | -------| -------
 DB2 Advanced Enterprise Server | db2.exe | db2.exe | db2.exe
