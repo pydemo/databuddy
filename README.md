@@ -48,8 +48,6 @@ Sybase   |  | yes  | yes
 TimesTen|  | yes  | yes
 
 
-
-
 ##Contents
 - Front end - data-buddy GUI (wxPython, PyInstaller).
 - Back end -[QueryCopy](https://github.com/QueryCopy/QueryCopy-for-Oracle/releases/tag/v1.23.9) (Python, PyInstaller).
@@ -82,6 +80,33 @@ TimesTen|  | yes  | yes
 
 1. Data extracted to temp file from source.
 2. Temp file loaded to target using bulk loader.
+
+###Data tools
+DataStore | Spooler | Loader | DbShell
+----------|-------- | -------| -------
+DB2 Advanced Enterprise Server | db2.exe | db2.exe | db2.exe
+DB2 Advanced Workgroup Server | db2.exe | db2.exe | db2.exe
+DB2 Developer Edition | db2.exe | db2.exe | db2.exe
+DB2 Express | db2.exe | db2.exe | db2.exe
+DB2 Express C | db2.exe | db2.exe | db2.exe
+DB2 Enterprise Server | db2.exe | db2.exe | db2.exe
+DB2 Workgroup Server | db2.exe | db2.exe | db2.exe
+Infobright | mysql.exe | mysql.exe | mysql.exe
+Informix IDS | dbaccess.exe | dbaccess.exe | dbaccess.exe
+Informix Innovator C | dbaccess.exe | dbaccess.exe | dbaccess.exe
+MariaDB | mysql.exe | mysql.exe | mysql.exe
+MySQL | mysql.exe | mysql.exe | mysql.exe
+Oracle 11G | sqlplus.exe | sqlldr.exe | sqlplus.exe
+Exadata | sqlplus.exe | sqlldr.exe | sqlplus.exe
+Oracle XE | sqlplus.exe | sqlldr.exe | sqlplus.exe
+PostgreSQL | psql.exe | psql.exe | psql.exe
+SQL Lite | sqlite3.exe | sqlite3.exe | sqlite3.exe
+SQL Server Enterprise | sqlcmd | sqlcmd | sqlcmd.exe
+SQL Server Express | sqlcmd | sqlcmd | sqlcmd.exe
+Sybase SQL Anywhere | dbisql.com | dbisql.com | dbisql.com
+SAP Sybase ASE | dbisql.com | dbisql.com | dbisql.com
+Sybase IQ | dbisql.com | dbisql.com | dbisql.com
+TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 
 ##Implementation
 
