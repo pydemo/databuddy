@@ -24,10 +24,10 @@ DB2      |  | yes
 Informix |  | yes
 MariaDB    | yes | yes
 MySQL    | yes | yes
-**Oracle**   |[yes](https://github.com/data-buddy/DataBuddy/releases/tag/v0.2.9)   | [yes](https://github.com/QueryCopy/QueryCopy-for-Oracle/releases/tag/v1.23.9)
+**Oracle**   | yes | [yes](https://github.com/QueryCopy/QueryCopy-for-Oracle/releases/tag/v1.23.9)
 PostgreSQL|  | yes
 SQLite|  | yes
-SQLServer| [yes](https://github.com/data-buddy/DataBuddy/releases/tag/v0.3.3)  | yes
+SQLServer| yes | yes
 Sybase   |  | yes
 TimesTen|  | yes
 
