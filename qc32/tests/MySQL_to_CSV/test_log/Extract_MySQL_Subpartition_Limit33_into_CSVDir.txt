@@ -1,0 +1,62 @@
+
+C:\Python27\data_migrator_1239_12c>echo y  | C:\Python27\qc_dist_32\20150514_124622\qc32\qc32.exe -w mysql-csv -o 1 -r 1 -t "|" -l 33 -K 1 -M C:\Temp\qc_log -F C:\tmp\TEST_default_spool -B qc_job -Y 20150514_124625_558000 -5 ".\config\host_map_v2.py" -c TEST.Sub_Partitioned_test_from -S subpart200 -j "alex" -x "mysql_pwd" -b "test" -n "localhost" -z "C:\Temp\mysql\bin" -D C:\Python27\data_migrator_1239_12c\CSV_OUT 
+----------------------------------------------------------------------
+QueryCopy for MySQL (v0.3.3, beta, 2015/05/14 12:46:22) [32bit]
+Copyright (c): 2014 Alex Buzunov, All rights reserved.
+Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
+----------------------------------------------------------------------
+####################
+Performing CSV data extraction.
+		
+From MySQL:	
+	from db: alex/test/localhost
+	table: TEST.Sub_Partitioned_test_from
+sub-partition: subpart200
+	shards:	1
+		
+To CSV:
+	C:\Python27\data_migrator_1239_12c\CSV_OUT\TEST.Sub_Partitioned_test_from_subpart200.20150514_124625_558000.data
+
+####################
+Are you sure you want to proceed?(y/n): 
+
+Thread-0 (0, 2319L, 21)
+############################################################
+Copy stats (1 threads, 1 shards):
+############################################################
+2015-05-14 12:47:08,782 - mysql-csv - INFO - Fetching table info...
+2015-05-14 12:47:08,813 - mysql-csv - WARNING - Warning: Using a password on the command line interface can be insecure.
+
+2015-05-14 12:47:08,813 - mysql-csv - WARNING - Warning: Using a password on the command line interface can be insecure.
+
+2015-05-14 12:47:08,813 - mysql-csv - INFO - Done.
+2015-05-14 12:47:08,813 - mysql-csv - INFO - Verifying partition...
+2015-05-14 12:47:08,861 - mysql-csv - WARNING - Warning: Using a password on the command line interface can be insecure.
+
+2015-05-14 12:47:08,861 - mysql-csv - WARNING - Warning: Using a password on the command line interface can be insecure.
+
+2015-05-14 12:47:08,861 - mysql-csv - INFO - Check OK. Partition "subpart200" exists in table "TEST.Sub_Partitioned_test_from".
+2015-05-14 12:47:08,861 - mysql-csv - INFO - Counting rows in source...
+2015-05-14 12:47:08,891 - mysql-csv - WARNING - Warning: Using a password on the command line interface can be insecure.
+
+2015-05-14 12:47:08,891 - mysql-csv - WARNING - Warning: Using a password on the command line interface can be insecure.
+
+2015-05-14 12:47:08,891 - mysql-csv - INFO - 21
+2015-05-14 12:47:08,891 - mysql-csv - INFO - Fetching source column names...
+2015-05-14 12:47:08,923 - mysql-csv - WARNING - Warning: Using a password on the command line interface can be insecure.
+
+2015-05-14 12:47:08,923 - mysql-csv - WARNING - Warning: Using a password on the command line interface can be insecure.
+
+2015-05-14 12:47:08,923 - mysql-csv - INFO - Got 7 columns.
+2015-05-14 12:47:08,923 - mysql-csv - INFO - Done.
+2015-05-14 12:47:08,923 - mysql-csv - INFO - Starting Thread-0
+2015-05-14 12:47:08,923 - mysql-csv - INFO - Thread-0 processing Shard-0
+2015-05-14 12:47:08,923 - mysql-csv - INFO - Extracting data...
+2015-05-14 12:47:08,938 - mysql-csv - INFO - Done.
+2015-05-14 12:47:08,938 - mysql-csv - INFO - Thread-0 exit status 0
+2015-05-14 12:47:08,938 - mysql-csv - INFO - Exiting Thread-0
+2015-05-14 12:47:08,938 - mysql-csv - INFO - Shard-0/0:          21 rows
+2015-05-14 12:47:08,938 - mysql-csv - INFO - TOTAL Bytes:        2319 Bytes
+2015-05-14 12:47:08,938 - mysql-csv - INFO - TOTAL Rows:           21 Rows
+2015-05-14 12:47:08,938 - mysql-csv - INFO - Done.
+2015-05-14 12:47:08,938 - mysql-csv - INFO - Elapsed: 00:00:00

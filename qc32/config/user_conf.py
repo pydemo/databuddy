@@ -1,5 +1,4 @@
 #__builtin__ args
-#__builtin__ _to
 
 import datetime
 import os, sys
@@ -19,8 +18,6 @@ inc['ORAXE']='oraxe.py'
 #print args.copy_vector
 
 db=None
-print _to
-print args.copy_vector
 from_db, to_db=args.copy_vector.split(_to)
 
 if inc.has_key(to_db.upper()):

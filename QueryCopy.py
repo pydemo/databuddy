@@ -97,7 +97,7 @@ except ImportError: # if it's not there locally, try the wxPython lib.
 
 from qc32.config.include.oracle import target	
 ########################################################################
-exe=True
+exe=False
 
 e=sys.exit
 blog=cu.blog
@@ -4079,7 +4079,7 @@ class NewSessionDialog(wx.Dialog):
 			apidir= os.path.join(home,aa_dir)
 			self.api_from = [ f for f in os.listdir(apidir) if os.path.isdir(os.path.join(apidir,f)) and f not in conf.ff ]
 			print self.api_from
-			#e(0)
+			e(0)
 			self.api2= list({ f[:2] for f in self.api_from})
 			self.api2.sort()
 			print self.api2

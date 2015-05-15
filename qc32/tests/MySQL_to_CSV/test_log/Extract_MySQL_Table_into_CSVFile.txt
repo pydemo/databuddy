@@ -1,0 +1,60 @@
+
+C:\Python27\data_migrator_1239_12c>echo y  | C:\Python27\qc_dist_32\20150514_124622\qc32\qc32.exe -w mysql-csv -o 1 -r 1 -t "|" -K 1 -M C:\Temp\qc_log -F C:\tmp\TEST_default_spool -B qc_job -Y 20150514_124625_417000 -5 ".\config\host_map_v2.py" -c TEST.Timestamp_test_from -j "alex" -x "mysql_pwd" -b "test" -n "localhost" -z "C:\Temp\mysql\bin" -g C:\Python27\data_migrator_1239_12c\CSV_OUT\testMYSQL_Table.data 
+----------------------------------------------------------------------
+QueryCopy for MySQL (v0.3.3, beta, 2015/05/14 12:46:22) [32bit]
+Copyright (c): 2014 Alex Buzunov, All rights reserved.
+Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
+----------------------------------------------------------------------
+####################
+Performing CSV data extraction.
+		
+From MySQL:	
+	from db: alex/test/localhost
+	table: TEST.Timestamp_test_from
+	shards:	1
+		
+To CSV:
+	C:\Python27\data_migrator_1239_12c\CSV_OUT\testMYSQL_Table.data
+
+####################
+Are you sure you want to proceed?(y/n): 
+
+
+Thread-0 (1, 5172L, -1)
+############################################################
+Copy stats (1 threads, 1 shards):
+############################################################
+2015-05-14 12:47:07,122 - mysql-csv - INFO - Fetching table info...
+2015-05-14 12:47:07,170 - mysql-csv - WARNING - Warning: Using a password on the command line interface can be insecure.
+
+2015-05-14 12:47:07,170 - mysql-csv - WARNING - Warning: Using a password on the command line interface can be insecure.
+
+2015-05-14 12:47:07,170 - mysql-csv - INFO - Done.
+2015-05-14 12:47:07,170 - mysql-csv - INFO - Counting rows in source...
+2015-05-14 12:47:07,200 - mysql-csv - WARNING - Warning: Using a password on the command line interface can be insecure.
+
+2015-05-14 12:47:07,200 - mysql-csv - WARNING - Warning: Using a password on the command line interface can be insecure.
+
+2015-05-14 12:47:07,200 - mysql-csv - INFO - 44
+2015-05-14 12:47:07,200 - mysql-csv - INFO - Done.
+2015-05-14 12:47:07,200 - mysql-csv - INFO - Fetching source column names...
+2015-05-14 12:47:07,232 - mysql-csv - WARNING - Warning: Using a password on the command line interface can be insecure.
+
+2015-05-14 12:47:07,232 - mysql-csv - WARNING - Warning: Using a password on the command line interface can be insecure.
+
+2015-05-14 12:47:07,232 - mysql-csv - INFO - Got 7 columns.
+2015-05-14 12:47:07,232 - mysql-csv - INFO - Done.
+2015-05-14 12:47:07,232 - mysql-csv - INFO - Starting Thread-0
+2015-05-14 12:47:07,232 - mysql-csv - INFO - Thread-0 processing Shard-0
+2015-05-14 12:47:07,232 - mysql-csv - INFO - Extracting data...
+2015-05-14 12:47:07,247 - mysql-csv - ERROR - Warning: Using a password on the command line interface can be insecure.
+ERROR 1086 (HY000) at line 1: File 'C:\Python27\data_migrator_1239_12c\CSV_OUT\testMYSQL_Table.data' already exists
+
+2015-05-14 12:47:07,247 - mysql-csv - INFO - Done.
+2015-05-14 12:47:07,247 - mysql-csv - INFO - Thread-0 exit status 1
+2015-05-14 12:47:07,247 - mysql-csv - INFO - Exiting Thread-0
+2015-05-14 12:47:07,247 - mysql-csv - INFO - Shard-0/1:		n/a
+2015-05-14 12:47:07,247 - mysql-csv - INFO - TOTAL Bytes:        5172 Bytes
+2015-05-14 12:47:07,247 - mysql-csv - INFO - TOTAL Rows:		n/a
+2015-05-14 12:47:07,247 - mysql-csv - ERROR - Copy failed.
+2015-05-14 12:47:07,247 - mysql-csv - INFO - Elapsed: 00:00:00
