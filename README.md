@@ -102,8 +102,8 @@ Exadata | sqlplus.exe | sqlldr.exe | sqlplus.exe
 Oracle XE | sqlplus.exe | sqlldr.exe | sqlplus.exe
 PostgreSQL | psql.exe | psql.exe | psql.exe
 SQL Lite | sqlite3.exe | sqlite3.exe | sqlite3.exe
-SQL Server Enterprise | sqlcmd | sqlcmd | sqlcmd.exe
-SQL Server Express | sqlcmd | sqlcmd | sqlcmd.exe
+SQL Server Enterprise | sqlcmd.exe | sqlcmd.exe | sqlcmd.exe
+SQL Server Express | sqlcmd.exe | sqlcmd.exe | sqlcmd.exe
 Sybase SQL Anywhere | dbisql.com | dbisql.com | dbisql.com
 SAP Sybase ASE | dbisql.com | dbisql.com | dbisql.com
 Sybase IQ | dbisql.com | dbisql.com | dbisql.com
