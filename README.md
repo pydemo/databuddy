@@ -186,16 +186,16 @@ TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 - let data copy to be executed on Linux (bash via ssh)**DONE**
 - let data spool/load to be executed on Linux (bash via ssh)
 - add SQLServer **DONE**
-- add MySQL
+- add MySQL **DONE**
 - add PostgreSQL
 - add SQLite
 - add Informix
-- add Sybase
+- add Sybase 
 - add DB2
 - add dBase
 - add Access DB
-- add MariaDB
-- add Infobright
+- add MariaDB 
+- add Infobright **DONE**
 - add TimesTen
 - add MongoDB
 - add Hadoop
