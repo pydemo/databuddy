@@ -236,11 +236,15 @@ TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 - add QV (QlikView file format)
 - add MDX (file format)
 
-
-
-
 #Does it work?
 - yes, for all major dbs. 
 
+
 ##References
 * [QueryCopy for Oracle](https://github.com/QueryCopy/QueryCopy-for-Oracle) -- `qc32\qc32.exe`
+
+## Screenshots
+
+New session: 
+![New session](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/new_session_all_dbs.png "Add New Session")
+
