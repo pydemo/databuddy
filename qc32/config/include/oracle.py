@@ -724,7 +724,7 @@ exit;
 				else:
 					last_line=''.join(out[::-1])
 					#print last line
-					print ':::',last_line
+					#print ':::',last_line
 					raise RowCountError(last_line)
 			else:
 				
@@ -963,7 +963,9 @@ class target(common):
 		#print ins_cnt
 		#sys.exit(0)
 		#return (out,status,err)
-		stat=os.stat(outfn).st_size
+		stat=-1
+		if os.path.isfile(outfn):
+			stat=os.stat(outfn).st_size
 		return (out,status,err,ins_cnt,stat)	
 		
 	def get_inserted_count(self,shard):

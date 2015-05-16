@@ -4558,7 +4558,7 @@ class NewSessionDialog(wx.Dialog):
 	def create_Menu4(self,Menu3,sm2,from_db, from_to='To'):
 		#Menu4 = FM.FlatMenu()
 		self.i +=1
-		
+		#pprint(conf.dbs)
 		menuItem = FM.FlatMenuItem(Menu3, 20000+self.i, "%s %s" % (from_to, conf.dbs[sm2]) , "", wx.ITEM_NORMAL)
 		#print from_db,sm2
 		self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(from_db,sm2))
@@ -10536,7 +10536,7 @@ class DataBuddy(wx.Frame):
 			'Manages QueryCopy spool/load/copy sessions.',
 			350, wx.ClientDC(self.panel))
 		#info.WebSite = ("https://github.com/alexbuz", "My Github")
-		info.Developers = [__author__]
+		info.Developers = ["Alex Buzunov"]
 		#info.License = wordwrap("Open source", 500, wx.ClientDC(self.panel))
 		# Show the wx.AboutBox
 		wx.AboutBox(info)	

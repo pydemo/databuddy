@@ -89,7 +89,7 @@ class target(common):
 	%s FROM %s OF DEL modified by COLDEL%s %s INSERT INTO %s
 	CONNECT RESET
 	""" % (args.to_user, args.to_passwd, loader, infile ,args.field_term,limit,args.to_table.strip().strip(';'))	
-		print(out)
+		#print(out)
 		return out	
 
 		

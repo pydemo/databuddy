@@ -2,6 +2,7 @@
 
 import datetime
 import os, sys
+from pprint import pprint
 from common.v101.loaders import import_module
 e=sys.exit
 inc={}
@@ -11,30 +12,39 @@ inc['TTEN']='tten.py'
 inc['SLITE']='slite.py'
 inc['INFOR']=inc['INFORC']='infor.py'
 inc['SYASE']=inc['SYANY']=inc['SYIQ']='sybase.py'
-inc['ORA11G']=inc['ORAEXA']='oracle.py'
+inc['ORA12C']=inc['ORA11G']=inc['ORAEXA']='oracle.py'
 inc['ORAXE']='oraxe.py'
 #print  inc
 
 #print args.copy_vector
 
-db=None
+#db=None
+target=source=None
 from_db, to_db=args.copy_vector.split(_to)
-
+#print from_db, to_db
+#pprint (inc)
 if inc.has_key(to_db.upper()):
 	import __builtin__
 	__builtin__.args = args
 	dmhome=os.path.dirname(os.path.realpath(__file__))
 	#print os.path.join(dmhome,'include',inc[to_db.upper()])
 	#e(0)
-	db = import_module(os.path.join(dmhome,'include',inc[to_db.upper()]))
-elif inc.has_key(from_db.upper()):
+	#print to_db.upper()
+	#print os.path.join(dmhome,'include',inc[to_db.upper()])
+	target = import_module(os.path.join(dmhome,'include',inc[to_db.upper()]))
+	#print db
+if inc.has_key(from_db.upper()):
 	import __builtin__
 	__builtin__.args = args
 	dmhome=os.path.dirname(os.path.realpath(__file__))
 	#print os.path.join(dmhome,'include',inc[from_db.upper()])
 	#e(0)
-	db = import_module(os.path.join(dmhome,'include',inc[from_db.upper()]))
-	
+	source = import_module(os.path.join(dmhome,'include',inc[from_db.upper()]))
+#print db
+#pprint(dir(db))
+#print target
+#print source
+#e(0)
 abspath=os.path.abspath(os.path.dirname(sys.argv[0]))
 
 

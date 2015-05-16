@@ -97,7 +97,7 @@ except ImportError: # if it's not there locally, try the wxPython lib.
 
 from qc32.config.include.oracle import target	
 ########################################################################
-exe=False
+exe=True
 
 e=sys.exit
 blog=cu.blog
@@ -4079,7 +4079,7 @@ class NewSessionDialog(wx.Dialog):
 			apidir= os.path.join(home,aa_dir)
 			self.api_from = [ f for f in os.listdir(apidir) if os.path.isdir(os.path.join(apidir,f)) and f not in conf.ff ]
 			print self.api_from
-			e(0)
+			#e(0)
 			self.api2= list({ f[:2] for f in self.api_from})
 			self.api2.sort()
 			print self.api2
@@ -4559,7 +4559,7 @@ class NewSessionDialog(wx.Dialog):
 	def create_Menu4(self,Menu3,sm2,from_db, from_to='To'):
 		#Menu4 = FM.FlatMenu()
 		self.i +=1
-		
+		#pprint(conf.dbs)
 		menuItem = FM.FlatMenuItem(Menu3, 20000+self.i, "%s %s" % (from_to, conf.dbs[sm2]) , "", wx.ITEM_NORMAL)
 		#print from_db,sm2
 		self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(from_db,sm2))

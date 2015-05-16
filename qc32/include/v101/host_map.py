@@ -16,6 +16,8 @@ class base_host_map(object):
 		self.set_host_map()
 		
 		(self.local_source_client_home, self.local_target_client_home) = self.get_local_client_home()
+		#print self.local_source_client_home
+		#print self.local_target_client_home
 	def get_local_client_home(self):
 		#print self.conf.uargs.copy_vector
 		(from_db, to_db)=self.copy_vector #.upper().split('2')
@@ -23,6 +25,7 @@ class base_host_map(object):
 		env=self.mapping['host_list'][self.mapping['local_host']]['db_env']
 		#pprint(env)
 		#print from_db, to_db
+		#pprint(env)
 		return (env[from_db.upper()]['source'], env[to_db.upper()]['target'])
 	def set_host_map(self):
 		self.remote_user='default'
