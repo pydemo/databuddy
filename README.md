@@ -240,7 +240,7 @@ TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 
 
 #Does it work?
-- yes, with some quirks and only for Oracle and SQLServer. 
+- yes, for all major dbs. 
 
 ##References
 * [QueryCopy for Oracle](https://github.com/QueryCopy/QueryCopy-for-Oracle) -- `qc32\qc32.exe`
