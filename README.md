@@ -20,16 +20,17 @@ Pre-Prod (UAT/QA/DEV)
 
 Database | GUI (data-buddy) | Command line (QueryCopy)
 ---------|---- | -------------
-DB2      |  | yes
-Informix |  | yes
+DB2      | yes | yes
+Informix | yes  | yes
 MariaDB    | yes | yes
 MySQL    | yes | yes
+Infobright    | yes | yes
 **Oracle**   | yes | [yes](https://github.com/QueryCopy/QueryCopy-for-Oracle/releases/tag/v1.23.9)
-PostgreSQL|  | yes
-SQLite|  | yes
+PostgreSQL| yes | yes
+SQLite| yes | yes
 SQLServer| yes | yes
-Sybase   |  | yes
-TimesTen|  | yes
+Sybase   | yes  | yes
+TimesTen| yes  | yes
 
 
 ##File formats
