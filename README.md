@@ -242,19 +242,8 @@ TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 - add QV (QlikView file format)
 - add MDX (file format)
 
-#Does it work?
-- yes, for all major dbs:
-1. Oracle
-2. SQLServer
-3. DB2
-4. Sybase
-5. Informix
-6. MySQL
-7. Infobright
-8. MariaDB
-9. PostgreSQL
-10. TimesTen
-11. SQLite
+##Does it work?
+- yes, for all major dbs (Oracle, SQLServer, DB2, Sybase, Informix, MySQL, Infobright, MariaDB, PostgreSQL, TimesTen, SQLite)
 - only on Windows (UI, cmd)
 - uncompressed spool
 - Oracle copy can be executed on Linux (bash via ssh)
