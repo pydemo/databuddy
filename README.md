@@ -97,7 +97,7 @@ TimesTen|  | yes  | yes
 3. "Loader" - loads temp file to target using bulk loader.
 
 ###Tools used to extract, load, and query data
-DB family|DataStore | Spooler | Loader | DbShell
+DB family|Database | Spooler | Loader | DbShell
 ---------|----------|-------- | -------| -------
 DB2 | DB2 Advanced Enterprise Server | db2.exe | db2.exe | db2.exe
  | DB2 Advanced Workgroup Server | db2.exe | db2.exe | db2.exe
@@ -106,24 +106,23 @@ DB2 | DB2 Advanced Enterprise Server | db2.exe | db2.exe | db2.exe
  | DB2 Express C | db2.exe | db2.exe | db2.exe
  | DB2 Enterprise Server | db2.exe | db2.exe | db2.exe
  | DB2 Workgroup Server | db2.exe | db2.exe | db2.exe
+MySQL | MySQL | mysql.exe | mysql.exe | mysql.exe 
  | Infobright | mysql.exe | mysql.exe | mysql.exe
- | Informix IDS | dbaccess.exe | dbaccess.exe | dbaccess.exe
+ | MariaDB | mysql.exe | mysql.exe | mysql.exe 
+Informix | Informix IDS | dbaccess.exe | dbaccess.exe | dbaccess.exe
  | Informix Innovator C | dbaccess.exe | dbaccess.exe | dbaccess.exe
- | MariaDB | mysql.exe | mysql.exe | mysql.exe
- | MySQL | mysql.exe | mysql.exe | mysql.exe
- | Oracle 12c | sqlplus.exe | sqlldr.exe | sqlplus.exe
+Oracle | Oracle 12c | sqlplus.exe | sqlldr.exe | sqlplus.exe
  | Oracle 11g | sqlplus.exe | sqlldr.exe | sqlplus.exe
  | Exadata | sqlplus.exe | sqlldr.exe | sqlplus.exe
  | Oracle XE | sqlplus.exe | sqlldr.exe | sqlplus.exe
- | PostgreSQL | psql.exe | psql.exe | psql.exe
- | SQL Lite | sqlite3.exe | sqlite3.exe | sqlite3.exe
- | SQL Server Enterprise | sqlcmd.exe | sqlcmd.exe | sqlcmd.exe
+PostgreSQL | PostgreSQL | psql.exe | psql.exe | psql.exe
+SQL Server | SQL Server Enterprise | sqlcmd.exe | sqlcmd.exe | sqlcmd.exe
  | SQL Server Express | sqlcmd.exe | sqlcmd.exe | sqlcmd.exe
- | Sybase SQL Anywhere | dbisql.com | dbisql.com | dbisql.com
+SAP Sybase | Sybase SQL Anywhere | dbisql.com | dbisql.com | dbisql.com
  | SAP Sybase ASE | dbisql.com | dbisql.com | dbisql.com
  | Sybase IQ | dbisql.com | dbisql.com | dbisql.com
- | TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
-
+TimesTen | TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
+SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 ## What it doesn't do
 - It does not create target table
 - It does not pipe data (it spools then loads)
