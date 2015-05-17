@@ -142,6 +142,7 @@ TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 
 ##Execution
 * data-buddy.exe
+
 >from Windows command line or File Explorer
 
 #Templates v.s. free argument entry
@@ -150,6 +151,8 @@ TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 
 ##Cons
 - user has to create new session if new argument has to be added/removed
+
+>There's no way to add/remove args to your choosing. Argument combos come as templates which you select in "Create new session window"
 
 #SQL*Loader config
 - Change SQL*Loader arguments and control file in ```qc32\config\include\oracle.py```
