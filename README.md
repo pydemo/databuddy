@@ -266,9 +266,9 @@ TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 - phisical copy is done on Windows. Only Oracle copy can be executed on Linux (bash via ssh)
 
 ##Performance
-- data copy speed really depends only on your NIC(Ethernet) and other factors like how _far_ you are from target and source servers (in terms of network topology). 
+- data copy speed mostly depends on your NIC(Ethernet) speed and other factors like how _far_ you are from target and source servers (in terms of network topology). 
 
->I've seen 10x performance improvement when I run it on Linux server v.s. Windows Desktop.
+>I've seen 10x performance improvement when I run it on Linux server (10Gb Ethernet) v.s. Windows Desktop (100Mb Ethernet).
 
 ##References
 * [QueryCopy for Oracle](https://github.com/QueryCopy/QueryCopy-for-Oracle) -- `qc32\qc32.exe`
