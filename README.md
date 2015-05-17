@@ -1,4 +1,9 @@
 # DataBuddy
+
+>As Oracle Developer I very often need to copy trial data from downstream environment to debug data or SQL performance issues.
+>"Data Buddy" is desktop UI that I wrote using Python/wxPython to help me with ad-hoc data replication.
+
+
 ##Version
 
 data-buddy (GUI) | QueryCopy (command line)
