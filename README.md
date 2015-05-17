@@ -9,7 +9,7 @@
 data-buddy (GUI) | QueryCopy (command line)
 ---- | -------------
 0.3.3 beta | 1.23.9 beta
-
+>There are 2 components. Upon "Run" UI will kick off `cmd` out of process.
 ##Purpose
 
 Ad-hoc data migration between databases and file formats (CSV)
