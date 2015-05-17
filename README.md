@@ -23,6 +23,7 @@ Database developers, ETL developers, Data Integrators.
 
 ##Designated Environment
 Pre-Prod (UAT/QA/DEV)
+>can be scripted into your ETL pipelines
 
 ##Databases supported
 
