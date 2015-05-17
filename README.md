@@ -274,7 +274,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - physical copy is done on Windows. Only Oracle copy can be executed on Linux (bash via ssh)
 
 ##Performance
-- data copy speed mostly depends on your NIC(Ethernet) speed and other factors like how _far_ you are from target and source servers (in terms of network topology snf physically). 
+- data copy speed mostly depends on your NIC(Ethernet) speed and other factors like how _far_ you are from target and source servers (in terms of network topology and physically). 
 
 >I've seen 10x performance improvement when I run it on DEV Linux server (10Gb Ethernet) v.s. my office Windows Desktop (100Mb Ethernet).
 
