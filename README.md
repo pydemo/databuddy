@@ -286,5 +286,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 New session: 
 ![New session](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/new_session_all_dbs.png "Add New Session")
 
-##Save Ukraine
-- _#CrimeaIsUkraine_ _#FreeUkraine_ _#SaveUkraine_ _#StopRussia_ _#HelpUkraine_
+#Download
+* [Data Buddy latest release](https://github.com/data-buddy/DataBuddy/releases/tag/v0.3.3) -- `data-buddy 0.3.3`
+
+
