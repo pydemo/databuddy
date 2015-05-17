@@ -260,13 +260,13 @@ TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 ##Does it work?
 - yes, for all major dbs (Oracle, SQLServer, DB2, Sybase, Informix, MySQL, Infobright, MariaDB, PostgreSQL, TimesTen, SQLite)
 
->only on Windows (UI, cmd)
+##Quirks
+- tested to run only on Windows for now (even thou it's wxPython)
+- CSV dump files are uncompressed (will add zip compression as option)
+- phisical copy is done on Windows. Only Oracle copy can be executed on Linux (bash via ssh)
 
->uncompressed spool
-
->Oracle copy can be executed on Linux (bash via ssh)
-
-
+##Performance
+- data copy speed really depends only on your network performance and other factors like how `far` you are from target and source servers. 
 
 ##References
 * [QueryCopy for Oracle](https://github.com/QueryCopy/QueryCopy-for-Oracle) -- `qc32\qc32.exe`
