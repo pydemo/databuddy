@@ -20,6 +20,8 @@ Ad-hoc data migration between databases and file formats (CSV)
 
 Database developers, ETL developers, Data Integrators.
 
+>geared for developers to bypass gatekeepers (DBAs)
+
 ##Designated Environment
 Pre-Prod (UAT/QA/DEV)
 >It can be scripted into your ETL pipelines, but really meant only for ad-hoc tial data work.
@@ -108,7 +110,8 @@ Informix IDS | dbaccess.exe | dbaccess.exe | dbaccess.exe
 Informix Innovator C | dbaccess.exe | dbaccess.exe | dbaccess.exe
 MariaDB | mysql.exe | mysql.exe | mysql.exe
 MySQL | mysql.exe | mysql.exe | mysql.exe
-Oracle 11G | sqlplus.exe | sqlldr.exe | sqlplus.exe
+Oracle 12c | sqlplus.exe | sqlldr.exe | sqlplus.exe
+Oracle 11g | sqlplus.exe | sqlldr.exe | sqlplus.exe
 Exadata | sqlplus.exe | sqlldr.exe | sqlplus.exe
 Oracle XE | sqlplus.exe | sqlldr.exe | sqlplus.exe
 PostgreSQL | psql.exe | psql.exe | psql.exe
@@ -214,6 +217,7 @@ TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 - add Informix **DONE**
 - add Sybase**DONE**
 - add DB2 **DONE**
+- add Oracle 12c **DONE**
 - add dBase
 - add Access DB
 - add MariaDB **DONE**
@@ -260,13 +264,15 @@ TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 ##Does it work?
 - yes, for all major dbs (Oracle, SQLServer, DB2, Sybase, Informix, MySQL, Infobright, MariaDB, PostgreSQL, TimesTen, SQLite)
 
->only on Windows (UI, cmd)
+##Quirks
+- tested to run only on Windows for now (even thou it's wxPython)
+- CSV dump files are uncompressed (will add zip compression as option)
+- phisical copy is done on Windows. Only Oracle copy can be executed on Linux (bash via ssh)
 
->uncompressed spool
+##Performance
+- data copy speed mostly depends on your NIC(Ethernet) speed and other factors like how _far_ you are from target and source servers (in terms of network topology). 
 
->Oracle copy can be executed on Linux (bash via ssh)
-
-
+>I've seen 10x performance improvement when I run it on DEV Linux server (10Gb Ethernet) v.s. my office Windows Desktop (100Mb Ethernet).
 
 ##References
 * [QueryCopy for Oracle](https://github.com/QueryCopy/QueryCopy-for-Oracle) -- `qc32\qc32.exe`
