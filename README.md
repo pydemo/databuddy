@@ -150,7 +150,7 @@ TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 
 #Target object Truncate
 - it will popup with warning window every time you try to run QueryCopy truncating you target object.
-![truncate](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/truncate_table.png "Truncate table")
+![truncate](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/truncate_target.png "Truncate target")
 > I'd gladly `DROP USER RUSSIA CASCADE' but I can't because I'm half Russian and cascade will get me :-)
 
 #Templates v.s. free argument entry
