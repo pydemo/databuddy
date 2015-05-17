@@ -271,10 +271,10 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 ##Quirks
 - tested to run only on Windows for now (even thou it's wxPython)
 - CSV dump files are uncompressed (will add zip compression as option)
-- phisical copy is done on Windows. Only Oracle copy can be executed on Linux (bash via ssh)
+- physical copy is done on Windows. Only Oracle copy can be executed on Linux (bash via ssh)
 
 ##Performance
-- data copy speed mostly depends on your NIC(Ethernet) speed and other factors like how _far_ you are from target and source servers (in terms of network topology). 
+- data copy speed mostly depends on your NIC(Ethernet) speed and other factors like how _far_ you are from target and source servers (in terms of network topology snf physically). 
 
 >I've seen 10x performance improvement when I run it on DEV Linux server (10Gb Ethernet) v.s. my office Windows Desktop (100Mb Ethernet).
 
