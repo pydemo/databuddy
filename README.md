@@ -97,32 +97,32 @@ TimesTen|  | yes  | yes
 3. "Loader" - loads temp file to target using bulk loader.
 
 ###Tools used to extract, load, and query data
-DataStore | Spooler | Loader | DbShell
-----------|-------- | -------| -------
-DB2 Advanced Enterprise Server | db2.exe | db2.exe | db2.exe
-DB2 Advanced Workgroup Server | db2.exe | db2.exe | db2.exe
-DB2 Developer Edition | db2.exe | db2.exe | db2.exe
-DB2 Express | db2.exe | db2.exe | db2.exe
-DB2 Express C | db2.exe | db2.exe | db2.exe
-DB2 Enterprise Server | db2.exe | db2.exe | db2.exe
-DB2 Workgroup Server | db2.exe | db2.exe | db2.exe
-Infobright | mysql.exe | mysql.exe | mysql.exe
-Informix IDS | dbaccess.exe | dbaccess.exe | dbaccess.exe
-Informix Innovator C | dbaccess.exe | dbaccess.exe | dbaccess.exe
-MariaDB | mysql.exe | mysql.exe | mysql.exe
-MySQL | mysql.exe | mysql.exe | mysql.exe
-Oracle 12c | sqlplus.exe | sqlldr.exe | sqlplus.exe
-Oracle 11g | sqlplus.exe | sqlldr.exe | sqlplus.exe
-Exadata | sqlplus.exe | sqlldr.exe | sqlplus.exe
-Oracle XE | sqlplus.exe | sqlldr.exe | sqlplus.exe
-PostgreSQL | psql.exe | psql.exe | psql.exe
-SQL Lite | sqlite3.exe | sqlite3.exe | sqlite3.exe
-SQL Server Enterprise | sqlcmd.exe | sqlcmd.exe | sqlcmd.exe
-SQL Server Express | sqlcmd.exe | sqlcmd.exe | sqlcmd.exe
-Sybase SQL Anywhere | dbisql.com | dbisql.com | dbisql.com
-SAP Sybase ASE | dbisql.com | dbisql.com | dbisql.com
-Sybase IQ | dbisql.com | dbisql.com | dbisql.com
-TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
+DB family|DataStore | Spooler | Loader | DbShell
+---------|----------|-------- | -------| -------
+DB2 | DB2 Advanced Enterprise Server | db2.exe | db2.exe | db2.exe
+ | DB2 Advanced Workgroup Server | db2.exe | db2.exe | db2.exe
+ | DB2 Developer Edition | db2.exe | db2.exe | db2.exe
+ | DB2 Express | db2.exe | db2.exe | db2.exe
+ | DB2 Express C | db2.exe | db2.exe | db2.exe
+ | DB2 Enterprise Server | db2.exe | db2.exe | db2.exe
+ | DB2 Workgroup Server | db2.exe | db2.exe | db2.exe
+ | Infobright | mysql.exe | mysql.exe | mysql.exe
+ | Informix IDS | dbaccess.exe | dbaccess.exe | dbaccess.exe
+ | Informix Innovator C | dbaccess.exe | dbaccess.exe | dbaccess.exe
+ | MariaDB | mysql.exe | mysql.exe | mysql.exe
+ | MySQL | mysql.exe | mysql.exe | mysql.exe
+ | Oracle 12c | sqlplus.exe | sqlldr.exe | sqlplus.exe
+ | Oracle 11g | sqlplus.exe | sqlldr.exe | sqlplus.exe
+ | Exadata | sqlplus.exe | sqlldr.exe | sqlplus.exe
+ | Oracle XE | sqlplus.exe | sqlldr.exe | sqlplus.exe
+ | PostgreSQL | psql.exe | psql.exe | psql.exe
+ | SQL Lite | sqlite3.exe | sqlite3.exe | sqlite3.exe
+ | SQL Server Enterprise | sqlcmd.exe | sqlcmd.exe | sqlcmd.exe
+ | SQL Server Express | sqlcmd.exe | sqlcmd.exe | sqlcmd.exe
+ | Sybase SQL Anywhere | dbisql.com | dbisql.com | dbisql.com
+ | SAP Sybase ASE | dbisql.com | dbisql.com | dbisql.com
+ | Sybase IQ | dbisql.com | dbisql.com | dbisql.com
+ | TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 
 ## What it doesn't do
 - It does not create target table
