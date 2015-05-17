@@ -65,7 +65,7 @@ TimesTen|  | yes  | yes
 
 ##Features:
 
-###Front end (data-buddy).
+###Front end, GUI (data-buddy).
 
 - Session management.
 
