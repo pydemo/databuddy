@@ -286,6 +286,5 @@ TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 New session: 
 ![New session](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/new_session_all_dbs.png "Add New Session")
 
-#Save Ukraine
-> I'd gladly `DROP USER RUSSIA CASCADE' but I can't because I'm half Russian and cascade will get me
-> _#CrimeaIsUkraine_ _#FreeUkraine_ _#SaveUkraine_ _#StopRussia_ _#HelpUkraine_
+##Save Ukraine
+- _#CrimeaIsUkraine_ _#FreeUkraine_ _#SaveUkraine_ _#StopRussia_ _#HelpUkraine_
