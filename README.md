@@ -122,7 +122,8 @@ TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 - Compiled with PyInstaller
 
 ##Configuration
-- modify host_map.py: ![host_map.py](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/edit_hostmap.png "Edit host_map.py")
+- modify default host_map.py: ![host_map.py](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/edit_hostmap.png "Edit host_map.py")
+- set your 'source' and 'target' for local clients for each database.
 
 ##Execution
 
