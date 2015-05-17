@@ -113,7 +113,7 @@ TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 ## What it doesn't do
 - It does not create target table
 - It does not pipe data (it spools then loads)
-- It does not work in Prod. Trial/ad-hoc use only.
+- It should not be used Prod. Trial/ad-hoc use only.
 
 
 ##Implementation
