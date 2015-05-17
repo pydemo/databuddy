@@ -258,6 +258,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add Enterprise DB
 - add Altibase HDB
 - add EXASOL
+- add Aster
 - add Kinesis
 - add Redshift
 - add RDS
