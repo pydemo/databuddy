@@ -231,7 +231,6 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add HBase
 - add Cassandra
 - add Bigtable
-- add Hive
 - add Terradata
 - add Redshift
 - add Apache Hive
