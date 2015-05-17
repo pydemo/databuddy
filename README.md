@@ -110,7 +110,8 @@ Informix IDS | dbaccess.exe | dbaccess.exe | dbaccess.exe
 Informix Innovator C | dbaccess.exe | dbaccess.exe | dbaccess.exe
 MariaDB | mysql.exe | mysql.exe | mysql.exe
 MySQL | mysql.exe | mysql.exe | mysql.exe
-Oracle 11G | sqlplus.exe | sqlldr.exe | sqlplus.exe
+Oracle 12c | sqlplus.exe | sqlldr.exe | sqlplus.exe
+Oracle 11g | sqlplus.exe | sqlldr.exe | sqlplus.exe
 Exadata | sqlplus.exe | sqlldr.exe | sqlplus.exe
 Oracle XE | sqlplus.exe | sqlldr.exe | sqlplus.exe
 PostgreSQL | psql.exe | psql.exe | psql.exe
@@ -216,6 +217,7 @@ TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 - add Informix **DONE**
 - add Sybase**DONE**
 - add DB2 **DONE**
+- add Oracle 12c **DONE**
 - add dBase
 - add Access DB
 - add MariaDB **DONE**
