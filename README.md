@@ -15,7 +15,7 @@ data-buddy (GUI) | QueryCopy (command line)
 ##Purpose
 
 Ad-hoc data migration between databases and file formats (CSV)
->spool, load, copy, migrate, dump, extract, upload, insert, bulk insert
+>synonyms: spool, load, copy, migrate, dump, extract, upload, insert, bulk insert
 
 ##Audience
 
