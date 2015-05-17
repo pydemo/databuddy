@@ -52,7 +52,7 @@ SQLite|  | yes  | yes
 SQLServer|   | yes  | yes
 Sybase   |  | yes  | yes
 TimesTen|  | yes  | yes
-
+> DDL extract works only for Oracle tables.
 
 ##Components
 - GUI - data-buddy (wxPython, PyInstaller).
