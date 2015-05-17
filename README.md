@@ -60,6 +60,7 @@ TimesTen|  | yes  | yes
 ##Components
 - GUI - data-buddy (wxPython, PyInstaller).
 - Command line -[QueryCopy](https://github.com/QueryCopy/QueryCopy-for-Oracle/releases/tag/v1.23.9) (Python, PyInstaller).
+
 >for now only data-buddy.py is open. I'm still cleaning up querycopy.py
 
 ##Features:
