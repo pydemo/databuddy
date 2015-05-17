@@ -49,9 +49,9 @@ Sybase   |  | yes  | yes
 TimesTen|  | yes  | yes
 
 
-##Contents
-- Front end - data-buddy GUI (wxPython, PyInstaller).
-- Back end -[QueryCopy](https://github.com/QueryCopy/QueryCopy-for-Oracle/releases/tag/v1.23.9) (Python, PyInstaller).
+##Components
+- GUI - data-buddy (wxPython, PyInstaller).
+- Command line -[QueryCopy](https://github.com/QueryCopy/QueryCopy-for-Oracle/releases/tag/v1.23.9) (Python, PyInstaller).
   
 ##Features:
 
