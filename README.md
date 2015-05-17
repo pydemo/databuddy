@@ -153,7 +153,7 @@ TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 ![truncate](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/truncate_target.png "Truncate target")
 
 > I'd gladly `DROP USER RUSSIA CASCADE' but I can't because I'm half Russian and cascade will get me
-> #CrimeaIsUkraine #FreeUkraine #SaveUkraine #StopRussia
+> _#CrimeaIsUkraine_ _#FreeUkraine_ _#SaveUkraine_ _#StopRussia_
 
 #Templates v.s. free argument entry
 ##Pros
