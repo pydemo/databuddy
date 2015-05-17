@@ -255,10 +255,11 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add Foundation DB
 - add Enterprise DB
 - add Altibase HDB
-- Kinesis
-- Redshift
-- RDS
-- DynamoDB
+- add EXASOL
+- add Kinesis
+- add Redshift
+- add RDS
+- add DynamoDB
 - add Couchbase
 - add Aerospike
 - add InterSystems
