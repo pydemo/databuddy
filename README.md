@@ -123,11 +123,13 @@ TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 
 ##Configuration
 - modify default host_map.py: ![host_map.py](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/edit_hostmap.png "Edit host_map.py")
-- set your 'source' and 'target' for local clients for each database.
+- set your 'source' and 'target' dirs for local clients for each database.
 ```python
  'host_list': {0: {'db_env': {'ORA11G': {'source': 'C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN',
                                          'target': 'C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN'},
 ```
+- you are good to go
+
 ##Execution
 
 * python data-buddy.py
