@@ -110,6 +110,12 @@ SAP Sybase ASE | dbisql.com | dbisql.com | dbisql.com
 Sybase IQ | dbisql.com | dbisql.com | dbisql.com
 TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 
+## What it doesn't do
+- It does not create target table
+- It does not pipe data (it spools then loads)
+- It does not work in Prod. Trial/ad-hoc use only.
+
+
 ##Implementation
 
 - Written using Python (command line) and wxPython (GUI).
