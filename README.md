@@ -21,7 +21,7 @@ Ad-hoc data migration between databases and file formats (CSV)
 
 Database developers, ETL developers, Data Integrators.
 
->geared for developers to bypass gatekeepers (DBAs)
+>geared for database developers to bypass gatekeepers (DBAs)
 
 ##Designated Environment
 Pre-Prod (UAT/QA/DEV)
