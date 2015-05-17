@@ -141,9 +141,8 @@ TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 - you are good to go
 
 ##Execution
-
-* python data-buddy.py
 * data-buddy.exe
+>from Windows command line or File Explorer
 
 #Templates v.s. free argument entry
 ##Pros
