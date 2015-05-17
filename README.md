@@ -122,8 +122,7 @@ TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 - Compiled with PyInstaller
 
 ##Configuration
-- modify host_map.py
-![host_map.py](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/edit_hostmap.png "Edit host_map.py")
+- modify host_map.py: ![host_map.py](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/edit_hostmap.png "Edit host_map.py")
 
 ##Execution
 
