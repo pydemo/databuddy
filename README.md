@@ -268,7 +268,7 @@ TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 ##Performance
 - data copy speed really depends only on your NIC(Ethernet) and other factors like how _far_ you are from target and source servers. 
 
->I've seen 10x performance improvement when I run it on Linux server v.s. Windows Desktop. 
+>I've seen 10x performance improvement when I run it on Linux server v.s. Windows Desktop.
 
 ##References
 * [QueryCopy for Oracle](https://github.com/QueryCopy/QueryCopy-for-Oracle) -- `qc32\qc32.exe`
