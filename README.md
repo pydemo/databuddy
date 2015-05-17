@@ -228,7 +228,9 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add Infobright **DONE**
 - add TimesTen **DONE**
 - add MongoDB
-- add Hadoop
+- add HBase
+- add Cassandra
+- add Bigtable
 - add Hive
 - add Terradata
 - add Redshift
