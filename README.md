@@ -125,7 +125,7 @@ TimesTen | TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 ## What it doesn't do
 - It does not create target table
-- It does not pipe data (it spools then loads)
+- It does not pipe data (it extracts into a file then loads)
 - It should not be used Prod. Trial/ad-hoc use only.
 
 
