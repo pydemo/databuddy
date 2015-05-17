@@ -276,7 +276,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 ##Performance
 - data copy speed mostly depends on your NIC(Ethernet) speed and other factors like how _far_ you are from target and source servers (in terms of network topology and physically). 
 
->I've seen 10x performance improvement when I run it on DEV Linux server (10Gb Ethernet) v.s. my office Windows Desktop (100Mb Ethernet).
+>I've seen 10x performance improvement when I ran it on DEV Linux server (10Gb Ethernet) v.s. my office Windows Desktop (100Mb Ethernet).
 
 ##References
 * [QueryCopy for Oracle](https://github.com/QueryCopy/QueryCopy-for-Oracle) -- `qc32\qc32.exe`
