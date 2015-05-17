@@ -9018,12 +9018,14 @@ class DataBuddy(wx.Frame):
 	def CreatePopupMenu(self):
 		global hmap
 		#global conf
+		hm_type= 'session'
 		if not self._hmMenu:
 		
 			self._hmMenu = FM.FlatMenu()
 			#mitems={0:'Open SQL*Plus', 1: 'count(*)', 2:'DESCRIBE'}
 			hm=self.args_panel.hm
 			if not hm:
+				hm_type='default'
 				default_hostmap_loc = os.path.join(transport_home, 'config','host_map_v2.py')
 				#new_hostmap_loc=self.parent.args_panel.CreateNewSessionHostMap(hostmap_loc)
 				#if new_hostmap_loc not in [hostmap_loc]:
@@ -9048,7 +9050,7 @@ class DataBuddy(wx.Frame):
 			if 1:
 				self.i +=1
 				self._hmMenu.AppendSeparator()
-				menuItem = FM.FlatMenuItem(self._hmMenu, 20000+self.i, 'Edit host_map.py', '', wx.ITEM_NORMAL)
+				menuItem = FM.FlatMenuItem(self._hmMenu, 20000+self.i, 'Edit %s host_map.py' % hm_type, '', wx.ITEM_NORMAL)
 				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnEditHostMap,(hm.host_map_loc))
 				self._hmMenu.AppendItem(menuItem)
 			
