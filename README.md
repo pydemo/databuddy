@@ -261,7 +261,9 @@ TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 - yes, for all major dbs (Oracle, SQLServer, DB2, Sybase, Informix, MySQL, Infobright, MariaDB, PostgreSQL, TimesTen, SQLite)
 
 >only on Windows (UI, cmd)
+
 >uncompressed spool
+
 >Oracle copy can be executed on Linux (bash via ssh)
 
 
