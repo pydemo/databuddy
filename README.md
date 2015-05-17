@@ -120,7 +120,11 @@ TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 
 - Written using Python (command line) and wxPython (GUI).
 - Compiled with PyInstaller
- 
+
+##Configuration
+- modify host_map.py
+![host_map.py](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/edit_hostmap.png "Edit host_map.py")
+
 ##Execution
 
 * python data-buddy.py
