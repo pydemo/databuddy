@@ -1,6 +1,6 @@
 # Title: 	data-buddy
 # Description:
-#			Session manager for DataMigrator.		
+#			Session manager for QueryCopy.		
 # Environment:
 #			Python 2.7 and wxPython 2.8		
 #
@@ -75,6 +75,8 @@ __builtin__.copy_vector = None
 __builtin__.cvarg = None
 
 import qc32.common.v101.config as conf
+#for d in sorted(conf.dbs):
+#	print d,': ',conf.dbs[d]
 import argparse
 
 try:
@@ -5115,7 +5117,7 @@ class pnl_args(wx.Panel):
 		sub(self.onSetEtlEditorProfile, "set_etl_editor_profile")
 		self.hm=None
 	def CreateNewSessionHostMap(self, hostmap_loc):
-		print 'CreateNewSessionHostMap'
+		print 'CreateNewSessionHostMap', hostmap_loc
 		#e(0)
 		#hostmap_loc=obj.GetValue()
 		#print 'existing hostmap: %s' % hostmap_loc
@@ -5131,7 +5133,11 @@ class pnl_args(wx.Panel):
 
 		else:
 			os.chdir(home)
-			real_hostmap_loc=os.path.realpath(hostmap_loc)
+			if hostmap_loc.startswith(r'.'):
+				#relative
+				real_hostmap_loc=os.path.join(transport_home,hostmap_loc)
+			else:
+				real_hostmap_loc=os.path.realpath(hostmap_loc)
 			assert os.path.isfile(real_hostmap_loc), 'host_map template does not exists at\n%s' % real_hostmap_loc
 			print real_hostmap_loc
 			print session_hostmap_loc
@@ -9011,17 +9017,30 @@ class DataBuddy(wx.Frame):
 
 		
 	def CreatePopupMenu(self):
+		global hmap
 		#global conf
+		hm_type= 'session'
 		if not self._hmMenu:
 		
 			self._hmMenu = FM.FlatMenu()
 			#mitems={0:'Open SQL*Plus', 1: 'count(*)', 2:'DESCRIBE'}
 			hm=self.args_panel.hm
-			(hmap, active_map) =hm.get_host_map()
+			if not hm:
+				hm_type='default'
+				default_hostmap_loc = os.path.join(transport_home, 'config','host_map_v2.py')
+				#new_hostmap_loc=self.parent.args_panel.CreateNewSessionHostMap(hostmap_loc)
+				#if new_hostmap_loc not in [hostmap_loc]:
+				#	self.obj[k][1].SetValue(new_hostmap_loc)
+				#e(0)
+				#print conf._to.join(self.copy_vector)
+				
+				hm = hmap(('ora11g','ora11g'), default_hostmap_loc)
+
+			(hostmap, active_map) =hm.get_host_map()
 			print active_map
 			self.i=0
 			
-			for v in hmap.keys():
+			for v in hostmap.keys():
 				self.i +=1
 				self.recentMenu = FM.FlatMenu()
 				menuItem = FM.FlatMenuItem(self._hmMenu, 20000+self.i, v, '', wx.ITEM_RADIO)
@@ -9032,7 +9051,7 @@ class DataBuddy(wx.Frame):
 			if 1:
 				self.i +=1
 				self._hmMenu.AppendSeparator()
-				menuItem = FM.FlatMenuItem(self._hmMenu, 20000+self.i, 'Edit host_map.py', '', wx.ITEM_NORMAL)
+				menuItem = FM.FlatMenuItem(self._hmMenu, 20000+self.i, 'Edit %s host_map.py' % hm_type, '', wx.ITEM_NORMAL)
 				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnEditHostMap,(hm.host_map_loc))
 				self._hmMenu.AppendItem(menuItem)
 			
@@ -10296,6 +10315,7 @@ class DataBuddy(wx.Frame):
 							
 							if exe:	#exe										
 								cfg=cfg+['-X','1']
+								pprint (cfg)
 								p = Popen(cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
 							else:	#py
 								cfg[0]=r'%s\datamule.py' % transport_home
