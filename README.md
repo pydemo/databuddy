@@ -224,6 +224,8 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add Oracle 12c **DONE**
 - add dBase
 - add Access DB
+- add Pandas
+- add Blaze
 - add MariaDB **DONE**
 - add Infobright **DONE**
 - add TimesTen **DONE**
