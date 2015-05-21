@@ -1,7 +1,7 @@
 # DataBuddy
 
 
-> "Data Buddy" is desktop UI that I wrote using Python/wxPython to help me with ad-hoc data replication.
+> "Data Buddy" is desktop UI that I wrote using Python/wxPython to help me with ad-hoc data migration.
 >
 As ETL Developer I very often need to copy trial data from downstream environment to debug data or SQL performance issues.
 
