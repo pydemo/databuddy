@@ -225,6 +225,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add dBase
 - add Access DB
 - add Pandas
+- add Hadoop
 - add Blaze
 - add MariaDB **DONE**
 - add Infobright **DONE**
