@@ -3,7 +3,7 @@
 
 > "Data Buddy" is desktop UI that I wrote using Python/wxPython to help me with ad-hoc data migration.
 >
-As ETL Developer I very often need to copy trial data from downstream environment to debug data or SQL performance issues.
+As Oracle/ETL Developer I very often need to copy trial data from downstream environment to debug data or SQL performance issues.
 
 ##Version
 
