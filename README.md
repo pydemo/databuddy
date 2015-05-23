@@ -123,10 +123,15 @@ SAP Sybase | Sybase SQL Anywhere | dbisql.com | dbisql.com | dbisql.com
  | Sybase IQ | dbisql.com | dbisql.com | dbisql.com
 TimesTen | TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
+
 ## What it doesn't do
-- It does not create target table
-- It does not pipe data (it extracts into a file then loads)
+- It does not create target table.
+- It does not pipe data (it extracts into a file then loads).
 - It should not be used Prod. Trial/ad-hoc use only.
+- It's not Excel replacement.
+- It's not a database.
+- It's not working with unstructured data.
+- It's not OLAP server.
 
 
 ##Implementation
