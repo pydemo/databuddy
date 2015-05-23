@@ -1,9 +1,9 @@
 # DataBuddy
 
 
-> "Data Buddy" is desktop UI that I wrote using Python/wxPython to help me with data integration.
->
-As Oracle/ETL Developer I very often need to copy trial data from downstream environment to debug data or SQL performance issues.
+## What is it for?
+- It is Data Integration software used to define technical processes to combine data from different sources.
+
 
 ##Version
 
@@ -123,6 +123,8 @@ SAP Sybase | Sybase SQL Anywhere | dbisql.com | dbisql.com | dbisql.com
  | Sybase IQ | dbisql.com | dbisql.com | dbisql.com
 TimesTen | TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
+
+
 
 ## What it doesn't do
 - It does not create target table.
