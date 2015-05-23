@@ -11,7 +11,7 @@ data-buddy (GUI) | QueryCopy (command line)
 ##Purpose
 
 - It is data integration software used to define technical processes to combine data from different sources.
--  Industry standard DI solution would help you with data discovery, monitoring, cleansing, and delivery from multiple sources to target platform. DataBuddy takes care of data delivery.
+-  Industry standard DI solution would help you with data discovery, monitoring, cleansing, and delivery from multiple sources to target platform. DataBuddy facilitates data delivery.
 
 ##Audience
 
