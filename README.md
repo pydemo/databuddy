@@ -1,10 +1,6 @@
 # DataBuddy
 
 
-## What is it for?
-- It is data integration software used to define technical processes to combine data from different sources.
--  Industry standard DI solution would help you with data discovery, monitoring, cleansing, and delivery from multiple sources to target platform. DataBuddy takes care of data delivery.
-
 ##Version
 
 data-buddy (GUI) | QueryCopy (command line)
@@ -14,8 +10,8 @@ data-buddy (GUI) | QueryCopy (command line)
 
 ##Purpose
 
-Ad-hoc data migration between databases and file formats (CSV)
->keywords: spool, load, copy, migrate, dump, extract, offload, upload, insert, bulk insert
+- It is data integration software used to define technical processes to combine data from different sources.
+-  Industry standard DI solution would help you with data discovery, monitoring, cleansing, and delivery from multiple sources to target platform. DataBuddy takes care of data delivery.
 
 ##Audience
 
