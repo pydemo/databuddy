@@ -76,6 +76,8 @@ __builtin__.copy_vector = None
 __builtin__.cvarg = None
 
 import qc32.common.v101.config as conf
+#for d in sorted(conf.dbs):
+#	print d,': ',conf.dbs[d]
 import argparse
 
 try:
@@ -10314,6 +10316,7 @@ class DataBuddy(wx.Frame):
 							
 							if exe:	#exe										
 								cfg=cfg+['-X','1']
+								pprint (cfg)
 								p = Popen(cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
 							else:	#py
 								cfg[0]=r'%s\datamule.py' % transport_home
