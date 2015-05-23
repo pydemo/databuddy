@@ -11,7 +11,9 @@ data-buddy (GUI) | QueryCopy (command line)
 ##Purpose
 
 - It is data integration software used to define technical processes to combine data from different sources.
-- Industry standard DI solution would help you with data discovery, monitoring, cleansing, and delivery from multiple sources to target platform. DataBuddy facilitates data delivery.
+- DataBuddy facilitates data delivery from multiple relational data sources including Oracle, SQLServer, DB2, Sybase, Informix, MySQL, Infobright, MariaDB, PostgreSQL, TimesTen, and SQLite.
+- It requires minimal initial configuration and lets you manage data integration process using GUI or command line.
+- Data is moved across RDBMS borders using CSV formatted files.
 
 ##Audience
 
