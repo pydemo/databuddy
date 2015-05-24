@@ -213,8 +213,8 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - distinguish A-Templates from B-Templates
 - let data copy to be executed on Linux (bash via ssh)**DONE**
 - let data spool/load to be executed on Linux (bash via ssh)
-- add [Oracle 12c](http://docs.oracle.com/database/121/index.htm) **DONE**
-- add [Oracle 11g](https://docs.oracle.com/cd/E11882_01/nav/portal_4.htm) **DONE**
+- add [Oracle 12c Release 1](http://docs.oracle.com/database/121/index.htm) **DONE**
+- add [Oracle 11g Release 2](https://docs.oracle.com/cd/E11882_01/nav/portal_4.htm) **DONE**
 - add SQLServer **DONE**
 - add MySQL **DONE**
 - add PostgreSQL **DONE**
@@ -233,7 +233,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add MariaDB **DONE**
 - add Infobright **DONE**
 - add TimesTen **DONE**
-- add [MongoDB](http://docs.mongodb.org/manual/)  
+- add [MongoDB 3.0](http://docs.mongodb.org/manual/)  
 - add HBase
 - add Cassandra
 - add Bigtable
