@@ -296,6 +296,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 * [QueryCopy for Oracle](https://github.com/QueryCopy/QueryCopy-for-Oracle) -- `qc32\qc32.exe`
 * [Apache Spark](https://www.openhub.net/p/apache-spark)
 * [Apache Storm](https://www.openhub.net/p/apache-storm)
+* [Oracle 12c](http://docs.oracle.com/database/121/index.htm) -- `Release 1`
 
 
 ## Screenshots
