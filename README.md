@@ -1,5 +1,5 @@
 # DataBuddy
-Do it yourself data integration kit.
+Do it yourself data integration starter kit.
 
 ##Version
 
