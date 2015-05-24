@@ -20,8 +20,6 @@ data-buddy (GUI) | QueryCopy (command line)
 
 Database developers, ETL developers, Data Integrators.
 
->geared for database developers to bypass gatekeepers (DBAs)
-
 ##Designated Environment
 Pre-Prod (UAT/QA/DEV)
 >It (QueryCopy) can be scripted into your ETL pipelines, but really meant only for ad-hoc tial data work.
