@@ -220,8 +220,8 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - distinguish A-Templates from B-Templates
 - let data copy to be executed on Linux (bash via ssh)**DONE**
 - let data spool/load to be executed on Linux (bash via ssh)
-- add [Oracle 12c](http://docs.oracle.com/database/121/index.htm)
-- add [Oracle 11g](https://docs.oracle.com/cd/E11882_01/nav/portal_4.htm)
+- add [Oracle 12c](http://docs.oracle.com/database/121/index.htm) **DONE**
+- add [Oracle 11g](https://docs.oracle.com/cd/E11882_01/nav/portal_4.htm) **DONE**
 - add SQLServer **DONE**
 - add MySQL **DONE**
 - add PostgreSQL **DONE**
@@ -253,7 +253,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add ParAccel
 - add Twitter (extract)
 - add GA
-- add Crate Data
+- add [Crate Data](https://www.openhub.net/p/cratedata)
 - add Facebook (extract)
 - add Taleo HR (extract) 
 - add Salesforce
@@ -298,7 +298,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 
 ##References
 * [QueryCopy for Oracle](https://github.com/QueryCopy/QueryCopy-for-Oracle) -- `qc32\qc32.exe`
-* [Apache Spark](https://www.openhub.net/p/apache-spark) [Apache Storm](https://www.openhub.net/p/apache-storm)
+* [Apache Spark](https://www.openhub.net/p/apache-spark), [Apache Storm](https://www.openhub.net/p/apache-storm)
 * [Oracle 12c](http://docs.oracle.com/database/121/index.htm) -- `Release 1`
 * [Oracle 11g](https://docs.oracle.com/cd/E11882_01/nav/portal_4.htm) -- `Release 2`
 * [Disco](https://www.openhub.net/p/disco)
