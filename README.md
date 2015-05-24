@@ -280,9 +280,6 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add QV (QlikView file format)
 - add MDX (file format)
 
-##Does it work?
-- yes, for all major dbs (Oracle, SQLServer, DB2, Sybase, Informix, MySQL, Infobright, MariaDB, PostgreSQL, TimesTen, SQLite)
-
 ##Quirks
 - tested to run only on Windows for now (even thou it's wxPython)
 - CSV dump files are uncompressed (will add zip compression as option)
