@@ -251,6 +251,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add ParAccel
 - add Twitter (extract)
 - add GA
+- add Crate Data
 - add Facebook (extract)
 - add Taleo HR (extract) 
 - add Salesforce
@@ -258,6 +259,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add Actian
 - add McObject
 - add NuiDB
+- add [Disco](https://www.openhub.net/p/disco)
 - add Clustrix
 - add Orient
 - add Scribe
@@ -297,7 +299,8 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 * [Apache Spark](https://www.openhub.net/p/apache-spark)
 * [Apache Storm](https://www.openhub.net/p/apache-storm)
 * [Oracle 12c](http://docs.oracle.com/database/121/index.htm) -- `Release 1`
-
+*  
+* [Crate Data](https://www.openhub.net/p/cratedata)
 
 ## Screenshots
 
