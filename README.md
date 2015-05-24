@@ -233,7 +233,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add MariaDB **DONE**
 - add Infobright **DONE**
 - add TimesTen **DONE**
-- add MongoDB
+- add [MongoDB](http://docs.mongodb.org/manual/)  
 - add HBase
 - add Cassandra
 - add Bigtable
@@ -293,6 +293,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 * [Oracle 11g](https://docs.oracle.com/cd/E11882_01/nav/portal_4.htm) -- `Release 2`
 * [Disco](https://www.openhub.net/p/disco)
 * [Crate Data](https://www.openhub.net/p/cratedata)
+* [MongoDB](http://docs.mongodb.org/manual/) `3.0`
 
 ## Screenshots
 
