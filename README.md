@@ -11,7 +11,7 @@ data-buddy (GUI) | QueryCopy (command line)
 ##Purpose
 
 - It is data integration software used to define technical processes to combine data from different sources.
-- __DataBuddy__ facilitates data delivery from multiple relational data sources including Oracle, SQLServer, DB2, Sybase, Informix, MySQL, Infobright, MariaDB, PostgreSQL, TimesTen, and SQLite.
+- __DataBuddy__ facilitates data delivery from multiple relational data sources including Oracle, SQLServer, DB2, SAP Sybase, Informix, MySQL, Infobright, MariaDB, PostgreSQL, TimesTen, and SQLite.
 - It requires minimal initial configuration and lets you manage data integration process using GUI or command line.
 - Data is moved across RDBMS borders using CSV formatted files.
 - Your data integration processes are stored as session files and can be scripted into your ETL pipelines or used in ad-hoc manner.
