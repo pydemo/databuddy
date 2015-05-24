@@ -232,6 +232,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add Access DB
 - add Pandas
 - add Apache Spark
+- add Apache Storm
 - add Hadoop
 - add Blaze
 - add MariaDB **DONE**
@@ -294,6 +295,8 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 ##References
 * [QueryCopy for Oracle](https://github.com/QueryCopy/QueryCopy-for-Oracle) -- `qc32\qc32.exe`
 * [Apache Spark](https://www.openhub.net/p/apache-spark)
+* [Apache Storm](https://www.openhub.net/p/apache-storm)
+
 
 ## Screenshots
 
