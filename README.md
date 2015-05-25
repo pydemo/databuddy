@@ -222,7 +222,6 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add Informix **DONE**
 - add Sybase**DONE**
 - add DB2 **DONE**
-- add Oracle 12c **DONE**
 - add dBase
 - add Access DB
 - add Pandas
