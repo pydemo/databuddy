@@ -231,7 +231,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add Blaze
 - add MariaDB **DONE**
 - add Infobright **DONE**
-- add [TimesTen R1](http://www.oracle.com/technetwork/database/database-technologies/timesten/documentation/index.html)    **DONE**
+- add [TimesTen](http://www.oracle.com/technetwork/database/database-technologies/timesten/documentation/index.html)    **DONE**
 - add [MongoDB 3.0](http://docs.mongodb.org/manual/)  
 - add HBase
 - add Cassandra
