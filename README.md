@@ -222,14 +222,13 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add [Informix](http://www-01.ibm.com/support/knowledgecenter/SSGU8G_12.1.0/com.ibm.welcome.doc/welcome.htm?lang=en)   **DONE**
 - add [SAP ASE Sybase](http://infocenter.sybase.com/help/index.jsp?topic=/com.sybase.infocenter.help.ase.15.7/title.htm)   **DONE**
 - add [DB2](http://www-01.ibm.com/support/knowledgecenter/SSEPGG_10.5.0/com.ibm.db2.luw.kc.doc/welcome.html)    **DONE**
-- add dBase
-- add Access DB
-- add Pandas
-- add Apache Spark
-- add Apache Storm
+- add [dBase](http://www.dbase.com/dbasesql/dbase-documentation-download/)   
+- add [MS Access](https://msdn.microsoft.com/en-us/library/office/ff604965%28v=office.14%29.aspx)
+- add [Pandas](http://pandas.pydata.org/pandas-docs/version/0.12.0/)   
+- add [Apache Spark](hhttps://spark.apache.org/docs/latest/)  
+- add [Apache Storm](hhttps://storm.apache.org/documentation/Home.html)  
 - add [Hadoop](http://hadoop.apache.org/docs/r2.7.0/)    
-- add Blaze
-- add MariaDB **DONE**
+- add [MariaDB](https://mariadb.com/kb/en/mariadb/documentation/)  **DONE**
 - add Infobright **DONE**
 - add [TimesTen](http://www.oracle.com/technetwork/database/database-technologies/timesten/documentation/index.html)    **DONE**
 - add [MongoDB](http://docs.mongodb.org/manual/)  
@@ -326,6 +325,12 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 * [Informix](http://www-01.ibm.com/support/knowledgecenter/SSGU8G_12.1.0/com.ibm.welcome.doc/welcome.htm?lang=en) `12.1.0` docs
 * [SAP ASE Sybase](http://infocenter.sybase.com/help/index.jsp?topic=/com.sybase.infocenter.help.ase.15.7/title.htm) docs
 * [DB2](http://www-01.ibm.com/support/knowledgecenter/SSEPGG_10.5.0/com.ibm.db2.luw.kc.doc/welcome.html) `10.5.0` docs
+* [dBase](http://www.dbase.com/dbasesql/dbase-documentation-download/) docs
+* [MS Access](https://msdn.microsoft.com/en-us/library/office/ff604965%28v=office.14%29.aspx) `10.0` docs
+* [Pandas](http://pandas.pydata.org/pandas-docs/version/0.12.0/) docs
+* [Apache Spark](hhttps://spark.apache.org/docs/latest/) docs
+* [Apache Storm](hhttps://storm.apache.org/documentation/Home.html) docs
+* [MariaDB](https://mariadb.com/kb/en/mariadb/documentation/) 
 
 
 ## Screenshots
