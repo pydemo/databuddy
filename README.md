@@ -215,13 +215,13 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - let data spool/load to be executed on Linux (bash via ssh)
 - add [Oracle 12c Release 1](http://docs.oracle.com/database/121/index.htm) **DONE**
 - add [Oracle 11g Release 2](https://docs.oracle.com/cd/E11882_01/nav/portal_4.htm) **DONE**
-- add SQLServer **DONE**
-- add MySQL **DONE**
-- add PostgreSQL **DONE**
-- add SQLite **DONE**
-- add Informix **DONE**
-- add Sybase**DONE**
-- add DB2 **DONE**
+- add [SQLServer](https://msdn.microsoft.com/en-US/sqlserver)   **DONE**
+- add [MySQL](http://dev.mysql.com/doc/)    **DONE**
+- add [PostgreSQL](http://www.postgresql.org/docs/)   **DONE**
+- add [SQLite](https://www.sqlite.org/docs.html)   **DONE**
+- add [Informix](http://www-01.ibm.com/support/knowledgecenter/SSGU8G_12.1.0/com.ibm.welcome.doc/welcome.htm?lang=en)   **DONE**
+- add [SAP ASE Sybase](http://infocenter.sybase.com/help/index.jsp?topic=/com.sybase.infocenter.help.ase.15.7/title.htm)   **DONE**
+- add [DB2](http://www-01.ibm.com/support/knowledgecenter/SSEPGG_10.5.0/com.ibm.db2.luw.kc.doc/welcome.html)    **DONE**
 - add dBase
 - add Access DB
 - add Pandas
@@ -319,6 +319,13 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 * [Twitter Streaming API](https://dev.twitter.com/streaming/overview) docs 
 * [Google Analytics](https://developers.google.com/analytics/devguides/reporting/core/v3/quickstart/service-py) docs
 * [Vertica](http://www.vertica.com/hp-vertica-documentation/hp-vertica-7-1-x-documentation/) `7-1-x` docs
+* [SQLServer](https://msdn.microsoft.com/en-US/sqlserver) docs
+* [MySQL](http://dev.mysql.com/doc/) docs
+* [PostgreSQL](http://www.postgresql.org/docs/) docs
+* [SQLite](https://www.sqlite.org/docs.html) docs
+* [Informix](http://www-01.ibm.com/support/knowledgecenter/SSGU8G_12.1.0/com.ibm.welcome.doc/welcome.htm?lang=en) `12.1.0` docs
+* [SAP ASE Sybase](http://infocenter.sybase.com/help/index.jsp?topic=/com.sybase.infocenter.help.ase.15.7/title.htm) docs
+* [DB2](http://www-01.ibm.com/support/knowledgecenter/SSEPGG_10.5.0/com.ibm.db2.luw.kc.doc/welcome.html) `10.5.0` docs
 
 
 ## Screenshots
