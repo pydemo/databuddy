@@ -342,9 +342,6 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 
 ![New Session Menu](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/new_session_all_dbs.png "New Session Menu")
 
-- Output Tab: 
-
-![Output Tab](https://github.com/data-buddy/DataBuddy/blob/master/screenshots/ouput_tab.png "Output Tab")
 
 - Add New Session: 
 
@@ -358,6 +355,9 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 
 ![Executed Session](https://github.com/data-buddy/DataBuddy/blob/master/screenshots/Session_Executed_for_SQLServer_to_CSV_file_extract.png "Executed Session")
 
+- Output Tab: 
+
+![Output Tab](https://github.com/data-buddy/DataBuddy/blob/master/screenshots/ouput_tab.png "Output Tab")
 
 
 ##Endorse
