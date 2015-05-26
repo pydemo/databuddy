@@ -241,7 +241,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add Redshift
 - add Apache Hive
 - add Vertica
-- add Netezza
+- add [Netezza](https://www-304.ibm.com/support/knowledgecenter/SSULQD_7.2.0/com.ibm.nz.welcome.doc/doc/welcome.html)   
 - add Parstream
 - add ParAccel
 - add Twitter (extract)
@@ -299,6 +299,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 * [Hadoop](http://hadoop.apache.org/docs/r2.7.0/) `r2.7.0` docs
 * [EXASOL](https://www.exasol.com/support/secure/attachment/30841/EXASolution_User_Manual-5.0.3-en.pdf) `5.0.3` docs pdf
 * [Kinesis](http://aws.amazon.com/documentation/kinesis/)
+* [Netezza](https://www-304.ibm.com/support/knowledgecenter/SSULQD_7.2.0/com.ibm.nz.welcome.doc/doc/welcome.html) `7.2.0` docs
 
 ## Screenshots
 
