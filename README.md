@@ -229,7 +229,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add [Apache Storm](hhttps://storm.apache.org/documentation/Home.html)  
 - add [Hadoop](http://hadoop.apache.org/docs/r2.7.0/)    
 - add [MariaDB](https://mariadb.com/kb/en/mariadb/documentation/)  **DONE**
-- add Infobright **DONE**
+- add [Infobright](https://www.infobright.com/index.php/community-2/)    **DONE**
 - add [TimesTen](http://www.oracle.com/technetwork/database/database-technologies/timesten/documentation/index.html)    **DONE**
 - add [MongoDB](http://docs.mongodb.org/manual/)  
 - add HBase
@@ -331,6 +331,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 * [Apache Spark](hhttps://spark.apache.org/docs/latest/) docs
 * [Apache Storm](hhttps://storm.apache.org/documentation/Home.html) docs
 * [MariaDB](https://mariadb.com/kb/en/mariadb/documentation/) 
+* [Infobright](https://www.infobright.com/index.php/community-2/)
 
 
 ## Screenshots
