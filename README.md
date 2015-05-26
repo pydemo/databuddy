@@ -231,14 +231,12 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add [MariaDB](https://mariadb.com/kb/en/mariadb/documentation/)  **DONE**
 - add [Infobright](https://www.infobright.com/index.php/community-2/)    **DONE**
 - add [TimesTen](http://www.oracle.com/technetwork/database/database-technologies/timesten/documentation/index.html)    **DONE**
-- add [MongoDB](http://docs.mongodb.org/manual/)  
-- add HBase
-- add Cassandra
-- add Netsuite 
-- add Bigtable
-- add Terradata
-- add Redshift
-- add Apache Hive
+- add [MongoDB] (http://docs.mongodb.org/manual/)  
+- add [HBase] (http://hbase.apache.org/)  
+- add [Cassandra] (http://cassandra.apache.org/)  
+- add [Bigtable] (https://cloud.google.com/bigtable/docs/)  
+- add [Teradata] (http://www.info.teradata.com/HTMLPubs/DB_TTU_14_00/index.html#page/Storage_Management/B035_2492_071A/2492ch01.084.17.html)  
+- add [Apache Hive] (http://doc.mapr.com/display/MapR/Hive)    
 - add [Vertica](http://www.vertica.com/hp-vertica-documentation/hp-vertica-7-1-x-documentation/)   
 - add [Netezza](https://www-304.ibm.com/support/knowledgecenter/SSULQD_7.2.0/com.ibm.nz.welcome.doc/doc/welcome.html)   
 - add Parstream
@@ -332,6 +330,11 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 * [Apache Storm](hhttps://storm.apache.org/documentation/Home.html) docs
 * [MariaDB](https://mariadb.com/kb/en/mariadb/documentation/) 
 * [Infobright](https://www.infobright.com/index.php/community-2/)
+* [Cassandra] (http://cassandra.apache.org/)
+* [HBase] (http://hbase.apache.org/)
+* [Teradata] (http://www.info.teradata.com/HTMLPubs/DB_TTU_14_00/index.html#page/Storage_Management/B035_2492_071A/2492ch01.084.17.html)
+* [Bigtable] (https://cloud.google.com/bigtable/docs/) 
+* [Apache Hive] (http://doc.mapr.com/display/MapR/Hive)
 
 
 ## Screenshots
