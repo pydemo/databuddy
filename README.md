@@ -258,20 +258,20 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add Clustrix
 - add Orient
 - add Scribe
-- add KDB+
+- add [KDB+](http://kx.com/resources.php)  
 - add Volt DB
-- add Arango DB
-- add Foundation DB
-- add Enterprise DB
+- add [Arango DB](https://www.arangodb.com/documentation/)   
+- add [Foundation DB](https://foundationdb.com/key-value-store/documentation/index.html)  
+- add [Enterprise DB](http://www.enterprisedb.com/products-services-training/products/documentation)   
 - add Altibase HDB
 - add [EXASOL](https://www.exasol.com/support/secure/attachment/30841/EXASolution_User_Manual-5.0.3-en.pdf)   
-- add Aster
+- add [Aster](http://www.teradata.com/Teradata-Aster/overview/)  
 - add [Kinesis](http://aws.amazon.com/documentation/kinesis/) (extract)
-- add Redshift
-- add RDS
+- add [Redshift](http://aws.amazon.com/documentation/redshift/)   
+- add [RDS](http://aws.amazon.com/documentation/rds/)   
 - add [DynamoDB](http://aws.amazon.com/documentation/dynamodb/)  
-- add Couchbase
-- add Aerospike
+- add [Couchbase](http://docs.couchbase.com/admin/admin/Couchbase-intro.html)  
+- add [Aerospike](http://www.aerospike.com/docs/)    
 - add InterSystems
 - add QV (QlikView file format)
 - add MDX (file format)
@@ -300,6 +300,16 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 * [EXASOL](https://www.exasol.com/support/secure/attachment/30841/EXASolution_User_Manual-5.0.3-en.pdf) `5.0.3` docs pdf
 * [Kinesis](http://aws.amazon.com/documentation/kinesis/)
 * [Netezza](https://www-304.ibm.com/support/knowledgecenter/SSULQD_7.2.0/com.ibm.nz.welcome.doc/doc/welcome.html) `7.2.0` docs
+* [KDB+](http://kx.com/resources.php) docs
+* [Aster](http://www.teradata.com/Teradata-Aster/overview/) overview
+* [Aerospike](http://www.aerospike.com/docs/) docs
+* [Couchbase](http://docs.couchbase.com/admin/admin/Couchbase-intro.html) docs
+* [Redshift](http://aws.amazon.com/documentation/redshift/) docs
+* [RDS](http://aws.amazon.com/documentation/rds/) docs
+* [Enterprise DB](http://www.enterprisedb.com/products-services-training/products/documentation)  docs
+* [Foundation DB](https://foundationdb.com/key-value-store/documentation/index.html) docs
+* [Arango DB](https://www.arangodb.com/documentation/) docs
+
 
 ## Screenshots
 
