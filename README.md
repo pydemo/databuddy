@@ -240,26 +240,25 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add Terradata
 - add Redshift
 - add Apache Hive
-- add Vertica
+- add [Vertica](http://www.vertica.com/hp-vertica-documentation/hp-vertica-7-1-x-documentation/)   
 - add [Netezza](https://www-304.ibm.com/support/knowledgecenter/SSULQD_7.2.0/com.ibm.nz.welcome.doc/doc/welcome.html)   
 - add Parstream
 - add ParAccel
-- add Twitter (extract)
-- add GA
+- add [Twitter Streaming API](https://dev.twitter.com/streaming/overview)  (extract)
+- add [Google Analytics](https://developers.google.com/analytics/devguides/reporting/core/v3/quickstart/service-py)  
 - add [Crate Data](https://www.openhub.net/p/cratedata)
 - add Facebook (extract)
 - add Taleo HR (extract) 
-- add Salesforce
-- add Greenplum
-- add Actian
-- add McObject
-- add NuiDB
+- add [Salesforce](https://developer.salesforce.com/docs/atlas.en-us.dataLoader.meta/dataLoader/) (load, extract) 
+- add [Greenplum](http://gpdb.docs.pivotal.io/gpdb-435.html)  
+- add [Actian Ingres](http://esd.actian.com/product/docs)  
+- add [McObject](http://www.mcobject.com/embedded-database-manuals)  
+- add [NuiDB](http://doc.nuodb.com/display/doc/NuoDB+Online+Documentation)  
 - add [Disco](https://www.openhub.net/p/disco)
-- add Clustrix
-- add Orient
-- add Scribe
+- add [Clustrix](http://docs.clustrix.com/display/CLXDOC/Home)  
+- add [OrientDB](http://orientdb.com/docs/last/)   
 - add [KDB+](http://kx.com/resources.php)  
-- add Volt DB
+- add [Volt DB](http://docs.voltdb.com/)  
 - add [Arango DB](https://www.arangodb.com/documentation/)   
 - add [Foundation DB](https://foundationdb.com/key-value-store/documentation/index.html)  
 - add [Enterprise DB](http://www.enterprisedb.com/products-services-training/products/documentation)   
@@ -309,6 +308,17 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 * [Enterprise DB](http://www.enterprisedb.com/products-services-training/products/documentation)  docs
 * [Foundation DB](https://foundationdb.com/key-value-store/documentation/index.html) docs
 * [Arango DB](https://www.arangodb.com/documentation/) docs
+* [Volt DB](http://docs.voltdb.com/)  docs
+* [OrientDB](http://orientdb.com/docs/last/) docs
+* [Clustrix](http://docs.clustrix.com/display/CLXDOC/Home)  docs
+* [NuiDB](http://doc.nuodb.com/display/doc/NuoDB+Online+Documentation) docs
+* [McObject](http://www.mcobject.com/embedded-database-manuals) docs
+* [Actian Ingres](http://esd.actian.com/product/docs) docs
+* [Greenplum](http://gpdb.docs.pivotal.io/gpdb-435.html)
+* [Salesforce](https://developer.salesforce.com/docs/atlas.en-us.dataLoader.meta/dataLoader/) `DataLoader` docs
+* [Twitter Streaming API](https://dev.twitter.com/streaming/overview) docs 
+* [Google Analytics](https://developers.google.com/analytics/devguides/reporting/core/v3/quickstart/service-py) docs
+* [Vertica](http://www.vertica.com/hp-vertica-documentation/hp-vertica-7-1-x-documentation/) `7-1-x` docs
 
 
 ## Screenshots
