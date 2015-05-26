@@ -227,12 +227,12 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add Pandas
 - add Apache Spark
 - add Apache Storm
-- add Hadoop
+- add [Hadoop](http://hadoop.apache.org/docs/r2.7.0/)    
 - add Blaze
 - add MariaDB **DONE**
 - add Infobright **DONE**
 - add [TimesTen](http://www.oracle.com/technetwork/database/database-technologies/timesten/documentation/index.html)    **DONE**
-- add [MongoDB 3.0](http://docs.mongodb.org/manual/)  
+- add [MongoDB](http://docs.mongodb.org/manual/)  
 - add HBase
 - add Cassandra
 - add Netsuite 
@@ -296,6 +296,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 * [MongoDB](http://docs.mongodb.org/manual/) `3.0` docs
 * [TimesTen](http://www.oracle.com/technetwork/database/database-technologies/timesten/documentation/index.html) `Release 2` docs
 * [DynamoDB](http://aws.amazon.com/documentation/dynamodb/) docs
+* [Hadoop](http://hadoop.apache.org/docs/r2.7.0/) `r2.7.0` docs
 
 ## Screenshots
 
