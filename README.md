@@ -225,8 +225,8 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add [dBase](http://www.dbase.com/dbasesql/dbase-documentation-download/)   
 - add [MS Access](https://msdn.microsoft.com/en-us/library/office/ff604965%28v=office.14%29.aspx)
 - add [Pandas](http://pandas.pydata.org/pandas-docs/version/0.12.0/)   
-- add [Apache Spark](hhttps://spark.apache.org/docs/latest/)  
-- add [Apache Storm](hhttps://storm.apache.org/documentation/Home.html)  
+- add [Apache Spark] (https://spark.apache.org/docs/latest/)  
+- add [Apache Storm] (https://storm.apache.org/documentation/Home.html)  
 - add [Hadoop](http://hadoop.apache.org/docs/r2.7.0/)    
 - add [MariaDB](https://mariadb.com/kb/en/mariadb/documentation/)  **DONE**
 - add [Infobright](https://www.infobright.com/index.php/community-2/)    **DONE**
@@ -284,7 +284,6 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 
 ##References
 * [QueryCopy for Oracle](https://github.com/QueryCopy/QueryCopy-for-Oracle) -- `qc32\qc32.exe` 
-* [Apache Spark](https://www.openhub.net/p/apache-spark), [Apache Storm](https://www.openhub.net/p/apache-storm) docs
 * [Oracle 12c](http://docs.oracle.com/database/121/index.htm)  `Release 1` docs
 * [Oracle 11g](https://docs.oracle.com/cd/E11882_01/nav/portal_4.htm)  `Release 2` docs
 * [Disco](https://www.openhub.net/p/disco) docs
@@ -326,8 +325,8 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 * [dBase](http://www.dbase.com/dbasesql/dbase-documentation-download/) docs
 * [MS Access](https://msdn.microsoft.com/en-us/library/office/ff604965%28v=office.14%29.aspx) `10.0` docs
 * [Pandas](http://pandas.pydata.org/pandas-docs/version/0.12.0/) docs
-* [Apache Spark](hhttps://spark.apache.org/docs/latest/) docs
-* [Apache Storm](hhttps://storm.apache.org/documentation/Home.html) docs
+* [Apache Spark](https://spark.apache.org/docs/latest/) docs
+* [Apache Storm](https://storm.apache.org/documentation/Home.html) docs
 * [MariaDB](https://mariadb.com/kb/en/mariadb/documentation/) 
 * [Infobright](https://www.infobright.com/index.php/community-2/)
 * [Cassandra] (http://cassandra.apache.org/)
