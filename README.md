@@ -329,17 +329,21 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 * [Apache Storm](https://storm.apache.org/documentation/Home.html) docs
 * [MariaDB](https://mariadb.com/kb/en/mariadb/documentation/) 
 * [Infobright](https://www.infobright.com/index.php/community-2/)
-* [Cassandra] (http://cassandra.apache.org/)
-* [HBase] (http://hbase.apache.org/)
-* [Teradata] (http://www.info.teradata.com/HTMLPubs/DB_TTU_14_00/index.html#page/Storage_Management/B035_2492_071A/2492ch01.084.17.html)
-* [Bigtable] (https://cloud.google.com/bigtable/docs/) 
-* [Apache Hive] (http://doc.mapr.com/display/MapR/Hive)
+* [Cassandra] (http://cassandra.apache.org/) docs
+* [HBase] (http://hbase.apache.org/) docs
+* [Teradata] (http://www.info.teradata.com/HTMLPubs/DB_TTU_14_00/index.html#page/Storage_Management/B035_2492_071A/2492ch01.084.17.html) docs
+* [Bigtable] (https://cloud.google.com/bigtable/docs/) docs
+* [Apache Hive] (http://doc.mapr.com/display/MapR/Hive) docs
 
 
 ## Screenshots
 
-New session: 
+- New session: 
 ![New session](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/new_session_all_dbs.png "Add New Session")
+
+- Output Tab: 
+![Output Tab](https://github.com/data-buddy/DataBuddy/blob/master/screenshots/ouput_tab.png "Add New Session")
+
 
 #Download
 * [Data Buddy latest release](https://github.com/data-buddy/DataBuddy/releases/tag/v0.3.3) -- `data-buddy 0.3.3`
