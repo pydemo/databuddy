@@ -231,7 +231,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add Blaze
 - add MariaDB **DONE**
 - add Infobright **DONE**
-- add TimesTen **DONE**
+- add [TimesTen R1](http://www.oracle.com/technetwork/database/database-technologies/timesten/documentation/index.html)    **DONE**
 - add [MongoDB 3.0](http://docs.mongodb.org/manual/)  
 - add HBase
 - add Cassandra
@@ -294,6 +294,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 * [Disco](https://www.openhub.net/p/disco)
 * [Crate Data](https://www.openhub.net/p/cratedata)
 * [MongoDB](http://docs.mongodb.org/manual/) `3.0`
+* [TimesTen](http://www.oracle.com/technetwork/database/database-technologies/timesten/documentation/index.html) `Release 2`
 
 ## Screenshots
 
