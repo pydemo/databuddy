@@ -266,7 +266,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add Altibase HDB
 - add [EXASOL](https://www.exasol.com/support/secure/attachment/30841/EXASolution_User_Manual-5.0.3-en.pdf)   
 - add Aster
-- add Kinesis
+- add [Kinesis](http://aws.amazon.com/documentation/kinesis/) (extract)
 - add Redshift
 - add RDS
 - add [DynamoDB](http://aws.amazon.com/documentation/dynamodb/)  
@@ -298,6 +298,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 * [DynamoDB](http://aws.amazon.com/documentation/dynamodb/) docs
 * [Hadoop](http://hadoop.apache.org/docs/r2.7.0/) `r2.7.0` docs
 * [EXASOL](https://www.exasol.com/support/secure/attachment/30841/EXASolution_User_Manual-5.0.3-en.pdf) `5.0.3` docs pdf
+* [Kinesis](http://aws.amazon.com/documentation/kinesis/)
 
 ## Screenshots
 
