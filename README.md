@@ -354,6 +354,11 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 
 ![Run Session](https://github.com/data-buddy/DataBuddy/blob/master/screenshots/Run_Session_for_SQLServer_to_CSV_file_extract.png "Run Session")
 
+- Executed Session: 
+
+![Executed Session](https://github.com/data-buddy/DataBuddy/blob/master/screenshots/Session_Executed_for_SQLServer_to_CSV_file_extract.png "Executed Session")
+
+
 
 ##Endorse
 * [My Linkedin](https://www.linkedin.com/in/alexbuz) `Alex Buzunov`
