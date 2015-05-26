@@ -350,11 +350,11 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 
 ![Add New Session](https://github.com/data-buddy/DataBuddy/blob/master/screenshots/new_session.png "Add New Session")
 
-
+##Endorse
+* [My Linkedin](https://www.linkedin.com/in/alexbuz) `Alex Buzunov`
 
 #Download
 * [Data Buddy latest release](https://github.com/data-buddy/DataBuddy/releases/tag/v0.3.3) -- `data-buddy 0.3.3`
 
 
-###Endorse
-* [My Linkedin](https://www.linkedin.com/in/alexbuz) `Alex Buzunov`
+
