@@ -356,3 +356,5 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 * [Data Buddy latest release](https://github.com/data-buddy/DataBuddy/releases/tag/v0.3.3) -- `data-buddy 0.3.3`
 
 
+###Endorse
+* [My Linkedin](https://www.linkedin.com/in/alexbuz) `Alex Buzunov`
