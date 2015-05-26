@@ -264,7 +264,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add Foundation DB
 - add Enterprise DB
 - add Altibase HDB
-- add EXASOL
+- add [EXASOL](https://www.exasol.com/support/secure/attachment/30841/EXASolution_User_Manual-5.0.3-en.pdf)   
 - add Aster
 - add Kinesis
 - add Redshift
@@ -292,11 +292,12 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 * [Oracle 12c](http://docs.oracle.com/database/121/index.htm)  `Release 1` docs
 * [Oracle 11g](https://docs.oracle.com/cd/E11882_01/nav/portal_4.htm)  `Release 2` docs
 * [Disco](https://www.openhub.net/p/disco) docs
-* [Crate Data](https://www.openhub.net/p/cratedata)
+* [Crate Data](https://www.openhub.net/p/cratedata) docs
 * [MongoDB](http://docs.mongodb.org/manual/) `3.0` docs
 * [TimesTen](http://www.oracle.com/technetwork/database/database-technologies/timesten/documentation/index.html) `Release 2` docs
 * [DynamoDB](http://aws.amazon.com/documentation/dynamodb/) docs
 * [Hadoop](http://hadoop.apache.org/docs/r2.7.0/) `r2.7.0` docs
+* [EXASOL](https://www.exasol.com/support/secure/attachment/30841/EXASolution_User_Manual-5.0.3-en.pdf) `5.0.3` docs pdf
 
 ## Screenshots
 
