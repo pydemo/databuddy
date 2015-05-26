@@ -269,7 +269,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - add Kinesis
 - add Redshift
 - add RDS
-- add DynamoDB
+- add [DynamoDB](http://aws.amazon.com/documentation/dynamodb/)  
 - add Couchbase
 - add Aerospike
 - add InterSystems
@@ -287,14 +287,15 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 >I've seen 10x performance improvement when I ran it on DEV Linux server (10Gb Ethernet) v.s. my office Windows Desktop (100Mb Ethernet).
 
 ##References
-* [QueryCopy for Oracle](https://github.com/QueryCopy/QueryCopy-for-Oracle) -- `qc32\qc32.exe`
-* [Apache Spark](https://www.openhub.net/p/apache-spark), [Apache Storm](https://www.openhub.net/p/apache-storm)
-* [Oracle 12c](http://docs.oracle.com/database/121/index.htm) -- `Release 1`
-* [Oracle 11g](https://docs.oracle.com/cd/E11882_01/nav/portal_4.htm) -- `Release 2`
-* [Disco](https://www.openhub.net/p/disco)
+* [QueryCopy for Oracle](https://github.com/QueryCopy/QueryCopy-for-Oracle) -- `qc32\qc32.exe` 
+* [Apache Spark](https://www.openhub.net/p/apache-spark), [Apache Storm](https://www.openhub.net/p/apache-storm) docs
+* [Oracle 12c](http://docs.oracle.com/database/121/index.htm)  `Release 1` docs
+* [Oracle 11g](https://docs.oracle.com/cd/E11882_01/nav/portal_4.htm)  `Release 2` docs
+* [Disco](https://www.openhub.net/p/disco) docs
 * [Crate Data](https://www.openhub.net/p/cratedata)
-* [MongoDB](http://docs.mongodb.org/manual/) `3.0`
-* [TimesTen](http://www.oracle.com/technetwork/database/database-technologies/timesten/documentation/index.html) `Release 2`
+* [MongoDB](http://docs.mongodb.org/manual/) `3.0` docs
+* [TimesTen](http://www.oracle.com/technetwork/database/database-technologies/timesten/documentation/index.html) `Release 2` docs
+* [DynamoDB](http://aws.amazon.com/documentation/dynamodb/) docs
 
 ## Screenshots
 
