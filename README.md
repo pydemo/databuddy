@@ -338,11 +338,18 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 
 ## Screenshots
 
-- New session: 
-![New session](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/new_session_all_dbs.png "Add New Session")
+- New Session Menu: 
+
+![New Session Menu](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/new_session_all_dbs.png "New Session Menu")
 
 - Output Tab: 
-![Output Tab](https://github.com/data-buddy/DataBuddy/blob/master/screenshots/ouput_tab.png "Add New Session")
+
+![Output Tab](https://github.com/data-buddy/DataBuddy/blob/master/screenshots/ouput_tab.png "Output Tab")
+
+- Add New Session: 
+
+![Add New Session](https://github.com/data-buddy/DataBuddy/blob/master/screenshots/new_session.png "Add New Session")
+
 
 
 #Download
