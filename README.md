@@ -69,22 +69,22 @@ TimesTen|  | yes  | yes
 - Session management.
 
 ###Command line (QueryCopy):
-- Multi-query load.
-- Partition/sub-partition copy
-- Sharded copy (turbo mode)
-- Custom spool location (config/user_conf.py)
-- config/include/oracle.py - configurable SQL*Loader args.
-- 3 generic arguments (use them to pass job_id or timestamp and process in config/user_config.py)
-- added all usecases
-- lame_duck/limit fix for trial runs
-- keep_data_file param (set it to 1 if you want to keep data dump)
-- White-space control.
-- Header line control.
-- Truncate target table/partition/subpartition
-- Ask to truncate.
-- No client (url) connect.
-- Supports CSV file load from multiple dirs.
-- --exit_on_key - let's you keep exec window open after load job is done
+- [x] Multi-query load.
+- [x] Partition/sub-partition copy
+- [x] Sharded copy (turbo mode)
+- [x] Custom spool location (config/user_conf.py)
+- [x] config/include/oracle.py - configurable SQL*Loader args.
+- [x] 3 generic arguments (use them to pass job_id or timestamp and process in config/user_config.py)
+- [x] added all usecases
+- [x] lame_duck/limit fix for trial runs
+- [x] keep_data_file param (set it to 1 if you want to keep data dump)
+- [x] White-space control.
+- [x] Header line control.
+- [x] Truncate target table/partition/subpartition
+- [x] Ask to truncate.
+- [x] No client (url) connect.
+- [x] Supports CSV file load from multiple dirs.
+- [x] --exit_on_key - let's you keep exec window open after load job is done
 
 ##How it works.
 
