@@ -246,7 +246,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - [ ] add [Crate Data](https://www.openhub.net/p/cratedata)
 - [ ] add Facebook (extract)
 - [ ] add Taleo HR (extract) 
-- [ ] add [Salesforce](https://developer.salesforce.com/docs/atlas.en-us.dataLoader.meta/dataLoader/) (load, extract) 
+- [ ] add Salesforce ([load](https://developer.salesforce.com/docs/atlas.en-us.dataLoader.meta/dataLoader/), extract) 
 - [ ] add [Greenplum](http://gpdb.docs.pivotal.io/gpdb-435.html)  
 - [ ] add [Actian Ingres](http://esd.actian.com/product/docs)  
 - [ ] add [McObject](http://www.mcobject.com/embedded-database-manuals)  
@@ -317,7 +317,7 @@ Database |Version | Export | Import | Comments
 [McObject](http://www.mcobject.com/embedded-database-manuals) ||||
 [Actian Ingres](http://esd.actian.com/product/docs) ||||
 [Greenplum](http://gpdb.docs.pivotal.io/gpdb-435.html)||||
-[Salesforce](https://developer.salesforce.com/docs/atlas.en-us.dataLoader.meta/dataLoader/) |`DataLoader`|||
+[Salesforce](https://developer.salesforce.com/docs/atlas.en-us.dataLoader.meta/dataLoader/) ||[DataLoader](https://developer.salesforce.com/docs/atlas.en-us.dataLoader.meta/dataLoader/)||
 [Twitter Streaming API](https://dev.twitter.com/streaming/overview)||||
 [Google Analytics](https://developers.google.com/analytics/devguides/reporting/core/v3/quickstart/service-py)||||
 [Vertica](http://www.vertica.com/hp-vertica-documentation/hp-vertica-7-1-x-documentation/)|`7-1-x`|||
