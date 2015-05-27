@@ -161,58 +161,58 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 >There's no way to add/remove args to your choosing. Argument combos come as templates which you select in "Create new session window"
 
 #TODO
-- argument values reuse from existing session. **DONE**
-- clean uargs.db. **DONE**
-- nls_format* duplication. **DONE**
-- test UI.
-- add --log_dir to backend. **DONE**
-- add "source" and "target" datasources to "New Session". **DONE**
-- Copy/Paste of argument values between sessions.
-- generic "New Session" so user not limited by source and target templates. **DONE**
-- history of values for each argument.
-- cleanup all other databases but Oracle.
-- more templates and better templates hierarchy.
-- init templates to open session for "New Session". **DONE**
-- validate args on Run. **DONE**.
-- smaller test_api files (get default args from test routines, not canned files).
-- fix template filters. **DONE**
-- create "Menu" button and hide "About".
-- create templates tab **DONE**
-- create sessions tab **DONE**
-- validate session name for chars not usable in file name. **DONE**
-- allow user to create multiple session libraries. **DONE**
-- fix mailformed path from MDD.MultiDirDialog. **DONE**
-- make sure all paths are windows friendly.**DONE**
-- open dir and open file use stale values.**DONE**
-- filter control keys from ones affecting field value. **DONE**
-- close all existing shells/shell groups upon exit.
-- highlight running sessions.**DONE**
-- beep on failing sessions.
-- detect DONE/FAILED from cmd window. **DONE**
-- let user disable post-etl email (Common: email_to). **DONE**
-- change copy_vector format from db2db to db->db or db_2_db
-- fix flicker on frame freeze **DONE**
-- save on close **DONE**
-- Table DDL export for Oracle **DONE**
-- validate all path arguments before run
-- add create template menu **DONE**
-- add "--host_map" arg to set hosts for each thread **DONE**
-- let user change host mapping **DONE**
-- save as template **DONE**
-- save as **DONE**
-- test ezconnect
-- add "Output" tab **DONE**
-- add '--compress_spool' arg for zipped output
-- add sqlloader.py
-- fix session sort **DONE**
-- fix session refresh **DONE**
-- let user set primary dbs, source/target dbs
-- add scp/ftp/sftp as data source/target
-- make all paths relative to transport_home 
-- create wizard for "New Session" template selection
-- distinguish A-Templates from B-Templates
-- let data copy to be executed on Linux (bash via ssh)**DONE**
-- let data spool/load to be executed on Linux (bash via ssh)
+- [x] argument values reuse from existing session. **DONE**
+- [x] clean uargs.db. **DONE**
+- [x] nls_format* duplication. **DONE**
+- [x] test UI.
+- [x] add --log_dir to backend. **DONE**
+- [x] add "source" and "target" datasources to "New Session". **DONE**
+- [x] Copy/Paste of argument values between sessions.
+- [x] generic "New Session" so user not limited by source and target templates. **DONE**
+- [x] history of values for each argument.
+- [x] cleanup all other databases but Oracle.
+- [x] more templates and better templates hierarchy.
+- [x] init templates to open session for "New Session". **DONE**
+- [x] validate args on Run. **DONE**.
+- [x] smaller test_api files (get default args from test routines, not canned files).
+- [x] fix template filters. **DONE**
+- [x] create "Menu" button and hide "About".
+- [x] create templates tab **DONE**
+- [x] create sessions tab **DONE**
+- [x] validate session name for chars not usable in file name. **DONE**
+- [x] allow user to create multiple session libraries. **DONE**
+- [x] fix mailformed path from MDD.MultiDirDialog. **DONE**
+- [x] make sure all paths are windows friendly.**DONE**
+- [x] open dir and open file use stale values.**DONE**
+- [x] filter control keys from ones affecting field value. **DONE**
+- [x] close all existing shells/shell groups upon exit.
+- [x] highlight running sessions.**DONE**
+- [x] beep on failing sessions.
+- [x] detect DONE/FAILED from cmd window. **DONE**
+- [x] let user disable post-etl email (Common: email_to). **DONE**
+- [x] change copy_vector format from db2db to db->db or db_2_db
+- [x] fix flicker on frame freeze **DONE**
+- [x] save on close **DONE**
+- [x] Table DDL export for Oracle **DONE**
+- [x] validate all path arguments before run
+- [x] add create template menu **DONE**
+- [x] add "--host_map" arg to set hosts for each thread **DONE**
+- [x] let user change host mapping **DONE**
+- [x] save as template **DONE**
+- [x] save as **DONE**
+- [x] test ezconnect
+- [x] add "Output" tab **DONE**
+- [x] add '--compress_spool' arg for zipped output
+- [x] add sqlloader.py
+- [x] fix session sort **DONE**
+- [x] fix session refresh **DONE**
+- [x] let user set primary dbs, source/target dbs
+- [x] add scp/ftp/sftp as data source/target
+- [x] make all paths relative to transport_home 
+- [x] create wizard for "New Session" template selection
+- [x] distinguish A-Templates from B-Templates
+- [x] let data copy to be executed on Linux (bash via ssh)**DONE**
+- [x] let data spool/load to be executed on Linux (bash via ssh)
 - add [Oracle 12c Release 1](http://docs.oracle.com/database/121/index.htm) **DONE**
 - add [Oracle 11g Release 2](https://docs.oracle.com/cd/E11882_01/nav/portal_4.htm) **DONE**
 - add [SQLServer](https://msdn.microsoft.com/en-US/sqlserver)   **DONE**
