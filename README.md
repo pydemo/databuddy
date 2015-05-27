@@ -283,8 +283,16 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 >I've seen 10x performance improvement when I ran it on DEV Linux server (10Gb Ethernet) v.s. my office Windows Desktop (100Mb Ethernet).
 
 ##References
-* [QueryCopy for Oracle](https://github.com/QueryCopy/QueryCopy-for-Oracle) -- `qc32\qc32.exe` 
-* [Oracle 12c](http://docs.oracle.com/database/121/index.htm)  `Release 1` docs
+* [QueryCopy for Oracle](https://github.com/QueryCopy/QueryCopy-for-Oracle) -- `qc32\qc32.exe`
+
+
+##Docs
+
+DB|Version | Export | Import | Comments
+---------|----------|-------- | -------| -------
+* [Oracle 12c](http://docs.oracle.com/database/121/index.htm)  |`Release 1` |docs|
+
+
 * [Oracle 11g](https://docs.oracle.com/cd/E11882_01/nav/portal_4.htm)  `Release 2` docs
 * [Disco](https://www.openhub.net/p/disco) docs
 * [Crate Data](https://www.openhub.net/p/cratedata) docs
