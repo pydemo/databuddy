@@ -344,6 +344,10 @@ DB|Version | Export | Import | Comments
 * [Apache Hive] (http://doc.mapr.com/display/MapR/Hive) docs
 * [InterSystems Caché](http://www.intersystems.com/our-products/cache/managing-data/) docs,  [export](http://docs.intersystems.com/ens20131/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_shell)
 
+- [x] @mentions, #refs, [links](), **formatting**, and <del>tags</del> supported
+- [x] list syntax required (any unordered or ordered list supported)
+- [x] this is a complete item
+- [ ] this is an incomplete item
 
 ## Screenshots
 
