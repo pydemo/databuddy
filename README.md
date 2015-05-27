@@ -88,9 +88,9 @@ TimesTen|  | yes  | yes
 
 ##How it works.
 
-1. "DbShell" - queries target and source for table metadata.
-2. "Spooler"  - extracts data to temp file from source.
-3. "Loader" - loads temp file to target using bulk loader.
+1. __DbShell__ - queries target and source for table metadata.
+2. __Spooler__  - extracts data to temp file from source.
+3. __Loader__ - loads temp file to target using bulk loader.
 
 ###Tools used to extract, load, and query data
 DB family|Database | Spooler | Loader | DbShell
