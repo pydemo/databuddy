@@ -286,14 +286,13 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 * [QueryCopy for Oracle](https://github.com/QueryCopy/QueryCopy-for-Oracle) -- `qc32\qc32.exe`
 
 
-##Docs
+##Vendor Docs
 
-DB docs|Version | Export | Import | Implemented
+DB |Version | Export | Import | Implemented
 ---------|----------|-------- | -------| -------
-[Oracle 12c](http://docs.oracle.com/database/121/index.htm)  |`Release 1` |[SQL*Plus ](http://docs.oracle.com/cd/B19306_01/server.102/b14357/toc.htm)|[SQL*Loader ](http://docs.oracle.com/cd/B19306_01/server.102/b14215/part_ldr.htmm) 
+[Oracle 12c](http://docs.oracle.com/database/121/index.htm)  |`Release 1` |[SQL*Plus ](https://docs.oracle.com/database/121/SQPUG/toc.htm)|[SQL*Loader ](https://docs.oracle.com/database/121/SUTIL/ldr_concepts.htm#SUTIL003) 
+[Oracle 11g](https://docs.oracle.com/cd/E11882_01/nav/portal_4.htm) | `Release 2`| docs||
 
-
-* [Oracle 11g](https://docs.oracle.com/cd/E11882_01/nav/portal_4.htm)  `Release 2` docs
 * [Disco](https://www.openhub.net/p/disco) docs
 * [Crate Data](https://www.openhub.net/p/cratedata) docs
 * [MongoDB](http://docs.mongodb.org/manual/) `3.0` docs
