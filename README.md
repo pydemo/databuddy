@@ -288,9 +288,9 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 
 ##Docs
 
-DB|Version | Export | Import | Comments
+DB docs|Version | Export | Import | Comments
 ---------|----------|-------- | -------| -------
-* [Oracle 12c](http://docs.oracle.com/database/121/index.htm)  |`Release 1` |docs|
+[Oracle 12c](http://docs.oracle.com/database/121/index.htm)  |`Release 1` |[[x]  ](http://docs.oracle.com/database/121/index.htm)|
 
 
 * [Oracle 11g](https://docs.oracle.com/cd/E11882_01/nav/portal_4.htm)  `Release 2` docs
@@ -345,9 +345,7 @@ DB|Version | Export | Import | Comments
 * [InterSystems Caché](http://www.intersystems.com/our-products/cache/managing-data/) docs,  [export](http://docs.intersystems.com/ens20131/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_shell)
 
 - [x] @mentions, #refs, [links](), **formatting**, and <del>tags</del> supported
-- [x] list syntax required (any unordered or ordered list supported)
-- [x] this is a complete item
-- [ ] this is an incomplete item
+
 
 ## Screenshots
 
