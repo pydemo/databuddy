@@ -290,7 +290,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 
 DB docs|Version | Export | Import | Comments
 ---------|----------|-------- | -------| -------
-[Oracle 12c](http://docs.oracle.com/database/121/index.htm)  |`Release 1` |[[x]  ](http://docs.oracle.com/database/121/index.htm)|
+[Oracle 12c](http://docs.oracle.com/database/121/index.htm)  |`Release 1` |[x][SQL*Plus ](http://docs.oracle.com/cd/B19306_01/server.102/b14357/toc.htm)|
 
 
 * [Oracle 11g](https://docs.oracle.com/cd/E11882_01/nav/portal_4.htm)  `Release 2` docs
