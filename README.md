@@ -259,7 +259,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - [ ] add [Arango DB](https://www.arangodb.com/documentation/)   
 - [ ] add [Foundation DB](https://foundationdb.com/key-value-store/documentation/index.html)  
 - [ ] add [Enterprise DB](http://www.enterprisedb.com/products-services-training/products/documentation)   
-- [ ] add Altibase HDB
+- [ ] add [Altibase HDB](http://altibase.com/)   
 - [ ] add [EXASOL](https://www.exasol.com/support/secure/attachment/30841/EXASolution_User_Manual-5.0.3-en.pdf)   
 - [ ] add [Aster](http://www.teradata.com/Teradata-Aster/overview/)  
 - [ ] add [Kinesis](http://aws.amazon.com/documentation/kinesis/) (extract)
@@ -341,6 +341,7 @@ Database |Version | Export | Import | Comments
 [Bigtable] (https://cloud.google.com/bigtable/docs/)||||
 [Apache Hive] (http://doc.mapr.com/display/MapR/Hive)||||
 [InterSystems Caché](http://www.intersystems.com/our-products/cache/managing-data/)|| [export](http://docs.intersystems.com/ens20131/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_shell)||
+[Altibase HDB](http://altibase.com/)||||
 
 
 
