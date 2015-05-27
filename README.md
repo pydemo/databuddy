@@ -288,7 +288,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 
 ##Vendor Docs
 
-DB |Version | Export | Import | Implemented
+Database |Version | Export | Import | Comments
 ---------|----------|-------- | -------| -------
 [Oracle 12c](http://docs.oracle.com/database/121/index.htm)  |`Release 1` |[SQL*Plus ](https://docs.oracle.com/database/121/SQPUG/toc.htm)|[SQL*Loader ](https://docs.oracle.com/database/121/SUTIL/ldr_concepts.htm#SUTIL003) 
 [Oracle 11g](https://docs.oracle.com/cd/E11882_01/nav/portal_4.htm) | `Release 2`| ||
@@ -340,7 +340,7 @@ DB |Version | Export | Import | Implemented
 [Teradata] (http://www.info.teradata.com/HTMLPubs/DB_TTU_14_00/index.html#page/Storage_Management/B035_2492_071A/2492ch01.084.17.html)||||
 [Bigtable] (https://cloud.google.com/bigtable/docs/)||||
 [Apache Hive] (http://doc.mapr.com/display/MapR/Hive)||||
-[InterSystems Caché](http://www.intersystems.com/our-products/cache/managing-data/)| [export](http://docs.intersystems.com/ens20131/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_shell)|||
+[InterSystems Caché](http://www.intersystems.com/our-products/cache/managing-data/)|| [export](http://docs.intersystems.com/ens20131/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_shell)||
 
 
 
