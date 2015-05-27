@@ -288,8 +288,6 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 
 ##Docs
 
-DB docs|Version | Export | Import | Implemented
----------|----------|-------- | -------| -------
 - [x] [Oracle 12c](http://docs.oracle.com/database/121/index.htm)  |`Release 1` |[SQL*Plus ](http://docs.oracle.com/cd/B19306_01/server.102/b14357/toc.htm)| 
 
 
