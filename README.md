@@ -288,7 +288,9 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 
 ##Docs
 
-- [x] [Oracle 12c](http://docs.oracle.com/database/121/index.htm)  |`Release 1` |[SQL*Plus ](http://docs.oracle.com/cd/B19306_01/server.102/b14357/toc.htm)| 
+DB docs|Version | Export | Import | Implemented
+---------|----------|-------- | -------| -------
+[Oracle 12c](http://docs.oracle.com/database/121/index.htm)  |`Release 1` |[SQL*Plus ](http://docs.oracle.com/cd/B19306_01/server.102/b14357/toc.htm)|[SQL*Loader ](http://docs.oracle.com/cd/B19306_01/server.102/b14215/part_ldr.htmm) 
 
 
 * [Oracle 11g](https://docs.oracle.com/cd/E11882_01/nav/portal_4.htm)  `Release 2` docs
