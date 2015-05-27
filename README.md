@@ -164,19 +164,19 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - [x] argument values reuse from existing session. **DONE**
 - [x] clean uargs.db. **DONE**
 - [x] nls_format* duplication. **DONE**
-- [x] test UI.
+- [ ] test UI.
 - [x] add --log_dir to backend. **DONE**
 - [x] add "source" and "target" datasources to "New Session". **DONE**
-- [x] Copy/Paste of argument values between sessions.
+- [ ] Copy/Paste of argument values between sessions.
 - [x] generic "New Session" so user not limited by source and target templates. **DONE**
-- [x] history of values for each argument.
-- [x] cleanup all other databases but Oracle.
-- [x] more templates and better templates hierarchy.
+- [ ] history of values for each argument.
+- [ ] cleanup all other databases but Oracle.
+- [ ] more templates and better templates hierarchy.
 - [x] init templates to open session for "New Session". **DONE**
 - [x] validate args on Run. **DONE**.
-- [x] smaller test_api files (get default args from test routines, not canned files).
+- [ ] smaller test_api files (get default args from test routines, not canned files).
 - [x] fix template filters. **DONE**
-- [x] create "Menu" button and hide "About".
+- [ ] create "Menu" button and hide "About".
 - [x] create templates tab **DONE**
 - [x] create sessions tab **DONE**
 - [x] validate session name for chars not usable in file name. **DONE**
@@ -185,12 +185,12 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - [x] make sure all paths are windows friendly.**DONE**
 - [x] open dir and open file use stale values.**DONE**
 - [x] filter control keys from ones affecting field value. **DONE**
-- [x] close all existing shells/shell groups upon exit.
+- [ ] close all existing shells/shell groups upon exit.
 - [x] highlight running sessions.**DONE**
-- [x] beep on failing sessions.
+- [ ] beep on failing sessions.
 - [x] detect DONE/FAILED from cmd window. **DONE**
 - [x] let user disable post-etl email (Common: email_to). **DONE**
-- [x] change copy_vector format from db2db to db->db or db_2_db
+- [ ] change copy_vector format from db2db to db->db or db_2_db
 - [x] fix flicker on frame freeze **DONE**
 - [x] save on close **DONE**
 - [x] Table DDL export for Oracle **DONE**
@@ -200,19 +200,19 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - [x] let user change host mapping **DONE**
 - [x] save as template **DONE**
 - [x] save as **DONE**
-- [x] test ezconnect
+- [ ] test ezconnect
 - [x] add "Output" tab **DONE**
-- [x] add '--compress_spool' arg for zipped output
-- [x] add sqlloader.py
+- [ ] add '--compress_spool' arg for zipped output
+- [ ] add sqlloader.py
 - [x] fix session sort **DONE**
 - [x] fix session refresh **DONE**
-- [x] let user set primary dbs, source/target dbs
-- [x] add scp/ftp/sftp as data source/target
-- [x] make all paths relative to transport_home 
-- [x] create wizard for "New Session" template selection
-- [x] distinguish A-Templates from B-Templates
+- [ ] let user set primary dbs, source/target dbs
+- [ ] add scp/ftp/sftp as data source/target
+- [ ] make all paths relative to transport_home 
+- [ ] create wizard for "New Session" template selection
+- [ ] distinguish A-Templates from B-Templates
 - [x] let data copy to be executed on Linux (bash via ssh)**DONE**
-- [x] let data spool/load to be executed on Linux (bash via ssh)
+- [ ] let data spool/load to be executed on Linux (bash via ssh)
 - [x] add [Oracle 12c Release 1](http://docs.oracle.com/database/121/index.htm) **DONE**
 - [x] add [Oracle 11g Release 2](https://docs.oracle.com/cd/E11882_01/nav/portal_4.htm) **DONE**
 - [x] add [SQLServer](https://msdn.microsoft.com/en-US/sqlserver)   **DONE**
@@ -222,55 +222,55 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - [x] add [Informix](http://www-01.ibm.com/support/knowledgecenter/SSGU8G_12.1.0/com.ibm.welcome.doc/welcome.htm?lang=en)   **DONE**
 - [x] add [SAP ASE Sybase](http://infocenter.sybase.com/help/index.jsp?topic=/com.sybase.infocenter.help.ase.15.7/title.htm)   **DONE**
 - [x] add [DB2](http://www-01.ibm.com/support/knowledgecenter/SSEPGG_10.5.0/com.ibm.db2.luw.kc.doc/welcome.html)    **DONE**
-- [] add [dBase](http://www.dbase.com/dbasesql/dbase-documentation-download/)   
-- [] add [MS Access](https://msdn.microsoft.com/en-us/library/office/ff604965%28v=office.14%29.aspx)
-- [] add [Pandas](http://pandas.pydata.org/pandas-docs/version/0.12.0/)   
-- [] add [Apache Spark] (https://spark.apache.org/docs/latest/)  
-- [] add [Apache Storm] (https://storm.apache.org/documentation/Home.html)  
-- [] add [Hadoop](http://hadoop.apache.org/docs/r2.7.0/)    
+- [ ] add [dBase](http://www.dbase.com/dbasesql/dbase-documentation-download/)   
+- [ ] add [MS Access](https://msdn.microsoft.com/en-us/library/office/ff604965%28v=office.14%29.aspx)
+- [ ] add [Pandas](http://pandas.pydata.org/pandas-docs/version/0.12.0/)   
+- [ ] add [Apache Spark] (https://spark.apache.org/docs/latest/)  
+- [ ] add [Apache Storm] (https://storm.apache.org/documentation/Home.html)  
+- [ ] add [Hadoop](http://hadoop.apache.org/docs/r2.7.0/)    
 - [x] add [MariaDB](https://mariadb.com/kb/en/mariadb/documentation/)  **DONE**
 - [x] add [Infobright](https://www.infobright.com/index.php/community-2/)    **DONE**
 - [x] add [TimesTen](http://www.oracle.com/technetwork/database/database-technologies/timesten/documentation/index.html)    **DONE**
-- [] add [MongoDB] (http://docs.mongodb.org/manual/)  
-- [] add [HBase] (http://hbase.apache.org/)  
-- [] add [Cassandra] (http://cassandra.apache.org/)  
-- [] add [Bigtable] (https://cloud.google.com/bigtable/docs/)  
-- [] add [Teradata] (http://www.info.teradata.com/HTMLPubs/DB_TTU_14_00/index.html#page/Storage_Management/B035_2492_071A/2492ch01.084.17.html)  
-- [] add [Apache Hive] (http://doc.mapr.com/display/MapR/Hive)    
-- [] add [Vertica](http://www.vertica.com/hp-vertica-documentation/hp-vertica-7-1-x-documentation/)   
-- [] add [Netezza](https://www-304.ibm.com/support/knowledgecenter/SSULQD_7.2.0/com.ibm.nz.welcome.doc/doc/welcome.html)   
-- [] add Parstream
-- [] add ParAccel
-- [] add [Twitter Streaming API](https://dev.twitter.com/streaming/overview)  (extract)
-- [] add [Google Analytics](https://developers.google.com/analytics/devguides/reporting/core/v3/quickstart/service-py)  
-- [] add [Crate Data](https://www.openhub.net/p/cratedata)
-- [] add Facebook (extract)
-- [] add Taleo HR (extract) 
-- [] add [Salesforce](https://developer.salesforce.com/docs/atlas.en-us.dataLoader.meta/dataLoader/) (load, extract) 
-- [] add [Greenplum](http://gpdb.docs.pivotal.io/gpdb-435.html)  
-- [] add [Actian Ingres](http://esd.actian.com/product/docs)  
-- [] add [McObject](http://www.mcobject.com/embedded-database-manuals)  
-- [] add [NuiDB](http://doc.nuodb.com/display/doc/NuoDB+Online+Documentation)  
-- [] add [Disco](https://www.openhub.net/p/disco)
-- [] add [Clustrix](http://docs.clustrix.com/display/CLXDOC/Home)  
-- [] add [OrientDB](http://orientdb.com/docs/last/)   
-- [] add [KDB+](http://kx.com/resources.php)  
-- [] add [Volt DB](http://docs.voltdb.com/)  
-- [] add [Arango DB](https://www.arangodb.com/documentation/)   
-- [] add [Foundation DB](https://foundationdb.com/key-value-store/documentation/index.html)  
-- [] add [Enterprise DB](http://www.enterprisedb.com/products-services-training/products/documentation)   
-- [] add Altibase HDB
-- [] add [EXASOL](https://www.exasol.com/support/secure/attachment/30841/EXASolution_User_Manual-5.0.3-en.pdf)   
-- [] add [Aster](http://www.teradata.com/Teradata-Aster/overview/)  
-- [] add [Kinesis](http://aws.amazon.com/documentation/kinesis/) (extract)
-- [] add [Redshift](http://aws.amazon.com/documentation/redshift/)   
-- [] add [RDS](http://aws.amazon.com/documentation/rds/)   
-- [] add [DynamoDB](http://aws.amazon.com/documentation/dynamodb/)  
-- [] add [Couchbase](http://docs.couchbase.com/admin/admin/Couchbase-intro.html)  
-- [] add [Aerospike](http://www.aerospike.com/docs/)    
-- [] add [InterSystems Caché](http://www.intersystems.com/our-products/cache/managing-data/),  [export](http://docs.intersystems.com/ens20131/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_shell)   
-- add QV (QlikView file format)
-- add MDX (file format)
+- [ ] add [MongoDB] (http://docs.mongodb.org/manual/)  
+- [ ] add [HBase] (http://hbase.apache.org/)  
+- [ ] add [Cassandra] (http://cassandra.apache.org/)  
+- [ ] add [Bigtable] (https://cloud.google.com/bigtable/docs/)  
+- [ ] add [Teradata] (http://www.info.teradata.com/HTMLPubs/DB_TTU_14_00/index.html#page/Storage_Management/B035_2492_071A/2492ch01.084.17.html)  
+- [ ] add [Apache Hive] (http://doc.mapr.com/display/MapR/Hive)    
+- [ ] add [Vertica](http://www.vertica.com/hp-vertica-documentation/hp-vertica-7-1-x-documentation/)   
+- [ ] add [Netezza](https://www-304.ibm.com/support/knowledgecenter/SSULQD_7.2.0/com.ibm.nz.welcome.doc/doc/welcome.html)   
+- [ ] add Parstream
+- [ ] add ParAccel
+- [ ] add [Twitter Streaming API](https://dev.twitter.com/streaming/overview)  (extract)
+- [ ] add [Google Analytics](https://developers.google.com/analytics/devguides/reporting/core/v3/quickstart/service-py)  
+- [ ] add [Crate Data](https://www.openhub.net/p/cratedata)
+- [ ] add Facebook (extract)
+- [ ] add Taleo HR (extract) 
+- [ ] add [Salesforce](https://developer.salesforce.com/docs/atlas.en-us.dataLoader.meta/dataLoader/) (load, extract) 
+- [ ] add [Greenplum](http://gpdb.docs.pivotal.io/gpdb-435.html)  
+- [ ] add [Actian Ingres](http://esd.actian.com/product/docs)  
+- [ ] add [McObject](http://www.mcobject.com/embedded-database-manuals)  
+- [ ] add [NuiDB](http://doc.nuodb.com/display/doc/NuoDB+Online+Documentation)  
+- [ ] add [Disco](https://www.openhub.net/p/disco)
+- [ ] add [Clustrix](http://docs.clustrix.com/display/CLXDOC/Home)  
+- [ ] add [OrientDB](http://orientdb.com/docs/last/)   
+- [ ] add [KDB+](http://kx.com/resources.php)  
+- [ ] add [Volt DB](http://docs.voltdb.com/)  
+- [ ] add [Arango DB](https://www.arangodb.com/documentation/)   
+- [ ] add [Foundation DB](https://foundationdb.com/key-value-store/documentation/index.html)  
+- [ ] add [Enterprise DB](http://www.enterprisedb.com/products-services-training/products/documentation)   
+- [ ] add Altibase HDB
+- [ ] add [EXASOL](https://www.exasol.com/support/secure/attachment/30841/EXASolution_User_Manual-5.0.3-en.pdf)   
+- [ ] add [Aster](http://www.teradata.com/Teradata-Aster/overview/)  
+- [ ] add [Kinesis](http://aws.amazon.com/documentation/kinesis/) (extract)
+- [ ] add [Redshift](http://aws.amazon.com/documentation/redshift/)   
+- [ ] add [RDS](http://aws.amazon.com/documentation/rds/)   
+- [ ] add [DynamoDB](http://aws.amazon.com/documentation/dynamodb/)  
+- [ ] add [Couchbase](http://docs.couchbase.com/admin/admin/Couchbase-intro.html)  
+- [ ] add [Aerospike](http://www.aerospike.com/docs/)    
+- [ ] add [InterSystems Caché](http://www.intersystems.com/our-products/cache/managing-data/),  [export](http://docs.intersystems.com/ens20131/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_shell)   
+- [ ] add QV (QlikView file format)
+- [ ] add MDX (file format)
 
 ##Quirks
 - tested to run only on Windows for now (even thou it's wxPython)
