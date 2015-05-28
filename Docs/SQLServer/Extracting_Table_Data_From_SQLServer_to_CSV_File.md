@@ -7,6 +7,11 @@ In this exersize we are going to define data extraction pipeline for SQLServer.
 
 - Click "New" button located in top right corner. It will open to "New session" dialog. 
 -  Define data extraction `Copy Vector` by zooming through popup menu items:
+```python
+  From SQLServer->
+                From SQLServer Express->
+                                     To CSV
+```  
 ![Define copy vetor for SQLServer-to-CSV extract pipeline](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/Define_copy_vector_for_SQLServer-to-CSV_extract_pipeline.png "Define copy vector for SQLServer-to-CSV extract pipeline.")
 
 
