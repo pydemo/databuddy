@@ -14,6 +14,7 @@ There are multiple ways to do it depending on your config:
 
 ###Start it from Windows command line (CLI):
 
+- Prerequisites: Click on infamous `Start` button. Type `cmd` and then 'Enter'. This opens CLI window.
 - `cd` to databuddy location, type `data-buddy.exe`  and press `Enter`
 
 ![Start from command line](https://github.com/data-buddy/DataBuddy/blob/master/screenshots/Databuddy_start_from_command_prompt.png "Start from command line")
