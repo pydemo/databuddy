@@ -344,6 +344,8 @@ Database |Version | Export | Import | Comments
 [Altibase HDB](http://altibase.com/)||||
 
 
+###Databuddy Docs
+- [How_to_start_Databuddy](https://github.com/data-buddy/DataBuddy/blob/master/Docs/How_to_start_Databuddy.md) 
 
 
 ## Screenshots
