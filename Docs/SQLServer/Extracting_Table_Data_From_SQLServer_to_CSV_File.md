@@ -1,4 +1,4 @@
-# SQL Server: Table extract to CSV file.
+# SQL Server: Table data extract to CSV file.
 In this exersize we are going to define data extraction pipeline for SQLServer.
 
 ##Open Databuddy
