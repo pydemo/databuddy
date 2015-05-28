@@ -1,8 +1,8 @@
 # How to start Databuddy.
-There multiple ways to do it depending on your config:
+There are multiple ways to do it depending on your config:
 ###Double click on data-buddy.exe in Windows file Explorer:
 
-- [ ] Prerequisites: Download latest Databuddy [release](https://github.com/data-buddy/DataBuddy/releases/tag/v0.3.3) unzip it to your `C:` drive.
+- [ ] Prerequisites: Download latest Databuddy [release](https://github.com/data-buddy/DataBuddy/releases/tag/v0.3.3) unzip it to your `C:\` drive.
 
 ![Start Databuddy from Windows Explorer](https://github.com/data-buddy/DataBuddy/blob/master/screenshots/Databuddy_explore.png "Start Databuddy from Windows Explorer")
 
