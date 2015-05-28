@@ -266,7 +266,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - [ ] add [EXASOL](https://www.exasol.com/support/secure/attachment/30841/EXASolution_User_Manual-5.0.3-en.pdf)   
 - [ ] add [Aster](http://www.teradata.com/Teradata-Aster/overview/)  
 - [ ] add [Kinesis](http://aws.amazon.com/documentation/kinesis/) (extract)
-- [ ] add [Redshift](http://aws.amazon.com/documentation/redshift/)   
+- [ ] add [Amazon Redshift](http://aws.amazon.com/documentation/redshift/)   
 - [ ] add [RDS](http://aws.amazon.com/documentation/rds/)   
 - [ ] add [DynamoDB](http://aws.amazon.com/documentation/dynamodb/)  
 - [ ] add [Couchbase](http://docs.couchbase.com/admin/admin/Couchbase-intro.html)  
@@ -348,6 +348,7 @@ Database |Version | Export | Import | Comments
 [ZooKeeper](https://zookeeper.apache.org/)||||
 [HDFS](https://hadoop.apache.org/docs/r2.4.1/hadoop-project-dist/hadoop-hdfs/HdfsUserGuide.html)||||
 [Amazon SimpleDB](http://aws.amazon.com/documentation/simpledb/)||||
+[Amazon Redshift](http://aws.amazon.com/documentation/redshift/) ||||
 
 
 
