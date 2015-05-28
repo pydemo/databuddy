@@ -6,6 +6,7 @@ There multiple ways to do it depending on your config:
 
 - Start it from Windows command line (CLI):
 > `cd` to databuddy location, type `data-buddy.exe`  and press `Enter`
+
 ![Start from command line](https://github.com/data-buddy/DataBuddy/blob/master/screenshots/Databuddy_start_from_command_prompt.png "Start from command line")
 
 
