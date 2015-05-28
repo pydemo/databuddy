@@ -1,4 +1,4 @@
-# SQL Server: Table extract to CSV file.
+## SQL Server: Table data extract to CSV file.
 
 - First [start](https://github.com/data-buddy/DataBuddy/releases/tag/v0.3.3) Databuddy. 
   It opens to a state where no sessions are selected and all tabs are disabled:
