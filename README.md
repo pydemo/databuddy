@@ -275,7 +275,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - [ ] add QV (QlikView file format)
 - [ ] add MDX (file format)
 
-##Quirks
+##Limitations
 - tested to run only on Windows for now (even thou it's wxPython)
 - CSV dump files are uncompressed (will add zip compression as option)
 - physical copy is done on Windows. Only Oracle copy can be executed on Linux (bash via ssh)
