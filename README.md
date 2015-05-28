@@ -372,7 +372,7 @@ Database |Version | Export | Import | Comments
 ##Endorse
 * [My Linkedin](https://www.linkedin.com/in/alexbuz) `Alex Buzunov`
 
-#Download
+##Download
 * [Data Buddy latest release](https://github.com/data-buddy/DataBuddy/releases/tag/v0.3.3) -- `data-buddy 0.3.3`
 
 
