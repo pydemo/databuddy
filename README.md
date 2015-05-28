@@ -377,6 +377,6 @@ Database |Version | Export | Import | Comments
 
 
 ###Databuddy Docs
-* [How_to_start_Databuddy](https://github.com/data-buddy/DataBuddy/blob/master/Docs/How_to_start_Databuddy.md) 
+- [How_to_start_Databuddy](https://github.com/data-buddy/DataBuddy/blob/master/Docs/How_to_start_Databuddy.md) 
 
 
