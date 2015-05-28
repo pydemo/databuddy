@@ -361,19 +361,19 @@ Database |Version | Export | Import | Comments
 
 - Add New Session: 
 
-![Add New Session](https://github.com/data-buddy/DataBuddy/blob/master/screenshots/new_session.png "Add New Session")
+![Add New Session](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/new_session.png "Add New Session")
 
 - Run Session: 
 
-![Run Session](https://github.com/data-buddy/DataBuddy/blob/master/screenshots/Run_Session_for_SQLServer_to_CSV_file_extract.png "Run Session")
+![Run Session](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/Run_Session_for_SQLServer_to_CSV_file_extract.png "Run Session")
 
 - Executed Session: 
 
-![Executed Session](https://github.com/data-buddy/DataBuddy/blob/master/screenshots/Session_Executed_for_SQLServer_to_CSV_file_extract.png "Executed Session")
+![Executed Session](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/Session_Executed_for_SQLServer_to_CSV_file_extract.png "Executed Session")
 
 - Output Tab: 
 
-![Output Tab](https://github.com/data-buddy/DataBuddy/blob/master/screenshots/ouput_tab.png "Output Tab")
+![Output Tab](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/ouput_tab.png "Output Tab")
 
 
 
