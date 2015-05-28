@@ -227,7 +227,9 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - [ ] add [Pandas](http://pandas.pydata.org/pandas-docs/version/0.12.0/)   
 - [ ] add [Apache Spark] (https://spark.apache.org/docs/latest/)  
 - [ ] add [Apache Storm] (https://storm.apache.org/documentation/Home.html)  
-- [ ] add [Hadoop](http://hadoop.apache.org/docs/r2.7.0/)    
+- [ ] add [Hadoop](http://hadoop.apache.org/docs/r2.7.0/)  
+- [ ] add [ZooKeeper](https://zookeeper.apache.org/)  
+- [ ] add [HDFS](https://hadoop.apache.org/docs/r2.4.1/hadoop-project-dist/hadoop-hdfs/HdfsUserGuide.html)  
 - [x] add [MariaDB](https://mariadb.com/kb/en/mariadb/documentation/)  **DONE**
 - [x] add [Infobright](https://www.infobright.com/index.php/community-2/)    **DONE**
 - [x] add [TimesTen](http://www.oracle.com/technetwork/database/database-technologies/timesten/documentation/index.html)    **DONE**
@@ -342,6 +344,8 @@ Database |Version | Export | Import | Comments
 [Apache Hive] (http://doc.mapr.com/display/MapR/Hive)||||
 [InterSystems Caché](http://www.intersystems.com/our-products/cache/managing-data/)|| [export](http://docs.intersystems.com/ens20131/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_shell)||
 [Altibase HDB](http://altibase.com/)||||
+[ZooKeeper](https://zookeeper.apache.org/)||||
+[HDFS](https://hadoop.apache.org/docs/r2.4.1/hadoop-project-dist/hadoop-hdfs/HdfsUserGuide.html)||||
 
 
 
