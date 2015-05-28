@@ -369,8 +369,6 @@ Database |Version | Export | Import | Comments
 ![Output Tab](https://github.com/data-buddy/DataBuddy/blob/master/screenshots/ouput_tab.png "Output Tab")
 
 
-##Endorse
-* [My Linkedin](https://www.linkedin.com/in/alexbuz) `Alex Buzunov`
 
 ##Download
 * [Data Buddy latest release](https://github.com/data-buddy/DataBuddy/releases/tag/v0.3.3) -- `data-buddy 0.3.3`
