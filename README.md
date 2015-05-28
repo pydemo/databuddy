@@ -243,6 +243,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 - [ ] add [Netezza](https://www-304.ibm.com/support/knowledgecenter/SSULQD_7.2.0/com.ibm.nz.welcome.doc/doc/welcome.html)   
 - [ ] add Parstream
 - [ ] add ParAccel
+- [ ] add [Amazon SimpleDB](http://aws.amazon.com/documentation/simpledb/)  
 - [ ] add [Twitter Streaming API](https://dev.twitter.com/streaming/overview)  (extract)
 - [ ] add [Google Analytics](https://developers.google.com/analytics/devguides/reporting/core/v3/quickstart/service-py)  
 - [ ] add [Crate Data](https://www.openhub.net/p/cratedata)
@@ -346,6 +347,7 @@ Database |Version | Export | Import | Comments
 [Altibase HDB](http://altibase.com/)||||
 [ZooKeeper](https://zookeeper.apache.org/)||||
 [HDFS](https://hadoop.apache.org/docs/r2.4.1/hadoop-project-dist/hadoop-hdfs/HdfsUserGuide.html)||||
+[Amazon SimpleDB](http://aws.amazon.com/documentation/simpledb/)||||
 
 
 
