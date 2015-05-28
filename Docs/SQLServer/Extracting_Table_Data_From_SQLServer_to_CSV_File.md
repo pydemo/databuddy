@@ -1,4 +1,4 @@
-# SQL Server extract to CSV file.
+# SQL Server: Table extract to CSV file.
 Let's start from the beginning.
 ###Start  Databuddy UI
 There multiple ways to do it depending on your config:
