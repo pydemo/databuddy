@@ -11,6 +11,10 @@ It opens to a state where no sessions are selected and all tabs are disabled:
 Click "New" button located in top right corner. It will open to "New session" dialog. 
 Define data extraction `Copy Vector` by zooming through popup menu items:
 ```python
+  Copy Vector
+  --------------
+  |     ->     |
+  --------------
   From SQLServer-
                 |
                 From SQLServer Express-
