@@ -74,7 +74,7 @@ Check job results at the bottom:
 Press any key to continue . . .
 ```
 Status `Done.` means good news. 
-CSV export file is at `C:\Python27\data_migrator_1239_12c\CSV_OUT\testSSEXP_Table.data` as defined by __Target__ section `to_file` argument.
+- [x] CSV export file is at `C:\Python27\data_migrator_1239_12c\CSV_OUT\testSSEXP_Table.data` as defined by __Target__ section `to_file` argument.
 
 
 
