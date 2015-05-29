@@ -65,7 +65,16 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\qc32\qc32.exe ^
 -g C:\Python27\data_migrator_1239_12c\CSV_OUT\testSSEXP_Table.data 
 ```
 
+##Checking results
+Check job results at the bottom of black CLI window:
+```
+############################################################
+2015-05-28 22:51:38,997 - ssexp-csv - INFO - Done.
+2015-05-28 22:51:38,997 - ssexp-csv - INFO - Elapsed: 00:00:03
+Press any key to continue . . .
+```
 
+`Press any key to continue...` in CLI window signi
 
 
 
