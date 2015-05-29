@@ -66,7 +66,7 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\qc32\qc32.exe ^
 ```
 
 ##Checking the results
-Check job results at the bottom:
+Check job results at the bottom of the black CLI window:
 ```
 ############################################################
 2015-05-28 22:51:38,997 - ssexp-csv - INFO - Done.
