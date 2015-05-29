@@ -65,7 +65,7 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\qc32\qc32.exe ^
 -g C:\Python27\data_migrator_1239_12c\CSV_OUT\testSSEXP_Table.data 
 ```
 
-##Checking results
+##Checking the results
 Check job results at the bottom:
 ```
 ############################################################
