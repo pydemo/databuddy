@@ -30,7 +30,7 @@ Next and last step is template selection. Why templates - I delve on this later.
 
 ## Define arguments
 After you click `Create` button new session is created and right panel is populated with default values.
-Go through __Source__ and __Target__ arguments sets and set them to values 
+Go through __Source__ and __Target__ arguments and set each agrument. 
 ![Define arguments](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/SQLServer_to_CSV_arguments.png "Define arguments.")
 
 
