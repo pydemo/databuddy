@@ -34,7 +34,7 @@ Go through __Source__ and __Target__ arguments and set each agrument.
 - Export file location:
 ```python
   Target
-  to_file: C:\Python27\data_migrator_1239_12c\CSV_OUT\testSSEXP_Table.data
+  to_file: r'C:\Python27\data_migrator_1239_12c\CSV_OUT\testSSEXP_Table.data'
 ```  
 ![Define arguments](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/SQLServer_to_CSV_arguments.png "Define arguments.")
 
