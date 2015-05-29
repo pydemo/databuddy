@@ -30,7 +30,7 @@ Next and last step is template selection. Why templates - I delve on this later.
 
 ## Define arguments.
 After you click `Create` button new session is created and right panel is populated with default values.
-Go through __Source__ and __Target__ arguments and set each agrument. 
+Please, ignore __Common__ argument section for now. Go through __Source__ and __Target__ arguments and set each agrument to appropriate value. 
 - Export file location:
 ```python
   Target
