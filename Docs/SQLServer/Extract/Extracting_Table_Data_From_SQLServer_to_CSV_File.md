@@ -35,6 +35,12 @@ Go through __Source__ and __Target__ arguments and set each agrument.
 
 ## Run Session.
 After you click __Run__ button black CLI window will popup executing QueryCopy (`qc32\qc.exe`).
+Export file location:
+```python
+  Target
+  to_file: C:\Python27\data_migrator_1239_12c\CSV_OUT\testSSEXP_Table.data
+```  
+
 ![Define arguments](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/Session_Executed_for_SQLServer_to_CSV_file_extract.png "Define arguments.")
 
 Command executed:
