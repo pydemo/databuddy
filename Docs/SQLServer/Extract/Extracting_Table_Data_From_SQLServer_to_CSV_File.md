@@ -73,7 +73,7 @@ Check job results at the bottom:
 2015-05-28 22:51:38,997 - ssexp-csv - INFO - Elapsed: 00:00:03
 Press any key to continue . . .
 ```
-Status "Done" means good news. 
+Status __"Done"__ means good news. 
 - [x] CSV export file is at `C:\Python27\data_migrator_1239_12c\CSV_OUT\testSSEXP_Table.data` as defined by __Target__ section `to_file` argument.
 
 
