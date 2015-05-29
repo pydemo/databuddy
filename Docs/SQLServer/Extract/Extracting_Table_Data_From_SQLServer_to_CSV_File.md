@@ -31,15 +31,16 @@ Next and last step is template selection. Why templates - I delve on this later.
 ## Define arguments.
 After you click `Create` button new session is created and right panel is populated with default values.
 Go through __Source__ and __Target__ arguments and set each agrument. 
-![Define arguments](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/SQLServer_to_CSV_arguments.png "Define arguments.")
-
-## Run Session.
-After you click __Run__ button black CLI window will popup executing QueryCopy (`qc32\qc.exe`).
-Export file location:
+- Export file location:
 ```python
   Target
   to_file: C:\Python27\data_migrator_1239_12c\CSV_OUT\testSSEXP_Table.data
 ```  
+![Define arguments](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/SQLServer_to_CSV_arguments.png "Define arguments.")
+
+## Run Session.
+After you click __Run__ button black CLI window will popup executing QueryCopy (`qc32\qc.exe`).
+
 
 ![Define arguments](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/Session_Executed_for_SQLServer_to_CSV_file_extract.png "Define arguments.")
 
