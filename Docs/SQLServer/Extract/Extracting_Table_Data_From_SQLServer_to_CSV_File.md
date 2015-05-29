@@ -25,7 +25,7 @@ Define data extraction `Copy Vector` by zooming through popup menu items:
 ![Define copy vetor for SQLServer-to-CSV extract pipeline](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/Define_copy_vector_for_SQLServer-to-CSV_extract_pipeline.png "Define copy vector for SQLServer-to-CSV extract pipeline.")
 
 ## Select Source and Target templates
-Next and last step is template selection. Why templates- i delve on this later. Right now pick one from the source list on the left and one from the target list on the right:
+Next and last step is template selection. Why templates - I delve on this later. Right now pick one from the source list on the left (`SSEXP_Table`) and one from the target list on the right (`CSV_File`):
 ![Source and target template selection](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/Export_from_SQLServer_CSV_file_Templates.png "Source and target template selection.")
 
 
