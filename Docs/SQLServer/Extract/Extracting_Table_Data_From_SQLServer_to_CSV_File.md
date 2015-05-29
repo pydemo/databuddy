@@ -28,7 +28,10 @@ Define data extraction `Copy Vector` by zooming through popup menu items:
 Next and last step is template selection. Why templates - I delve on this later. Right now pick one from the source list on the left (`SSEXP_Table`) and one from the target list on the right (`CSV_File`):
 ![Source and target template selection](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/Export_from_SQLServer_CSV_file_Templates.png "Source and target template selection.")
 
-
+## Define arguments
+After you click `Create` button new session is created and right panel is populated with default values.
+Go through __Source__ and __Target__ arguments sets and set them to values 
+![Define arguments](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/SQLServer_to_CSV_arguments.png "Define arguments.")
 
 
 
