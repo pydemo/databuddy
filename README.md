@@ -292,7 +292,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 ##Vendor Docs
 
 Database |Version | Export | Import | DbShell|Comments
----------|----------|-------- | -------| -------
+---------|----------|-------- | -------| -------|------
 [Oracle 12c](http://docs.oracle.com/database/121/index.htm)  |`12c Release 1` |[SQL*Plus ](https://docs.oracle.com/database/121/SQPUG/toc.htm)|[SQL*Loader ](https://docs.oracle.com/database/121/SUTIL/ldr_concepts.htm#SUTIL003) ||
 [Oracle 11g](https://docs.oracle.com/cd/E11882_01/nav/portal_4.htm) | `11g Release 2`| |||
 [Disco](https://www.openhub.net/p/disco)|||||
