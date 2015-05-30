@@ -291,13 +291,13 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 
 ##Vendor Docs
 
-Database |Version | Export | Import | DbShell|Comments
+Database |Version | Export | Import | DbShell|File formats
 ---------|----------|-------- | -------| -------|------
-[Oracle 12c](http://docs.oracle.com/database/121/index.htm)  |`12c Release 1` |[SQL*Plus ](https://docs.oracle.com/database/121/SQPUG/toc.htm)|[SQL*Loader ](https://docs.oracle.com/database/121/SUTIL/ldr_concepts.htm#SUTIL003) ||
+[Oracle 12c](http://docs.oracle.com/database/121/index.htm)  |`12c Release 1` |[SQL*Plus ](https://docs.oracle.com/database/121/SQPUG/toc.htm)|[SQL*Loader ](https://docs.oracle.com/database/121/SUTIL/ldr_concepts.htm#SUTIL003) || CSV, DDL
 [Oracle 11g](https://docs.oracle.com/cd/E11882_01/nav/portal_4.htm) | `11g Release 2`| |||
 [Disco](https://www.openhub.net/p/disco)|||||
 [Crate Data](https://www.openhub.net/p/cratedata)|||||
-[MongoDB](http://docs.mongodb.org/manual/)| `3.0` |[mongoexport](http://docs.mongodb.org/v2.2/reference/mongoexport/)  |[mongoimport](http://docs.mongodb.org/v2.2/reference/mongoimport/) |[mongo shell](http://docs.mongodb.org/manual/faq/mongo/)  |
+[MongoDB](http://docs.mongodb.org/manual/)| `3.0` |[mongoexport](http://docs.mongodb.org/v2.2/reference/mongoexport/)  |[mongoimport](http://docs.mongodb.org/v2.2/reference/mongoimport/) |[mongo shell](http://docs.mongodb.org/manual/faq/mongo/)  | CSV, JSON
 [TimesTen](http://www.oracle.com/technetwork/database/database-technologies/timesten/documentation/index.html)|`Release 2`||||
 [DynamoDB](http://aws.amazon.com/documentation/dynamodb/) |||||
 [Hadoop](http://hadoop.apache.org/docs/r2.7.0/) |`r2.7.0` ||||
