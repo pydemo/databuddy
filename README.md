@@ -66,7 +66,7 @@ TimesTen|  | yes  | yes
 
 ###noSQL
 Database |  CSV extract | CSV load | JSON extract | JSON load
----------|- ------------- | -------| -------| -------
+---------|-------------- | -------| -------| -------
 MongoDB      | yes  | yes | |
 
 ##Components
