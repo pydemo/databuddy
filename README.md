@@ -427,7 +427,7 @@ Sybase|x|x|x|x|x|x|x|x|x|x|x
 TimesTen|x|x|x|x|x|x|x|x|x|x|x
 Mongo DB|x|x|x|x|[X](https://github.com/data-buddy/DataBuddy/blob/master/Docs/MongoDB/Copy/Copy_Table_Data_From_Oracle_to_MongoDB_Collection.md)|x|x|x|x|x|x
 
-> 'x' means feature is implemented and part of the release [0.3.3](https://github.com/data-buddy/DataBuddy/releases/tag/v0.3.3)
+> 'x' means feature is implemented and is part of the release [0.3.3](https://github.com/data-buddy/DataBuddy/releases/tag/v0.3.3)
 
 ##Copy vector matrix (via JSON)
 Database |MongoDB
