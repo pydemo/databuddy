@@ -22,7 +22,7 @@ Most often they will point to the same location, but, it you use Oracle versions
                                          'target': r'C:\Program Files\MongoDB\Server\3.0\bin'},
 ```
 Set your __'source'__ and __'target'__ to actual locations of `mongo.exe`, `mongoexport.exe`, and `mongoimport.exe` in your system.
-Most probable they will point to the same location. Just giving an option here in case you want to draw the line between 2 local installs of MongoDB.
+Most probable they will point to the same location. Just giving an option here in case you want to draw the line between 2 local installs of MongoDB client.
 
 
 
