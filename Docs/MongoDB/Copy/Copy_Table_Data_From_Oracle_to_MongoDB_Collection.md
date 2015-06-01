@@ -35,12 +35,12 @@ Next and last step is template selection. Pick one from the source list on the l
 After you click `Create` button new session is created and right panel is populated with default values.
 Please, ignore __Common__ argument section for now. Go through __Source__ and __Target__ arguments and set each argument to appropriate value. 
 
-![Define arguments](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/Oracle12c_to_MongoDB_Define_Arguments.png "Define arguments.")
+![Define arguments](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/MongoDB/Oracle12c_to_MongoDB_Define_Arguments.png "Define arguments.")
 
 ## Run Session.
 After you click __Run__ button black CLI window will pop-up executing QueryCopy (`qc32\qc.exe`).
 
-![Session executed](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/Oracle12c_to_MongoDB_Copy_CLI_Window.png "Session executed.")
+![Session executed](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/MongoDB/Oracle12c_to_MongoDB_Copy_CLI_Window.png "Session executed.")
 
 Command executed:
 ```powershell
