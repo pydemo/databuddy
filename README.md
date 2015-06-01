@@ -49,6 +49,7 @@ MongoDB      | yes | yes
 
 ##File formats
 
+###SQL
 Database | DDL extract | CSV extract | CSV load
 ---------|---- | ------------- | -------
 DB2      |  | yes  | yes
@@ -62,6 +63,11 @@ SQLServer|   | yes  | yes
 Sybase   |  | yes  | yes
 TimesTen|  | yes  | yes
 > DDL extract works only for Oracle tables.
+
+###noSQL
+Database | DDL extract | CSV extract | CSV load
+---------|---- | ------------- | -------
+MongoDB      |  | yes  | yes
 
 ##Components
 - GUI - data-buddy (wxPython, PyInstaller).
