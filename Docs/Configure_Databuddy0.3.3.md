@@ -8,7 +8,7 @@ Basic configuration required for Databuddy 0.3.3 to run properly.
 
 ##Configuration for Oracle
 ```
- 'host_list': {0: {'db_env': {__'ORA11G'__: {'source': 'C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN',
+ 'host_list': {0: {'db_env': {'ORA11G': {'source': 'C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN',
                                          'target': 'C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN'},
 ```
 Set your 'source' and 'target' to actual locations of `sqlplus.exe` and `sqlldr.exe` in your system.
