@@ -274,6 +274,7 @@ Database | Spooler | Loader | DbShell
 - [ ] add [OrientDB](http://orientdb.com/docs/last/)   
 - [ ] add [KDB+](http://kx.com/resources.php)  
 - [ ] add [Volt DB](http://docs.voltdb.com/)  
+- [ ] add [Elasticsearch](https://www.found.no/foundation/elasticsearch-as-nosql/)  
 - [ ] add [Azure DocumentDB](http://azure.microsoft.com/en-us/services/documentdb/)  
 - [ ] add [Arango DB](https://www.arangodb.com/documentation/)   
 - [ ] add [Foundation DB](https://foundationdb.com/key-value-store/documentation/index.html)  
@@ -366,6 +367,7 @@ Database |Version | Export | Import | DbShell|File formats
 [Amazon SimpleDB](http://aws.amazon.com/documentation/simpledb/)|||||
 [Amazon Redshift](http://aws.amazon.com/documentation/redshift/) |||||
 [Azure DocumentDB](http://azure.microsoft.com/en-us/services/documentdb/)  |||||
+[Elasticsearch](https://www.found.no/foundation/elasticsearch-as-nosql/)   |||||
 
 
 
