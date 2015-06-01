@@ -108,7 +108,7 @@ userhome = os.path.expanduser('~')
 session_home=os.path.join(userhome,'sessions')	
 default_tmpl_lib='My_Templates'	
 default_sess_lib='My_Sessions'	
-transport_home=r'C:\Python27\data_migrator_1239_12c'
+transport_home=r'C:\Python27\data_migrator_1239_mongo'
 if exe:
 	transport_home=os.path.join(home,'qc%d' % int(__platform__[:2]))
 aa_dir='args_api'
@@ -3923,7 +3923,7 @@ class NewSessionDialog(wx.Dialog):
 			if self.def_cv:
 			#	#lbl='%s->%s' % (conf.dbs[self.def_cv[0]], conf.dbs[self.def_cv[1]])
 				lbl='%s->%s' % (self.def_cv[0], self.def_cv[1])
-				self.copy_vector=[self.def_cv[0], self.def_cv[1]]
+				self.copy_vector=[self.def_cv[0].upper(), self.def_cv[1].upper()]
 			self.b_vector = wx.Button(self, label=lbl,size=(120,35))
 			#if self.def_cv:
 				#self.set_vector_btn(self.def_cv[0], self.def_cv[1])
@@ -4455,7 +4455,8 @@ class NewSessionDialog(wx.Dialog):
 			#e(0)
 			
 			#dbf={'DB':'DB2', 'EX':'Exadata', 'IN', 'MA', 'MY', 'OR', 'PG', 'SL', 'SS', 'SY', 'TT'}
-			dbf={'OR':'Oracle', 'SS':'SQLServer', 'MA':'MariaDB', 'MY': 'MySQL', 'PG':'PostgreSQL', 'DB':'DB2', 'TT':'TimesTen', 'SL':'SQLite', 'IN':'Informix', 'SY':'Sybase'}
+			#pprint(conf.dbs)
+			dbf={'OR':'Oracle', 'SS':'SQLServer', 'MA':'MariaDB', 'MY': 'MySQL', 'PG':'PostgreSQL', 'DB':'DB2', 'TT':'TimesTen', 'SL':'SQLite', 'IN':'Informix', 'SY':'Sybase','MO':'Mongo'}
 			
 			#pprint(api_from)
 			
@@ -4470,6 +4471,8 @@ class NewSessionDialog(wx.Dialog):
 				if self.recent:
 					for r in self.recent:
 						(a,b)=r
+						a=a.upper()
+						b=b.upper()
 						self.i +=1
 						#Menu1 = FM.FlatMenu()
 						menuItem = FM.FlatMenuItem(self.recentMenu, 20000+self.i, '%s --> %s' % (conf.dbs[a],conf.dbs[b]), '', wx.ITEM_NORMAL)
@@ -4494,9 +4497,16 @@ class NewSessionDialog(wx.Dialog):
 						for k2 in self.api2:
 							self.i +=1
 							if len(self.api_menu[k2])>1:
-								self.create_Menu3(Menu1,k2,dbf,from_db=sm)
+								self.create_Menu3(Menu1,k2,dbf,from_db=sm,from_to='To2')
 							else:
-								self.create_Menu4(Menu1,self.api_menu[k2][0],from_db=sm)
+								self.create_Menu4(Menu1,self.api_menu[k2][0],from_db=sm, from_to='To3')
+						Menu1.AppendSeparator()
+						for sm in conf.ff:
+							self.i +=1
+							#Menu1 = FM.FlatMenu()
+							menuItem = FM.FlatMenuItem(Menu1, 20000+self.i, 'To %s' % sm, '', wx.ITEM_NORMAL)
+							Menu1.AppendItem(menuItem)									
+							self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(dbf[k],sm))
 			self._popUpMenu.AppendSeparator()	
 			for sm in conf.ff:
 				self.i +=1
@@ -4545,7 +4555,9 @@ class NewSessionDialog(wx.Dialog):
 			self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(sm,s))
 			Menu2.AppendItem(menuItem)	
 	
-	def create_Menu3(self,Menu2,k2,dbf,from_db, from_to='To'):
+	def create_Menu3(self,Menu2,k2,dbf,from_db, from_to='To1'):
+		#print from_db, k2
+		#from_to='To_%s_%s' %(from_db,k2)
 		self.i +=1
 		Menu3 = FM.FlatMenu()
 		menuItem = FM.FlatMenuItem(Menu2, 20000+self.i, "%s %s" % (from_to, dbf[k2]), "", wx.ITEM_NORMAL, Menu3)
@@ -4554,7 +4566,16 @@ class NewSessionDialog(wx.Dialog):
 		#	menuItem.Enable(False)
 		for sm2 in self.api_menu[k2]:
 			self.i +=1
-			self.create_Menu4(Menu3,sm2,from_db,from_to)	
+			self.create_Menu4(Menu3,sm2,from_db,from_to)
+		if 0 and  from_db not in conf.ff:
+			Menu2.AppendSeparator()
+			for s in conf.ff:
+				self.i +=1
+				#Menu1 = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(Menu2, 20000+self.i, 'To %s' % s, '', wx.ITEM_NORMAL)
+				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(k2,s))
+				Menu2.AppendItem(menuItem)	
+			
 			
 
 	def create_Menu4(self,Menu3,sm2,from_db, from_to='To'):
@@ -10149,7 +10170,8 @@ class DataBuddy(wx.Frame):
 		os.spawnl(os.P_NOWAIT, EXPLORER, '.', '/n,/e,/select,"%s"'%fname)
 
 	def get_title(self):
-		return '%s: %s->%s' % (self.session_name,conf.dbs[self.copy_vector[0]],conf.dbs[self.copy_vector[1]])
+		#print self.copy_vector
+		return '%s: %s->%s' % (self.session_name,conf.dbs[self.copy_vector[0].upper()],conf.dbs[self.copy_vector[1].upper()])
 	def updateTimeStamp(self):
 		ts=datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')
 		self.args_panel.obj['time_stamp'][1].SetValue(ts)
