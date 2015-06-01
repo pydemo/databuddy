@@ -1,4 +1,4 @@
-#Configuration
+#Databuddy 0.3.3 configuration
 Basic configuration required for Databuddy 0.3.3 to run properly.
 - modify default host_map.py: ![host_map.py](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/edit_hostmap.png "Edit host_map.py")
 
