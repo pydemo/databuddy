@@ -135,7 +135,7 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 ###noSQL stores.
 Database | Spooler | Loader | DbShell
 ----------|-------- | -------| -------
- MongoDB | mongo.exe | mongoimport.exe | mongoexport.exe
+ MongoDB | mongoexport.exe  | mongoimport.exe | mongo.exe
 
 ## What it doesn't do
 - It does not create target table.
