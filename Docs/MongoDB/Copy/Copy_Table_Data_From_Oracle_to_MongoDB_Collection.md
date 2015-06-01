@@ -1,8 +1,8 @@
 # Migrating Oracle 12c table data to MongoDB collection.
 In this example we are going to migrate Oracle table data to MongoDB collection.
 Migration steps:
-1. Extract Oracle table data to CSV file using SQL*Plus.
-2. Load CSV file into MongoDB collection using mongoimport.
+- Extract Oracle table data to CSV file using SQL*Plus.
+- Load CSV file into MongoDB collection using mongoimport.
 
 ##Open Databuddy
 First [start](https://github.com/data-buddy/DataBuddy/blob/master/Docs/How_to_start_Databuddy.md) Databuddy. 
