@@ -65,9 +65,9 @@ TimesTen|  | yes  | yes
 > DDL extract works only for Oracle tables.
 
 ###noSQL
-Database | DDL extract | CSV extract | CSV load
----------|---- | ------------- | -------
-MongoDB      |  | yes  | yes
+Database |  CSV extract | CSV load | JSON extract | JSON load
+---------|- ------------- | -------| -------| -------
+MongoDB      | yes  | yes | |
 
 ##Components
 - GUI - data-buddy (wxPython, PyInstaller).
