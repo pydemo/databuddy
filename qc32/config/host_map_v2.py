@@ -1,25 +1,36 @@
-dbclients={ 'PGRES':r"C:\Program Files\PostgreSQL\9.4\bin",
-			'ORA11G':r'C:\app\alex_buz\product\11.2.0\dbhome_2\BIN',
-			'ORAXE':r'C:\app\alex_buz\product\11.2.0\dbhome_2\BIN',
-			#'ORA11G':r'C:\ORACLE\product\11.1.0\client_1\BIN',
-			'ORAEXA':r'C:\app\alex_buz\product\11.2.0\dbhome_2\BIN',
-			'SSENT':r'C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn',
-			'SSEXP':r'C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn',
-			'MYSQL':r'C:\Temp\mysql\bin',	'INFOB':r'C:\Temp\mysql\bin',	
-			#'CSVFILE':r'', 'CSVDIR':r'', 
-			'CSV':r'',
-			'SYANY': r'C:\Program Files\SQL Anywhere 16\Bin64',
-			'SYASE': r'C:\Program Files\SQL Anywhere 16\Bin64',
-			'SYIQ': r'C:\Program Files\SQL Anywhere 16\Bin64',
-			'TTEN':r'C:\Program Files (x86)\TimesTen\tt1122_64\bin',
-			#'DBTUDB':r'C:\Program Files (x86)\IBM\SQLLIB_01\BIN',
-			'INFOR':r'C:\Program Files (x86)\IBM Informix Software Bundle\bin',
-			'INFORC':r'C:\Program Files (x86)\IBM Informix Software Bundle\bin',
-			'MARIA':r'C:\Program Files\MariaDB 10.0\bin',
-			'SLITE':'C:\Temp\SqlLite'}
+"""
+DBTAES :  DB2 Advanced Enterprise Server
+DBTAWS :  DB2 Advanced Workgroup Server
+DBTDE :  DB2 Developer Edition
+DBTE :  DB2 Express
+DBTEC :  DB2 Express C
+DBTES :  DB2 Enterprise Server
+DBTWS :  DB2 Workgroup Server
+DDL :  DDL
+INFOB :  Infobright
+INFOR :  Informix IDS
+INFORC :  Informix Innovator C
+MARIA :  MariaDB
+MYSQL :  MySQL
+ORA11G :  Oracle 11g
+ORA12C :  Oracle 12c
+ORAEXA :  Exadata
+ORAXE :  Oracle XE
+PGRES :  PostgreSQL
+SLITE :  SQL Lite
+SSENT :  SQL Server Enterprise
+SSEXP :  SQL Server Express
+SYANY :  Sybase SQL Anywhere
+SYASE :  SAP Sybase ASE
+SYIQ :  Sybase IQ
+TTEN :  TimesTen
+"""
+
 mapping={'active_mapping': 'local_nt/20', 'local_host': 0,
  'host_list': {0: {'db_env': {'ORA12C': {'source': 'C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN',
                                          'target': 'C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN'},
+							  'MONGO': {'source': r'C:\Program Files\MongoDB\Server\3.0\bin',
+							             'target': r'C:\Program Files\MongoDB\Server\3.0\bin'},
 							  'ORA11G': {'source': 'C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN',
                                          'target': 'C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN'},
                               'ORAEXA': {'source': 'C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN',

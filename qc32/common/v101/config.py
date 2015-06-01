@@ -24,7 +24,8 @@ dbs={	'SYASE':'SAP Sybase ASE', 'SYANY':'Sybase SQL Anywhere','SYIQ':'Sybase IQ'
 		'DBTAWS':'DB2 Advanced Workgroup Server',
 		'DBTWS':'DB2 Workgroup Server',
 		'DBTE':'DB2 Express', 'DBTEC':'DB2 Express C', 'DBTDE':'DB2 Developer Edition',
-		'INFOR':'Informix IDS', 'INFORC':'Informix Innovator C',		
+		'INFOR':'Informix IDS', 'INFORC':'Informix Innovator C',
+		'MONGO':'MongoDB',		
 		}
 import __builtin__
 __builtin__.dbs = dbs		
@@ -143,6 +144,19 @@ def set_params(params):
 	pfrom[dbkey]['from_db_server']={'short':'-n','long':'--from_db_server', 'type':str, 'default':None, 'help':'%s source instance name.' % dbs[dbkey]}
 	pfrom[dbkey]['source_client_home']={'short':'-z','long':'--source_client_home', 'type':str, 'default':None, 'help':'Path to %s client home.' % dbs[dbkey]}
 
+	dbkey='MONGO'				
+	pfrom[dbkey]=OrderedDict()
+	pfrom[dbkey]['query_sql_file']={'short':'-q','long':'--query_sql_file', 'type':str, 'default':None, 'help':'Input file with %s query sql.'  % dbs[dbkey]}
+	pfrom[dbkey]['query_sql_dir']={'short':'-Q','long':'--query_sql_dir', 'type':str, 'default':None, 'help':'Input dir with %s query sqls.'  % dbs[dbkey]}
+	pfrom[dbkey]['from_collection']=  {'short':'-c','long':'--from_collection', 	'type':str, 'default':None, 'help':'From collection.'}
+	pfrom[dbkey]['from_column_names']=  {'short':'-P','long':'--from_column_names', 	'type':str, 'default':None, 'help':'From column list.'}
+	pfrom[dbkey]['from_user']= {'short':'-j','long':'--from_user', 	'type':str, 'default':None, 'help':'%s source user.' % dbs[dbkey]}
+	pfrom[dbkey]['from_passwd']={'short':'-x','long':'--from_passwd', 'type':str, 'default':None, 'help':'%s source user password.' % dbs[dbkey]}			
+	pfrom[dbkey]['from_db_name']={'short':'-b','long':'--from_db_name', 'type':str, 'default':None, 'help':'%s source database.' % dbs[dbkey]}			
+	pfrom[dbkey]['from_db_server']={'short':'-n','long':'--from_db_server', 'type':str, 'default':None, 'help':'%s source instance name.' % dbs[dbkey]}
+	pfrom[dbkey]['from_db_port']={'short':'-z','long':'--from_db_port', 'type':str, 'default':None, 'help':'%s source database port.' % dbs[dbkey]}	
+	pfrom[dbkey]['header']={'short':'-A','long':'--header', 'type':int, 'default':1, 'help':'Include header to %s extract.' % dbs[dbkey]}	
+	#pfrom[dbkey]['source_client_home']={'short':'-z','long':'--source_client_home', 'type':str, 'default':None, 'help':'Path to %s client home.' % dbs[dbkey]}
 
 	if 0:
 		dbkey='SS'				
@@ -451,6 +465,17 @@ def set_params(params):
 	pto[dbkey]['target_client_home']={'short':'-Z','long':'--target_client_home', 'type':str, 'default':None, 'help':'Path to %s client home bin dir.' %  dbs[dbkey]}
 	pto[dbkey]['skip_rows']= {'short':'-k','long':'--skip_rows', 	'type':int, 'default':0, 'help':'Header size. Number of rows to skip in input file.'}
 
+	dbkey='MONGO'	
+	pto[dbkey]=OrderedDict()				
+	pto[dbkey]['to_user']={'short':'-u','long':'--to_user', 'type':str, 'default':None, 'help':('Target %s db user.' % dbs[dbkey])}
+	pto[dbkey]['to_passwd']= {'short':'-p','long':'--to_passwd', 'type':str, 'default':None, 'help':'%s user password.' % dbs[dbkey]}
+	pto[dbkey]['to_db_name']={'short':'-d','long':'--to_db_name', 'type':str, 'default':None, 'help':'%s database.' % dbs[dbkey]}
+	pto[dbkey]['to_db_server']= {'short': '-s','long':'--to_db_server', 'type':str, 'default':None, 'help':'Target %s instance name.' % dbs[dbkey]}
+	pto[dbkey]['to_db_port']= {'short': '-T','long':'--to_db_port', 'type':str, 'default':None, 'help':'Target %s port.' % dbs[dbkey]}
+	pto[dbkey]['to_collection']={'short':'-a','long':'--to_collection', 'type':str, 'default':None, 'help':'To table.'}
+	pto[dbkey]['to_column_names']={'short':'-Z','long':'--to_column_names', 'type':str, 'default':None, 'help':'To column list for %s.' %  dbs[dbkey]}
+	#pto[dbkey]['skip_rows']= {'short':'-k','long':'--skip_rows', 	'type':int, 'default':0, 'help':'Header size. Number of rows to skip in input file.'}
+	
 	dbkey='MARIA'	
 	pto[dbkey]=OrderedDict()		
 	pto[dbkey]['to_user']={'short':'-u','long':'--to_user', 'type':str, 'default':None, 'help':('Target %s db user.' % dbs[dbkey])}
@@ -748,7 +773,8 @@ dbclients={ 'PGRES':r"C:\Program Files\PostgreSQL\9.4\bin",
 			'INFOR':r'C:\Program Files (x86)\IBM Informix Software Bundle\bin',
 			'INFORC':r'C:\Program Files (x86)\IBM Informix Software Bundle\bin',
 			'MARIA':r'C:\Program Files\MariaDB 10.0\bin',
-			'SLITE':'C:\Temp\SqlLite'}
+			'SLITE':'C:\Temp\SqlLite',
+			'MONGO':r'C:\Program Files\MongoDB\Server\3.0\bin'}
 for db in('DBTAES', 'DBTES', 'DBTAWS', 'DBTWS', 'DBTE', 'DBTEC', 'DBTDE'):
 	dbclients[db]=r'C:\Program Files (x86)\IBM\SQLLIB_01\BIN'
 #C:\Program Files\MySQL\MySQL Server 5.6\bin
@@ -767,8 +793,8 @@ dbtools['SPOOLER']={'PGRES':'psql.exe',
 			#'DBTUDB': 'db2.exe',
 			'INFOR': 'dbaccess.exe',
 			'INFORC': 'dbaccess.exe',
-			
-			'SLITE':'sqlite3.exe'}
+			'SLITE':'sqlite3.exe',
+			'MONGO':'mongoexport.exe'}
 for db in('DBTAES', 'DBTES', 'DBTAWS', 'DBTWS', 'DBTE', 'DBTEC', 'DBTDE'):
 	dbtools['SPOOLER'][db]='db2.exe'			
 dbtools['LOADER']={ 
@@ -783,9 +809,9 @@ dbtools['LOADER']={
 			'TTEN': 'ttBulkCp.exe',
 			#'DBTUDB': 'db2.exe',
 			'INFOR': 'dbaccess.exe',
-			'INFORC': 'dbaccess.exe',
-			
-			'SLITE':'sqlite3.exe'}
+			'INFORC': 'dbaccess.exe',			
+			'SLITE':'sqlite3.exe',
+			'MONGO':'mongoimport.exe'}
 for db in('DBTAES', 'DBTES', 'DBTAWS', 'DBTWS', 'DBTE', 'DBTEC', 'DBTDE'):
 	dbtools['LOADER'][db]='db2.exe'
 dbtools['DBSHELL']={ 
@@ -800,9 +826,9 @@ dbtools['DBSHELL']={
 			'TTEN': 'ttIsql.exe',
 			#'DBTUDB': 'db2.exe',
 			'INFOR': 'dbaccess.exe',
-			'INFORC': 'dbaccess.exe',
-			
-			'SLITE':'sqlite3.exe'}
+			'INFORC': 'dbaccess.exe',			
+			'SLITE':'sqlite3.exe',
+			'MONGO':'mongo.exe'}
 for db in('DBTAES', 'DBTES', 'DBTAWS', 'DBTWS', 'DBTE', 'DBTEC', 'DBTDE'):
 	dbtools['DBSHELL'][db]='db2.exe'			
 			

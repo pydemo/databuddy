@@ -424,28 +424,9 @@ class common(base):
 		self.hm = hmap.host_map(self.args.copy_vector.split(self.conf._to),host_map_loc,0)
 			
 	def get_table_columns(self,  tab_name):
-		if self.tab_cols.has_key(tab_name):
-			return self.tab_cols[tab_name]
-		else:
-			#print tab_name
-			assert len(tab_name.upper().split('.'))==2, 'Table format: SCHEMA.TABLE'
-			qry="""
-			set pagesize 0 feedback off TIMING OFF
-			SELECT COLUMN_NAME||':'||DATA_LENGTH||':'||DATA_TYPE
-			FROM ALL_TAB_COLUMNS WHERE OWNER=UPPER('%s') AND TABLE_NAME=UPPER('%s')
-			ORDER BY COLUMN_ID;
-			exit;
-			""" % tuple(tab_name.upper().split('.'))
-			#print qry
-			
-			cqfn=self.save_qry('get_table_columns',qry)
-			regexp=re.compile(r'(.*)')
-			(r_int, status,err)=self.do_query(self.login, query=None,query_file=cqfn,regexp=regexp)
-			assert r_int, 'Table %s does not exists in %s.' % (tab_name, self.login.split('@')[1])
-			#pprint(r_int)		
-			assert not status, 'Cannot fetch table columns (%s)' % tab_name
-			self.tab_cols[tab_name] = (r_int, map(self.coldef, r_int))
-			return self.tab_cols[tab_name]
+		self.tab_cols[tab_name]=(self.args.to_column_names,[])
+		return self.tab_cols[tab_name]
+
 	def do_query(self,login, query, query_file=None, regexp=None, grp=None, spset='', qname=None):
 		status=0
 		out=[]
@@ -474,17 +455,17 @@ class common(base):
 		
 		
 
-		if self.args.nls_timestamp_format:
-			os.environ['NLS_TIMESTAMP_FORMAT'] = self.args.nls_timestamp_format
-		else:
+		#if self.args.nls_timestamp_format:
+		#	os.environ['NLS_TIMESTAMP_FORMAT'] = self.args.nls_timestamp_format
+		#else:
 			#print '2'
-			os.environ['NLS_TIMESTAMP_FORMAT']=''
-		#print cfg
+		#	os.environ['NLS_TIMESTAMP_FORMAT']=''
+		pprint (cfg)
 		p = Popen(cfg,  stdout=PIPE,stderr=PIPE, shell=True)
 		output, err = p.communicate()
 		#print output, err
 		if err:
-			self.log.err(err)
+			self.log.error(err)
 		status=p.wait()	
 		for o in output.split(os.linesep):
 			#print o
@@ -637,109 +618,60 @@ exit;
 	def spool_source_data_nt(self,outfn, spConf, payload):
 		(shard_name,from_pld,to_pld)=payload
 
-		outf=open(outfn, "w")
+		#outf=open(outfn, "w")
 		#print self.cols_from
-		if self.args.nls_timestamp_format:
-			os.environ['NLS_TIMESTAMP_FORMAT'] = self.args.nls_timestamp_format
-		else:
-			os.environ['NLS_TIMESTAMP_FORMAT'] =''
-		if self.args.nls_timestamp_tz_format:
-			os.environ['NLS_TIMESTAMP_TZ_FORMAT'] = self.args.nls_timestamp_tz_format
-		else:
-			os.environ['NLS_TIMESTAMP_TZ_FORMAT'] =''	
+		if 0:
+			if self.args.nls_timestamp_format:
+				os.environ['NLS_TIMESTAMP_FORMAT'] = self.args.nls_timestamp_format
+			else:
+				os.environ['NLS_TIMESTAMP_FORMAT'] =''
+			if self.args.nls_timestamp_tz_format:
+				os.environ['NLS_TIMESTAMP_TZ_FORMAT'] = self.args.nls_timestamp_tz_format
+			else:
+				os.environ['NLS_TIMESTAMP_TZ_FORMAT'] =''	
 		#print outfn
 		#pprint(spConf)
 		#e(0)
-		p = Popen(spConf, stdout=outf) # '-S',  stdin=p1.stdout,
-		
-		output, err = p.communicate()
-		#print output, err
-		
-		if err:
-			self.log.err(err)
-			#print output
-		status=p.wait()
-		outf.close()
-		#e(0)
-		count=-1
-
+		output=None
+		err=None
 		if 1:
-			#print 'spooled %d B' % stat
-			import io
-			#file = open(outfn,  mode='r+')
-			file = io.open(outfn, 'r+', encoding = 'utf-8')
-
-			file.seek(0, os.SEEK_END)
-			pos = file.tell() - 3
-			char=file.read(1)
-			eol=char != "\n"	
-			nums=[str(i) for i in range(0,10)]
-			#print nums
-			cnt=[]
-			out=[]
-			while pos > 0 and eol:
-				#pprint(file.read(1))
-				pos -= 1
-				file.seek(pos, os.SEEK_SET)
-				char=file.read(1)
-				eol=char != "\n"
-				#pprint(char)
-				#print 1,pos
-
-
-			char=file.read(1)
-			eol=char != "\n"				
-			while pos > 0 and eol:
-				#pprint(file.read(1))
-				pos -= 1
-				file.seek(pos, os.SEEK_SET)
-				char=file.read(1)
-				eol=char != "\n"
-				#pprint(char)
-				#print 2,pos
-			char=file.read(1)
-			eol=char != "\n"	
-			while pos > 0 and eol:
-				
-				pos -= 1
-				file.seek(pos, os.SEEK_SET)
-				char=file.read(1)
-				eol=char != "\n"
-				#pprint(char)				
-				if char in nums:
-					cnt.append(char)
-				else:
-					out.append(char)
-				#print 3,pos, char, ord(char)
-			#print 'last',pos
-			#print 			 pos
-			if pos > 2:
-				pos -= 1
-				file.seek(pos, os.SEEK_SET)
-				#pprint(file.read(1))
-				#print 'truncate'
-				file.truncate()
-				if cnt:
-					count=int( ''.join(cnt[::-1]))
-				else:
-					last_line=''.join(out[::-1])
-					#print last line
-					#print ':::',last_line
-					raise RowCountError(last_line)
-			else:
-				
-				#self.log.error('Cannot get row count.')
-				last_line=''.join(out[::-1])
-				#print last line
-				tail=open(outfn).read(4000).strip()
-				if 'no rows selected' in tail:
-					print tail
-					return (0, status)			
-				else:
-					raise RowCountError(last_line)
-				
-			file.close()
-
+			p = Popen(spConf, stdout=PIPE, stderr=PIPE) # '-S',  stdin=p1.stdout,
+			#print 1
+			output, err = p.communicate()
+			#print 1,output, 2,err
+		else:
+			p = Popen(spConf, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+			output=' '
+			while output:
+				output = p.stdout.readline()
+				print output
+			error=' '
+			while error:
+				error = p.stderr.readline()
+				print 1,error				
+				#out.append(output)		
+			#if err:
+			#	self.log.err(err)
+				#print output
+		status=p.wait()
+		#print outfn
+		#outf.close()
+		#print 1
+		#e(0)
+		#print err
+		count=-1
+		
+		#count is in err
+		r=re.compile(r'exported\s+(\d+)\s+records')
+		
+		g=re.search(r,err)
+		#print g.groups()
+		if g:
+			count=int(g.groups()[0])
+			#rows_total +=rows_copied
+			#print rows_total
+		#print rows_copied
+		#print count
 		return (count, status)			
 		
 
@@ -765,46 +697,17 @@ class target(common):
 		#self.cr={} #code release
 	def get_load_config(self, db_loader_loc,shard_name, row_from, row_to,ctlfn,outfn, datadir):
 		to_db=self.args.copy_vector.split(self.conf._to)[1].upper()
-		loader_profile= self.conf.dlp[to_db].strip('"')
-		if hasattr(self.args, 'loader_profile') and self.args.loader_profile:
-			self.log.info('using non-default loader profile')
-			loader_profile=self.args.loader_profile.strip('"')
-		assert os.path.isfile(loader_profile), 'Loader profile\n%s\ndoes not exists.' % loader_profile
-			
-		loader={}
-		with open(loader_profile, 'r') as f:
-			loader = yaml.load(f)
-
-		loader_args= ['%s=%s' % (x,loader[x].strip().strip(' ')) for x in loader]
-		loader_errors=10
-		ptn=''
-		sptn=''
-		userid = self.args.to_db
-		#check if url connect
-		c,sid = self.args.to_db.split('@')
-		if sid.strip().startswith("'(DESCRIPTION"):
-			u,p=c.split('/')
-			userid='%s@\"%s\"/%s' % (u,sid.strip("'").replace('(',r'\(').replace(')',r'\)'),p)
-		
-		loadConf=[db_loader_loc, 
-		'control="%s"' % ctlfn, 
-		'userid=%s' % userid, #args.to_db,
-		'DATA="%s"' % outfn,
-		#'EXTERNAL_TABLE=EXECUTE', %s/sqlloader/%s%s_%s.log
-		'LOG=%s' % os.path.join(datadir,'sqlloader','%s%s_%s.log' % (self.args.to_table, "%s%s" % (ptn,sptn),shard_name)), 
-		'BAD=%s' % os.path.join(datadir,'sqlloader','%s%s_%s.bad' % (self.args.to_table, "%s%s" % (ptn,sptn),shard_name)),
-		'DISCARD=%s' % os.path.join(datadir,'sqlloader','%s%s_%s.dsc' % (self.args.to_table, "%s%s" % (ptn,sptn),shard_name))
-		] + loader_args
-		if row_from:
-			loadConf.append('SKIP=%s' % (row_from-1))
+		#from_file=self.args.input_files
+		#print outfn
+		file_format=''
+		fn, file_ext = os.path.splitext(outfn) 
+		file_ext = file_ext.strip('.')
+		if file_ext.upper() in ('DATA','CSV'):
+			file_format='csv'
 		else:
-			if hasattr(self.args, 'skip_rows') and self.args.skip_rows:
-				loadConf.append('SKIP=%s' % self.args.skip_rows)
-		if row_to:
-			loadConf.append('LOAD=%s' % (row_to-row_from))
-			
-		#pprint(loadConf)
-		#e(0)
+			file_format=file_ext.lower()
+		#print file_ext, file_format
+		loadConf=[db_loader_loc, '-u', self.args.to_user, '-p', self.args.to_passwd, '/d', self.args.to_db_name,'/h',self.args.to_db_server, '/c', self.args.to_collection, '/file', outfn, '/type', file_format, '/headerline'] #'/f', self.args.to_column_names, 
 		
 		return loadConf	
 		
@@ -840,10 +743,10 @@ class target(common):
 	INTO TABLE %s %s
 	FIELDS TERMINATED BY '%s'
 	TRAILING NULLCOLS
-	(%s)""" % (unrec,dpl_mode,to_tab, part, self.args.field_term, ','.join(r_int[1]))
+	(%s)""" % (unrec,dpl_mode,to_tab, part, field_term, ','.join(r_int[1]))
 		#pprint(tmpl)
 		#pprint(r_int)
-		#e(0)
+		#sys.exit(1)
 		return tmpl	
 		
 	def get_db_client_dbshell(self):
@@ -929,7 +832,7 @@ class target(common):
 		
 		out=[]
 		err=[]
-		if 1:
+		if 0:
 			if self.args.nls_date_format:
 				os.environ['NLS_DATE_FORMAT'] = self.args.nls_date_format
 			#else:
@@ -941,35 +844,44 @@ class target(common):
 
 		
 		#pprint(loadConf)
+		#print ' '.join(loadConf)
 		#e(0)
-		p3 = Popen(loadConf, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-		output=' '
-		while output:
-			output = p3.stdout.readline()
-			#print output
-			out.append(output)
-		status=p3.wait()
-		if status==0:
-			logger.info('SQL*Loader status =%s' % status)
-		if status!=0:
-			logger.error('SQL*Loader status =%s' % status)
+		
 		if 1:
-			
+			p = Popen(loadConf, stdout=PIPE, stderr=PIPE) # '-S',  stdin=p1.stdout,
+			#print 1
+			output, err = p.communicate()
+			#print 1,output
+			#print 2,err
+		else:
+			p = Popen(loadConf, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+			output=' '
+			while output:
+				output = p.stdout.readline()
+				print output
 			error=' '
 			while error:
-				error = p3.stderr.readline()
-				print error
-				err.append(error)
-		status = p3.wait()
-		#print 'shard',shard
-		ins_cnt = self.get_inserted_count(shard)
-		#print ins_cnt
-		#sys.exit(0)
-		#return (out,status,err)
+				error = p.stderr.readline()
+				print 1,error				
+
+		status = p.wait()
+		count=-1
+		print err
+		#count is in err
+		r=re.compile(r'imported\s+(\d+)\s+documents')
+		g=re.search(r,err)
+		#print g.groups()
+		if g:
+			count=int(g.groups()[0])
+			#rows_total +=rows_copied
+			#print rows_total
+		#print count
+		if count>-1:
+			err=[]
 		stat=-1
 		if os.path.isfile(outfn):
 			stat=os.stat(outfn).st_size
-		return (out,status,err,ins_cnt,stat)	
+		return (out,status,err,count,stat)	
 		
 	def get_inserted_count(self,shard):
 		ptn=''
