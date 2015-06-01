@@ -25,7 +25,7 @@ Define data extraction `Copy Vector` by zooming through popup menu items:
                                       To MongoDB
 ```  
 
-![Define copy vector for Oracle12c-to-MongoDb extract pipeline](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/Define_copy_vector_for_Oracle12c-to-MongoDB_copy_pipeline.png "Define copy vector for Oracle12c-to-MongoDB copy pipeline.")
+![Define copy vector for Oracle12c-to-MongoDb extract pipeline](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/MongoDB/Define_copy_vector_for_Oracle12c-to-MongoDB_copy_pipeline.png "Define copy vector for Oracle12c-to-MongoDB copy pipeline.")
 
 ## Select Source and Target templates
 Next and last step is template selection. Pick one from the source list on the left (`ORA12C_TimestampTable_withComaHeader`) and one from the target list on the right (`MONGO_Table`):
