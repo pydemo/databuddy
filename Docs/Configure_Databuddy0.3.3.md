@@ -5,6 +5,7 @@ Basic configuration required for Databuddy 0.3.3 to run properly.
 > You can click pop-up menu item or open `..\qc32\config\host_map2.py ` (relative to Databuddy 0.3.3 home)
 
 - set your 'source' and 'target' dirs for local clients for each database.
+
 ##Configuration for Oracle
 ```python
  'host_list': {0: {'db_env': {'ORA11G': {'source': 'C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN',
