@@ -42,7 +42,7 @@ Please, ignore __Common__ argument section for now. Go through __Source__ and __
 After you click __Run__ button black CLI window will popup executing QueryCopy (`qc32\qc.exe`).
 
 
-![Define arguments](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/Session_Executed_for_SQLServer_to_CSV_file_extract.png "Define arguments.")
+![Session executed](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/Session_Executed_for_SQLServer_to_CSV_file_extract.png "Session executed.")
 
 Command executed:
 ```powershell
