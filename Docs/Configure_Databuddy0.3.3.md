@@ -1,7 +1,7 @@
 #Configuration
 Basic configuration required for Databuddy 0.3.3 to run properly.
 - modify default host_map.py: ![host_map.py](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/edit_hostmap.png "Edit host_map.py")
-You can click pop-up menu item or open `..\qc32\config\host_map2.py ` (relative to Databuddy 0.3.3 home)
+> You can click pop-up menu item or open `..\qc32\config\host_map2.py ` (relative to Databuddy 0.3.3 home)
 - set your 'source' and 'target' dirs for local clients for each database.
 ##Configuration for Oracle
 ```python
