@@ -27,6 +27,7 @@ Pre-Prod (UAT/QA/DEV)
 
 ##Databases supported
 
+###SQL
 Database | GUI (data-buddy) | Command line (QueryCopy)
 ---------|---- | -------------
 DB2      | yes | yes
@@ -41,6 +42,10 @@ SQLServer| yes | yes
 Sybase   | yes  | yes
 TimesTen| yes  | yes
 
+###noSQL
+Database | GUI (data-buddy) | Command line (QueryCopy)
+---------|---- | -------------
+MongoDB      | yes | yes
 
 ##File formats
 
