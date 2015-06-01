@@ -133,9 +133,9 @@ TimesTen | TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 
 ###noSQL stores.
-DB family|Database | Spooler | Loader | DbShell
----------|----------|-------- | -------| -------
-MongoDB | MongoDB | mongo.exe | mongoimport.exe | mongoexport.exe
+Database | Spooler | Loader | DbShell
+----------|-------- | -------| -------
+ MongoDB | mongo.exe | mongoimport.exe | mongoexport.exe
 
 ## What it doesn't do
 - It does not create target table.
