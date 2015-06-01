@@ -29,7 +29,7 @@ Define data extraction `Copy Vector` by zooming through popup menu items:
 
 ## Select Source and Target templates
 Next and last step is template selection. Pick one from the source list on the left (`ORA12C_TimestampTable_withComaHeader`) and one from the target list on the right (`MONGO_Table`):
-![Source and target template selection](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/Copy_from_Oracle12c_to_MongoDB_Templates.png "Source and target template selection.")
+![Source and target template selection](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/MongoDB/Copy_from_Oracle12c_to_MongoDB_Templates.png "Source and target template selection.")
 
 ## Define arguments.
 After you click `Create` button new session is created and right panel is populated with default values.
