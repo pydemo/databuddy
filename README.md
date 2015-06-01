@@ -412,3 +412,17 @@ Database |Version | Export | Import | DbShell|File formats
 - [ ] Oracle
  - [Copy_Table_Data_From_Oracle_to_MongoDB_Collection](https://github.com/data-buddy/DataBuddy/blob/master/Docs/MongoDB/Copy/Copy_Table_Data_From_Oracle_to_MongoDB_Collection.md) 
 
+##Copy vector matrix (via CSV file)
+Database | DB2 | Informix | MariaDB |MySQL| **Oracle**|PostgreSQL|SQLite|SQLServer|Sybase|TimesTen|MongoDB
+---------|---- | ------- | -------|---- | ------ | -------|---- | -------| -------|
+DB2      |  | x  | x|  | |  | |  | | 
+Informix |  | x  | x|  | |  | |  | |
+MariaDB   |  | x  | x|  | |  | |  | |
+MySQL    |  | x  | x|  | |  | |  | |
+**Oracle**   |  | x  | x|  | |  | |  | |
+PostgreSQL|  | x  | x|  | |  | |  | |
+SQLite|  | x  | x|  | |  | |  | |
+SQLServer|  | x  | x|  | |  | |  | |
+Sybase   |  | x  | x|  | |  | |  | |
+TimesTen|  | x  | x|  | |  | |  | |
+Mongo DB|  | x  | x|  | |  | |  | |
