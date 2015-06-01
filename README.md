@@ -415,14 +415,14 @@ Database |Version | Export | Import | DbShell|File formats
 ##Copy vector matrix (via CSV file)
 Database | DB2 | Informix | MariaDB |MySQL| **Oracle**|PostgreSQL|SQLite|SQLServer|Sybase|TimesTen|MongoDB
 ---------|---- | ------- | -------|---- | ------ | -------|---- | -------| -------|----|-----
-DB2      |||||||||||
-Informix |||||||||||
-MariaDB  |||||||||||
-MySQL    |||||||||||
-**Oracle** |||||||||||
-PostgreSQL|||||||||||
-SQLite|||||||||||
-SQLServer|||||||||||
-Sybase   |||||||||||
-TimesTen|||||||||||
-Mongo DB|||||||||||
+DB2      |x|x|x|x|x|x|x|x|x|x|x
+Informix |x|x|x|x|x|x|x|x|x|x|x
+MariaDB  |x|x|x|x|x|x|x|x|x|x|x
+MySQL    |x|x|x|x|x|x|x|x|x|x|x
+**Oracle** |x|x|x|x|x|x|x|x|x|x|x
+PostgreSQL|x|x|x|x|x|x|x|x|x|x|x
+SQLite|x|x|x|x|x|x|x|x|x|x|x
+SQLServer|x|x|x|x|x|x|x|x|x|x|x
+Sybase|x|x|x|x|x|x|x|x|x|x|x
+TimesTen|x|x|x|x|x|x|x|x|x|x|x
+Mongo DB|x|x|x|x|x|x|x|x|x|x|x
