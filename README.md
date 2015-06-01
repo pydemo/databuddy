@@ -274,6 +274,7 @@ Database | Spooler | Loader | DbShell
 - [ ] add [OrientDB](http://orientdb.com/docs/last/)   
 - [ ] add [KDB+](http://kx.com/resources.php)  
 - [ ] add [Volt DB](http://docs.voltdb.com/)  
+- [ ] add [Azure DocumentDB](http://azure.microsoft.com/en-us/services/documentdb/)  
 - [ ] add [Arango DB](https://www.arangodb.com/documentation/)   
 - [ ] add [Foundation DB](https://foundationdb.com/key-value-store/documentation/index.html)  
 - [ ] add [Enterprise DB](http://www.enterprisedb.com/products-services-training/products/documentation)   
@@ -364,6 +365,7 @@ Database |Version | Export | Import | DbShell|File formats
 [HDFS](https://hadoop.apache.org/docs/r2.4.1/hadoop-project-dist/hadoop-hdfs/HdfsUserGuide.html)|||||
 [Amazon SimpleDB](http://aws.amazon.com/documentation/simpledb/)|||||
 [Amazon Redshift](http://aws.amazon.com/documentation/redshift/) |||||
+[Azure DocumentDB](http://azure.microsoft.com/en-us/services/documentdb/)  |||||
 
 
 
