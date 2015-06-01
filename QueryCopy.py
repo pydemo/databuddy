@@ -4528,6 +4528,8 @@ class NewSessionDialog(wx.Dialog):
 			if self.recent:
 				for r in reversed(self.recent):
 					(a,b)=r
+					a=a.upper()
+					b=b.upper()
 					self.i +=1
 					#Menu1 = FM.FlatMenu()
 					menuItem = FM.FlatMenuItem(self.recentMenu, 20000+self.i, '%s --> %s' % (conf.dbs[a],conf.dbs[b]), '', wx.ITEM_NORMAL)
