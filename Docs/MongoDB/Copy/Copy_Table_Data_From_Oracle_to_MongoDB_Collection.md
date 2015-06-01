@@ -1,4 +1,4 @@
-# MongoDB: Migrating Oracle 12c table data to MongoDB collection.
+# Migrating Oracle 12c table data to MongoDB collection.
 In this example we are going to migrate Oracle table data to MongoDB collection.
 Migration steps:
 1. Extract Oracle table data to CSV file using SQL*Plus.
