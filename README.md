@@ -414,15 +414,15 @@ Database |Version | Export | Import | DbShell|File formats
 
 ##Copy vector matrix (via CSV file)
 Database | DB2 | Informix | MariaDB |MySQL| **Oracle**|PostgreSQL|SQLite|SQLServer|Sybase|TimesTen|MongoDB
----------|---- | ------- | -------|---- | ------ | -------|---- | -------| -------|
-DB2      |  | x  | x|  | |  | |  | | 
-Informix |  | x  | x|  | |  | |  | |
-MariaDB   |  | x  | x|  | |  | |  | |
-MySQL    |  | x  | x|  | |  | |  | |
-**Oracle**   |  | x  | x|  | |  | |  | |
-PostgreSQL|  | x  | x|  | |  | |  | |
-SQLite|  | x  | x|  | |  | |  | |
-SQLServer|  | x  | x|  | |  | |  | |
-Sybase   |  | x  | x|  | |  | |  | |
-TimesTen|  | x  | x|  | |  | |  | |
-Mongo DB|  | x  | x|  | |  | |  | |
+---------|---- | ------- | -------|---- | ------ | -------|---- | -------| -------|----|
+DB2      |  | x  | x|  | |  | |  | | |
+Informix |  | x  | x|  | |  | |  | ||
+MariaDB   |  | x  | x|  | |  | |  | ||
+MySQL    |  | x  | x|  | |  | |  | ||
+**Oracle**   |  | x  | x|  | |  | |  | ||
+PostgreSQL|  | x  | x|  | |  | |  | ||
+SQLite|  | x  | x|  | |  | |  | ||
+SQLServer|  | x  | x|  | |  | |  | ||
+Sybase   |  | x  | x|  | |  | |  | ||
+TimesTen|  | x  | x|  | |  | |  | ||
+Mongo DB|  | x  | x|  | |  | |  | ||
