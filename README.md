@@ -401,7 +401,9 @@ Database |Version | Export | Import | DbShell|File formats
 
 
 ##Databuddy Docs
-- [How_to_start_Databuddy](https://github.com/data-buddy/DataBuddy/blob/master/Docs/How_to_start_Databuddy.md)
-- [Extracting_Table_Data_From_SQLServer_to_CSV_File](https://github.com/data-buddy/DataBuddy/blob/master/Docs/SQLServer/Extract/Extracting_Table_Data_From_SQLServer_to_CSV_File.md) 
+* General docs
+ *[How_to_start_Databuddy](https://github.com/data-buddy/DataBuddy/blob/master/Docs/How_to_start_Databuddy.md)
+* SQL Server
+ *[Extracting_Table_Data_From_SQLServer_to_CSV_File](https://github.com/data-buddy/DataBuddy/blob/master/Docs/SQLServer/Extract/Extracting_Table_Data_From_SQLServer_to_CSV_File.md) 
 
 
