@@ -287,7 +287,8 @@ Database | Spooler | Loader | DbShell
 - [ ] add [RDS](http://aws.amazon.com/documentation/rds/)   
 - [ ] add [DynamoDB](http://aws.amazon.com/documentation/dynamodb/)  
 - [ ] add [Couchbase](http://docs.couchbase.com/admin/admin/Couchbase-intro.html)  
-- [ ] add [Aerospike](http://www.aerospike.com/docs/)    
+- [ ] add [Aerospike](http://www.aerospike.com/docs/)   
+- [ ] add [Riak](https://docs.basho.com/)
 - [ ] add [InterSystems Caché](http://www.intersystems.com/our-products/cache/managing-data/),  [export](http://docs.intersystems.com/ens20131/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_shell)   
 - [ ] add QV (QlikView file format)
 - [ ] add MDX (file format)
@@ -368,7 +369,7 @@ Database |Version | Export | Import | DbShell|File formats
 [Amazon Redshift](http://aws.amazon.com/documentation/redshift/) |||||
 [Azure DocumentDB](http://azure.microsoft.com/en-us/services/documentdb/)  |||||
 [Elasticsearch](https://www.found.no/foundation/elasticsearch-as-nosql/)   |||||
-
+[Riak](https://docs.basho.com/)|||||
 
 
 ## Screenshots
@@ -426,6 +427,7 @@ SQLServer|x|x|x|x|x|x|x|x|x|x|x
 Sybase|x|x|x|x|x|x|x|x|x|x|x
 TimesTen|x|x|x|x|x|x|x|x|x|x|x
 Mongo DB|x|x|x|x|[X](https://github.com/data-buddy/DataBuddy/blob/master/Docs/MongoDB/Copy/Copy_Table_Data_From_Oracle_to_MongoDB_Collection.md)|x|x|x|x|x|x
+
 
 > 'x' means feature is implemented and is part of the release [0.3.3](https://github.com/data-buddy/DataBuddy/releases/tag/v0.3.3)
 
