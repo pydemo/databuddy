@@ -1,5 +1,5 @@
 
-	# Migrating CSV table data to DB2DeveloperEdition.
+# Migrating CSV table data to DB2DeveloperEdition.
 	In this example we are going to migrate CSV table data to DB2DeveloperEdition.
 	Migration steps:
 	- Extract CSV table data to CSV.
