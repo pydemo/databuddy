@@ -26,7 +26,7 @@ Define data extraction `Copy Vector` by zooming through popup menu items:
 									  To DB2DeveloperEdition
 ```  
 (sample image)
-![Define copy vector for DB2DeveloperEdition-to-DB2DeveloperEdition extract pipeline](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/MongoDB/Define_copy_vector_for_Oracle12c-to-MongoDB_copy_pipeline.png "Define copy vector for DBTDE-to-DBTDE copy pipeline.")
+![Define copy vector for DB2DeveloperEdition-to-DB2DeveloperEdition extract pipeline](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/MongoDB/Define_copy_vector_for_Oracle12c-to-MongoDB_copy_pipeline.png "Define copy vector for DB2DeveloperEdition-to-DB2DeveloperEdition copy pipeline.")
 
 ## Select Source and Target templates
 Next and last step is template selection. Pick one from the source list on the left (`DBTDE_TimestampTable`) and one from the target list on the right (`DBTDE_Table`):

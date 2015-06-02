@@ -26,7 +26,7 @@ Define data extraction `Copy Vector` by zooming through popup menu items:
 									  To Infobright
 ```  
 (sample image)
-![Define copy vector for Infobright-to-Infobright extract pipeline](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/MongoDB/Define_copy_vector_for_Oracle12c-to-MongoDB_copy_pipeline.png "Define copy vector for INFOB-to-INFOB copy pipeline.")
+![Define copy vector for Infobright-to-Infobright extract pipeline](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/MongoDB/Define_copy_vector_for_Oracle12c-to-MongoDB_copy_pipeline.png "Define copy vector for Infobright-to-Infobright copy pipeline.")
 
 ## Select Source and Target templates
 Next and last step is template selection. Pick one from the source list on the left (`INFOB_TimestampTable`) and one from the target list on the right (`INFOB_Table`):

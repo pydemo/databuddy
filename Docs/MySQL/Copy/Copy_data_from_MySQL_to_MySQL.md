@@ -26,7 +26,7 @@ Define data extraction `Copy Vector` by zooming through popup menu items:
 									  To MySQL
 ```  
 (sample image)
-![Define copy vector for MySQL-to-MySQL extract pipeline](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/MongoDB/Define_copy_vector_for_Oracle12c-to-MongoDB_copy_pipeline.png "Define copy vector for MYSQL-to-MYSQL copy pipeline.")
+![Define copy vector for MySQL-to-MySQL extract pipeline](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/MongoDB/Define_copy_vector_for_Oracle12c-to-MongoDB_copy_pipeline.png "Define copy vector for MySQL-to-MySQL copy pipeline.")
 
 ## Select Source and Target templates
 Next and last step is template selection. Pick one from the source list on the left (`MYSQL_TimestampTable`) and one from the target list on the right (`MYSQL_Table`):

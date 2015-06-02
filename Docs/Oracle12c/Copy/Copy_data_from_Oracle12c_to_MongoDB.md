@@ -1,9 +1,8 @@
 
-# Migrating DB2AdvancedWorkgroupServer table data to Oracle12c.
-In this example we are going to migrate DB2AdvancedWorkgroupServer table data to Oracle12c.
+# Migrating Oracle12c table data to MongoDB.
+In this example we are going to migrate Oracle12c table data to MongoDB.
 Migration steps:
-- Extract DB2AdvancedWorkgroupServer table data to CSV.
-- Load CSV file into Oracle12c.
+- Extract Oracle12c table data to CSV.
 
 ##Open Databuddy
 [Download](https://github.com/data-buddy/DataBuddy/releases/tag/v0.3.3), [configure](https://github.com/data-buddy/DataBuddy/blob/master/Docs/Configure_Databuddy0.3.3.md#configuration-for-mongdb), and [start](https://github.com/data-buddy/DataBuddy/blob/master/Docs/How_to_start_Databuddy.md) Databuddy. 
@@ -19,17 +18,15 @@ Define data extraction `Copy Vector` by zooming through popup menu items:
   --------------
   |     ->     |
   --------------
-  From DB2AdvancedWorkgroupServer-
 				|
-				From DB2AdvancedWorkgroupServer-
+				From Oracle12c-
 									  |
-									  To Oracle12c
+									  To MongoDB
 ```  
 (sample image)
-![Define copy vector for DB2AdvancedWorkgroupServer-to-Oracle12c extract pipeline](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/MongoDB/Define_copy_vector_for_Oracle12c-to-MongoDB_copy_pipeline.png "Define copy vector for DB2AdvancedWorkgroupServer-to-Oracle12c copy pipeline.")
 
 ## Select Source and Target templates
-Next and last step is template selection. Pick one from the source list on the left (`DBTAWS_TimestampTable`) and one from the target list on the right (`ORA12C_Table`):
+Next and last step is template selection. Pick one from the source list on the left (`ORA12C_TimestampTable`) and one from the target list on the right (`MONGO_Table`):
 (sample image)
 ![Source and target template selection](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/MongoDB/Copy_from_Oracle12c_to_MongoDB_Templates.png "Source and target template selection.")
 
@@ -49,11 +46,11 @@ After you click __Run__ button black CLI window will pop-up executing QueryCopy 
 Check job results at the bottom of the black CLI window:
 ```
 ############################################################
-2015-06-01 11:30:09,022 - DBTAWS-ORA12C - INFO - Done.
-2015-06-01 11:30:09,022 - DBTAWS-ORA12C - INFO - Elapsed: 00:00:00
+2015-06-01 11:30:09,022 - ORA12C-MONGO - INFO - Done.
+2015-06-01 11:30:09,022 - ORA12C-MONGO - INFO - Elapsed: 00:00:00
 Press any key to continue . . .
 ```
 Status __"Done"__ means export job executed successfully. 
-- [x] Temporary DB2AdvancedWorkgroupServer CSV spool data file will be at `C:	mp\TEST_default_spool\qc_job\[timestamp]\[table_name].data` as defined by __Common__ section `default_spool_dir` argument.
+- [x] Temporary Oracle12c CSV spool data file will be at `C:	mp\TEST_default_spool\qc_job\[timestamp]\[table_name].data` as defined by __Common__ section `default_spool_dir` argument.
 
 	

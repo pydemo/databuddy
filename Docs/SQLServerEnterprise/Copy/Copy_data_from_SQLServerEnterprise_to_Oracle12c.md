@@ -3,7 +3,7 @@
 In this example we are going to migrate SQLServerEnterprise table data to Oracle12c.
 Migration steps:
 - Extract SQLServerEnterprise table data to CSV.
-- Load CSV file into SQLServerEnterprise.
+- Load CSV file into Oracle12c.
 
 ##Open Databuddy
 [Download](https://github.com/data-buddy/DataBuddy/releases/tag/v0.3.3), [configure](https://github.com/data-buddy/DataBuddy/blob/master/Docs/Configure_Databuddy0.3.3.md#configuration-for-mongdb), and [start](https://github.com/data-buddy/DataBuddy/blob/master/Docs/How_to_start_Databuddy.md) Databuddy. 
@@ -19,14 +19,14 @@ Define data extraction `Copy Vector` by zooming through popup menu items:
   --------------
   |     ->     |
   --------------
-  From Oracle12c-
+  From SQLServerEnterprise-
 				|
 				From SQLServerEnterprise-
 									  |
 									  To Oracle12c
 ```  
 (sample image)
-![Define copy vector for SQLServerEnterprise-to-Oracle12c extract pipeline](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/MongoDB/Define_copy_vector_for_Oracle12c-to-MongoDB_copy_pipeline.png "Define copy vector for SSENT-to-ORA12C copy pipeline.")
+![Define copy vector for SQLServerEnterprise-to-Oracle12c extract pipeline](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/MongoDB/Define_copy_vector_for_Oracle12c-to-MongoDB_copy_pipeline.png "Define copy vector for SQLServerEnterprise-to-Oracle12c copy pipeline.")
 
 ## Select Source and Target templates
 Next and last step is template selection. Pick one from the source list on the left (`SSENT_TimestampTable`) and one from the target list on the right (`ORA12C_Table`):

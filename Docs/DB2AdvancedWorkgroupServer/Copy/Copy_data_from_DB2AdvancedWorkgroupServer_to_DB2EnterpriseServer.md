@@ -3,7 +3,7 @@
 In this example we are going to migrate DB2AdvancedWorkgroupServer table data to DB2EnterpriseServer.
 Migration steps:
 - Extract DB2AdvancedWorkgroupServer table data to CSV.
-- Load CSV file into DB2AdvancedWorkgroupServer.
+- Load CSV file into DB2EnterpriseServer.
 
 ##Open Databuddy
 [Download](https://github.com/data-buddy/DataBuddy/releases/tag/v0.3.3), [configure](https://github.com/data-buddy/DataBuddy/blob/master/Docs/Configure_Databuddy0.3.3.md#configuration-for-mongdb), and [start](https://github.com/data-buddy/DataBuddy/blob/master/Docs/How_to_start_Databuddy.md) Databuddy. 
@@ -19,14 +19,14 @@ Define data extraction `Copy Vector` by zooming through popup menu items:
   --------------
   |     ->     |
   --------------
-  From DB2EnterpriseServer-
+  From DB2AdvancedWorkgroupServer-
 				|
 				From DB2AdvancedWorkgroupServer-
 									  |
 									  To DB2EnterpriseServer
 ```  
 (sample image)
-![Define copy vector for DB2AdvancedWorkgroupServer-to-DB2EnterpriseServer extract pipeline](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/MongoDB/Define_copy_vector_for_Oracle12c-to-MongoDB_copy_pipeline.png "Define copy vector for DBTAWS-to-DBTES copy pipeline.")
+![Define copy vector for DB2AdvancedWorkgroupServer-to-DB2EnterpriseServer extract pipeline](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/MongoDB/Define_copy_vector_for_Oracle12c-to-MongoDB_copy_pipeline.png "Define copy vector for DB2AdvancedWorkgroupServer-to-DB2EnterpriseServer copy pipeline.")
 
 ## Select Source and Target templates
 Next and last step is template selection. Pick one from the source list on the left (`DBTAWS_TimestampTable`) and one from the target list on the right (`DBTES_Table`):

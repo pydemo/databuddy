@@ -3,7 +3,7 @@
 In this example we are going to migrate PostgreSQL table data to SQLLite.
 Migration steps:
 - Extract PostgreSQL table data to CSV.
-- Load CSV file into PostgreSQL.
+- Load CSV file into SQLLite.
 
 ##Open Databuddy
 [Download](https://github.com/data-buddy/DataBuddy/releases/tag/v0.3.3), [configure](https://github.com/data-buddy/DataBuddy/blob/master/Docs/Configure_Databuddy0.3.3.md#configuration-for-mongdb), and [start](https://github.com/data-buddy/DataBuddy/blob/master/Docs/How_to_start_Databuddy.md) Databuddy. 
@@ -19,14 +19,14 @@ Define data extraction `Copy Vector` by zooming through popup menu items:
   --------------
   |     ->     |
   --------------
-  From SQLLite-
+  From PostgreSQL-
 				|
 				From PostgreSQL-
 									  |
 									  To SQLLite
 ```  
 (sample image)
-![Define copy vector for PostgreSQL-to-SQLLite extract pipeline](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/MongoDB/Define_copy_vector_for_Oracle12c-to-MongoDB_copy_pipeline.png "Define copy vector for PGRES-to-SLITE copy pipeline.")
+![Define copy vector for PostgreSQL-to-SQLLite extract pipeline](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/MongoDB/Define_copy_vector_for_Oracle12c-to-MongoDB_copy_pipeline.png "Define copy vector for PostgreSQL-to-SQLLite copy pipeline.")
 
 ## Select Source and Target templates
 Next and last step is template selection. Pick one from the source list on the left (`PGRES_TimestampTable`) and one from the target list on the right (`SLITE_Table`):
