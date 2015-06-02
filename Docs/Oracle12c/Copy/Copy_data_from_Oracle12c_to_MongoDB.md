@@ -3,6 +3,7 @@
 In this example we are going to migrate Oracle12c table data to MongoDB.
 Migration steps:
 - Extract Oracle12c table data to CSV.
+- Load CSV file into MongoDB.
 
 ##Open Databuddy
 [Download](https://github.com/data-buddy/DataBuddy/releases/tag/v0.3.3), [configure](https://github.com/data-buddy/DataBuddy/blob/master/Docs/Configure_Databuddy0.3.3.md#configuration-for-mongdb), and [start](https://github.com/data-buddy/DataBuddy/blob/master/Docs/How_to_start_Databuddy.md) Databuddy. 
@@ -18,12 +19,14 @@ Define data extraction `Copy Vector` by zooming through popup menu items:
   --------------
   |     ->     |
   --------------
+  From Oracle12c-
 				|
 				From Oracle12c-
 									  |
 									  To MongoDB
 ```  
 (sample image)
+![Define copy vector for Oracle12c-to-MongoDB extract pipeline](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/MongoDB/Define_copy_vector_for_Oracle12c-to-MongoDB_copy_pipeline.png "Define copy vector for Oracle12c-to-MongoDB copy pipeline.")
 
 ## Select Source and Target templates
 Next and last step is template selection. Pick one from the source list on the left (`ORA12C_TimestampTable`) and one from the target list on the right (`MONGO_Table`):
