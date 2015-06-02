@@ -25,22 +25,23 @@ Define data extraction `Copy Vector` by zooming through popup menu items:
 									  |
 									  To Oracle12c
 ```  
-
+(sample image)
 ![Define copy vector for PostgreSQL-to-Oracle12c extract pipeline](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/MongoDB/Define_copy_vector_for_Oracle12c-to-MongoDB_copy_pipeline.png "Define copy vector for PGRES-to-ORA12C copy pipeline.")
 
 ## Select Source and Target templates
 Next and last step is template selection. Pick one from the source list on the left (`PGRES_TimestampTable`) and one from the target list on the right (`ORA12C_Table`):
+(sample image)
 ![Source and target template selection](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/MongoDB/Copy_from_Oracle12c_to_MongoDB_Templates.png "Source and target template selection.")
 
 ## Define arguments.
 After you click `Create` button new session is created and right panel is populated with default values.
 Please, ignore __Common__ argument section for now. Go through __Source__ and __Target__ arguments and set each argument to appropriate value. 
-
+(sample image)
 ![Define arguments](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/MongoDB/Oracle12c_to_MongoDB_Define_Arguments.png "Define arguments.")
 
 ## Run Session.
 After you click __Run__ button black CLI window will pop-up executing QueryCopy (`qc32\qc.exe`).
-
+(sample image)
 ![Session executed](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/MongoDB/Oracle12c_to_MongoDB_Copy_CLI_Window.png "Session executed.")
 
 
