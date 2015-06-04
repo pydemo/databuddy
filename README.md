@@ -371,6 +371,8 @@ Database |Version | Export | Import | DbShell|File formats
 [Elasticsearch](https://www.found.no/foundation/elasticsearch-as-nosql/)   |||||
 [Riak](https://docs.basho.com/)|||||
 
+## Vendor architecture
+[MongoDB Architecture Guide] (http://s3.amazonaws.com/info-mongodb-com/MongoDB_Architecture_Guide.pdf)
 
 ## Screenshots
 
