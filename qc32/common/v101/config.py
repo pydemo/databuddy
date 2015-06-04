@@ -17,8 +17,6 @@ dbs={	'SYASE':'SAP Sybase ASE', 'SYANY':'Sybase SQL Anywhere','SYIQ':'Sybase IQ'
 		'SLITE':'SQL Lite',
 		'SSEXP':'SQL Server Express','SSENT':'SQL Server Enterprise',
 		'MYSQL':'MySQL', 'MARIA':'MariaDB', 'INFOB':'Infobright',
-		'CSV':'CSV',
-		'DDL':'DDL',
 		'PGRES':'PostgreSQL',		
 		'DBTAES':'DB2 Advanced Enterprise Server','DBTES':'DB2 Enterprise Server',
 		'DBTAWS':'DB2 Advanced Workgroup Server',
@@ -26,6 +24,9 @@ dbs={	'SYASE':'SAP Sybase ASE', 'SYANY':'Sybase SQL Anywhere','SYIQ':'Sybase IQ'
 		'DBTE':'DB2 Express', 'DBTEC':'DB2 Express C', 'DBTDE':'DB2 Developer Edition',
 		'INFOR':'Informix IDS', 'INFORC':'Informix Innovator C',
 		'MONGO':'MongoDB',		
+		'CSV':'CSV',
+		'JSON':'JSON',
+		'DDL':'DDL',		
 		}
 import __builtin__
 __builtin__.dbs = dbs		
@@ -41,7 +42,7 @@ rel_date=rel.ts
 citi=False
 if_hg=False #hourglass
 _to='-'
-ff=['CSV','DDL'] #file v.s. db 
+ff=['CSV','JSON','DDL'] #file v.s. db 
 #SQL*Loader init
 dlp={}
 dlp['ORA12C']=dlp['ORA11G']=dlp['ORAEXA']=dlp['ORAXE']=r'"C:\Python27\data_migrator_1239\config\loader\sqlloader.yaml"'
@@ -114,9 +115,10 @@ def set_params(params):
 	
 	params['core']['loader_profile']={'short':'-C','long':'--loader_profile', 'type':str, 'default':'', 'help':'SQL*Loader profile (user defined).'}
 	params['core']['host_map']={'short':'-5','long':'--host_map', 'type':str, 'default':'', 'help':'Host-to-shard map.'}
-	params['core']['arg_6']={'short':'-6','long':'--arg_6', 'type':str, 'default':'', 'help':'Generic string argument 1.'}
-	params['core']['arg_7']={'short':'-7','long':'--arg_7', 'type':str, 'default':'', 'help':'Generic string argument 2.'}
-	params['core']['arg_8']={'short':'-8','long':'--arg_8', 'type':str, 'default':'', 'help':'Generic string argument 3.'}
+	params['core']['spool_type']={'short':'-6','long':'--spool_type', 'type':str, 'default':'csv', 'help':'Spool file type (CSV or JSON).'}
+	params['core']['arg_7']={'short':'-7','long':'--arg_7', 'type':str, 'default':'', 'help':'Generic string argument 7.'}
+	params['core']['arg_8']={'short':'-8','long':'--arg_8', 'type':str, 'default':'', 'help':'Generic string argument 8.'}
+	params['core']['arg_9']={'short':'-9','long':'--arg_9', 'type':str, 'default':'', 'help':'Generic string argument 9.'}
 					
 	params['FROM']={}
 	pfrom=params['FROM']
@@ -156,6 +158,7 @@ def set_params(params):
 	pfrom[dbkey]['from_db_server']={'short':'-n','long':'--from_db_server', 'type':str, 'default':None, 'help':'%s source instance name.' % dbs[dbkey]}
 	pfrom[dbkey]['from_db_port']={'short':'-z','long':'--from_db_port', 'type':str, 'default':None, 'help':'%s source database port.' % dbs[dbkey]}	
 	pfrom[dbkey]['header']={'short':'-A','long':'--header', 'type':int, 'default':1, 'help':'Include header to %s extract.' % dbs[dbkey]}	
+	pfrom[dbkey]['from_skip_rows']= {'short':'-O','long':'--from_skip_rows', 	'type':int, 'default':0, 'help':'Number of rows tto skip in source % stream.'  % dbs[dbkey]}
 	#pfrom[dbkey]['source_client_home']={'short':'-z','long':'--source_client_home', 'type':str, 'default':None, 'help':'Path to %s client home.' % dbs[dbkey]}
 
 	if 0:
@@ -373,13 +376,21 @@ def set_params(params):
 		pfrom[dbkey]['source_client_home']={'short':'-z','long':'--source_client_home', 'type':str, 'default':None, 'help':'Path to %s client home.' % dbs[dbkey]}
 		#pfrom[dbkey]['header']={'short':'-H','long':'--header', 'type':int, 'default':0, 'help':'Include header to %s extract.' % dbs[dbkey]}
 
+	dbkey='JSON'				
+	pfrom[dbkey]=OrderedDict()
+	pfrom[dbkey]['input_files']={'short':'-i','long':'--input_files', 'type':str, 'default':None, 'help':'Input JSON file(s).'}
+	pfrom[dbkey]['input_dirs']={'short':'-I','long':'--input_dirs', 'type':str, 'default':None, 'help':'Input JSON directory.'}
+	pfrom[dbkey]['skip_rows']= {'short':'-k','long':'--skip_rows', 	'type':int, 'default':0, 'help':'Header size. Number of rows to skip in input file.'}
+	pfrom[dbkey]['shard_size_kb']={'short':'-y','long':'--shard_size_kb', 'type':int, 'default':10, 'help':'Shard size in KBytes (to partition file and to estimate number of lines in input CSV file).'}				
+
 	dbkey='CSV'				
 	pfrom[dbkey]=OrderedDict()
 	pfrom[dbkey]['input_files']={'short':'-i','long':'--input_files', 'type':str, 'default':None, 'help':'Input CSV file(s).'}
 	pfrom[dbkey]['input_dirs']={'short':'-I','long':'--input_dirs', 'type':str, 'default':None, 'help':'Input CSV directory.'}
 	pfrom[dbkey]['skip_rows']= {'short':'-k','long':'--skip_rows', 	'type':int, 'default':0, 'help':'Header size. Number of rows to skip in input file.'}
 	pfrom[dbkey]['shard_size_kb']={'short':'-y','long':'--shard_size_kb', 'type':int, 'default':10, 'help':'Shard size in KBytes (to partition file and to estimate number of lines in input CSV file).'}				
-				
+
+	
 	#pfrom[dbkey]['source_defaults_file']={'short':'-D','long':'--source_defaults_file', 'type':str, 'default':None, 'help':'Path to %s source defaults file.' % dbs[dbkey]}				
 	dbkey='SLITE'				
 	pfrom[dbkey]=OrderedDict()
@@ -411,6 +422,8 @@ def set_params(params):
 		pto[dbkey]['nls_timestamp_format']={'short':'-m','long':'--nls_timestamp_format', 'type':str, 'default':'', 'help':'nls_timestamp_format for target.'}
 		pto[dbkey]['nls_timestamp_tz_format']={'short':'-O','long':'--nls_timestamp_tz_format', 'type':str, 'default':'', 'help':'nls_timestamp_tz_format for target.'}
 		#pto[dbkey]['target_client_home']={'short':'-Z','long':'--target_client_home', 'type':str, 'default':None, 'help':'Path to %s client home bin dir.' %  dbs[dbkey]}
+		pto[dbkey]['skip_rows']= {'short':'-k','long':'--skip_rows', 	'type':int, 'default':0, 'help':'Number of rows to skip in input file.'}
+
 	if 0:
 		dbkey='ORAXE'
 		pto[dbkey]=OrderedDict()
@@ -439,6 +452,12 @@ def set_params(params):
 	pto[dbkey]['to_file']={'short':'-g','long':'--to_file', 'type':str, 'default':None, 'help':'To %s file.' % dbs[dbkey]  }
 	pto[dbkey]['to_dir']={'short':'-D','long':'--to_dir', 'type':str, 'default':None, 'help':'To directory.'}
 
+	dbkey='JSON'
+	pto[dbkey]=OrderedDict()
+	pto[dbkey]['to_file']={'short':'-g','long':'--to_file', 'type':str, 'default':None, 'help':'To %s file.' % dbs[dbkey]  }
+	pto[dbkey]['to_dir']={'short':'-D','long':'--to_dir', 'type':str, 'default':None, 'help':'To %s directory.' % dbs[dbkey]}
+
+	
 	dbkey='DDL'
 	pto[dbkey]=OrderedDict()
 	pto[dbkey]['to_file']={'short':'-g','long':'--to_file', 'type':str, 'default':None, 'help':'To %s file.' % dbs[dbkey]  }
@@ -474,7 +493,7 @@ def set_params(params):
 	pto[dbkey]['to_db_port']= {'short': '-T','long':'--to_db_port', 'type':str, 'default':None, 'help':'Target %s port.' % dbs[dbkey]}
 	pto[dbkey]['to_collection']={'short':'-a','long':'--to_collection', 'type':str, 'default':None, 'help':'To table.'}
 	pto[dbkey]['to_column_names']={'short':'-Z','long':'--to_column_names', 'type':str, 'default':None, 'help':'To column list for %s.' %  dbs[dbkey]}
-	#pto[dbkey]['skip_rows']= {'short':'-k','long':'--skip_rows', 	'type':int, 'default':0, 'help':'Header size. Number of rows to skip in input file.'}
+	pto[dbkey]['upsert']= {'short':'-O','long':'--upsert', 	'type':int, 'default':0, 'help':'Upsert rows into %s.' %  dbs[dbkey]}
 	
 	dbkey='MARIA'	
 	pto[dbkey]=OrderedDict()		
@@ -506,8 +525,7 @@ def set_params(params):
 	pto[dbkey]['to_table']={'short':'-a','long':'--to_table', 'type':str, 'default':None, 'help':'Target %s table.' % dbs[dbkey]}
 	pto[dbkey]['target_client_home']={'short':'-Z','long':'--target_client_home', 'type':str, 'default':None, 'help':'Path to %s client home bin dir.' %  dbs[dbkey]}
 	pto[dbkey]['target_port']={'short':'-T','long':'--target_port', 'type':str, 'default':'5432', 'help':'Connection port for target %s.' % dbs[dbkey]}
-	
-	#pto[dbkey]['header_line']= {'short':'-k','long':'--header_line', 	'type':int, 'default':0, 'help':'Skip header line.'}
+	pto[dbkey]['skip_header']= {'short':'-k','long':'--skip_header', 	'type':int, 'default':0, 'help':'Skip header line.'}
 	if 0:
 		dbkey='SYANY'				
 		pto[dbkey]=OrderedDict()		

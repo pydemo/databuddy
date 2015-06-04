@@ -1,0 +1,53 @@
+
+C:\Python27\data_migrator_1239_mongo>echo y  | C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe -w mongo-pgres -o 1 -r 1 -t "," -l 10 -K 1 -M C:\Temp\qc_log -F C:\tmp\TEST_default_spool -B qc_job -Y 20150604_155850_394000 -5 ".\config\host_map_v2.py" -6 csv -c test -P "ID,TITLE,ISIN,COUNTRY,DESCRIPTION,SECURITYTYPE,CREATED" -j test_user -x tast_pwd -b test -n localhost -z 27017 -u "postgres" -p "postgre_pwd" -d "postgres" -s "localhost" -a "Timestamp_test_to" -Z "C:\Program Files\PostgreSQL\9.4\bin" -T 5434 -k 1 
+----------------------------------------------------------------------
+QueryCopy for MongoDB (v0.3.3, beta, 2015/06/04 15:58:50) [32bit]
+Copyright (c): 2014 Alex Buzunov, All rights reserved.
+Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
+----------------------------------------------------------------------
+####################
+Performing data copy.
+		
+From MongoDB:	
+	from db: test_user@test
+	table: test
+	shards:	1
+		
+default_spool_dir:
+	C:\tmp\TEST_default_spool\qc_job\20150604_155850_394000
+		
+	To PGRES:	
+		to db: postgres/postgres/localhost
+		to table: Timestamp_test_to
+		
+####################
+Are you sure you want to proceed?(y/n): 
+2015-06-04T15:59:54.192-0400	connected to: localhost:27017
+2015-06-04T15:59:54.193-0400	exported 10 records
+
+COPY Timestamp_test_to FROM 'C:\\tmp\\TEST_default_spool\\qc_job\\20150604_155850_394000\\shard_0.data' WITH DELIMITER ',' CSV HEADER
+############################################################
+Copy stats (1 threads, 1 shards):
+############################################################
+2015-06-04 15:59:54,042 - mongo-pgres - INFO - Starting Thread-0
+2015-06-04 15:59:54,043 - mongo-pgres - INFO - Thread-0 processing Shard-0
+2015-06-04 15:59:54,043 - mongo-pgres - INFO - Extracting data...
+2015-06-04 15:59:54,045 - mongo-pgres - INFO - Starting local spool...
+2015-06-04 15:59:54,197 - mongo-pgres - INFO - Done
+2015-06-04 15:59:54,197 - mongo-pgres - INFO - Loading data...
+ERROR:  invalid input syntax for type timestamp: "2014-12-10 13.02.40.17"
+CONTEXT:  COPY timestamp_test_to, line 2, column created: "2014-12-10 13.02.40.17"
+Exception in thread Thread-0:
+Traceback (most recent call last):
+  File "C:\Python27\data_migrator_1239_mongo\build\qc32\out00-PYZ.pyz\threading", line 810, in __bootstrap_inner
+  File "<string>", line 343, in run
+  File "<string>", line 358, in process_data
+  File "C:\Python27\data_migrator_1239_mongo\build\qc32\out00-PYZ.pyz\template.v101.spool_and_load", line 327, in execute
+  File "C:\Python27\data_migrator_1239_mongo\build\qc32\out00-PYZ.pyz\pipeline.v101.to_postgresql", line 90, in load_data
+IndexError: list index out of range
+
+2015-06-04 15:59:54,243 - mongo-pgres - INFO - Shard-0/-1:		n/a
+2015-06-04 15:59:54,243 - mongo-pgres - INFO - TOTAL Bytes:	n/a
+2015-06-04 15:59:54,243 - mongo-pgres - INFO - TOTAL Rows:		n/a
+2015-06-04 15:59:54,243 - mongo-pgres - ERROR - Copy failed.
+2015-06-04 15:59:54,243 - mongo-pgres - INFO - Elapsed: 00:00:00

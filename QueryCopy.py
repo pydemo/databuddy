@@ -4079,7 +4079,7 @@ class NewSessionDialog(wx.Dialog):
 		self.changed=False
 		if 1:
 			apidir= os.path.join(home,aa_dir)
-			self.api_from = [ f for f in os.listdir(apidir) if os.path.isdir(os.path.join(apidir,f)) and f not in conf.ff ]
+			self.api_from = [ f.upper() for f in os.listdir(apidir) if os.path.isdir(os.path.join(apidir,f)) and f not in conf.ff ]
 			print self.api_from
 			#e(0)
 			self.api2= list({ f[:2] for f in self.api_from})
@@ -4088,6 +4088,7 @@ class NewSessionDialog(wx.Dialog):
 			self.api_menu={}
 			for m in self.api_from:
 				#print m
+				
 				if not self.api_menu.has_key(m[:2]):
 					self.api_menu[m[:2]]=[]
 				self.api_menu[m[:2]].append(m)
@@ -4460,7 +4461,7 @@ class NewSessionDialog(wx.Dialog):
 			dbf={'OR':'Oracle', 'SS':'SQLServer', 'MA':'MariaDB', 'MY': 'MySQL', 'PG':'PostgreSQL', 'DB':'DB2', 'TT':'TimesTen', 'SL':'SQLite', 'IN':'Informix', 'SY':'Sybase','MO':'Mongo'}
 			
 			#pprint(api_from)
-			
+			#print conf.ff
 			# Add sub-menu to main menu
 			self.i=0
 			#print '-'*20, self.recent

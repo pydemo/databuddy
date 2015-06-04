@@ -12,7 +12,7 @@ __title__ = "Session Manager for QueryCopy"
 __version__ = "0.3.3"
 __email__ = "alexbuzunov@gmail.com"
 __status__ = "Development" 	
-import sys,platform; 
+import sys,platform
 __platform__='32' #platform.architecture()[0]
 
 if __platform__ in ['32']:
@@ -4497,9 +4497,9 @@ class NewSessionDialog(wx.Dialog):
 						for k2 in self.api2:
 							self.i +=1
 							if len(self.api_menu[k2])>1:
-								self.create_Menu3(Menu1,k2,dbf,from_db=sm,from_to='To2')
+								self.create_Menu3(Menu1,k2,dbf,from_db=sm,from_to='To')
 							else:
-								self.create_Menu4(Menu1,self.api_menu[k2][0],from_db=sm, from_to='To3')
+								self.create_Menu4(Menu1,self.api_menu[k2][0],from_db=sm, from_to='To')
 						Menu1.AppendSeparator()
 						for sm in conf.ff:
 							self.i +=1
@@ -4527,6 +4527,8 @@ class NewSessionDialog(wx.Dialog):
 			if self.recent:
 				for r in reversed(self.recent):
 					(a,b)=r
+					a=a.upper()
+					b=b.upper()
 					self.i +=1
 					#Menu1 = FM.FlatMenu()
 					menuItem = FM.FlatMenuItem(self.recentMenu, 20000+self.i, '%s --> %s' % (conf.dbs[a],conf.dbs[b]), '', wx.ITEM_NORMAL)
@@ -4555,7 +4557,7 @@ class NewSessionDialog(wx.Dialog):
 			self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(sm,s))
 			Menu2.AppendItem(menuItem)	
 	
-	def create_Menu3(self,Menu2,k2,dbf,from_db, from_to='To1'):
+	def create_Menu3(self,Menu2,k2,dbf,from_db, from_to='To'):
 		#print from_db, k2
 		#from_to='To_%s_%s' %(from_db,k2)
 		self.i +=1

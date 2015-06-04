@@ -658,7 +658,7 @@ exit;
 		#outf.close()
 		#print 1
 		#e(0)
-		#print err
+		print err
 		count=-1
 		
 		#count is in err
@@ -699,15 +699,24 @@ class target(common):
 		to_db=self.args.copy_vector.split(self.conf._to)[1].upper()
 		#from_file=self.args.input_files
 		#print outfn
-		file_format=''
-		fn, file_ext = os.path.splitext(outfn) 
-		file_ext = file_ext.strip('.')
-		if file_ext.upper() in ('DATA','CSV'):
-			file_format='csv'
-		else:
-			file_format=file_ext.lower()
+		file_format=self.args.spool_type
+		if 0:
+			fn, file_ext = os.path.splitext(outfn) 
+			file_ext = file_ext.strip('.')
+			if file_ext.upper() in ('DATA','CSV'):
+				file_format='csv'
+			else:
+				file_format=file_ext.lower()
 		#print file_ext, file_format
-		loadConf=[db_loader_loc, '-u', self.args.to_user, '-p', self.args.to_passwd, '/d', self.args.to_db_name,'/h',self.args.to_db_server, '/c', self.args.to_collection, '/file', outfn, '/type', file_format, '/headerline'] #'/f', self.args.to_column_names, 
+		loadConf=[db_loader_loc, '-u', self.args.to_user, '-p', self.args.to_passwd, '/d', self.args.to_db_name,'/h',self.args.to_db_server, '/c', self.args.to_collection, '/file', outfn, '/type', file_format] #'/f', self.args.to_column_names, 
+		#pprint(dir(self.args))
+		if hasattr(self.args, 'upsert') and  self.args.upsert:
+				self.log.info('Upserting...')
+				loadConf=loadConf+['/upsert']
+		
+		if file_format.upper in ('CSV',):
+			self.log.info('+header line')
+			loadConf= loadConf+['/headerline']
 		
 		return loadConf	
 		
@@ -876,11 +885,13 @@ class target(common):
 			#rows_total +=rows_copied
 			#print rows_total
 		#print count
-		if count>-1:
-			err=[]
 		stat=-1
 		if os.path.isfile(outfn):
-			stat=os.stat(outfn).st_size
+			stat=os.stat(outfn).st_size		
+		if stat>0 and count in [-1,0]:
+			status=1
+		else:
+			err=[]
 		return (out,status,err,count,stat)	
 		
 	def get_inserted_count(self,shard):
