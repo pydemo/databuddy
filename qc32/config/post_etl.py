@@ -7,7 +7,6 @@ import win32com.client
 def send_email(subj):
 	assert args.email_to, 'Email_to is not set'
 	if 1:
-
 		gmail_user = 'data.buddy.test@gmail.com' 
 		gmail_pwd = "data;buddy;test"
 		FROM = 'alex_buz@yahoo.com'

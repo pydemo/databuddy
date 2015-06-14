@@ -5061,9 +5061,14 @@ class pnl_args(wx.Panel):
 				self.cb_all_args.Bind(wx.EVT_CHECKBOX, self.OnShowAllArgs)
 				self.cb_all_args.SetValue(False)	
 				font = wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.NORMAL)
-				self.cb_all_args.SetFont(font)
-				
+				self.cb_all_args.SetFont(font)				
 				hboxsizer.Add(self.cb_all_args, 1, flag=wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM|wx.GROW|wx.ALL|wx.EXPAND, border=3)
+				
+				imageFile = os.path.join(home,"images/refresh_icon_16_grey2.png")
+				image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+				r_button=wx.BitmapButton(self, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6))				
+				hboxsizer.Add(r_button, 0, flag=wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM, border=1)
+				
 				boxsizer.Add(hboxsizer, 1, flag=wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM|wx.GROW|wx.ALL|wx.EXPAND, border=1)				
 				#self.boxsizer.Add(self.from_args_panel, flag=wx.LEFT|wx.TOP, border=1)
 			boxsizer.Add(self.core_args_panel, flag=wx.LEFT|wx.TOP, border=1)
@@ -6558,10 +6563,10 @@ class pnl_args(wx.Panel):
 			sval=str(val).strip('"')
 			style=wx.TE_PROCESS_ENTER
 			#length=self.tc_length
-			if k in ['default_spool_dir','log_dir']:
+			if k in ['default_spool_dir','log_dir','time_stamp']:
 				length=self.tc_length-20
-			elif k in ['time_stamp']:
-				length=self.tc_length
+			#elif k in ['time_stamp']:
+			#	length=self.tc_length
 			else:
 				length=self.tc_length
 				#print k,v
@@ -6628,13 +6633,29 @@ class pnl_args(wx.Panel):
 				self.gen_bind(wx.EVT_BUTTON,self.obj[k][3], self.OnShowOutputDir,[self.obj[k][1]])
 				#self.obj[k][2].Bind(wx.EVT_BUTTON, self.OnDirButton)					
 				#self.Bind(wx.EVT_BUTTON, self.OnInputDir, self.btn_dir)
-				bbox = wx.BoxSizer(wx.HORIZONTAL)
+				#bbox = wx.BoxSizer(wx.HORIZONTAL)
 				self.add_tc(panel, (1,2,3),  k, i,bucket,col)
 				#bbox.Add(self.obj[k][1], 0, flag=wx.ALIGN_CENTER, border=5)	
 				#bbox.Add(self.obj[k][2], 0, flag=wx.ALIGN_CENTER, border=5)
 				#bbox.Add(self.obj[k][3], 0, flag=wx.ALIGN_CENTER, border=5)						
 				#fgs.Add(self.obj[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	
-				panel.fgs.Add(bbox, pos=(i%bucket, col+1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)					
+				#panel.fgs.Add(bbox, pos=(i%bucket, col+1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	
+			elif k in ['time_stamp']:
+				
+				imageFile = os.path.join(home,"images/refresh_icon_16_grey2.png")
+				image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+				self.obj[k].append(wx.BitmapButton(panel, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6)))
+				
+				self.obj[k][2].Bind(wx.EVT_BUTTON, self.OnResetTimestamp)
+				#self.obj[k][2].Bind(wx.EVT_BUTTON, self.OnDirButton)					
+				#self.Bind(wx.EVT_BUTTON, self.OnInputDir, self.btn_dir)
+				#bbox = wx.BoxSizer(wx.HORIZONTAL)
+				self.add_tc(panel, (1,2),  k, i,bucket,col)
+				#bbox.Add(self.obj[k][1], 0, flag=wx.ALIGN_CENTER, border=5)	
+				#bbox.Add(self.obj[k][2], 0, flag=wx.ALIGN_CENTER, border=5)
+				#bbox.Add(self.obj[k][3], 0, flag=wx.ALIGN_CENTER, border=5)						
+				#fgs.Add(self.obj[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	
+				#panel.fgs.Add(bbox, pos=(i%bucket, col+1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)					
 			elif k in ['job_pre_etl','thread_pre_etl','loader_profile', 'host_map']:
 				if 0:
 					imageFile = os.path.join(home,"images/refresh_icon_16_grey2.png")
@@ -6698,7 +6719,11 @@ class pnl_args(wx.Panel):
 		#print len(self.checks), len(self.obj)
 		#pprint(sorted(self.obj.keys()))
 		#from_args_panel.SetSizer(hbox)
-	
+	def OnResetTimestamp(self, evt):
+		#print 'OnResetTimestamp'
+		#[ts_obj,title] = params
+		self.parent.updateTimeStamp()
+		
 	def add_tc(self, panel, oids, k, i, bucket=None,col=None):
 		bbox = wx.BoxSizer(wx.HORIZONTAL)	
 		
@@ -6781,7 +6806,7 @@ class pnl_args(wx.Panel):
 		#(self.copy_vector,self.tmpl,self.the_id,(self.cargs,self.fargs,self.targs))
 		self.args=args
 		(self.cargs,self.fargs,self.targs)=args
-		print len(self.cargs),len(self.fargs),len(self.targs)
+		#print len(self.cargs),len(self.fargs),len(self.targs)
 		#self.args=args_api
 		self.the_id=the_id
 		#self.cargs,self.fargs,self.targs=self.args
@@ -6799,7 +6824,7 @@ class pnl_args(wx.Panel):
 		self.setTargetArgs(self.to_args_panel)
 		#pprint(self.obj.keys())
 		self.setLoaderButtons(self.output_panel)
-		print len(self.cargs),len(self.fargs),len(self.targs)
+		#print len(self.cargs),len(self.fargs),len(self.targs)
 		
 		k='host_map'
 		
@@ -6853,8 +6878,8 @@ class pnl_args(wx.Panel):
 		self._saMenu = None #save as popup menu
 		self.T=False
 		self.Q=False
-		print '###############exiting open_session args_panel'
-		print len(self.cargs),len(self.fargs),len(self.targs)
+		#print '###############exiting open_session args_panel'
+		#print len(self.cargs),len(self.fargs),len(self.targs)
 		
 	def OnEditTestConnectSQL(self, evt):
 		print 'OnEditTestConnectSQL'
@@ -7377,8 +7402,8 @@ class pnl_args(wx.Panel):
 					if  self.obj.has_key(k):
 						self.obj[k][i].Enable(True)		
 	def getArgs(self):
-		print 'getArgs'
-		print len(self.cargs)
+		#print 'getArgs'
+		#print len(self.cargs)
 		for k in self.cargs:
 			assert self.obj.has_key(k), 'cargs "%s" is not set' % k
 			val=self.obj[k][1].GetValue()
@@ -7410,7 +7435,7 @@ class pnl_args(wx.Panel):
 					#print 'targs "%s" value changed' % k, str(self.targs[k][2]),'-->' ,val
 					self.targs[k][2]=val
 		#save to file
-		print len(self.cargs)
+		#print len(self.cargs)
 		return [self.cargs, self.fargs, self.targs]
 	def OnPwdFocus (self, evt):
 		#print 'OnPwdFocus'
@@ -10177,7 +10202,7 @@ class DataBuddy(wx.Frame):
 		#pprint(self.changed)
 		sess=self.get_session_args(os.path.join(self.sdir,self.fname))
 		(self.cargs,self.fargs,self.targs)=sess
-		print len(self.cargs),len(self.fargs),len(self.targs)
+		#print len(self.cargs),len(self.fargs),len(self.targs)
 		for k,v in self.cargs.items():
 			#print k, v
 			if k in self.changed:
@@ -10983,11 +11008,11 @@ class DataBuddy(wx.Frame):
 			#print sname,copy_vector,tmpl
 			self.setTemplates(self.tmpl)
 			self.setType(self.tmpl)
-			print len(self.cargs),len(self.fargs),len(self.targs)
+			#print len(self.cargs),len(self.fargs),len(self.targs)
 			sess=self.get_session_args(os.path.join(self.sdir,self.fname))
 			#pprint(sess.keys())
 			(self.cargs,self.fargs,self.targs)=sess
-			print len(self.cargs),len(self.fargs),len(self.targs)
+			#print len(self.cargs),len(self.fargs),len(self.targs)
 			
 			ids=None
 
@@ -11036,10 +11061,10 @@ class DataBuddy(wx.Frame):
 				self.nb.SetSelection(self.nb_tab)
 				#self.updateCommand(self.nb_tab)
 			else:
-				print len(self.cargs),len(self.fargs),len(self.targs)
+				#print len(self.cargs),len(self.fargs),len(self.targs)
 				self.args_panel.load_session(self.copy_vector,self.tmpl,self.the_id,(self.cargs,self.fargs,self.targs))
-				print '```````````````EnableTab```````'
-				print len(self.cargs),len(self.fargs),len(self.targs)
+				#print '```````````````EnableTab```````'
+				#print len(self.cargs),len(self.fargs),len(self.targs)
 				self.nb.EnableTab(0,True)
 				send('disable_unused_args', [])
 				self.nb.EnableTab(1,True)
@@ -11063,7 +11088,7 @@ class DataBuddy(wx.Frame):
 			self.btn_save.Enable(True)
 			self.save_as.Enable(True)			
 			self.btn_clearall.Enable(True)
-			print len(self.cargs),len(self.fargs),len(self.targs)
+			#print len(self.cargs),len(self.fargs),len(self.targs)
 			
 	def updateCommand(self, page_id=1):
 		#print 'updateCommand', page_id
@@ -11138,7 +11163,7 @@ class DataBuddy(wx.Frame):
 		#pprint(self.p.keys())
 		#print 'OnButtonRun'
 		#pprint(self.p)
-		print len(self.cargs),len(self.fargs),len(self.targs)
+		#print len(self.cargs),len(self.fargs),len(self.targs)
 		if self.p.has_key(the_id) and self.p[the_id]:
 			#window1 = find_window(title)
 			#print window1
@@ -11170,7 +11195,7 @@ class DataBuddy(wx.Frame):
 			#print dir(window1)
 			#win32con.HWND_TOPMOST
 		else:
-			print len(self.cargs),len(self.fargs),len(self.targs)
+			#print len(self.cargs),len(self.fargs),len(self.targs)
 			if self.validateOnRun():
 				msg='Are you sure you want to execute this command?\n%s' % self.args_panel.get_cmd(self.transport)
 				yes=True

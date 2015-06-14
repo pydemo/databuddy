@@ -32,7 +32,7 @@ if inc.has_key(to_db.upper()):
 	#e(0)
 	#print to_db.upper()
 	#print os.path.join(dmhome,'include',inc[to_db.upper()])
-	target = import_module(os.path.join(dmhome,'include',inc[to_db.upper()]))
+	target = import_module(os.path.join(dmhome,'include','etl',inc[to_db.upper()]))
 	#print db
 if inc.has_key(from_db.upper()):
 	import __builtin__
@@ -40,7 +40,9 @@ if inc.has_key(from_db.upper()):
 	dmhome=os.path.dirname(os.path.realpath(__file__))
 	#print os.path.join(dmhome,'include',inc[from_db.upper()])
 	#e(0)
-	source = import_module(os.path.join(dmhome,'include',inc[from_db.upper()]))
+	module_file=os.path.join(dmhome,'include','etl',inc[from_db.upper()])
+	print module_file
+	source = import_module(module_file)
 #print db
 #pprint(dir(db))
 #print target
