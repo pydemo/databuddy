@@ -31,3 +31,8 @@ class base(object):
 		logger.error( err)
 		logger.error( '#'*20)
 		logger.error( '#'*20)
+	def get_ddl_extract_config(self,from_pld):
+		return None			
+	def spool_ddl(self,outfn, spConf, payload):
+		self.log.error('DDL extract is not supported')
+		return (-1, -1)

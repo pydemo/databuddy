@@ -27,7 +27,7 @@
 ::	-a[--to_table] is "Target table."
 ::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
+echo y|C:\Python27\qc_dist_32\20150614_220157\qc32\qc32.exe ^
 -w mongo-maria ^
 -o 1 ^
 -r 1 ^
@@ -36,7 +36,7 @@ echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20150604_155853_528000 ^
+-Y 20150614_220203_784000 ^
 -5 ".\config\host_map_v2.py" ^
 -6 json ^
 -c test ^

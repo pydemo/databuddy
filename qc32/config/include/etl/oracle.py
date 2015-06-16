@@ -4,7 +4,7 @@ from pprint import pprint
 from common.v101.base import base 
 import re, types, os, codecs
 from subprocess import Popen, PIPE,STDOUT
-import yaml
+#import yaml
 e=sys.exit
 import Crypto
 #sys.modules['Crypto'] = crypto
@@ -364,11 +364,14 @@ export TNS_ADMIN
 		
 		from_zip='%s/%s_%s_log.zip' % (self.remote_home_ts,ts,self.shard)
 		#format login for sqlldr
-		user_pwd,conn =db_login_from.split('@')
+		user_pwd,conn =db_login_from.strip().split('@')
 		login_from= """%s@'"%s"'""" % (user_pwd, conn.strip("'").strip('"'))
-		user_pwd,conn =db_login_to.split('@')
+		#print db_login_from,login_from
+		#e(0)
+		user_pwd,conn =db_login_to.strip().split('@')
 		login_to= """%s@'"%s"'""" % (user_pwd, conn.strip("'").strip('"'))
-		
+		#print login_to
+		#e(0)
 		#print db_login
 		
 		cmd="""
@@ -480,12 +483,18 @@ class common(base):
 			#print '2'
 			os.environ['NLS_TIMESTAMP_FORMAT']=''
 		#print cfg
-		p = Popen(cfg,  stdout=PIPE,stderr=PIPE, shell=True)
+		#print ' '. join(cfg)
+		os.chdir(os.path.dirname(db_client_dbshell))
+		#C:\app\alex_buz\product\11.2.0\dbhome_2\BIN\sqlplus.exe -S SCOTT/tiger@orcl @C:\Temp\qc_log\qc_job\20150615_114603_830000\sql\get_table_columns.sql		
+		p = Popen(cfg,  stdout=PIPE,stderr=PIPE, shell=False)
 		output, err = p.communicate()
 		#print output, err
 		if err:
 			self.log.err(err)
 		status=p.wait()	
+		#print self.conf.home
+		#e(0)
+		os.chdir(self.conf.home)
 		for o in output.split(os.linesep):
 			#print o
 			if o.strip():
@@ -650,6 +659,7 @@ exit;
 		#print outfn
 		#pprint(payload)
 		#e(0)
+		os.chdir(os.path.dirname(self.get_db_client_dbshell()))
 		p = Popen(spConf, stdout=outf) # '-S',  stdin=p1.stdout,
 		
 		output, err = p.communicate()
@@ -660,6 +670,7 @@ exit;
 			#print output
 		status=p.wait()
 		outf.close()
+		os.chdir(self.conf.home)
 		#e(0)
 		count=-1
 
@@ -769,19 +780,28 @@ class target(common):
 		if not os.path.isdir(self.ctldir):
 			os.makedirs(self.ctldir)
 		#self.cr={} #code release
+	def loadProfile(self, profile_loc):	
+		assert os.path.isfile(profile_loc), 'sqloader config file %s does not exists.' % (profile_loc)
+		lc=import_module(profile_loc)
+		return lc.sqlloader_config		
 	def get_load_config(self, db_loader_loc,shard_name, row_from, row_to,ctlfn,outfn, datadir):
 		to_db=self.args.copy_vector.split(self.conf._to)[1].upper()
-		loader_profile= self.conf.dlp[to_db].strip('"')
-		if hasattr(self.args, 'loader_profile') and self.args.loader_profile:
-			self.log.info('using non-default loader profile')
-			loader_profile=self.args.loader_profile.strip('"')
+		#loader_profile= self.conf.dlp[to_db].strip('"')
+		#print loader_profile
+		#e(0)
+		assert hasattr(self.args, 'loader_profile') and self.args.loader_profile, 'loader profile is not set'
+		#self.log.info('using non-default loader profile')
+		loader_profile=self.args.loader_profile.strip('"')
 		assert os.path.isfile(loader_profile), 'Loader profile\n%s\ndoes not exists.' % loader_profile
 			
-		loader={}
-		with open(loader_profile, 'r') as f:
-			loader = yaml.load(f)
-
-		loader_args= ['%s=%s' % (x,loader[x].strip().strip(' ')) for x in loader]
+		#loader={}
+		loadProfile= self.loadProfile(loader_profile)
+		#pprint(loadProfile)
+		#e(0)
+		#with open(loader_profile, 'r') as f:
+		#	loader = yaml.load(f)
+		#loader=loadProfile.sqlloader_config
+		loader_args= ['%s=%s' % (x,loadProfile[x].strip().strip(' ')) for x in loadProfile]
 		loader_errors=10
 		ptn=''
 		sptn=''
@@ -863,6 +883,7 @@ class target(common):
 			self.db_client_dbshell=self.conf.dbtools['DBSHELL'][self.db]
 			print self.db_client_dbshell,self.db
 			print self.hm.local_target_client_home
+			print 'get_db_client_dbshell'  
 			e(0)
 			
 			if not os.path.isfile(self.db_client_dbshell):
@@ -893,7 +914,8 @@ class target(common):
 		#print (self.args.from_db)
 		
 		out=self.cr[shard].execute(db_login_from=self.args.from_db, db_login_to=self.login)
-		
+		#print (out)
+		#e(0)
 		#out,status,err,ins_cnt =([],0,None,-1)
 		ins_cnt=-1
 		spool_size=-1
@@ -906,7 +928,7 @@ class target(common):
 		regexp4=re.compile(r'Load retcode = (\d+)')
 		
 		for l in out:
-			#print l
+			#print l.strip()
 			m = re.match(regexp1, l.strip()) 
 			if m and m.groups():
 				ins_cnt= m.groups()[0]
@@ -923,12 +945,17 @@ class target(common):
 			if m and m.groups():
 				load_status= int(m.groups()[0])
 
-				
-		#print ins_cnt, spool_size
+		#if 		
+		#if 		
+		print ins_cnt, spool_size, spool_status , load_status
 		status= spool_status + load_status
-		#print spool_status , load_status
+		#print 
 		err=[]
+		if ins_cnt in (-1,) or spool_size in (-1) or int(load_status)>0 or int(spool_status)>0:
+			for l in out:
+				print 'ERROR: ',l.strip()
 		#e(0)
+		#print status,err,ins_cnt,spool_size
 		return (out,status,err,ins_cnt,spool_size)	
 		
 	def load_data_nt(self,logger,loadConf,outfn,shard):
@@ -948,6 +975,9 @@ class target(common):
 		
 		#pprint(loadConf)
 		#e(0)
+		#print self.get_db_client_dbshell()
+		#e(0)
+		os.chdir(os.path.dirname(self.get_db_client_dbshell()))
 		p3 = Popen(loadConf, stdin=PIPE, stdout=PIPE, stderr=PIPE)
 		output=' '
 		while output:
@@ -964,9 +994,10 @@ class target(common):
 			error=' '
 			while error:
 				error = p3.stderr.readline()
-				print error
+				#print error
 				err.append(error)
 		status = p3.wait()
+		os.chdir(self.conf.home)
 		#print 'shard',shard
 		ins_cnt = self.get_inserted_count(shard)
 		#print ins_cnt

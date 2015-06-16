@@ -19,7 +19,7 @@
 ::	-b[--from_db_name] is "MongoDB source database."
 ::	-n[--from_db_server] is "MongoDB source instance name."
 ::	-z[--from_db_port] is "MongoDB source database port."
-::	-O[--from_skip_rows] is "Number of rows tto skip in source MongoDBtream."
+::	-S[--from_skip_rows] is "Number of rows tto skip in source MongoDBtream."
 ::	-u[--to_user] is "Target SAP Sybase ASE db user."
 ::	-p[--to_passwd] is "Target SAP Sybase ASE db user password."
 ::	-d[--to_db_name] is "Target SAP Sybase ASE database."
@@ -27,7 +27,7 @@
 ::	-a[--to_table] is "Target SAP Sybase ASE table."
 ::	-Z[--target_client_home] is "Path to SAP Sybase ASE client home bin dir."	
 	
-echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
+echo y|C:\Python27\qc_dist_32\20150614_220157\qc32\qc32.exe ^
 -w mongo-syase ^
 -o 1 ^
 -r 1 ^
@@ -36,7 +36,7 @@ echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20150604_155931_360000 ^
+-Y 20150614_220318_881000 ^
 -5 ".\config\host_map_v2.py" ^
 -6 json ^
 -c test ^
@@ -46,7 +46,7 @@ echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
 -b test ^
 -n localhost ^
 -z 27017 ^
--O 1 ^
+-S 1 ^
 -u "dba" ^
 -p "sql" ^
 -d "demo" ^

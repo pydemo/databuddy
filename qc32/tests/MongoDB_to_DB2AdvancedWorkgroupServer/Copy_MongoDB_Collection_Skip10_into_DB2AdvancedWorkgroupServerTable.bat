@@ -19,7 +19,7 @@
 ::	-b[--from_db_name] is "MongoDB source database."
 ::	-n[--from_db_server] is "MongoDB source instance name."
 ::	-z[--from_db_port] is "MongoDB source database port."
-::	-O[--from_skip_rows] is "Number of rows tto skip in source MongoDBtream."
+::	-S[--from_skip_rows] is "Number of rows tto skip in source MongoDBtream."
 ::	-a[--to_table] is "Target DB2 Advanced Workgroup Server table."
 ::	-u[--to_user] is "Target DB2 Advanced Workgroup Server db user."
 ::	-p[--to_passwd] is "Target DB2 Advanced Workgroup Server db user password."
@@ -27,7 +27,7 @@
 ::	-s[--to_db_server] is "Target DB2 Advanced Workgroup Server db instance name."
 ::	-Z[--target_client_home] is "Path to DB2 Advanced Workgroup Server client home bin dir."	
 	
-echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
+echo y|C:\Python27\qc_dist_32\20150614_220157\qc32\qc32.exe ^
 -w mongo-dbtaws ^
 -o 1 ^
 -r 1 ^
@@ -36,7 +36,7 @@ echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20150604_155851_807000 ^
+-Y 20150614_220200_715000 ^
 -5 ".\config\host_map_v2.py" ^
 -6 json ^
 -c test ^
@@ -46,7 +46,7 @@ echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
 -b test ^
 -n localhost ^
 -z 27017 ^
--O 1 ^
+-S 1 ^
 -a ALEX_BUZ.Timestamp_test_to ^
 -u "ALEX_BUZ" ^
 -p "198Morgan" ^

@@ -28,7 +28,7 @@
 ::	-m[--nls_timestamp_format] is "nls_timestamp_format for target."
 ::	-O[--nls_timestamp_tz_format] is "nls_timestamp_tz_format for target."	
 	
-echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
+echo y|C:\Python27\qc_dist_32\20150614_220157\qc32\qc32.exe ^
 -w mongo-oraexa ^
 -o 1 ^
 -r 1 ^
@@ -37,7 +37,7 @@ echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20150604_155922_758000 ^
+-Y 20150614_220302_747000 ^
 -C "C:\Python27\data_migrator_1239\config\loader\sqlloader.yaml" ^
 -5 ".\config\host_map_v2.py" ^
 -6 json ^

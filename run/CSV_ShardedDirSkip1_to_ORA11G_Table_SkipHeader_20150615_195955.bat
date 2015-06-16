@@ -1,0 +1,22 @@
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\qc32\qc32.exe ^
+-t | ^
+-r 3 ^
+-o 1 ^
+-6 json ^
+-w csv-ora11g ^
+-K 1 ^
+-Y 20150615_193820_174000 ^
+-5 C:\Users\alex_buz\sessions\My_Sessions\CSV_ShardedDirSkip1_to_ORA11G_Table_SkipHeader\host_map_v2.py ^
+-B qc_job ^
+-C C:\Users\alex_buz\sessions\My_Sessions\CSV_ShardedDirSkip1_to_ORA11G_Table_SkipHeader\sqlloader.py ^
+-M C:\Temp\qc_log ^
+-I C:\Python27\data_migrator_1239_mongo\test\v101\data\ora_data_dir_1;C:\Python27\data_migrator_1239_mongo\test\v101\data\ora_data_dir_2 ^
+-k 1 ^
+-y 50 ^
+-d orcl ^
+-k 1 ^
+-m "YYYY-MM-DD HH24.MI.SS.FF2" ^
+-u SCOTT ^
+-e "YYYY-MM-DD HH24.MI.SS" ^
+-O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" ^
+-a SCOTT.Timestamp_test_to 

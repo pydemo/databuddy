@@ -26,7 +26,7 @@
 ::	-s[--to_db_server] is "Target Informix IDS db instance name."
 ::	-Z[--target_client_home] is "Path to Informix IDS client home bin dir."	
 	
-echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
+echo y|C:\Python27\qc_dist_32\20150614_220157\qc32\qc32.exe ^
 -w mongo-infor ^
 -o 1 ^
 -r 1 ^
@@ -35,7 +35,7 @@ echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20150604_155857_688000 ^
+-Y 20150614_220211_584000 ^
 -5 ".\config\host_map_v2.py" ^
 -6 json ^
 -c test ^

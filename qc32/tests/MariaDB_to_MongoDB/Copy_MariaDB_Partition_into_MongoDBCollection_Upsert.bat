@@ -26,9 +26,10 @@
 ::	-T[--to_db_port] is "Target MongoDB port."
 ::	-a[--to_collection] is "To table."
 ::	-Z[--to_column_names] is "To column list for MongoDB."
-::	-O[--upsert] is "Upsert rows into MongoDB."	
+::	-G[--upsert] is "Upsert rows into MongoDB."
+::	-numIW[--numInsertionWorkers] is "Upsert rows into MongoDB."	
 	
-echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
+echo y|C:\Python27\qc_dist_32\20150614_220157\qc32\qc32.exe ^
 -w maria-mongo ^
 -o 1 ^
 -r 1 ^
@@ -37,7 +38,7 @@ echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20150604_155852_833000 ^
+-Y 20150614_220202_606000 ^
 -5 ".\config\host_map_v2.py" ^
 -6 json ^
 -c TEST.Partitioned_test_from ^
@@ -54,4 +55,5 @@ echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
 -T 27017 ^
 -a test ^
 -Z "ID,TITLE,ISIN,COUNTRY,DESCRIPTION,SECURITYTYPE,CREATED" ^
--O 1
+-G 1 ^
+-numIW 1

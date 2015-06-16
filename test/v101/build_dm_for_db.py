@@ -24,7 +24,8 @@ class build(common_build):
 		self.run=run
 		import __builtin__
 		__builtin__.copy_vector = copy_vector
-		import common.v101.config as conf
+		#import common.v101.config as conf
+		import config.config as conf
 		self.conf=conf
 		import release as rel 	
 		self.rel=rel
@@ -55,6 +56,7 @@ appn='%s'
 appex='exe'
 appname='%s'
 tests=%s
+_to='%s'
 ucases=None
 import __builtin__
 __builtin__.for_db = for_db
@@ -65,6 +67,7 @@ __builtin__.version=version
 __builtin__.bin=bin
 __builtin__.appname=appname
 __builtin__.release=release
+__builtin__._to=_to
 import test.v101.build_include.%s as inc
 def get_ucases():
 	return ucases
@@ -79,7 +82,7 @@ def getExeTitle():
 def show_help(cvarg,copy_vector,params):
 	inc.show_help(for_db,from_to_dbs,dbs,cvarg,copy_vector,params,ucases)
 
-""" % ( bin,version, ts,self.for_db,self.from_to_dbs,self.ff,self.is_release,app_author,apptitle,appn, '%s%s.exe' % (appn,bin), tests,incname.split('.')[0])
+""" % ( bin,version, ts,self.for_db,self.from_to_dbs,self.ff,self.is_release,app_author,apptitle,appn, '%s%s.exe' % (appn,bin), tests,self.conf._to,incname.split('.')[0])
 		#print relcfg
 		#e(0)
 		fn=os.path.join(self.dmhome,'release.py')
@@ -132,7 +135,7 @@ def show_help(cvarg,copy_vector,params):
 					tlog.append((tkey,len(t)))
 					tests2[tkey]=t
 		#print len(tests2)
-		pprint(tlog)
+		#pprint(tlog)
 		#e(0)
 		for rs in self.regs:
 			relc=(rs, self.v, self.ts)

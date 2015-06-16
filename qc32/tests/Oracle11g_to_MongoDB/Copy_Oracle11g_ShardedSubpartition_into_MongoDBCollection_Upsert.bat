@@ -27,18 +27,19 @@
 ::	-T[--to_db_port] is "Target MongoDB port."
 ::	-a[--to_collection] is "To table."
 ::	-Z[--to_column_names] is "To column list for MongoDB."
-::	-O[--upsert] is "Upsert rows into MongoDB."	
+::	-G[--upsert] is "Upsert rows into MongoDB."
+::	-numIW[--numInsertionWorkers] is "Upsert rows into MongoDB."	
 	
-echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
+echo y|C:\Python27\qc_dist_32\20150614_220157\qc32\qc32.exe ^
 -w ora11g-mongo ^
--o 3 ^
+-o 1 ^
 -r 3 ^
 -t "," ^
 -K 1 ^
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20150604_155910_864000 ^
+-Y 20150614_220236_921000 ^
 -5 ".\config\host_map_v2.py" ^
 -6 json ^
 -c SCOTT.Sub_Partitioned_test_from ^
@@ -56,4 +57,5 @@ echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
 -T 27017 ^
 -a test ^
 -Z "ID,TITLE,ISIN,COUNTRY,DESCRIPTION,SECURITYTYPE,CREATED" ^
--O 1
+-G 1 ^
+-numIW 1

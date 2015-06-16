@@ -10,6 +10,7 @@ from_tab_cols={}
 
 
 		
+		
 class pipeline(base):
 	"""Pipeline template"""
 	def __init__(self,log,args):

@@ -5,21 +5,20 @@
 #			Python 2.7 and wxPython 2.8		
 #
 __author__ = "METRICS TECH"
-__copyright__ = "Copyright 2015, SequelWorks Inc."
+__copyright__ = None # "Copyright 2015, SequelWorks Inc."
 __credits__ = []
+__appname__='QC Session Manager'
 __license__ = "GPL"
 __title__ = "Session Manager for QueryCopy"
-__version__ = "0.3.3"
+__version__ = "0.3.5"
 __maintainer__ = "Alex Buzunov"
 __email__ = "alexbuzunov@gmail.com"
+__github__=None
 __status__ = "Development" 	
+
+
 import sys,platform; 
 __platform__='32' #platform.architecture()[0]
-
-if __platform__ in ['32']:
-	from qc32.include.v101.host_map import host_map as hmap
-else:
-	from qc64.include.v101.host_map import host_map as hmap
 
 import wx.lib.inspection
 import wx.lib.mixins.inspection
@@ -65,7 +64,7 @@ from subprocess import Popen, PIPE,CREATE_NEW_CONSOLE
 import shutil
 import wx.combo
 
-import yaml
+#import yaml
 import re
 import wx.lib.scrolledpanel
 
@@ -75,7 +74,8 @@ import shlex
 __builtin__.copy_vector = None
 __builtin__.cvarg = None
 
-import qc32.common.v101.config as conf
+#import qc32.common.v101.config as conf
+import qc32.config.config as conf
 #for d in sorted(conf.dbs):
 #	print d,': ',conf.dbs[d]
 import argparse
@@ -98,8 +98,21 @@ except ImportError: # if it's not there locally, try the wxPython lib.
 
 
 from qc32.config.include.oracle import target	
-########################################################################
-exe=False
+
+def import_module(filepath):
+	class_inst = None
+	#expected_class = 'MyClass'
+
+	mod_name,file_ext = os.path.splitext(os.path.split(filepath)[-1])
+	assert os.path.isfile(filepath), 'File %s does not exists.' % filepath
+	if file_ext.lower() == '.py':
+		py_mod = imp.load_source(mod_name, filepath)
+
+	elif file_ext.lower() == '.pyc':
+		py_mod = imp.load_compiled(mod_name, filepath)
+	return py_mod
+########################################################################	
+exe=True
 
 e=sys.exit
 blog=cu.blog
@@ -112,6 +125,35 @@ default_sess_lib='My_Sessions'
 transport_home=r'C:\Python27\data_migrator_1239_mongo'
 if exe:
 	transport_home=os.path.join(home,'qc%d' % int(__platform__[:2]))
+if __platform__ in ['32']:
+	from qc32.include.v101.host_map import host_map as hmap
+	if 0:
+		if exe:
+			from qc32.include.v101.host_map import host_map as hmap
+		else:
+			if 0:
+				mod_file=os.path.join(transport_home, 'include','v101', 'host_map.py')
+				hmap2=import_module(mod_file)
+				#hmap2= hmapmod.host_map
+				
+				from qc32.include.v101.host_map import host_map as hmap
+				#print hmap2
+				#print hmap
+				e(0)
+				#os.chdir(transport_home)
+				#from include.v101.host_map import host_map as hmap
+				#os.chdir(home)
+			import os, sys, inspect
+			# realpath() will make your script run, even if you symlink it :)
+			#cmd_folder = os.path.realpath(os.path.abspath(os.path.split(inspect.getfile( inspect.currentframe() ))[0]))
+			if transport_home not in sys.path:
+				sys.path.insert(0, transport_home)	 
+				from include.v101.host_map import host_map as hmap
+				sys.path.pop()
+				sys.path.remove(transport_home)
+else:
+	from qc64.include.v101.host_map import host_map as hmap
+	
 aa_dir='args_api'
 ID_EXIT = wx.NewId()
 ID_CREATE = wx.NewId()
@@ -314,18 +356,7 @@ def find_window( s_app_name ):
         raise
 		
 
-def import_module(filepath):
-	class_inst = None
-	#expected_class = 'MyClass'
 
-	mod_name,file_ext = os.path.splitext(os.path.split(filepath)[-1])
-	assert os.path.isfile(filepath), 'File %s does not exists.' % filepath
-	if file_ext.lower() == '.py':
-		py_mod = imp.load_source(mod_name, filepath)
-
-	elif file_ext.lower() == '.pyc':
-		py_mod = imp.load_compiled(mod_name, filepath)
-	return py_mod
 import ctypes
 
 LONG = ctypes.c_long
@@ -847,7 +878,7 @@ class SessionList(wx.ListCtrl):
 		self.pos=pos
 		#slib_path, slib_name
 		self.save_to_dir=slib_path #self.getLibPath(slib_name)
-		print self.save_to_dir
+		#print self.save_to_dir
 		assert os.path.isdir(self.save_to_dir), 'Library does not exists.'
 		#	os.makedirs(self.save_to_dir)
 		#self.db= OracleDb(self,pos)
@@ -1698,7 +1729,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		event.Skip()		
 	def openSessionByItemId(self, idx):
 		#print self.currentItem
-		print 'idx',idx
+		#print 'idx',idx
 		ii=self.list.GetItemData(idx)
 		s= self.list.getList()[ii]
 		session=s[:1]+s[2:]
@@ -2147,8 +2178,8 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 				 self.filter_history[list.current_list]=fltr
 
 			item_mask='%s'
-			print 'RecreateList'
-			print list.data[list.current_list]
+			#print 'RecreateList'
+			#print list.data[list.current_list]
 			if 1:
 				count += 1
 				if fltr:
@@ -4093,11 +4124,11 @@ class NewSessionDialog(wx.Dialog):
 		if 1:
 			apidir= os.path.join(home,aa_dir)
 			self.api_from = [ f.upper() for f in os.listdir(apidir) if os.path.isdir(os.path.join(apidir,f)) and f not in conf.ff ]
-			print self.api_from
+			#print self.api_from
 			#e(0)
 			self.api2= list({ f[:2] for f in self.api_from})
 			self.api2.sort()
-			print self.api2
+			#print self.api2
 			self.api_menu={}
 			for m in self.api_from:
 				#print m
@@ -5012,6 +5043,7 @@ class pnl_args(wx.Panel):
 		self.copy_vector=copy_vector
 		self.tmpl=tmpl
 		self.obj={}
+		self.checks={}
 		#self.changed=False
 		self.tc_length=180
 		self.tfile={'target':os.path.join(home,'test','test_connnect','Target_connect_test_for_oracle.sql'),
@@ -5068,7 +5100,9 @@ class pnl_args(wx.Panel):
 				image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
 				r_button=wx.BitmapButton(self, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6))				
 				hboxsizer.Add(r_button, 0, flag=wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM, border=1)
-				
+				r_button.Bind(wx.EVT_BUTTON, self.OnRefreshArgLists)  
+					
+		
 				boxsizer.Add(hboxsizer, 1, flag=wx.RIGHT|wx.BOTTOM|wx.ALIGN_BOTTOM|wx.GROW|wx.ALL|wx.EXPAND, border=1)				
 				#self.boxsizer.Add(self.from_args_panel, flag=wx.LEFT|wx.TOP, border=1)
 			boxsizer.Add(self.core_args_panel, flag=wx.LEFT|wx.TOP, border=1)
@@ -5330,24 +5364,47 @@ class pnl_args(wx.Panel):
 			
 		self.Bind(wx.EVT_CHAR_HOOK, self.onKey)
 		
-		self.checks={}
+		#self.checks={}
 		sub(self.onSetLoaderProfile, "set_loader_profile")
 		sub(self.onSetHostMap, "set_hostmap")
-		sub(self.onSetEtlEditorProfile, "set_etl_editor_profile")
+		#sub(self.onSetEtlEditorProfile, "set_etl_editor_profile")
 		sub(self.onDisableUnusedArgs, 'disable_unused_args')
 		
 		self.hm=None
+		if not self.hm:
+			hm_type='default'
+			default_hostmap_loc = os.path.join(transport_home, 'config','host_map_v2.py')
+			#new_hostmap_loc=self.parent.args_panel.CreateNewSessionHostMap(hostmap_loc)
+			#if new_hostmap_loc not in [hostmap_loc]:
+			#	self.obj[k][1].SetValue(new_hostmap_loc)
+			#e(0)
+			#print conf._to.join(self.copy_vector)
+			#print transport_home,default_hostmap_loc
+			self.hm = hmap(('ora11g','ora11g'), default_hostmap_loc)
+			#pprint(dir(self.hm))
+			am= self.hm.get_active_mapping()
+			#print am
+			self.parent.set_bar_status(2,am)
+			#send('set_bar_status', (2,am))
+	def OnRefreshArgLists(self, e):
+		#sender = e.GetEventObject()
+		#isChecked = sender.GetValue()
+		#print isChecked
+		self.setCommonArgs(self.core_args_panel)
+		self.setSourceArgs(self.from_args_panel)		
+		self.setTargetArgs(self.to_args_panel)		
+		#k=sender.GetName() 		
 	def OnShowAllArgs(self, e):
 		sender = e.GetEventObject()
 		isChecked = sender.GetValue()
-		print isChecked
+		#print isChecked
 		self.setCommonArgs(self.core_args_panel)
 		self.setSourceArgs(self.from_args_panel)		
 		self.setTargetArgs(self.to_args_panel)		
 		#k=sender.GetName() 
 		
 	def CreateNewSessionHostMap(self, hostmap_loc):
-		print 'CreateNewSessionHostMap', hostmap_loc
+		#print 'CreateNewSessionHostMap', hostmap_loc
 		#e(0)
 		#hostmap_loc=obj.GetValue()
 		#print 'existing hostmap: %s' % hostmap_loc
@@ -5356,8 +5413,8 @@ class pnl_args(wx.Panel):
 		if not os.path.isdir(session_dir):
 			os.makedirs(session_dir)
 		session_hostmap_loc=os.path.join(session_dir,hostmap_name)
-		print session_hostmap_loc
-		print self.parent.save_to_dir
+		#print session_hostmap_loc
+		#print self.parent.save_to_dir
 		if os.path.isfile(session_hostmap_loc):
 			print 'session host map already exists'
 
@@ -5369,16 +5426,50 @@ class pnl_args(wx.Panel):
 			else:
 				real_hostmap_loc=os.path.realpath(hostmap_loc)
 			assert os.path.isfile(real_hostmap_loc), 'host_map template does not exists at\n%s' % real_hostmap_loc
-			print real_hostmap_loc
-			print session_hostmap_loc
+			#print real_hostmap_loc
+			#print session_hostmap_loc
 			shutil.copyfile(real_hostmap_loc,session_hostmap_loc)
 			#obj.SetValue(session_hostmap_loc)
 			#self.Save()
 			#print 'created new session_hostmap at \n%s' % session_hostmap_loc
 			send('set_hostmap', (session_hostmap_loc))
-		print session_hostmap_loc
+		#print session_hostmap_loc
 		#e(0)
-		return session_hostmap_loc		
+		return session_hostmap_loc	
+	def CreateNewSessionLoaderProfile(self, loader_loc):
+		#print 'CreateNewSessionHostMap', hostmap_loc
+		#e(0)
+		#hostmap_loc=obj.GetValue()
+		#print 'existing hostmap: %s' % hostmap_loc
+		loader_name=os.path.basename(loader_loc)
+		session_dir=self.getSessionDir()
+		if not os.path.isdir(session_dir):
+			os.makedirs(session_dir)
+		session_loader_loc=os.path.join(session_dir,loader_name)
+		#print session_hostmap_loc
+		#print self.parent.save_to_dir
+		if os.path.isfile(session_loader_loc):
+			print 'session host map already exists'
+
+		else:
+			os.chdir(home)
+			if loader_loc.startswith(r'.'):
+				#relative
+				real_loader_loc=os.path.join(transport_home,loader_loc)
+			else:
+				real_loader_loc=os.path.realpath(loader_loc)
+			assert os.path.isfile(real_loader_loc), 'sqlloader template does not exists at\n%s' % real_loader_loc
+			#print real_hostmap_loc
+			#print session_hostmap_loc
+			shutil.copyfile(real_loader_loc,session_loader_loc)
+			#obj.SetValue(session_hostmap_loc)
+			#self.Save()
+			#print 'created new session_hostmap at \n%s' % session_hostmap_loc
+			send('set_loader_profile', (session_loader_loc))
+		#print session_hostmap_loc
+		#e(0)
+		return session_loader_loc	
+		
 	def getSessionDir(self):
 		session_dir=os.path.join(self.parent.save_to_dir,self.parent.getSessionName())
 		return session_dir		
@@ -5394,8 +5485,8 @@ class pnl_args(wx.Panel):
 		#print self.obj.keys()
 		if self.obj.has_key(k):
 			self.obj[k][1].SetValue(profile_loc)
-		send('save_args',())
-	def onSetEtlEditorProfile(self, data, extra1, extra2=None):
+		#send('save_args',())
+	def onSetEtlEditorProfile_(self, data, extra1, extra2=None):
 		(etl_loc,k)=data
 		#print 'onSetEtlEditorProfile',k
 		#print etl_loc
@@ -5403,7 +5494,7 @@ class pnl_args(wx.Panel):
 		#print self.obj.keys()
 		if self.obj.has_key(k):
 			self.obj[k][1].SetValue(etl_loc)
-		send('save_args',())	
+		#send('save_args',())	
 	def onKey(self, evt):
 		if evt.GetKeyCode() == wx.WXK_DOWN:
 			print "Down key pressed"
@@ -5542,7 +5633,7 @@ class pnl_args(wx.Panel):
 		#print tkeys
 		#e(0)
 		dbkey=self.copy_vector[1]
-		unused_from_args={} #self.targs
+		panel.unused_from_args={} #self.targs
 		#pprint(all_from_args)
 		if dbkey:
 			
@@ -5562,7 +5653,7 @@ class pnl_args(wx.Panel):
 			for k,v in pto[dbkey].items():
 				#print k
 				#print v				
-				if 1:
+				if not self.checks.has_key(k):
 					#panel.fgs.Add(cb,  pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 					if self.targs.has_key(k):
 						cb = wx.CheckBox(panel, label='', size=(20,20))
@@ -5574,18 +5665,20 @@ class pnl_args(wx.Panel):
 						cb.SetValue(True)					
 					elif self.show_unused():
 						cb = wx.CheckBox(panel, label='', size=(20,20))
-
 						cb.SetName(k)
 						cb.Bind(wx.EVT_CHECKBOX, self.onArgCheck)
 						#panel.fgs.Add(cb,  pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 						self.checks[k]=cb
-						unused_from_args[k]=(v['short'],v['long'],'',v['help'])
+						panel.unused_from_args[k]=(v['short'],v['long'],'',v['help'])
 						#self.checks[k]=cb
 						cb.SetValue(False)
 		#print len(all_from_args)
 		#show used args
 		#for k,v in sorted(self.fargs.items()):
-		for k,v in sorted(unused_from_args.items()+self.targs.items()):		
+		items=[(k,self.targs[k] ) for k in self.targs if k not in self.fargs.keys()]
+		#pprint(items)
+		#e(0)
+		for k,v in sorted(panel.unused_from_args.items()+items):		
 		#for k in sorted(tkeys):
 			#v=self.targs[k]
 			#print k,v
@@ -5607,7 +5700,8 @@ class pnl_args(wx.Panel):
 			else:
 				self.obj[k]= [wx.StaticText(panel, label=k), wx.TextCtrl(panel,value=sval, style=style, size=(length,22))]
 			panel.fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-			
+			if self.checks and not self.checks[k].GetValue():
+				self.obj[k][0].Enable(False)			
 			
 			if k in ['to_file']:
 				
@@ -5821,7 +5915,7 @@ class pnl_args(wx.Panel):
 		if dbkey:
 			
 			imp_file = os.path.join(transport_home,'config','include','args','%s_to.py' % dbkey)
-			print imp_file
+			#print imp_file
 			assert os.path.isfile(imp_file), imp_file
 			pto={}
 			pto[dbkey]=OrderedDict()
@@ -5834,7 +5928,7 @@ class pnl_args(wx.Panel):
 			#all_from_args=[] #pfrom[dbkey].items() #.keys()
 			
 			for k,v in pto[dbkey].items():
-				print k
+				#print k
 				#print v				
 				if 1:
 					cb = wx.CheckBox(panel, label='', size=(20,20))
@@ -6056,7 +6150,7 @@ class pnl_args(wx.Panel):
 		#from_args_panel.SetSizer(hbox)
 
 	def onDisableUnusedArgs(self, data, extra1, extra2=None):
-		print 'onDisableUnusedArgs'	
+		#print 'onDisableUnusedArgs'	
 		#usedkeys=self.fargs.keys()
 		for k, v in self.checks.items():
 			if not v.GetValue():
@@ -6090,7 +6184,7 @@ class pnl_args(wx.Panel):
 		#print len(self.fargs.items())
 		
 		dbkey=self.copy_vector[0]
-		unused_from_args={} #self.fargs
+		panel.unused_from_args={} #self.fargs
 		#pprint(all_from_args)
 		(_,self.fargs,self.targs)=self.parent.unobfuscate([None,self.fargs,self.targs])
 		if dbkey:
@@ -6128,12 +6222,12 @@ class pnl_args(wx.Panel):
 						#panel.fgs.Add(cb,  pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 						self.checks[k]=cb					
 						#print '---------adding ------', k
-						unused_from_args[k]=(v['short'],v['long'],'',v['help'])
+						panel.unused_from_args[k]=(v['short'],v['long'],'',v['help'])
 						cb.SetValue(False)
 		#print len(all_from_args)
 		#show used args
 		#for k,v in sorted(self.fargs.items()):
-		for k,v in sorted(unused_from_args.items()+self.fargs.items()):
+		for k,v in sorted(panel.unused_from_args.items()+self.fargs.items()):
 			#all_from_args
 			#print k
 			#print i
@@ -6151,13 +6245,14 @@ class pnl_args(wx.Panel):
 				self.obj[k]= [wx.StaticText(panel, label=k)]
 			else:
 				tx=wx.StaticText(panel, label=k)
-				tx.Enable(False)
+				#tx.Enable(False)
 				tc=wx.TextCtrl(panel,value=sval, style=style, size=(length,22))
 				tc.Disable()
 				self.obj[k]= [tx, tc]
 				
 			panel.fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-			self.obj[k][0].Enable(False)
+			if self.checks and not self.checks[k].GetValue():
+				self.obj[k][0].Enable(False)
 			#print dir(panel.fgs)
 			#print panel.fgs.Rows
 			#print i
@@ -6179,8 +6274,9 @@ class pnl_args(wx.Panel):
 				
 				bbox.Add(self.obj[k][1], 0, flag=wx.ALIGN_CENTER, border=5)	
 				bbox.Add(self.obj[k][2], 0, flag=wx.ALIGN_CENTER, border=5)	
-				#fgs.Add(self.obj[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	
-				panel.fgs.Add(bbox, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	
+				#fgs.Add(self.obj[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				self.add_tc(panel, (1,2), k, i)				
+				#panel.fgs.Add(bbox, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	
 
 						
 			elif k in ['query_sql_file']:
@@ -6289,8 +6385,8 @@ class pnl_args(wx.Panel):
 				self.add_tc(panel, (1,), k, i)
 				if 0:
 					bbox = wx.BoxSizer(wx.HORIZONTAL)
-					if not hasattr(self, 'checks'):
-						self.checks={}
+					#if not hasattr(self, 'checks'):
+					#	self.checks={}
 					if self.checks.has_key(k):
 
 						bbox.Add(self.checks[k], 0, flag=wx.ALIGN_CENTER|wx.TOP|wx.LEFT|wx.BOTTOM, border=0)
@@ -6326,21 +6422,60 @@ class pnl_args(wx.Panel):
 		#print len(self.checks), len(self.obj)
 		#pprint(sorted(self.obj.keys()))
 		#from_args_panel.SetSizer(hbox)
-		print self.obj['from_passwd'][1].GetValue()
+		#print self.obj['from_passwd'][1].GetValue()
 	def onArgCheck(self, e):
 
 		sender = e.GetEventObject()
 		isChecked = sender.GetValue()
 		k=sender.GetName() 
+		print k
 		if isChecked:
-			print 'checked', k			
+			#print 'checked', k			
 			self.obj[k][0].Enable(True)
 			self.obj[k][1].Enable(True)
-			
+			self.checks[k].SetValue(True)
+			self.changed=True
+			if self.core_args_panel.unused_from_args.has_key(k):
+				#print self.core_args_panel.unused_from_args[k]
+				self.obj[k][1].SetValue(self.core_args_panel.unused_from_args[k][2])
+				self.cargs[k]=self.core_args_panel.unused_from_args[k]
+				del self.core_args_panel.unused_from_args[k]
+				#print self.cargs[k]
+			elif self.from_args_panel.unused_from_args.has_key(k):
+				#print self.core_args_panel.unused_from_args[k]
+				self.obj[k][1].SetValue(self.from_args_panel.unused_from_args[k][2])
+				self.fargs[k]=self.from_args_panel.unused_from_args[k]
+				del self.from_args_panel.unused_from_args[k]
+				#print self.cargs[k]
+			elif self.to_args_panel.unused_from_args.has_key(k):
+				#print self.core_args_panel.unused_from_args[k]
+				self.obj[k][1].SetValue(self.to_args_panel.unused_from_args[k][2])
+				self.targs[k]=self.to_args_panel.unused_from_args[k]
+				del self.to_args_panel.unused_from_args[k]
+				#print self.cargs[k]
+			else:
+				assert 1==2, 'Unknown key "%s"' % k
 		else: 
-			print 'un-checked'
+			#print 'un-checked'
 			self.obj[k][0].Enable(False)
 			self.obj[k][1].Enable(False)
+			self.checks[k].SetValue(False)
+			self.changed=True
+			if self.cargs.has_key(k):
+				self.core_args_panel.unused_from_args[k] = self.cargs[k]
+				del self.cargs[k]
+				#print self.core_args_panel.unused_from_args[k]
+			elif self.fargs.has_key(k):
+				self.from_args_panel.unused_from_args[k] = self.fargs[k]
+				del self.fargs[k]
+				#print self.core_args_panel.unused_from_args[k]
+			elif self.targs.has_key(k):
+				self.to_args_panel.unused_from_args[k] = self.targs[k]
+				del self.targs[k]
+				#print self.core_args_panel.unused_from_args[k]
+			else:
+				assert 1==2, 'Unknown key "%s"' % k
+			send('save_args',())
 	def setCommonArgs_0(self, panel):
 		empty=False
 		#self.obj={}
@@ -6484,6 +6619,7 @@ class pnl_args(wx.Panel):
 		return self.cb_all_args.GetValue()
 	def setCommonArgs(self, panel):	
 		empty=False
+		
 		panel.Freeze()
 		#self.obj={}
 		if not hasattr(panel, 'hbox'):
@@ -6506,7 +6642,7 @@ class pnl_args(wx.Panel):
 		#print len(self.fargs.items())
 		
 		dbkey=self.copy_vector[0].upper()
-		unused_from_args={}#self.cargs
+		panel.unused_from_args={}#self.cargs
 		#pprint(all_from_args)
 		#print len(self.cargs),len(self.fargs),len(self.targs)
 		if dbkey:
@@ -6544,7 +6680,7 @@ class pnl_args(wx.Panel):
 						cb.Bind(wx.EVT_CHECKBOX, self.onArgCheck)
 						#panel.fgs.Add(cb,  pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 						self.checks[k]=cb						
-						unused_from_args[k]=(v['short'],v['long'],'',v['help'])
+						panel.unused_from_args[k]=(v['short'],v['long'],'',v['help'])
 						#self.checks[k]=cb
 						cb.SetValue(False)
 		#print len(all_from_args)
@@ -6554,7 +6690,7 @@ class pnl_args(wx.Panel):
 		#print len(self.cargs),len(self.fargs),len(self.targs)
 		#all_from_args=[]
 		#all_from_args=self.cargs.items()+extra_from_args.items()
-		for k,v in sorted(self.cargs.items()+unused_from_args.items()):
+		for k,v in sorted(self.cargs.items()+panel.unused_from_args.items()):
 			#all_from_args
 			#print k
 			#print i
@@ -6577,7 +6713,7 @@ class pnl_args(wx.Panel):
 			bucket=8
 			col=i/bucket*2
 			tx=wx.StaticText(panel, label=k, size=(-1,-1))
-			tx.Enable(False)
+			tx.Enable(True)
 			tc=wx.TextCtrl(panel,value=sval, style=style, size=(length,-1))
 			tc.Disable()
 			self.obj[k]= [tx, tc]
@@ -6585,7 +6721,8 @@ class pnl_args(wx.Panel):
 			#panel.fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 			#print 'common',i%bucket, col
 			panel.fgs.Add(self.obj[k][0], pos=(i%bucket, col), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-			self.obj[k][0].Enable(False)
+			if self.checks and not self.checks[k].GetValue():
+				self.obj[k][0].Enable(False)
 			#print dir(panel.fgs)
 			#print panel.fgs.Rows
 			#print i
@@ -6684,8 +6821,8 @@ class pnl_args(wx.Panel):
 			#else:
 			#	panel.fgs.Add(self.obj[k][1], pos=(i%bucket, col+1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 			else:
-				if not hasattr(self, 'checks'):
-					self.checks={}
+				#if not hasattr(self, 'checks'):
+				#	self.checks={}
 				self.add_tc(panel, (1,), k, i,bucket,col)
 			
 			if k in self.disabled:
@@ -6829,20 +6966,39 @@ class pnl_args(wx.Panel):
 		k='host_map'
 		
 		if self.obj.has_key(k):
-			hostmap_loc = self.obj[k][1].GetValue()
+			hostmap_loc = self.obj[k][1].GetValue().strip()
 			new_hostmap_loc=self.parent.args_panel.CreateNewSessionHostMap(hostmap_loc)
 			if new_hostmap_loc not in [hostmap_loc]:
 				self.obj[k][1].SetValue(new_hostmap_loc)
 			#e(0)
 			#print conf._to.join(self.copy_vector)
 			
-			self.hm = hmap(self.copy_vector,new_hostmap_loc)
+			self.hm = hmap(self.copy_vector,new_hostmap_loc)						
+			am= self.hm.get_active_mapping()
+			self.parent.set_bar_status(2,am)
 			self.parent._hmMenu=None
 		else:
 			print 'no host_map'
+		
+		k='loader_profile'		
+		assert self.obj.has_key(k), 'loader profile ./config/sqlloader.py is not defined for this session.'
+		if 1:
+			loader_loc = self.obj[k][1].GetValue().strip()
+			new_hostmap_loc=self.parent.args_panel.CreateNewSessionLoaderProfile(loader_loc)
+			#if new_hostmap_loc not in [loader_loc]:
+			#	self.obj[k][1].SetValue(new_loader_loc)
+			#e(0)
+			#print conf._to.join(self.copy_vector)
+			
+			#self.hm = hmap(self.copy_vector,new_hostmap_loc)						
+			#am= self.hm.get_active_mapping()
+			#self.parent.set_bar_status(2,am)
+			#self.parent._hmMenu=None
+		#else:
+			#print 'no host_map'			
 		k='keep_data_file'
 		if self.obj.has_key(k):
-			val=self.obj[k][1].GetValue()
+			val=self.obj[k][1].GetValue().strip()
 			send('set_keep_data_file',(val))
 		
 		if 1:
@@ -7215,8 +7371,8 @@ class pnl_args(wx.Panel):
 		spooler=None
 		path_to_db_client=None
 		
-		print self.hm
-		print self.hm.local_source_client_home, self.hm.local_target_client_home 
+		#print self.hm
+		#print self.hm.local_source_client_home, self.hm.local_target_client_home 
 		if tc.Name=='source':
 			spooler=conf.dbtools['SPOOLER'][self.copy_vector[0]]
 			path_to_db_client=self.hm.local_source_client_home #self.obj['source_client_home'][1].GetValue()
@@ -7406,7 +7562,7 @@ class pnl_args(wx.Panel):
 		#print len(self.cargs)
 		for k in self.cargs:
 			assert self.obj.has_key(k), 'cargs "%s" is not set' % k
-			val=self.obj[k][1].GetValue()
+			val=self.obj[k][1].GetValue().strip()
 			self.cargs[k]=list(self.cargs[k])
 			if str(self.cargs[k][2]).strip('"') not in [val]:
 				#print 'cargs "%s" value changed' % k, str(self.cargs[k][2]),'-->' ,val
@@ -7414,7 +7570,7 @@ class pnl_args(wx.Panel):
 			#,self.fargs,self.targs=self.args
 		for k in self.fargs:
 			assert self.obj.has_key(k), 'fargs "%s" is not set' % k
-			val=self.obj[k][1].GetValue()
+			val=self.obj[k][1].GetValue().strip()
 			self.fargs[k]=list(self.fargs[k])
 			#if k in ['from_passwd']:
 			#	#base64.b64decode("cGFzc3dvcmQ=")
@@ -7425,7 +7581,7 @@ class pnl_args(wx.Panel):
 					self.fargs[k][2]=val		
 		for k in self.targs:
 			assert self.obj.has_key(k), 'targs "%s" is not set' % k
-			val=self.obj[k][1].GetValue()
+			val=self.obj[k][1].GetValue().strip()
 			self.targs[k]=list(self.targs[k])
 			#if k in ['to_passwd']:
 			#	#import base64
@@ -7687,11 +7843,11 @@ class pnl_args(wx.Panel):
 		for k, v in sorted(self.cargs.items()):
 			#print k,v
 			short,long,val,desc=v
-			cmd='%s %s "%s"' % (cmd, short,self.obj[k][1].GetValue())
+			cmd='%s %s "%s"' % (cmd, short,self.obj[k][1].GetValue().strip())
 		for k, v in sorted(self.fargs.items()):
 			#print k,v
 			short,long,val,desc=v
-			val=self.obj[k][1].GetValue()
+			val=self.obj[k][1].GetValue().strip()
 			if 0 and 'passwd' in long: 
 				val= base64.b64decode(val)
 			cmd='%s %s "%s"' % (cmd, short,val)
@@ -7699,7 +7855,7 @@ class pnl_args(wx.Panel):
 		for k, v in sorted(self.targs.items()):
 			#print k,v
 			short,long,val,tesc=v
-			val=self.obj[k][1].GetValue()
+			val=self.obj[k][1].GetValue().strip()
 			if 0 and 'passwd' in long: 
 				#pprint (val)
 				val= base64.b64decode(val)
@@ -7711,7 +7867,7 @@ class pnl_args(wx.Panel):
 			#print k, self.parent.if_send_email()
 			#print k,v
 			short,long,val,desc=v
-			value=self.obj[k][1].GetValue()
+			value=self.obj[k][1].GetValue().strip()
 			#if not value.isdigit() and short not in ['-w']:
 			#	value='"%s"' % value
 			if value and value.strip('"') and value.strip(' ') :
@@ -7730,7 +7886,7 @@ class pnl_args(wx.Panel):
 			#print k
 			v= self.fargs[k]
 			short,long,val,desc=v
-			value=self.obj[k][1].GetValue()
+			value=self.obj[k][1].GetValue().strip()
 			if not value.isdigit() and ' ' in value:
 				value='"%s"' % value
 			if value and value.strip('"')  and value.strip(' '):
@@ -7743,7 +7899,7 @@ class pnl_args(wx.Panel):
 			#print k
 			v= self.targs[k]
 			short,long,val,tesc=v
-			value=self.obj[k][1].GetValue()
+			value=self.obj[k][1].GetValue().strip()
 			if (not value.isdigit() and ' ' in value):
 				value='"%s"' % value
 			if value and value.strip('"')  and value.strip(' '):
@@ -8061,15 +8217,15 @@ class pnl_output(wx.Panel):
 							lbl='Truncate table'						
 						elif 'query_spool' in k:
 							
-							print k
+							#print k
 							regexp1=re.compile(r'.*_(\d+)\.sql')
 							m= re.match(regexp1, k)
 							sid=''
-							print sid
+							#print sid
 							if m:
 								lbl='Query spool (%s)' % m.groups()[0]
 						else:						
-							print k
+							#print k
 							regexp1=re.compile(r'.*\.(\d+)\.sql')
 							m= re.match(regexp1, k)
 							sid=''
@@ -8120,8 +8276,11 @@ class pnl_output(wx.Panel):
 			#self.vbox4.Add(self.p_sql, flag=wx.LEFT|wx.TOP, border=5)
 			i=0
 			self.dump={}	
-			if args_panel.obj.has_key('default_spool_dir'):
+			k='default_spool_dir'
+			if args_panel.obj.has_key(k) and args_panel.checks[k].GetValue():
 				dumpdir=self.parent.getDumpDir()
+				print args_panel.obj.has_key('default_spool_dir')
+				print dumpdir
 				#os.path.isdir(dumpdir):
 				files=[d for d in os.listdir(dumpdir) if os.path.isfile(os.path.join(dumpdir,d))]
 				for k in files:
@@ -8316,15 +8475,15 @@ class pnl_output(wx.Panel):
 						regexp1=re.compile(r'.*_(\d+)\.sql')
 						m= re.match(regexp1, k)
 						sid=''
-						print sid
+						#print sid
 						if m:
 							lbl='Query spool (Shard-%s)' % m.groups()[0]
 					else:						
-						print k
+						#print k
 						regexp1=re.compile(r'.*\.(\d+)\.sql')
 						m= re.match(regexp1, k)
 						sid=''
-						print sid
+						#print sid
 						if m:
 							lbl='Data load (Shard-%s)' % m.groups()[0]
 							
@@ -8339,470 +8498,6 @@ class pnl_output(wx.Panel):
 			#self.btnsizer.Layout()
 			self.vbox4.Layout()
 			self.h_sizer.Layout()			
-########################################################################
-class pnl_loader(wx.Panel):
-	"""
-	SQL*Loader config
->>> members = {'Starspy' : 'SHSN4N', 'Test' : 'Test1'}
->>> json.dumps(members)
-'{"Test": "Test1", "Starspy": "SHSN4N"}'
->>> json.loads(json.dumps(members))
-{u'Test': u'Test1', u'Starspy': u'SHSN4N'}
-
-d = {'A':'a', 'B':{'C':'c', 'D':'d', 'E':'e'}}
-with open('default_sqlloader.yaml', 'w') as f:
-  yaml.dump(p, f, default_flow_style=False)
-  
-	"""
-	#----------------------------------------------------------------------
-	def __init__(self, parent, profile_loc, style):
-		""""""
-		wx.Panel.__init__(self, parent, id=wx.NewId(), style=style)
-		self.parent=parent
-		#self.frame=frame
-
-		self.changed=False
-		self.param={}
-		self.loader_args=None
-		self.pname='sqlloader.yaml'
-		#self.rel_pfile_loc= os.path.join('loader', self.pname)
-		self.default_loader_profile_loc=os.path.join(transport_home,  os.path.join('config','loader',self.pname))
-		#print self.default_loader_profile
-		self.profile_loc=profile_loc
-		if profile_loc:
-			self.Prepare( profile_loc)
-		else:
-			pass
-		if 0:
-			dpl_columnarrayrows=10000
-			dpl_streamsize=500000
-			dpl_readsize=200000
-			if_dpl_parallel='TRUE'
-			dpl_bindsize=200000
-			dpl_skip_index_maintenance='TRUE'
-			dpl_skip_unusable_indexes='TRUE'
-			if_direct='TRUE'
-			loader_errors=10
-			ptn=''
-			sptn=''
-			userid = self.args.to_db
-			#check if url connect
-			c,sid = self.args.to_db.split('@')
-			if sid.strip().startswith("'(DESCRIPTION"):
-				u,p=c.split('/')
-				userid='%s@\"%s\"/%s' % (u,sid.strip("'").replace('(',r'\(').replace(')',r'\)'),p)
-			
-			loadConf=[db_loader_loc, 
-			'control="%s"' % ctlfn, 
-			'userid=%s' % userid, #args.to_db,
-			'DATA="%s"' % outfn,
-			'COLUMNARRAYROWS=%s' % dpl_columnarrayrows,
-			'STREAMSIZE=%s' % dpl_streamsize,'READSIZE=%s' % dpl_readsize,
-			'PARALLEL=%s' % if_dpl_parallel,
-			'BINDSIZE=%s' % dpl_bindsize, 
-			#'UNRECOVERABLE=Y', 
-			'SKIP_INDEX_MAINTENANCE=%s' % dpl_skip_index_maintenance, 'SKIP_UNUSABLE_INDEXES=%s' % dpl_skip_unusable_indexes,
-			'DIRECT=%s' % if_direct, 	
-			'MULTITHREADING=TRUE', 
-			#'EXTERNAL_TABLE=EXECUTE', %s/sqlloader/%s%s_%s.log
-			'LOG=%s' % os.path.join(datadir,'sqlloader','%s%s_%s.log' % (self.args.to_table, "%s%s" % (ptn,sptn),shard_name)), 
-			'BAD=%s' % os.path.join(datadir,'sqlloader','%s%s_%s.bad' % (self.args.to_table, "%s%s" % (ptn,sptn),shard_name)),
-			'DISCARD=%s' % os.path.join(datadir,'sqlloader','%s%s_%s.dsc' % (self.args.to_table, "%s%s" % (ptn,sptn),shard_name)),				
-			'ERRORS=%s' % loader_errors]
-	def Prepare(self, profile_loc):
-		self.SetProfile(profile_loc)
-		self.initProfile()
-		#pprint(self.profile)
-		#e(0)
-	
-	
-	
-		self.initPanel()
-		
-	def SetProfile(self,profile_loc):
-		self.profile_loc=None
-		if not profile_loc:
-			if os.path.isfile(self.default_loader_profile_loc):
-				self.profile_loc = self.default_loader_profile_loc
-				print 'default transport loader'
-		else:
-			self.profile_loc=profile_loc
-			print 'session loader profile'
-
-	def initProfile(self):			
-		self.profile={}
-		self.changed=False
-		if self.profile_loc:
-			if os.path.isfile(self.profile_loc):
-				self.profile_loc=self.CreateNewSessionLoaderProfile(self.profile_loc)
-			else: 
-				defailt_profile=self.loadDefaultProfile()
-				session_loc=self.getSessionLoc()
-				self.saveProfile(session_loc, defailt_profile)
-				self.profile_loc=session_loc
-			
-			
-			#pprint(self.profile)
-			print 'external profile\n%s' % self.profile_loc
-		else:
-			defailt_profile=self.loadDefaultProfile()
-			session_loc=self.getSessionLoc()
-			self.saveProfile(session_loc, defailt_profile)
-			self.profile_loc=session_loc
-			print 'default inline loader'
-		self.profile=self.loadProfile(self.profile_loc)
-		send('set_loader_profile', (self.profile_loc))
-	def getSessionLoc(self):
-		session_loc=os.path.join(self.parent.save_to_dir,self.parent.getSessionName(),'loader', self.pname)
-		return session_loc
-	def CreateNewSessionLoaderProfile(self, profile_loc):
-		session_loc=self.getSessionLoc()
-		if os.path.isfile(session_loc):
-			print 'session file exists'
-			pass
-		else:			
-			#print profile_loc
-			#print session_loc
-			dir=os.path.dirname(session_loc)
-			os.makedirs(dir)
-			shutil.copyfile(profile_loc,session_loc)
-		return session_loc
-		
-	def loadProfile(self, profile_loc):		
-		with open(profile_loc, 'r') as f:
-			return yaml.load(f)
-	def loadDefaultProfile(self):		
-		return {'BINDSIZE': '200010',
- 'COLUMNARRAYROWS': '10000',
- 'DIRECT': 'TRUE',
- 'ERRORS': '10',
- 'MULTITHREADING': 'TRUE',
- 'PARALLEL': 'TRUE',
- 'READSIZE': '200000',
- 'SKIP_INDEX_MAINTENANCE': 'TRUE',
- 'SKIP_UNUSABLE_INDEXES': 'TRUE',
- 'STREAMSIZE': '500000'}
-	def Save(self):
-		out={}
-		if self.changed:
-			for k in self.param.keys():
-				out[k]=str(self.param[k][1].GetValue())
-			#print(out)
-			if 1:
-				self.saveProfile(self.profile_loc, out)
-		self.changed=False		
-	def saveProfile(self, profile_loc, profile):
-		dir=os.path.dirname(profile_loc)
-		if not os.path.isdir(dir):
-			os.makedirs(dir)
-		with open(profile_loc, 'w') as f:
-			yaml.dump(profile, f, default_flow_style=False)		
-
-
-		
-	def onKeyPress(self, event):
-		
-		tc = event.GetEventObject()
-		kc = event.GetKeyCode()
-		#print str(self.__class__) ,kc
-
-		controlDown = event.CmdDown()
-		if controlDown:			
-			if kc == 1:
-				print 'Ctrl-A'				
-				tc.SelectAll()
-			if kc == 19:
-				print 'Ctrl-S'
-				send('save_args',())				
-				#self.Save()
-			if	kc == 4:
-				print 'Ctrl-D 3'
-				self.parent.tryToDelete()				
-		else:
-			if kc<123: 
-				if not self.changed:
-					self.changed=True
-					send('value_changed',())
-		event.Skip()		
-	def initPanel(self):
-		length=self.tc_length
-		self.fgs = wx.GridBagSizer(2, 10) 
-		
-		i=0		
-		for k,v in self.profile.items():
-			self.param[k]= [wx.StaticText(self, label=k), wx.TextCtrl(self,value=v, size=(length,22))]
-			self.fgs.Add(self.param[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-			self.fgs.Add(self.param[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-			self.param[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
-			i +=1
-		self.btnsizer = wx.BoxSizer(wx.VERTICAL)
-		#btnsizer.Add(fgs, 0 , wx.TOP|wx.BOTTOM|wx.LEFT)
-		
-		if 1: #Config
-			
-			if 0:
-				self.source_sizer = wx.BoxSizer(wx.HORIZONTAL)
-				source= wx.StaticText(self, label='Source:')
-				self.tc_sloc = wx.TextCtrl(self, size=(650,23),style=wx.TE_READONLY|wx.BORDER_NONE)
-				self.tc_sloc.SetValue(self.profile_loc)
-				#print len(self.profile_loc), 600
-				self.tc_sloc.SetBackgroundColour(wx.SystemSettings.GetColour(4))
-				edit_btn=self.parent.getEditButton(self) 
-				self.gen_bind(wx.EVT_BUTTON,edit_btn, self.parent.OnEditSQL,(self.tc_sloc))
-				self.source_sizer.Add(edit_btn, flag=wx.LEFT|wx.TOP|wx.EXPAND, border=5)
-				self.source_sizer.Add(source, flag=wx.LEFT|wx.TOP, border=5)
-				self.source_sizer.Add(self.tc_sloc, flag=wx.LEFT|wx.TOP|wx.EXPAND, border=5)
-			
-			
-				self.btnsizer.Add(self.source_sizer, flag=wx.LEFT|wx.TOP, border=10)
-			self.sb_slconfig = wx.StaticBox(self, label="Configuration")
-			self.vbox = wx.StaticBoxSizer(self.sb_slconfig, wx.VERTICAL)
-			self.vbox.Add(self.fgs, flag=wx.LEFT|wx.TOP, border=5)
-			#sizer.Add(boxsizer, pos=(3, 0), span=(1, 3), flag=wx.TOP|wx.EXPAND, border=5)
-			self.btnsizer.Add(self.vbox, flag=wx.LEFT|wx.TOP, border=10)
-			self.SetSizer(self.btnsizer)
-			#print dir(self.tc_sloc)
-			#
-	def gen_bind(self, type, instance, handler, *args, **kwargs):
-		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)			
-	def setLoaderArgs(self,loader_profile):		
-		#print str(self.__class__) + ' - setLoaderArgs'
-		
-		#print loader_profile
-		
-		if not self.profile_loc:
-			self.Prepare(loader_profile)
-		else:
-			self.initProfile()	
-			empty=False
-			self.param={}
-			length=self.tc_length
-			#self.obj={}
-			if not hasattr(self, 'vbox'):
-				empty=True
-				self.vbox = wx.BoxSizer(wx.VERTICAL)
-			if hasattr(self, 'fgs'):
-				#for c in panel.fgs.GetChildren():
-				#	print c.Destroy()
-				#panel.fgs.Destroy()
-				self.vbox.Hide(0)
-				self.vbox.Remove(0)
-			#else:
-			self.fgs = wx.GridBagSizer(2, 10) 
-			i=0		
-			#print 'profile:',self.profile_loc
-			for k,v in self.profile.items():
-				#print k
-				self.param[k]= [wx.StaticText(self, label=k), wx.TextCtrl(self,value=v, size=(length,22))]
-				self.fgs.Add(self.param[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-				self.fgs.Add(self.param[k][1], pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-				self.param[k][1].Bind(wx.EVT_CHAR, self.onKeyPress)
-				i +=1
-			self.vbox.Add(self.fgs, flag=wx.LEFT|wx.TOP, border=5)
-			#self.tc_sloc.SetValue(self.getSessionLoc())
-			#self.tc_sloc.SetSize((len(self.profile_loc)*5.5,23))
-			#self.btnsizer.Layout()
-			self.vbox.Layout()
-
-
-
-
-########################################################################
-class pnl_editor(wx.Panel):
-	"""
-	Editor config
-  
-	"""
-	#----------------------------------------------------------------------
-	def __init__(self, parent,  style):
-		""""""
-		wx.Panel.__init__(self, parent, id=wx.NewId(), style=style)
-		self.parent=parent
-		#self.frame=frame
-		self.etl_name=['job_pre_etl', 'job_post_etl', 'thread_pre_etl', 'thread_post_etl']
-		#print self.args_panel.obj.keys()
-		self.etl_file_loc={}
-
-		self.changed=False
-		#self.etlname={}
-		default_etl=self.etl_name[0]
-		self.etl_file_name={x:'%s.py' % x for x in self.etl_name}		
-		self.default_etl_file_loc={x:os.path.join(transport_home,  os.path.join('config','etl',self.etl_file_name[x])) for x in self.etl_name}
-		#self.etl_loc={}
-		self.etl={}
-		#self.changed=False
-		self.etl_loc={}		
-		#if etl_loc:
-		#	self.Prepare(etl_loc)
-		#else:
-		#	pass
-		#pprint (etl_loc)
-		#e(0)
-		sub(self.onValueChanged, "value_changed")
-	def onValueChanged(self, data, extra1, extra2=None):		
-		self.changed=True
-	def Changed(self):
-		return self.changed
-	def OnToggleClick(self,event):
-		if self.ToggleButtonObj.GetValue():
-			 self.ToggleButtonObj.SetBackgroundColour(wx.SystemSettings.GetColour(4))
-			 
-		else:
-			 self.ToggleButtonObj.SetBackgroundColour(wx.SystemSettings.GetColour(3))
-	def Prepare(self):
-		#e(0)
-		self.SetEtlEditor()
-		self.initEtlEditor()
-		self.initPanel()
-		
-	def SetEtlEditor(self):
-		self.etl_loc={}
-		self.etl_file_loc={}
-		if 1:
-			 #{x:None for x in k}
-			for k in self.etl_name:
-				if self.parent.args_panel.obj.has_key(k):			
-					self.etl_file_loc[k]=self.parent.args_panel.obj[k][1].GetValue()
-		#pprint (self.etl_file_loc)
-		#e(0)
-		for k in self.etl_name:
-			if not self.etl_file_loc.has_key(k):
-				if os.path.isfile(self.default_etl_file_loc[k]):
-					self.etl_loc[k] = self.default_etl_file_loc[k]
-					#print 'default etl file'
-			else:
-				
-				if self.etl_file_loc[k].startswith('.'):
-					#print self.etl_file_loc[k]
-					os.chdir(home)
-					tmpl_loc=os.path.realpath(self.etl_file_loc[k])
-					assert os.path.isfile(tmpl_loc), 'JOB-PRE-ETL template is missing\n%s' % tmpl_loc
-					self.etl_loc[k]= tmpl_loc
-					#print 'template etl file'
-					#e(0)
-				else:
-					if not os.path.isfile(self.etl_file_loc[k]):
-						self.etl_loc[k] = self.default_etl_file_loc[k]
-						#print 'test etl file, session file missing'
-				#self.etl_loc[k]= os.path.join(home,self.etl_file_loc[k])
-				#print self.etl_loc[k]
-				#print 'test etl file'
-
-	def initEtlEditor(self):	
-		#print 'initEtlEditor'
-		#pprint(self.etl_loc)
-		for k in self.etl_name:
-			session_loc=self.getSessionEtlFileLoc(k)
-			dn=os.path.dirname(session_loc)
-			#print dn
-			#print self.etl_loc
-			#e(0)
-			
-			if not os.path.isdir(dn):
-				os.makedirs(dn)
-			if not os.path.isfile(session_loc):
-				self.etl_loc[k]=self.CreateNewSessionEtlFile(self.etl_loc[k],k)
-			else: 
-				self.etl_loc[k]=session_loc
-			
-			#print self.etl[k]
-			send('set_etl_editor_profile', (self.etl_loc[k],k))
-	def getSessionEtlFileLoc(self,k):
-		session_loc=os.path.join(self.parent.save_to_dir,self.parent.getSessionName(),'etl', self.etl_file_name[k])
-		return session_loc
-	def CreateNewSessionEtlFile(self, etl_loc,k ): 
-		session_loc=self.getSessionEtlFileLoc(k)
-		if os.path.isfile(session_loc):
-			#print 'session file exists'
-			pass
-		else:			
-			#print profile_loc
-			#print session_loc
-			dir=os.path.dirname(session_loc)
-			if not os.path.isdir(dir):
-				os.makedirs(dir)
-			shutil.copyfile(etl_loc,session_loc)
-		return session_loc
-	def loadEtlFile(self, etl_loc):	
-		if os.path.isfile(etl_loc):
-			with open(etl_loc, 'r') as f:
-				return f.read()
-		else:
-			print 'etl file does not exists'
-			#print etl_loc
-
-	def Save(self):
-		out={}
-		if self.changed and self.editor.IsModified():
-			out=self.editor.GetText()
-			self.saveEtlFile(self.etl_loc[self.etl_name[0]], out)
-		self.changed=False		
-	def saveEtlFile(self, etl_loc, etl):
-		dir=os.path.dirname(etl_loc)
-		if not os.path.isdir(dir):
-			os.makedirs(dir)		
-		with open(etl_loc, 'w') as f:
-			#yaml.dump(etl, f, default_flow_style=False)	
-			f.write(etl)			
-	def onKeyPress(self, event):
-		
-		tc = event.GetEventObject()
-		kc = event.GetKeyCode()
-		#print str(self.__class__) ,kc
-		#print kc
-		controlDown = event.CmdDown()
-		if controlDown:			
-			if kc == 1:
-				print 'Ctrl-A'				
-				tc.SelectAll()
-			if kc == 19:
-				print 'Ctrl-S'
-				self.changed=True
-				send('save_args',())				
-				return
-			if	kc == 4:
-				print 'Ctrl-D 3'
-				self.parent.tryToDelete()				
-		else:
-			if 1: #kc<123: 
-				if not self.changed:
-					self.changed=True
-					#send('value_changed',())
-		event.Skip()		
-	def initPanel(self):
-		#print '-----------------initPanel'
-		length=self.tc_length
-		if not hasattr(self,'editor'):
-			self.editor = PythonEditor(self)
-		etl= self.loadEtlFile(self.etl_loc[self.etl_name[0]])
-		#e(0)
-		self.editor.SetText(etl)
-		self.editor.SetEditable(True)
-		self.ebox = wx.BoxSizer(wx.VERTICAL)
-		self.editor.Bind(wx.EVT_CHAR, self.onKeyPress)
-		#self.ToggleButtonObj = wx.ToggleButton(self, -1, 'test',size=(60,23))
-		#self.ToggleButtonObj.Bind(wx.EVT_TOGGLEBUTTON, self.OnToggleClick)
-
-		#self.ebox.Add(self.ToggleButtonObj, flag=wx.LEFT|wx.TOP, border=0) 
-		self.editor.Refresh()
-		self.parent.Refresh()
-		self.ebox.Add(self.editor, 1, flag=wx.LEFT|wx.TOP|wx.EXPAND, border=0)
-		self.SetSizer(self.ebox)
-
-	def gen_bind(self, type, instance, handler, *args, **kwargs):
-		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)			
-	def setEditor(self,etl_name):		
-		#e(0)
-		#print 'setEditor', etl_name, self.etl_loc
-		if not self.etl_loc:
-			self.Prepare()
-		else:
-			self.initEtlEditor()	
-			k=self.etl_name[0]
-			etl=self.loadEtlFile(self.etl_loc[k])
-			self.editor.SetText(etl)
-			self.editor.Refresh()
-			#print self.etl_loc[k]
 
 ########################################################################
 class etl_file(object):
@@ -8845,7 +8540,7 @@ class etl_file(object):
 			 #{x:None for x in k}
 			for k in self.etl_name:
 				if self.parent.args_panel.obj.has_key(k):			
-					self.etl_file_loc[k]=self.parent.args_panel.obj[k][1].GetValue()
+					self.etl_file_loc[k]=self.parent.args_panel.obj[k][1].GetValue().strip()
 		#pprint (self.etl_file_loc)
 		#e(0)
 		for k in self.etl_name:
@@ -9405,6 +9100,12 @@ class DataBuddy(wx.Frame):
 		#self.sizer.Add(self.panel1, pos=(2, 0), span=(1,4),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=1)	
 			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))				
 		#print self.copy_vector
+		if 1:
+			self.statusbar = self.CreateStatusBar(3, wx.ST_SIZEGRIP)
+			#self.statusbar.SetStatusWidths([-3, -3])
+			self.statusbar.SetStatusText(os.getcwd(), 0)
+			self.statusbar.SetStatusText("Welcome To %s!" % app_title, 1)
+			#self.statusbar.SetStatusText('', 2)		
 		self.args_panel= pnl_args(self,self.copy_vector,self.tmpl,self.the_id,(self.cargs,self.fargs,self.targs),size=(-1,-1),style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 		self.preetl='not set'
 		if 1:
@@ -9419,7 +9120,9 @@ class DataBuddy(wx.Frame):
 			#print self.args_panel.obj.keys()
 			loader_profile=None
 			if self.args_panel.obj.has_key(k):			
-				loader_profile=self.args_panel.obj[k][1].GetValue()
+				loader_profile=self.args_panel.obj[k][1].GetValue().strip()
+			#print loader_profile
+			#e(0)
 			self.output_panel = pnl_output(self, loader_profile, style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			self.nb.AddPage(self.output_panel, 'Output' )
 			self.nb.EnableTab(1,False)			
@@ -9430,7 +9133,7 @@ class DataBuddy(wx.Frame):
 				etl_file_loc={} #{x:None for x in k}
 				for k in etl_names:
 					if self.args_panel.obj.has_key(k):			
-						etl_file_loc[k]=self.args_panel.obj[k][1].GetValue()
+						etl_file_loc[k]=self.args_panel.obj[k][1].GetValue().strip()
 
 				#print editor_profile
 				
@@ -9446,7 +9149,7 @@ class DataBuddy(wx.Frame):
 				
 			self.sizer.Add(self.nb, pos=(1, 0), span=(1, 4), flag=wx.GROW|wx.EXPAND|wx.ALL, border=0)
 		if 1:
-			fgs = wx.FlexGridSizer(10, 1, 9, 25)
+			fgs = wx.FlexGridSizer(20, 1)
 
 			#l=[wx.StaticText(panel_from, label="Title"), wx.StaticText(panel_from, label="Author"),wx.StaticText(panel_from, label="Review")]
 
@@ -9752,13 +9455,10 @@ class DataBuddy(wx.Frame):
 		sub(self.onSetKeepDumpFile, "set_keep_data_file")
 		
 		sub(self.onSaveSessionAsTemplate, "save_as_template")
+		sub(self.onSetBarStatus, "set_bar_status")
 		
 		#self.SetSizeHints(250,300,500,400)
-		if 1:
-			self.statusbar = self.CreateStatusBar(2, wx.ST_SIZEGRIP)
-			self.statusbar.SetStatusWidths([-3, -3])
-			self.statusbar.SetStatusText(os.getcwd(), 0)
-			self.statusbar.SetStatusText("Welcome To %s!" % app_title, 1)
+
 		
 		#self.Refresh()
 		self.Center()
@@ -9777,7 +9477,14 @@ class DataBuddy(wx.Frame):
 		#print self.GetSize()
 		self._hmMenu=None
 		self._saMenu=None
-
+	def onSetBarStatus(self, data, extra1, extra2=None):		
+		(id,msg)= data	
+		print 'data',data
+		self.set_bar_status(id,msg)
+	def set_bar_status(self, id, msg):
+		if id in [2]:
+			msg= 'Run at: %s' % msg
+		self.statusbar.SetStatusText(msg, id)
 	def setLibHome(self,lname):
 		print 'setLibHome', lname
 		if self.S:
@@ -9830,9 +9537,9 @@ class DataBuddy(wx.Frame):
 			self.args_panel._tMenu=None
 			#self.save_to_dir=os.path.join(session_home,default_sess_lib)
 	def if_duplicate_tmpl_name(self,tname,tlib='My_Templates'):
-		print 'if_duplicate_tmpl_name'
+		#print 'if_duplicate_tmpl_name'
 		tmpl_loc=os.path.join(tmpl_home,tlib,tname)
-		print tmpl_loc, os.path.isdir(tmpl_loc)
+		#print tmpl_loc, os.path.isdir(tmpl_loc)
 		return os.path.isdir(tmpl_loc)		
 	def OnSaveAsMenu(self, event):
 		# Demonstrate using the wxFlatMenu without a menu bar
@@ -9988,6 +9695,7 @@ class DataBuddy(wx.Frame):
 				#print conf._to.join(self.copy_vector)
 				
 				hm = hmap(('ora11g','ora11g'), default_hostmap_loc)
+				self.args_panel.hm=hm
 
 			(hostmap, active_map) =hm.get_host_map()
 			print active_map
@@ -10017,11 +9725,12 @@ class DataBuddy(wx.Frame):
 					
 	def OnHostMapMenu(self, event,params):				
 		(v,hm)=params	
-		print v
+		#print v
 		self.args_panel.hm.set_active_mapping(v)
+		send('set_bar_status', (2,v))
 		
 	def onSetKeepDumpFile(self, data, extra1, extra2=None):
-		print 'onSetKeepDumpFile'
+		#print 'onSetKeepDumpFile'
 		(val)=data	
 		#print val
 		if  val in ['1'] or val ==1 :
@@ -10185,11 +9894,14 @@ class DataBuddy(wx.Frame):
 			self.ShowLocation(dump_file)
 	def getDumpDir(self):
 		dump_dir=self.args_panel.obj['default_spool_dir'][1].GetValue()
+		#print 'dump_dir',dump_dir
 		#dump_dir=r'C:\tmp'
 		job_name=self.args_panel.obj['job_name'][1].GetValue()
+		#print job_name
 		time_stamp=self.ts 
 		if self.args_panel.obj.has_key('time_stamp'):
 			time_stamp=self.args_panel.obj['time_stamp'][1].GetValue()
+		#print time_stamp
 		return os.path.join(dump_dir, job_name,time_stamp)			
 	def OnChangeEmailYesNo(self,evt):
 		print 'OnChangeEmailYesNo'
@@ -10309,7 +10021,7 @@ class DataBuddy(wx.Frame):
 		self.btn_new.Enable(True)
 		
 	def onEnableAll(self, data, extra1, extra2=None):	
-		print '-----------onEnableAll-----------'	
+		#print '-----------onEnableAll-----------'	
 		#self.args_panel.DisableAll()
 		#self.btn_delete.Enable(True)
 		self.Freeze()
@@ -10610,11 +10322,11 @@ class DataBuddy(wx.Frame):
 		#print '#####', self.sm.list.GetSelectedItemCount()
 		self.tryToDelete()
 	def tryToDelete(self):
-		print  'tryToDelete'
+		#print  'tryToDelete'
 		items={}
 		#self.lists[default_slib_name]
-		print self.sm.lists.keys()
-		print self.sm.slib_name
+		#print self.sm.lists.keys()
+		#print self.sm.slib_name
 		#e(0)
 		list=self.sm.lists[self.sm.slib_name]
 		data =list.data[list.current_list]
@@ -10652,7 +10364,7 @@ class DataBuddy(wx.Frame):
 		dlg.Destroy()
 		return answer==wx.ID_YES
 	def if_yes_2(self, msg, caption = 'Warning!'):
-		print 'if_yes_2'
+		#print 'if_yes_2'
 		dlg = NewDialog(self, msg=msg, title=caption, style=wx.YES_NO | wx.ICON_QUESTION|wx.THICK_FRAME|wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 		#dlg.SetSize((500,-1))
 		dlg.CenterOnParent()
@@ -10730,12 +10442,12 @@ class DataBuddy(wx.Frame):
 		self.saveArgs(slib=lname)		
 		
 	def saveArgs(self, slib='My_Sessions'):
-		print 'saveArgs', slib
+		#print 'saveArgs', slib
 		sname=self.getSessionName() 
 		save_as=self.session_name!=sname 
-		print self.session_name, sname
+		print self.session_name, sname, save_as
 		#a=1/0
-		if (save_as and self.if_duplicate_name(sname,slib)) or self.if_duplicate_name(sname,slib):
+		if (save_as and self.if_duplicate_name(sname,slib)):
 			self.Warn('Duplicate session name.')
 			self.tc_session_name.SetFocus()
 		else:
@@ -10745,8 +10457,8 @@ class DataBuddy(wx.Frame):
 				#print dname
 				#e(0)
 				list=self.sm.lists[slib]
-				print slib
-				print self.sm.slps.keys()
+				#print slib
+				#print self.sm.slps.keys()
 				slp=self.sm.slps[slib]
 				idx=slp.addSession(session)	
 				slp.list.set_data()
@@ -10758,7 +10470,7 @@ class DataBuddy(wx.Frame):
 			#self.output_panel.Save()
 			#self.editor_panel.Save()
 			#self.parent.btn_save.Enable(False)
-			print 'test'
+			#print 'test'
 			self.args_panel._sMenu=None
 			self.args_panel._tMenu=None
 		
@@ -10767,12 +10479,12 @@ class DataBuddy(wx.Frame):
 		dlg.ShowModal()
 		dlg.Destroy()	
 	def if_duplicate_name(self,sname,slib='My_Sessions'):
-		print 'if_duplicate_name', slib
+		#print 'if_duplicate_name', slib
 		sfile_loc=os.path.join(session_home,slib,sname)
-		print session_home,slib,sname
-		print sfile_loc, os.path.isdir(sfile_loc)
+		#print session_home,slib,sname
+		#print sfile_loc, os.path.isdir(sfile_loc)
 		#raise;
-		e(0)
+		#e(0)
 		return os.path.isdir(sfile_loc)
 		
 	def if_sname_changed(self):
@@ -10780,16 +10492,16 @@ class DataBuddy(wx.Frame):
 		#print self.tc_session_name.GetItemData()
 		
 	def saveSession(self, sess_home=session_home, slib_name='My_Sessions', sname=None, data=None):
-		print '---------------------------saveSession'
+		#print '---------------------------saveSession'
 		#print len(args[0]), len(args[1]),len(args[2])
 		if data:
-			print '---new session'
+			#print '---new session'
 			#it's a new session
 			(sname,copy_vector,tmpl,args,reuse)=data
 			sname=sname.strip().strip(' ')
-			if 0 and reuse:
+			if reuse:
 				(cargs,fargs,targs)=args
-				print 'reuse',reuse
+				#print 'reuse',reuse
 				#e(0)
 				#print len(args)
 				#print len(cargs),len(fargs),len(targs)
@@ -10804,7 +10516,7 @@ class DataBuddy(wx.Frame):
 							#print k, cargs[k][2],self.args_panel.obj[k][1].GetValue()
 							cargs[k]=list(cargs[k])
 							#val=self.args_panel.obj[k][1].GetValue()
-							cargs[k][2]=self.args_panel.obj[k][1].GetValue()
+							cargs[k][2]=self.args_panel.obj[k][1].GetValue().strip()
 				if reuse[1]:
 					for k in reuse_fargs:
 						
@@ -10813,7 +10525,7 @@ class DataBuddy(wx.Frame):
 							#print k, fargs[k][2], self.args_panel.obj[k][1].GetValue()
 							fargs[k]=list(fargs[k])
 							#val=self.args_panel.obj[k][1].GetValue()
-							fargs[k][2]=self.args_panel.obj[k][1].GetValue()		
+							fargs[k][2]=self.args_panel.obj[k][1].GetValue().strip()	
 				#if reuse[2]:
 					for k in reuse_targs:	
 						
@@ -10822,21 +10534,21 @@ class DataBuddy(wx.Frame):
 							#print k, targs[k][2], self.args_panel.obj[k][1].GetValue()
 							targs[k]=list(targs[k])
 							#val=self.args_panel.obj[k][1].GetValue()
-							targs[k][2]=self.args_panel.obj[k][1].GetValue()
+							targs[k][2]=self.args_panel.obj[k][1].GetValue().strip()
 				args=(cargs,fargs,targs)
 				#pprint(fargs)
 				#print reuse_targs
 				#pprint(targs)
 		else:
-			print 'exising session----'
+			#print 'exising session----'
 			
 			if not sname:
 				sname=self.getSessionName()
 			(copy_vector,tmpl,args)=[ self.getCopyVector(), '.'.join(self.getTemplates()), self.args_panel.getArgs()]
-			print len(args[0]), len(args[1]),len(args[2])
+			#print len(args[0]), len(args[1]),len(args[2])
 			#assert self.session_name==sname, 'session name changed!'
-		print sess_home
-		print self.save_to_dir
+		#print sess_home
+		#print self.save_to_dir
 		#e(0)
 		#if not os.path.isdir(sess_home):
 		#	os.makedirs(sess_home)
@@ -10854,8 +10566,8 @@ class DataBuddy(wx.Frame):
 		#print sname
 		
 		#print '#'*60
-		print sess_home
-		print slib_name
+		#print sess_home
+		#print slib_name
 		#a=1/0
 		save_to_dir=os.path.join(sess_home,slib_name)
 		assert os.path.isdir(save_to_dir), 'Cannot save new session to\n%s' % save_to_dir
@@ -11219,7 +10931,7 @@ class DataBuddy(wx.Frame):
 
 					if_save=self.auto_save.GetValue() 
 					if if_save:
-						print 'if_save'
+						#print 'if_save'
 						(sname,cv,tmpl,dname,fname)=self.saveSession()
 						
 					
@@ -11318,7 +11030,7 @@ class DataBuddy(wx.Frame):
 							
 							if exe:	#exe										
 								cfg=cfg+['-X','1']
-								pprint (cfg)
+								#pprint (cfg)
 								p = Popen(cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
 							else:	#py
 								cfg[0]=r'%s\datamule.py' % transport_home
@@ -11551,18 +11263,20 @@ class DataBuddy(wx.Frame):
 		
 		from wx.lib.wordwrap import wordwrap
 		info = wx.AboutDialogInfo()
-		info.Name = 'Session Manager'
+		info.Name = __appname__
 		info.Version = __version__
-		info.Copyright = "METRICS TECH"
+		if __copyright__:
+			info.Copyright = __copyright__
 		info.Description = wordwrap(
 			#'This is session manager for  <b><a href="https://github.com/DataMigrator/DataMigrator-for-Oracle">DataMigrator</a></b>.</p>',
-			'Manages QueryCopy spool/load/copy sessions.',
+			'Manages "QueryCopy" sessions \nfor data spool, load, copy.',
 			350, wx.ClientDC(self.panel))
-		#info.WebSite = ("https://github.com/alexbuz", "My Github")
-		info.Developers = ["Alex Buzunov"]
+		if __github__:
+			info.WebSite = (__github__, "%s Github" % __appname__)
+		info.Developers = [__author__]
 		#info.License = wordwrap("Open source", 500, wx.ClientDC(self.panel))
 		# Show the wx.AboutBox
-		wx.AboutBox(info)	
+		wx.AboutBox(info)		
 	def onAboutHtmlDlg(self, event):
 		aboutDlg = AboutDlg(None)
 		aboutDlg.Show()		
@@ -11699,7 +11413,7 @@ if __name__ == '__main__':
 			self.frame.Show(True)
 			#self.frame.Maximize(True)
 			self.SetTopWindow(self.frame)
-			print self.frame.GetClientSizeTuple()
+			#print self.frame.GetClientSizeTuple()
 			
 			return True
 

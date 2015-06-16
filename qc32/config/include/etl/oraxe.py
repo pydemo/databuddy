@@ -884,7 +884,8 @@ class target(common):
 		#print (self.args.from_db)
 		
 		out=self.cr[shard].execute(db_login_from=self.args.from_db, db_login_to=self.login)
-		
+		#print out
+		#e(0)
 		#out,status,err,ins_cnt =([],0,None,-1)
 		ins_cnt=-1
 		spool_size=-1

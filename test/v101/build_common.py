@@ -26,13 +26,16 @@ keep_spool_file=1
 #wide row support
 column_buckets=2
 loader_profile=''
-with_loader_profile=r'"C:\Python27\data_migrator_1239\config\loader\sqlloader.yaml"'
+with_loader_profile=r'".\config\sqlloader.py"'
 job_pre_etl='' #r'"C:\Python27\data_migrator_1239\config\etl\job_pre_etl.py"'
 DeleteTargetRecs=r'".\etl_templates\Oracle\delete_target_recs\job_pre_etl.py"'
+HostMap=r'".\config\host_map_v2.py"'
 shard_pre_etl='' #r'"C:\Python27\data_migrator_1239\config\etl\shard_pre_etl.py"'
 job_post_etl='' #r'"C:\Python27\data_migrator_1239\config\etl\job_post_etl.py"'
 shard_post_etl='' #r'"C:\Python27\data_migrator_1239\config\etl\shard_post_etl.py"'
 ask_to_truncate=0
+col_sep='|'
+spool_type='csv'
 #sqlloader_profile
 #os.path.join(abspath,'user_log')
 #print log_dir
@@ -141,7 +144,7 @@ class common_build(base):
 			out.append((db_from,db_to,scr))
 		return out	
 	def build_test_dbs2(self, relc, tests,cmd):
-		global conf
+		global conf,col_sep, spool_type
 		i=len(cmd)
 		all=[]
 		print tests.keys()
@@ -177,8 +180,8 @@ class common_build(base):
 					print  '%s does not support "skip header row"' % conf.dbs[db_to.upper()]
 				elif  'KeepSpoolFile' in db_from and db_to.startswith('CSV'):
 					print  'Extractor does not support "KeepSpoolFile"'
-				elif  'Header' in db_from and (not db_to.startswith('CSV')):
-					print  'Header tests are CSV bound.'					
+				elif  'JSON' in db_to and not db_from.startswith('MONGO'):
+					print  'JSON extract works only for MongoDB'					
 				else:
 					if db_to.startswith('ORA'):
 						loader_profile=with_loader_profile
@@ -188,16 +191,26 @@ class common_build(base):
 					paramkey_from=db_from.split('_')[0]
 					paramkey_to=db_to.split('_')[0]
 
-					if '%s2%s' % (paramkey_from.lower(),db_to.lower()) not  in ('csv2csv'):
+					if '%s%s%s' % (paramkey_from.lower(),self.conf._to,db_to.lower()) not  in ('csv%scsv' % self.conf._to):
 						i +=1
 						if 1:
-							b=['%s2%s' % (paramkey_from.lower(),paramkey_to.lower()),1,			1,				'"|"',		0,keep_spool_file,0,0,ask_to_truncate,0,email_to,log_dir,'',job_name,time_stamp,'',job_pre_etl,'','','',loader_profile,'','','']
+							time_stamp=datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')
+							if 'MONGO' in db_from :
+								col_sep=','
+							if 'JSON' in db_from.upper() or 'JSON' in db_to.upper():
+								spool_type='json'
+							else:
+								spool_type='csv'
+							b=['%s%s%s' % (paramkey_from.lower(),self.conf._to,paramkey_to.lower()),1,			1,				'"%s"' % col_sep,		0,keep_spool_file,0,0,ask_to_truncate,0,email_to,log_dir,'',job_name,time_stamp,'',job_pre_etl,'','','',loader_profile,HostMap,spool_type,'','','']
 							
 							if 'Sharded' in db_from or 'Parallel' in  db_from:
 								if db_to in ('CSV_File'):
 									print 'skipping test %s to %s"' % (db_from,db_to) 
 									continue
-								b[1]=b[2]=3
+								b[2]=3
+								if 'Parallel' in  db_from:
+									b[1]=3
+
 							if 'Limit' in db_from:
 								limit=int(db_from.split('Limit')[1])
 								b[4]=limit
@@ -221,12 +234,14 @@ class common_build(base):
 							#	b[15]=job_pre_etl
 							if 'WithWideRows' in db_from:
 								b[15]=column_buckets
-							if 'DeleteTargetRecs' in db_to:
+							if 'DeleteTargetRecs' in db_to and 'Query' in db_from:
 								b[16]=DeleteTargetRecs
 
 								
 							if 'WithLoaderProfile' in db_to:
 								b[20]=with_loader_profile
+							#if paramkey_from in self.conf.ff and paramkey_to in self.conf.ff:								
+							#	b[21]=''
 								
 							self.test['core']=b
 							
@@ -251,7 +266,7 @@ class common_build(base):
 							all.append(test_key)
 			home=os.path.dirname(os.path.realpath(__file__))
 			source,target=t.split('->')
-			pprint (args_api.keys())
+			#pprint (args_api.keys())
 			for k,v in args_api.items():
 				print k
 				#pprint(v.keys())
@@ -277,10 +292,13 @@ class common_build(base):
 			if not os.path.isdir(api_todir):
 				os.makedirs(api_todir)
 			api_tofile= os.path.join(api_todir, py_name)
+			#print conf.ts
+			ts= datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')
 			if os.path.isfile(api_tofile):
 				print 'api file exists'
+				#api_tofile='%s_%s' % (ts,py_name)
 				os.remove(api_tofile)
-			shutil.copyfile(fname,api_tofile)
+			shutil.copyfile(fname,os.path.join(api_todir,api_tofile))
 		
 		#e(0)
 						
@@ -315,6 +333,8 @@ class common_build(base):
 					print  '%s does not support "skip header row"' % conf.dbs[db_to.upper()]
 				elif  'KeepSpoolFile' in db_from and db_to.startswith('CSV'):
 					print  'Extractor does not support "KeepSpoolFile"'
+				elif  'JSON' in db_to and not db_from.startswith('MONGO'):
+					print  'JSON extract works only for MongoDB'					
 				else:
 					if db_to.startswith('ORA'):
 						loader_profile=with_loader_profile
@@ -322,15 +342,24 @@ class common_build(base):
 						loader_profile=''				
 					paramkey_from=db_from.split('_')[0]
 					paramkey_to=db_to.split('_')[0]
-					if '%s2%s' % (paramkey_from.lower(),db_to.lower()) not  in ('csv2csv'):
+					if '%s%s%s' % (paramkey_from.lower(),self.conf._to,db_to.lower()) not  in ('csv2csv'):
 						i +=1
 						if 1:
-							b=['%s2%s' % (paramkey_from.lower(),paramkey_to.lower()),1,			1,				'"|"',		0,keep_spool_file,0,0,ask_to_truncate,0,email_to,log_dir,'',job_name,time_stamp,'',job_pre_etl,'','','',loader_profile,'','','']
+							time_stamp=datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')
+							if 'MONGO' in db_from :
+								col_sep=','
+							if 'JSON' in db_from.upper() or 'JSON' in db_to.upper():
+								spool_type='json'
+							else:
+								spool_type='csv'
+							b=['%s%s%s' % (paramkey_from.lower(),self.conf._to,paramkey_to.lower()),1,			1,				'"%s"' % col_sep,		0,keep_spool_file,0,0,ask_to_truncate,0,email_to,log_dir,'',job_name,time_stamp,'',job_pre_etl,'','','',loader_profile,HostMap,spool_type,'','','']
 							if 'Sharded' in db_from or 'Parallel' in  db_from:
 								if db_to in ('CSV_File'):
 									print 'skipping test %s to %s"' % (db_from,db_to) 
 									continue
-								b[1]=b[2]=3
+								b[2]=3
+								if 'Parallel' in  db_from:
+									b[1]=3
 							if 'Limit' in db_from:
 								limit=int(db_from.split('Limit')[1])
 								b[4]=limit
@@ -353,10 +382,12 @@ class common_build(base):
 							#	b[15]=job_pre_etl
 							if 'WithWideRows' in db_from:
 								b[15]=column_buckets
-							if 'DeleteTargetRecs' in db_to:
+							if 'DeleteTargetRecs' in db_to and 'Query' in db_from:
 								b[16]=DeleteTargetRecs								
 							if 'WithLoaderProfile' in db_to:
-								b[20]=with_loader_profile								
+								b[20]=with_loader_profile
+							#if paramkey_from in self.conf.ff or paramkey_to in self.conf.ff:
+							#	b[21]=''
 							self.test['core']=b
 							
 	
@@ -433,6 +464,10 @@ class common_build(base):
 		ucon_to_dir=os.path.join(reldir,'config')
 		ucon_home=os.path.join(self.dmhome,'config')
 		shutil.copytree(ucon_home,ucon_to_dir)
+		incdir=os.path.join('include','v101')
+		ucon_to_dir=os.path.join(reldir,incdir)
+		ucon_home=os.path.join(self.dmhome,incdir)
+		shutil.copytree(ucon_home,ucon_to_dir)		
 		#sys.exit(1)	
 	def release_exe(self,relc,exefn,ucases):
 		pypath=(os.sep).join(self.dmhome.split(os.sep)[:-1])	
@@ -461,7 +496,7 @@ class common_build(base):
 			for from_to in sorted(uck):
 				print from_to
 				out =  '%s\n%s: %d use case(s) available:\n' % (out, from_to,len(ucases[from_to]))
-				pprint (ucases[from_to].keys())
+				#pprint (ucases[from_to].keys())
 				for uc in sorted(ucases[from_to].keys()):
 				
 					(paramkey_from,paramkey_to,(dir,sharded,descr), ucbody) = ucases[from_to][uc]
@@ -567,7 +602,8 @@ class common_build(base):
 			print '-'*80
 			#print os.path.dirname(exefn)
 			#os.environ['PATH'] = '%s;%s' % (os.environ['PATH'],os.path.dirname(os.path.dirname(exefn)))
-			pprint( command)
+			#pprint( command)
+			print t_from, t_to
 			#e(0)
 			p = Popen([command],  stdout=PIPE, stderr=PIPE) # '-S',  stdin=p1.stdout,
 			out, err = p.communicate()	
@@ -623,7 +659,7 @@ class common_build(base):
 			from_dbname=self.conf.dbs[paramkey_from.upper()].replace(' ','')
 			to_dbname=self.conf.dbs[paramkey_to.upper()].replace(' ','')
 			
-			title ="%s %s_%s data to %s%s" % (action,from_dbname,' '.join(db_from.split('_')[1:]),to_dbname,' '.join(db_to.split('_')[1:]))
+			title ="%s %s (%s) data to %s (%s)" % (action,from_dbname,db_from,to_dbname,db_to)
 			fname=title.replace(' ','_')
 			#print title
 			#print fname
@@ -632,10 +668,9 @@ class common_build(base):
 			print scr
 			cmt='\n::	'.join(cmt)
 			header="""
-	::Test: %s
-	::Arguments:
-	::		%s	
-	"""	 %  (title,cmt)
+::Test: %s
+::Arguments:
+::	%s	\n\n"""	 %  (title,cmt)
 			f=open( scr,'w')
 			f.write('%s%s' % (header,c))
 			f.close()
@@ -877,7 +912,7 @@ Example:
 		release(relc,exefn)
 	
 	def build_test(self, relc, t_from,t_to,cmd):
-		#global conf
+		global col_sep,spool_type
 		i=len(cmd)
 		#print t_from
 		#print t_to
@@ -901,6 +936,10 @@ Example:
 				print  '%s does not support "skip header row"' % self.conf.dbs[db_to.upper()]
 			elif  'KeepSpoolFile' in db_from and db_to.startswith('CSV'):
 				print  'Extractor does not support "KeepSpoolFile"'
+			elif  'JSON' in db_to and not db_from.startswith('MONGO'):
+				print  'JSON extract works only for MongoDB'
+			elif  'TRUNCATE' in db_from and db_from.upper()[:3] in self.conf.ff:
+				print  'Cannot truncate file.'				
 			else:
 				if db_to.startswith('ORA'):
 					loader_profile=with_loader_profile
@@ -908,15 +947,25 @@ Example:
 					loader_profile=''
 				paramkey_from=db_from.split('_')[0]
 				paramkey_to=db_to.split('_')[0]
-				if '%s2%s' % (paramkey_from.lower(),db_to.lower()) not  in ('csv2csv'):
+				if '%s%s%s' % (paramkey_from.lower(),self.conf._to,db_to.lower()) not  in ('csv2csv'):
 					i +=1
 					if 1:
-						b=['%s2%s' % (paramkey_from.lower(),paramkey_to.lower()),1,			1,				'"|"',		0,keep_spool_file,0,0,ask_to_truncate,0,email_to, log_dir,'',job_name,time_stamp,'',job_pre_etl,'','','',loader_profile,'','','']
+						time_stamp=datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')
+						if 'MONGO' in db_from :
+							col_sep=','		
+						if 'JSON' in db_from.upper() or 'JSON' in db_to.upper():
+							spool_type='json'
+						else:
+							spool_type='csv'
+						b=['%s%s%s' % (paramkey_from.lower(),self.conf._to,paramkey_to.lower()),1,			1,				'"%s"' % col_sep,		0,keep_spool_file,0,0,ask_to_truncate,0,email_to, log_dir,'',job_name,time_stamp,'',job_pre_etl,'','','',loader_profile,HostMap,spool_type,'','','']
 						if 'Sharded' in db_from or 'Parallel' in  db_from:
 							if db_to in ('CSV_File'):
 								print 'skipping test %s to %s"' % (db_from,db_to) 
 								continue
-							b[1]=b[2]=3
+							b[2]=3
+							if 'Parallel' in  db_from:
+								b[1]=3
+
 						if 'Limit' in db_from:
 							limit=int(db_from.split('Limit')[1])
 							b[4]=limit
@@ -939,10 +988,13 @@ Example:
 						#	b[15]=job_pre_etl
 						if 'WithWideRows' in db_from:
 							b[15]=column_buckets	
-						if 'DeleteTargetRecs' in db_to:
+						if 'DeleteTargetRecs' in db_to and 'Query' in db_from:
 							b[16]=DeleteTargetRecs							
 						if 'WithLoaderProfile' in db_to:
-							b[20]=with_loader_profile							
+							b[20]=with_loader_profile
+						#if paramkey_from in self.conf.ff and paramkey_to in self.conf.ff:
+						#	#loader profile
+						#	b[21]=''
 						self.test['core']=b
 						#pprint (b)
 						#print 'AskToTruncate' in db_from or 'AskToTruncate' in db_to

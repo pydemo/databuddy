@@ -1,6 +1,6 @@
 ::Test name: CSV_ShardedDir
 	::Description:	Read each CSV file from a directory "C:\Python27\data_migrator_1239_mongo\test\v101\data\mongo_data_dir".Break input CSV files into logical partitions (shards) and run loader 
-	::				process on each shard in thread pool (-o[--pool_size] 3)
+	::				process on each shard in thread pool (-o[--pool_size] 1)
 	::				Load CSV file into MongoDBCollection.
 	::Arguments:
 	::	-w[--copy_vector] is "Data copy direction."
@@ -21,17 +21,18 @@
 ::	-s[--to_db_server] is "Target MongoDB instance name."
 ::	-T[--to_db_port] is "Target MongoDB port."
 ::	-a[--to_collection] is "To table."
-::	-Z[--to_column_names] is "To column list for MongoDB."	
+::	-Z[--to_column_names] is "To column list for MongoDB."
+::	-numIW[--numInsertionWorkers] is "Upsert rows into MongoDB."	
 	
-echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
+echo y|C:\Python27\qc_dist_32\20150614_220157\qc32\qc32.exe ^
 -w csv-mongo ^
--o 3 ^
+-o 1 ^
 -r 3 ^
 -t "," ^
 -K 1 ^
 -M C:\Temp\qc_log ^
 -B qc_job ^
--Y 20150604_155854_905000 ^
+-Y 20150614_220206_033000 ^
 -5 ".\config\host_map_v2.py" ^
 -6 json ^
 -I C:\Python27\data_migrator_1239_mongo\test\v101\data\mongo_data_dir ^
@@ -42,4 +43,5 @@ echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
 -s localhost ^
 -T 27017 ^
 -a test ^
--Z "ID,TITLE,ISIN,COUNTRY,DESCRIPTION,SECURITYTYPE,CREATED"
+-Z "ID,TITLE,ISIN,COUNTRY,DESCRIPTION,SECURITYTYPE,CREATED" ^
+-numIW 1

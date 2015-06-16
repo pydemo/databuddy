@@ -28,7 +28,7 @@
 ::	-T[--target_port] is "Connection port for target PostgreSQL."
 ::	-k[--skip_header] is "Skip header line."	
 	
-echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
+echo y|C:\Python27\qc_dist_32\20150614_220157\qc32\qc32.exe ^
 -w mongo-pgres ^
 -o 1 ^
 -r 1 ^
@@ -37,7 +37,7 @@ echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20150604_155850_531000 ^
+-Y 20150614_220158_347000 ^
 -5 ".\config\host_map_v2.py" ^
 -6 json ^
 -c test ^

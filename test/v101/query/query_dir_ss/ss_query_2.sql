@@ -1,1 +1,1 @@
-SELECT p.* FROM     dbo.Timestamp_test_from p;
+SELECT p.* FROM  Timestamp_test_from p;

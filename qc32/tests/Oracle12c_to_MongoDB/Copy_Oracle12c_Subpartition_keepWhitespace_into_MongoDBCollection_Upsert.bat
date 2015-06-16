@@ -13,13 +13,11 @@
 ::	-5[--host_map] is "Host-to-shard map."
 ::	-6[--spool_type] is "Spool file type (CSV or JSON)."
 ::	-c[--from_table] is "From table."
-::	-S[--from_sub_partition] is "From sub-partition."
-::	-j[--from_user] is "Oracle 12c source user."
 ::	-x[--from_passwd] is "Oracle 12c source user password."
-::	-b[--from_db_name] is "Oracle 12c source database."
 ::	-e[--nls_date_format] is "nls_date_format for source."
 ::	-m[--nls_timestamp_format] is "nls_timestamp_format for source."
 ::	-O[--nls_timestamp_tz_format] is "nls_timestamp_tz_format for source."
+::	-A[--header] is "Include header to Oracle 12c extract."
 ::	-W[--keep_whitespace] is "Keep whitespace from CHAR type in "Oracle 12c" extract."
 ::	-u[--to_user] is "Target MongoDB db user."
 ::	-p[--to_passwd] is "MongoDB user password."
@@ -28,9 +26,10 @@
 ::	-T[--to_db_port] is "Target MongoDB port."
 ::	-a[--to_collection] is "To table."
 ::	-Z[--to_column_names] is "To column list for MongoDB."
-::	-O[--upsert] is "Upsert rows into MongoDB."	
+::	-G[--upsert] is "Upsert rows into MongoDB."
+::	-numIW[--numInsertionWorkers] is "Upsert rows into MongoDB."	
 	
-echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
+echo y|C:\Python27\qc_dist_32\20150614_220157\qc32\qc32.exe ^
 -w ora12c-mongo ^
 -o 1 ^
 -r 1 ^
@@ -39,18 +38,16 @@ echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20150604_155915_499000 ^
+-Y 20150614_220248_616000 ^
 -5 ".\config\host_map_v2.py" ^
 -6 json ^
 -c SCOTT.Sub_Partitioned_test_from ^
--S part_15_sp1 ^
--j SCOTT ^
--x tiger ^
--b orcl ^
--e "YYYY-MM-DD HH24.MI.SS" ^
--m "YYYY-MM-DD HH24.MI.SS.FF2" ^
--O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" ^
--W 1 ^
+-x part_15_sp1 ^
+-e SCOTT ^
+-m tiger ^
+-O orcl ^
+-A "YYYY-MM-DD HH24.MI.SS" ^
+-W "YYYY-MM-DD HH24.MI.SS.FF2" ^
 -u test_user ^
 -p tast_pwd ^
 -d test ^
@@ -58,4 +55,5 @@ echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
 -T 27017 ^
 -a test ^
 -Z "ID,TITLE,ISIN,COUNTRY,DESCRIPTION,SECURITYTYPE,CREATED" ^
--O 1
+-G 1 ^
+-numIW 1

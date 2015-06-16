@@ -75,7 +75,7 @@ def rcopyFile(from_loc, to_loc, pos, panel_id):
 			if 1:
 			
 				cmd='pscp -pw %s  "%s" %s@%s:%s' % (password,from_loc,username,hostname,to_loc)
-				print cmd
+				#print cmd
 				#sys.exit(1)
 				#os.system(cmd)
 				if 1:
@@ -141,9 +141,9 @@ def execRemoteCmd(specs, worker,panel_id):
 	#ssh.exec_command( 'ls -al' )	
 	#stdin,stdout,stderr = ssh.exec_command("cd /opt/etl/apps/smart_dev/volumes/etl/scripts/tab_copy;. ./.ora_profile;./run.sh t tab_copy;")
 	cmd='time python tc.py --pipeline_spec=%s --pipeline=%s;' % (specs, worker)
-	print cmd
-	print specs
-	print worker
+	#print cmd
+	#print specs
+	#print worker
 	#sys.exit(1)
 	stdin,stdout,stderr = ssh.exec_command("cd /opt/etl/apps/smart_dev/volumes/etl/scripts/tab_copy;. ./.ora_profile;%s" % cmd)
 	

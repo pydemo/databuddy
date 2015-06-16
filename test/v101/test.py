@@ -1,6 +1,7 @@
 import os, sys
 from pprint import pprint
-import common.v101.config as conf  
+#import common.v101.config as conf 
+import config.config as conf 
 e=sys.exit
 #test={}
 csvf_dt={}
@@ -32,6 +33,7 @@ if 0:
 		csvf['ORA11G'] = '%s\\oracle_citi_shard_0.data' % data_loc
 	else:
 		csvf['ORA11G'] = '%s\\oracle_shard_0_ts.data' % data_loc
+		csvf['ORA12C'] = '%s\\oracle_shard_0_ts.data' % data_loc
 	csvf['ORAXE'] = '%s\\oracle_shard_0_ts.data' % data_loc	
 	csvf['TTEN'] = '%s\\tt_shard_0.data' % data_loc
 	csvf['ORAEXA'] = '%s\\oracle_shard_0_ts.data' % data_loc
@@ -55,6 +57,7 @@ for db in ('DBTAES', 'DBTES', 'DBTAWS', 'DBTWS', 'DBTE', 'DBTEC', 'DBTDE'):
 if conf.citi:
 	csvf_tz['ORA11G'] = '%s\\oracle_citi_shard_0_tz.data' % data_loc
 else:
+	csvf_tz['ORA12C'] = '%s\\oracle_shard_0_tz.data' % data_loc
 	csvf_tz['ORA11G'] = '%s\\oracle_shard_0_tz.data' % data_loc
 csvf_tz['ORAXE'] = '%s\\oracle_shard_0_tz.data' % data_loc	
 csvf_tz['TTEN'] = '%s\\tt_shard_0.data' % data_loc
@@ -79,6 +82,7 @@ for db in ('DBTAES', 'DBTES', 'DBTAWS', 'DBTWS', 'DBTE', 'DBTEC', 'DBTDE'):
 if conf.citi:
 	csvf_ts['ORA11G'] = '%s\\oracle_citi_shard_0.data' % data_loc
 else:
+	csvf_ts['ORA12C'] = '%s\\oracle_shard_0_ts.data' % data_loc
 	csvf_ts['ORA11G'] = '%s\\oracle_shard_0_ts.data' % data_loc
 csvf_ts['ORAXE'] = '%s\\oracle_shard_0_ts.data' % data_loc	
 csvf_ts['TTEN'] = '%s\\tt_shard_0.data' % data_loc
@@ -102,12 +106,14 @@ for db in ('DBTAES', 'DBTES', 'DBTAWS', 'DBTWS', 'DBTE', 'DBTEC', 'DBTDE'):
 if conf.citi:
 	csvf_dt['ORA11G'] = '%s\\oracle_citi_shard_0_dt.data' % data_loc
 else:
+	csvf_dt['ORA12C'] = '%s\\oracle_shard_0_dt.data' % data_loc
 	csvf_dt['ORA11G'] = '%s\\oracle_shard_0_dt.data' % data_loc
 csvf_dt['ORAXE'] = '%s\\oracle_shard_0_dt.data' % data_loc	
 csvf_dt['TTEN'] = '%s\\tt_shard_0.data' % data_loc
 csvf_dt['ORAEXA'] = '%s\\oracle_shard_0_ts.data' % data_loc
 csvf_dt['SSEXP'] = '%s\\ss_shard_0.data' % data_loc
 csvf_dt['SSENT'] = '%s\\ss_shard_0.data' % data_loc
+csvf_dt['MONGO'] =csvf_ts['MONGO'] = csvf_tz['MONGO'] = '%s\\mongo_shard_0.data' % data_loc
 
 
 
@@ -122,6 +128,7 @@ qryf['INFOR'] = '%s\\informix_query.sql' % qry_loc
 qryf['INFORC'] = '%s\\informix_query.sql' % qry_loc
 
 qryf['SLITE'] = '%s\\sqllite_query.sql' % qry_loc
+qryf['ORA12C'] = '%s\\oracle_query.sql' % qry_loc
 qryf['ORA11G'] = '%s\\oracle_query.sql' % qry_loc
 qryf['ORA_TimezoneQueryFile:MYSQL'] = '%s\\oracle_query_tz_to_mysql.sql' % qry_loc
 qryf['ORA_TimezoneQueryFile:TTEN'] = '%s\\oracle_query_tz_to_tten.sql' % qry_loc
@@ -171,7 +178,7 @@ ora_data_dir=os.path.join(data_loc,'ora_data_dir')
 #qdir['PGRES'] = qry_dir_pgres
 ddir={}
 ddir['PGRES'] = os.path.join(data_loc,'pgres_data_dir')
-ddir['ORAEXA'] = ddir['ORA11G'] = ddir['ORAXE'] =os.path.join(data_loc,'ora_data_dir_1')+';'+os.path.join(data_loc,'ora_data_dir_2')
+ddir['ORAEXA'] = ddir['ORA11G'] = ddir['ORA12C'] = ddir['ORAXE'] =os.path.join(data_loc,'ora_data_dir_1')+';'+os.path.join(data_loc,'ora_data_dir_2')
 ddir['SSENT'] =  ddir['SSEXP'] = os.path.join(data_loc,'ss_data_dir')
 ddir['DBTAES']=ddir['DBTES']=ddir['DBTAWS']=ddir['DBTWS']=ddir['DBTE']=ddir['DBTEC']=ddir['DBTDE']=os.path.join(data_loc,'db2_data_dir')
 ddir['INFOR'] = ddir['INFORC']= os.path.join(data_loc,'infor_data_dir')
@@ -179,6 +186,7 @@ ddir['TTEN'] = os.path.join(data_loc,'tt_data_dir')
 ddir['SLITE'] = os.path.join(data_loc,'slite_data_dir')
 ddir['SYASE']=ddir['SYANY']=ddir['SYIQ'] = os.path.join(data_loc,'sybase_data_dir')
 ddir['MYSQL']=ddir['MARIA']=ddir['INFOB']=os.path.join(data_loc,'mysql_data_dir')
+ddir['MONGO'] = os.path.join(data_loc,'mongo_data_dir')
 
 
 #'DBTAES', 'DBTES', 'DBTAWS', 'DBTWS', 'DBTE', 'DBTEC', 'DBTDE'
@@ -215,7 +223,7 @@ def zip_lists(a,b):
 	return out
 def create_run_tests(db_from, db_to, test,citi=False):
 	global conf, from_table, to_table
-	print db_from, db_to
+	#print db_from, db_to
 	#test={}
 	#	print prog
 	#e(0)
@@ -246,12 +254,12 @@ def create_run_tests(db_from, db_to, test,citi=False):
 		
 	test['FROM']={}
 	tfrom=test['FROM']	
-	if db_from.startswith('ORA11G') and db_to.startswith('PGRES'):
+	if db_from.startswith('ORA') and db_to.startswith('PGRES'):
 		from_table='Timestamp_test_from'
 		to_table='Timestamp_test_to'	
 
 		#print db_from, db_to,
-	if db_to.startswith('PGRES') or db_from.startswith('PGRES') or db_from.startswith('ORA11G') or db_to.startswith('ORA11G'):
+	if db_to.startswith('PGRES') or db_from.startswith('PGRES') or db_from.startswith('ORA') or db_to.startswith('ORA'):
 		if 'Date' in db_from:
 			from_table='Date_test_from'
 			to_table='Date_test_to'
@@ -281,7 +289,7 @@ def create_run_tests(db_from, db_to, test,citi=False):
 		from_table = 'wide_row_from'
 		to_table = 'wide_row_to'				
 		qryfile= r'"%s\oracle_query_with_widerows.sql"' % qry_loc	
-	print qryfile
+	#print qryfile
 	#e(0)
 	csvfile_dt=r'"%s\oracle_shard_0_dt.data"' % data_loc
 	csvfile_ts=r'"%s\oracle_shard_0_ts.data"' % data_loc
@@ -300,6 +308,8 @@ def create_run_tests(db_from, db_to, test,citi=False):
 		data_dir = ora_data_dir
 	small_csvfile=r'"%s\oracle_shard_0_small.data"' % data_loc
 	tfrom['CSV_DateFile']= 			( csvfile_dt, None, 0,	1000)
+	mongo_file=r'C:\Python27\data_migrator_1239_mongo\test\v101\data\oracle_shard_0_mongo.csv'
+	tfrom['CSV_MongoFile']= 			( mongo_file, None, 0,	1000)
 	tfrom['CSV_DateFiles']= 			( '%s;%s' % (csvfile_dt,csvfile_dt), None, 0,	1000)
 	tfrom['CSV_TimestampFile']= 	( csvfile_ts, None, 0,	1000)
 	tfrom['CSV_TimezoneFile']= 		( csvfile_tz, None, 0,	1000)
@@ -311,120 +321,172 @@ def create_run_tests(db_from, db_to, test,citi=False):
 	tfrom['CSV_ShardedFileSkip1']= 	( csvfile_ts, None, 1,	10)
 	
 	tfrom['CSV_Dirs']= 			( None, data_dir, 0,	1000)
-	tfrom['CSV_Dirs_Limit10']= 			( None, data_dir, 0,	1000)
-	tfrom['CSV_DirsSkip1']= 		( None, data_dir, 1,	1000)
+	tfrom['CSV_Dirs_Limit10']= 	( None, data_dir, 0,	1000)
+	tfrom['CSV_DirsSkip1']= 	( None, data_dir, 1,	1000)
 	tfrom['CSV_ShardedDir']= 	( None, data_dir, 0,	50)
 	tfrom['CSV_ShardedDir_Limit10']= 	( None, data_dir, 0,	50)
 	tfrom['CSV_ShardedDirSkip1']= 	( None, data_dir, 1,	50)
 
-								
+	home=os.path.dirname(os.path.realpath(__file__))	
+	json_file=os.path.join(data_loc,'JSON_Mongo_Collection.js')
+	json_file_noids=os.path.join(data_loc,'JSON_Mongo_Collection_noIDs.js')
+	json_dir = os.path.join(data_loc,'JSON_data_dir')
+	tfrom['JSON_Files']=( json_file, None, 0, 1000)
+	tfrom['JSON_Files_noIDs']=( json_file_noids, None, 0, 1000)
+	#tfrom['JSON_Dir']=( json_dir, None, 0, 1000)
+	tfrom['JSON_Dirs']=( None,json_dir, 0, 1000)
+	tfrom['JSON_ShardedDirs']=( None,json_dir, 0, 1000)
+
+	ezconnect='SCOTT/tiger@//192.168.15.47:1521/orcl.localdomain'		
 	orapart= 'part_15'
 	oraspart='part_15_sp1'
-	noclient="SCOTT/tiger2@'(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=orcl)))'"
+	#noclient="SCOTT/tiger2@'(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=orcl)))'"
 	#ora_conn='SCOTT/tiger2@orcl'
-	ora_user, ora_pwd, ora_sid=('SCOTT', 'tiger2', 'orcl',)
-	ora_user, ora_pwd, noclient_connect_string=('SCOTT', 'tiger2', "'(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=orcl)))'",)
-	for dbkey in ('ORA11G', 'ORAEXA'):
-		tfrom['%s_QueryFile' % dbkey]= (qryfile, None, None , None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
+	if 0:
+		ora_user, ora_pwd, ora_sid=('SCOTT', 'tiger', 'orcl_ol7',)
+		noclient_connect_string='(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.15.47)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=orcl.localdomain)))';
+		if db_from.startswith('CSV') or db_to.startswith('CSV'):
+			ora_user, ora_pwd, ora_sid=('SCOTT', 'tiger2', 'orcl',)
+			noclient_connect_string='(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=orcl)))'
+	else:
+		ora_user, ora_pwd, ora_sid=('SCOTT', 'tiger', 'orcl',)
+		noclient_connect_string="'(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=orcl)))'"
+	
+	for dbkey in ('ORA12C','ORA11G', 'ORAEXA'):
+		tfrom['%s_QueryFile' % dbkey]= (qryfile, None, None , None,	None,None,None,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
+		#tfrom['%s_QueryFile_withComaHeader' % dbkey]= (qryfile, None, None , None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   1,0)
+		tfrom['%s_QueryFile_WithWideRows' % dbkey]= (qryfile, None, None , None,None,	None,None,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
 		
-		tfrom['%s_QueryFile_WithWideRows' % dbkey]= (qryfile, None, None , None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
 		
-		tfrom['%s_QueryFile_withHeader' % dbkey]= (qryfile, None, None , None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],1,0)
-		tfrom['%s_QueryFile_noHeader' % dbkey]= (qryfile, None, None , None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_QueryFile_keepWhitespace' % dbkey]= (qryfile, None, None , None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,1)
-		tfrom['%s_QueryFile_keepWhitespace_noHeader' % dbkey]= (qryfile, None, None , None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,1)
-		tfrom['%s_QueryFile_keepWhitespace_withHeader' % dbkey]= (qryfile, None, None , None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],1,1)
-		tfrom['%s_QueryFile_trimWhitespace' % dbkey]= (qryfile, None, None , None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_QueryFile_trimWhitespace_noHeader' % dbkey]= (qryfile, None, None , None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_QueryFile_trimWhitespace_withHeader' % dbkey]= (qryfile, None, None , None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],1,0)
-		tfrom['%s_TimezoneQueryFile' % dbkey]= (qryfile, None, None , None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_QueryFile_Limit10' % dbkey]= (qryfile, None, None , None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
+		tfrom['%s_QueryFile_noHeader' % dbkey]= (qryfile, None, None , None,None,	None,None,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
+		tfrom['%s_QueryFile_keepWhitespace' % dbkey]= (qryfile, None, None , None,None,	None,None,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,1)
+		tfrom['%s_QueryFile_keepWhitespace_noHeader' % dbkey]= (qryfile, None, None ,None, None,None,None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,1)
+		tfrom['%s_QueryFile_keepWhitespace_withHeader' % dbkey]= (qryfile, None, None , None,None,None,None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   1,1)
+		tfrom['%s_QueryFile_trimWhitespace' % dbkey]= (qryfile, None, None , None,	None,None, None,None,ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
+		tfrom['%s_QueryFile_trimWhitespace_noHeader' % dbkey]= (qryfile, None, None , None,None,None,None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
+		tfrom['%s_QueryFile_trimWhitespace_withHeader' % dbkey]= (qryfile, None, None , None,None,None,None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   1,0)
+		tfrom['%s_TimezoneQueryFile' % dbkey]= (qryfile, None, None , None,	None, None,None,None,ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
+		tfrom['%s_QueryFile_Limit10' % dbkey]= (qryfile, None, None , None,	None,None,None,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
 		
-		tfrom['%s_QueryDir' % dbkey]= (None,qry_dir_ora,  None , None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_QueryDir_TableNamedFiles' % dbkey]= (None,qry_dir_ora_table_named,  None , None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_QueryFile_TableNamedFile' % dbkey]= (qryfile_table_named, None, None , None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_QueryDir_WithWideRows' % dbkey]= (None,qry_dir_ora,  None , None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
+		tfrom['%s_QueryDir' % dbkey]= (None,qry_dir_ora,  None , None,	None,None,None,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
+		tfrom['%s_ShardedQueryDir' % dbkey]= (None,qry_dir_ora,  None , None,	None,None,None,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
+		tfrom['%s_Table_withHeader' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,None,None,None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
+		tfrom['%s_QueryFile_withHeader' % dbkey]= (qryfile, None, None , None,	None,None,None,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   1,0)
+		tfrom['%s_QueryDir_withHeader' % dbkey]= (None,qry_dir_ora,  None , None,None,	None,None,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   1,0)
+		tfrom['%s_ShardedQueryDir_withHeader' % dbkey]= (None,qry_dir_ora,  None , None,None,	None,None,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   1,0)
+		#tfrom['%s_ShardedQueryDir_withComaHeader' % dbkey]= (None,qry_dir_ora,  None , None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   1,0)
+		#tfrom['%s_QueryDir_withComaHeader' % dbkey]= (None,qry_dir_ora,  None , None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   1,0)
+		tfrom['%s_QueryDir_TableNamedFiles' % dbkey]= (None,qry_dir_ora_table_named,  None ,None,None,None, None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
+		tfrom['%s_QueryFile_TableNamedFile' % dbkey]= (qryfile_table_named, None, None ,None, None,None,None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
+		tfrom['%s_QueryDir_WithWideRows' % dbkey]= (None,qry_dir_ora,  None , None,	None,None,None,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
 		
-		tfrom['%s_QueryDir_keepWhitespace' % dbkey]= (None,qry_dir_ora,  None , None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,1)
-		tfrom['%s_QueryDir_keepWhitespace_withHeader' % dbkey]= (None,qry_dir_ora,  None , None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],1,1)
-		tfrom['%s_QueryDir_trimWhitespace' % dbkey]= (None,qry_dir_ora,  None , None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_QueryDir_Limit10' % dbkey]= (None,qry_dir_ora,  None , None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
+		tfrom['%s_QueryDir_keepWhitespace' % dbkey]= (None,qry_dir_ora,  None , None,None,	None,None,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,1)
+		tfrom['%s_QueryDir_keepWhitespace_withHeader' % dbkey]= (None,qry_dir_ora,  None , None,None,None,None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   1,1)
+		tfrom['%s_QueryDir_trimWhitespace' % dbkey]= (None,qry_dir_ora,  None , None,None,None,None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
+		tfrom['%s_QueryDir_Limit10' % dbkey]= (None,qry_dir_ora,  None , None,	None,None,None,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
+		
 		if citi:
-			tfrom['ORA_QueryFile' ]= ('%s\\oracle_citi_query.sql' % qry_loc,  None , None,	'AD45676/Sep2014@SMARTC1B',nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-			tfrom['ORA_QueryDir' ]= ( qry_dir_ora,  None , None,	'AD45676/Sep2014@SMARTC1B',nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-			tfrom['ORA_Query_NoNLSDate']= ('%s\\oracle_citi_query.sql' % qry_loc,  None , None,	'AD45676/Sep2014@SMARTC1B',nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
+			tfrom['ORA_QueryFile' ]= ('%s\\oracle_citi_query.sql' % qry_loc,  None , None,	'AD45676/Sep2014@SMARTC1B',nls_d, nls_t, nls_tz,   0,0)
+			tfrom['ORA_QueryDir' ]= ( qry_dir_ora,  None , None,	'AD45676/Sep2014@SMARTC1B',nls_d, nls_t, nls_tz,   0,0)
+			tfrom['ORA_Query_NoNLSDate']= ('%s\\oracle_citi_query.sql' % qry_loc,  None , None,	'AD45676/Sep2014@SMARTC1B',nls_d, nls_t, nls_tz,   0,0)
 						# from_table, from_db, nls_date_format, nls_time_format
 		
-		tfrom['%s_Table_WithWideRows' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
+		tfrom['%s_Table_WithWideRows' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,	None,None,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
 		
-		tfrom['%s_Table' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_TimestampTable' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_TimestampTable_withHeader' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],1,0)
-		tfrom['%s_TimestampTable_keepWhitespace_withHeader' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,  ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],1,1)
-		tfrom['%s_TimestampTable_trimWhitespace' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_TimestampTable_keepWhitespace_Validate' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,1)
-		tfrom['%s_ShardedTimestampTable_keepWhitespace_Validate' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,1)
-		tfrom['%s_DateTable' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_DateTable_Email' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_DateTable_JobName' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_TimezoneTable' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_TimezoneTable_KeepSpoolFile' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_Table_KeepSpoolFile' % dbkey]= 		 (None,None,'SCOTT.%s' % from_table, None, None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_Table_Limit10' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
+		tfrom['%s_JSON_Table' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,	None,None,None,ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
+		tfrom['%s_Table' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,	None,None,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
+		tfrom['%s_TimestampTable' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,	None,None,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
+		tfrom['%s_TimestampTable_withHeader' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,None,None,None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   1,0)
+		tfrom['%s_TimestampTable_withComaHeader' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,	None, None,None,ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   1,0)
+		tfrom['%s_TimestampTable_keepWhitespace_withHeader' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None, None,None,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   1,1)
+		tfrom['%s_TimestampTable_trimWhitespace' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,	None,None,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
+		tfrom['%s_TimestampTable_keepWhitespace_Validate' % dbkey]= (None,None,'SCOTT.%s' % from_table, None,None,None, None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,1)
+		tfrom['%s_ShardedTimestampTable_keepWhitespace_Validate' % dbkey]= (None,None,'SCOTT.%s' % from_table,None,None, None, None,None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,1)
+		tfrom['%s_DateTable' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,	None, None,None,ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
+		tfrom['%s_DateTable_Email' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,	None,None,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
+		tfrom['%s_DateTable_JobName' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,	None,None,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
+		tfrom['%s_TimezoneTable' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,None,	None,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
+		tfrom['%s_TimezoneTable_KeepSpoolFile' % dbkey]= (None,None,'SCOTT.%s' % from_table,None,None,None, None, None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
+		tfrom['%s_Table_KeepSpoolFile' % dbkey]= 		 (None,None,'SCOTT.%s' % from_table,None,None,None, None, None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
+		tfrom['%s_Table_Limit10' % dbkey]= (None,None,'SCOTT.%s' % from_table, None,None,None, None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
 		if citi:
-			tfrom['ORA_Table' ]= (None,None,'CSMARTOTD.OTD_VOL_FX', None, None,	'AD45676/Sep2014@SMARTC1B',nls_d, nls_t, nls_tz,   '"%s"' %	dbclients[dbkey],0,0)
+			tfrom['ORA_Table' ]= (None,None,'CSMARTOTD.OTD_VOL_FX', None, None,	'AD45676/Sep2014@SMARTC1B',nls_d, nls_t, nls_tz,    0,0)
 
-		tfrom['%s_ShardedTable' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_ShardedTable_Limit10' % dbkey]= (None,None,'SCOTT.%s' % from_table, None, None, ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
+		tfrom['%s_ShardedTable' % dbkey]= (None,None,'SCOTT.%s' % from_table,None,None, None, None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,   0,0)
+		tfrom['%s_Parallel_ShardedTable' % dbkey]= (None,None,'SCOTT.%s' % from_table,None,None, None, None,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,   0,0)
+		tfrom['%s_ShardedTable_Limit10' % dbkey]= (None,None,'SCOTT.%s' % from_table, None,None,None,None, None, ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,   0,0)
+		
+		tfrom['%s_TableList' % dbkey]= (None,None,None, 'SCOTT.%s,SCOTT.%s_2' % (from_table,from_table), None,	None,None,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   0,0)
+		
 		if citi:
-			tfrom['ORA_ShardedTable' ]= (None,None,'CSMARTOTD.OTD_VOL_FX', None, None,	'AD45676/Sep2014@SMARTC1B',nls_d, nls_t, nls_tz,   '"%s"' %	dbclients[dbkey],0,0)	
+			tfrom['ORA_ShardedTable' ]= (None,None,'CSMARTOTD.OTD_VOL_FX', None, None,	'AD45676/Sep2014@SMARTC1B',nls_d, nls_t, nls_tz,    0,0)	
 
-		tfrom['%s_Partition' % dbkey]= (None,None,'SCOTT.%s' % from_part_table , orapart,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_Partition_WithWideRows' % dbkey]= (None,None,'SCOTT.%s' % from_part_table , orapart,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_Partition_NoClient' % dbkey]= (None,None,'SCOTT.%s' % from_part_table , orapart,None,	ora_user, ora_pwd, noclient_connect_string,nls_d, nls_t,  nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_Partition_TruncateTarget_AskToTruncate' % dbkey]= (None,None,'SCOTT.%s' % from_part_table , orapart,None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		
-		tfrom['%s_Partition_withHeader' % dbkey]= (None,None,'SCOTT.%s' % from_part_table , orapart,None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,  '"%s"' %	dbclients[dbkey],1,0)
-		
-		tfrom['%s_Partition_Validate' % dbkey]= (None,None,'SCOTT.%s' % from_part_table , orapart,None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_Partition_keepWhitespace' % dbkey]= (None,None,'SCOTT.%s' % from_part_table , orapart,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,  '"%s"' %	dbclients[dbkey],0,1)
-		tfrom['%s_Partition_trimWhitespace' % dbkey]= (None,None,'SCOTT.%s' % from_part_table , orapart,None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		
-		tfrom['%s_Partition_KeepSpoolFile' % dbkey]= (None,None,'SCOTT.%s' % from_part_table , orapart,None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_Partition_Limit10' % dbkey]= (None,None,'SCOTT.%s' % from_part_table , orapart,None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   '"%s"' %	dbclients[dbkey],0,0)
+		tfrom['%s_Partition' % dbkey]= (None,None,'SCOTT.%s' % from_part_table , None, orapart,None,None, None, ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,   0,0)
+		tfrom['%s_Partition_WithWideRows' % dbkey]= (None,None,'SCOTT.%s' % from_part_table ,None,  orapart,None, None, None,ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,   0,0)
+		tfrom['%s_Partition_NoClient' % dbkey]= (None,None,'SCOTT.%s' % from_part_table , None, orapart,None,None,None, 	ora_user, ora_pwd, noclient_connect_string,nls_d, nls_t,  nls_tz,   0,0)
+		tfrom['%s_Partition_TruncateTarget_AskToTruncate' % dbkey]= (None,None,'SCOTT.%s' % from_part_table ,None,  orapart,None,None,None, 	 ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,   0,0)
+		tfrom['%s_Partition_withHeader' % dbkey]= (None,None,'SCOTT.%s' % from_part_table ,None,  orapart,None,None, None, 	 ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,   1,0)
+		tfrom['%s_Partition_Validate' % dbkey]= (None,None,'SCOTT.%s' % from_part_table ,None, orapart,None,None,None, 	 ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,   0,0)
+		tfrom['%s_Partition_keepWhitespace' % dbkey]= (None,None,'SCOTT.%s' % from_part_table , None, orapart,None,None,None,  ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,   0,1)
+		tfrom['%s_Partition_trimWhitespace' % dbkey]= (None,None,'SCOTT.%s' % from_part_table ,None,  orapart,None,None,None, 	 ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,   0,0)
+		tfrom['%s_Partition_KeepSpoolFile' % dbkey]= (None,None,'SCOTT.%s' % from_part_table , None, orapart,None,None,None, 	 ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,   0,0)
+		tfrom['%s_Partition_Limit10' % dbkey]= (None,None,'SCOTT.%s' % from_part_table ,None,  orapart,None,None,	None,  ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,    0,0)
 		if citi:
-			tfrom['ORA_Partition' ]= (None,None,'CSMARTOTD.OTD_VOL_FX', 'P20141014',None,	'AD45676/Sep2014@SMARTC1B',nls_d, nls_t, nls_tz,   '"%s"' %	dbclients[dbkey],0,0)
+			tfrom['ORA_Partition' ]= (None,None,'CSMARTOTD.OTD_VOL_FX', 'P20141014',None,	'AD45676/Sep2014@SMARTC1B',nls_d, nls_t, nls_tz,    0,0)
+		tfrom['%s_ShardedPartition' % dbkey]= (None,None,'SCOTT.%s' % from_part_table ,None,  orapart,None,None,	None,  ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,    0,0)
+		tfrom['%s_ShardedPartition_Limit10' % dbkey]= (None,None,'SCOTT.%s' % from_part_table ,None,  orapart,None,None,None, 	 ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,   0,0)
 		
-		tfrom['%s_ShardedPartition' % dbkey]= (None,None,'SCOTT.%s' % from_part_table , orapart,None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_ShardedPartition_Limit10' % dbkey]= (None,None,'SCOTT.%s' % from_part_table , orapart,None,	 ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		if citi:
-			tfrom['ORA_ShardedPartition' ]= (None,None,'CSMARTOTD.OTD_VOL_FX' , 'P20141014',None,	'AD45676/Sep2014@SMARTC1B',nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_Subpartition' % dbkey]= (None,None,'SCOTT.%s' % from_sub_part_table , None, oraspart,	ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_Subpartition_WithWideRows' % dbkey]= (None,None,'SCOTT.%s' % from_sub_part_table , None, oraspart,	ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_Subpartition_withHeader' % dbkey]= (None,None,'SCOTT.%s' % from_sub_part_table , None, oraspart,	ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,  '"%s"' %	dbclients[dbkey],1,0)
-		tfrom['%s_Subpartition_Validate' % dbkey]= (None,None,'SCOTT.%s' % from_sub_part_table , None, oraspart,ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_Subpartition_keepWhitespace' % dbkey]= (None,None,'SCOTT.%s' % from_sub_part_table , None, oraspart,	ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,  '"%s"' %	dbclients[dbkey],0,1)
-		tfrom['%s_Subpartition_KeepSpoolFile' % dbkey]= (None,None,'SCOTT.%s' % from_sub_part_table , None, oraspart,ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,   '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_Subpartition_Limit10' % dbkey]= (None,None,'SCOTT.%s' % from_sub_part_table , None, oraspart,	ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		if citi:
-			tfrom['ORA_Subpartition' ]= (None,None,'CSMARTOTD.OTD_VOL_FX', None, 'P20141014',	'AD45676/Sep2014@SMARTC1B',nls_d, nls_t,  nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
+		tfrom['%s_PartitionList' % dbkey]= (None,None,'SCOTT.%s' % from_part_table , None, None,'part_13,part_14,part_15,part_16' ,None, None, ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,   0,0)
 		
-		tfrom['%s_ShardedSubpartition' % dbkey]= (None,None,'SCOTT.%s' % from_sub_part_table ,None, oraspart,	ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-		tfrom['%s_ShardedSubpartition_Limit10' % dbkey]= (None,None,'SCOTT.%s' % from_sub_part_table ,None, oraspart,	ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
+		tfrom['%s_Parallel_PartitionList' % dbkey]= (None,None,'SCOTT.%s' % from_part_table , None, None,'part_13,part_14,part_15,part_16' ,None,None,  ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,   0,0)
+		
 		if citi:
-			tfrom['ORA_ShardedSubpartition' ]= (None,None,'CSMARTOTD.OTD_VOL_FX' , None, 'P20141014', 	'AD45676/Sep2014@SMARTC1B',nls_d, nls_t,  nls_tz, '"%s"' %	dbclients[dbkey],0,0)
+			tfrom['ORA_ShardedPartition' ]= (None,None,'CSMARTOTD.OTD_VOL_FX' , 'P20141014',None,	'AD45676/Sep2014@SMARTC1B',nls_d, nls_t, nls_tz,   0,0)
+		tfrom['%s_Subpartition' % dbkey]= (None,None,'SCOTT.%s' % from_sub_part_table ,None,  None,None, oraspart,None, 	ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,   0,0)
+		tfrom['%s_Subpartition_WithWideRows' % dbkey]= (None,None,'SCOTT.%s' % from_sub_part_table ,None,  None,None, oraspart,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,   0,0)
+		tfrom['%s_Subpartition_withHeader' % dbkey]= (None,None,'SCOTT.%s' % from_sub_part_table , None,None,None,  oraspart,None, 	ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,   1,0)
+		tfrom['%s_Subpartition_Validate' % dbkey]= (None,None,'SCOTT.%s' % from_sub_part_table , None, None,None, oraspart,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,   0,0)
+		tfrom['%s_Subpartition_keepWhitespace' % dbkey]= (None,None,'SCOTT.%s' % from_sub_part_table , None, None,None, oraspart,None, 	ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,   0,1)
+		tfrom['%s_Subpartition_KeepSpoolFile' % dbkey]= (None,None,'SCOTT.%s' % from_sub_part_table , None,None, None, oraspart,None, ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,    0,0)
+		tfrom['%s_Subpartition_Limit10' % dbkey]= (None,None,'SCOTT.%s' % from_sub_part_table , None,None,None,  oraspart,None, 	ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,   0,0)
+		if citi:
+			tfrom['ORA_Subpartition' ]= (None,None,'CSMARTOTD.OTD_VOL_FX', None, 'P20141014',	'AD45676/Sep2014@SMARTC1B',nls_d, nls_t,  nls_tz,   0,0)
+		tfrom['%s_ShardedSubpartition' % dbkey]= (None,None,'SCOTT.%s' % from_sub_part_table ,None,None,  None,oraspart,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,   0,0)
+		tfrom['%s_ShardedSubpartition_Limit10' % dbkey]= (None,None,'SCOTT.%s' % from_sub_part_table ,None,None,  None,oraspart,	None, ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,   0,0)
+		if citi:
+			tfrom['ORA_ShardedSubpartition' ]= (None,None,'CSMARTOTD.OTD_VOL_FX' , None, 'P20141014', 	'AD45676/Sep2014@SMARTC1B',nls_d, nls_t,  nls_tz,  0,0)
 
-	dbkey='ORAXE'
-	tfrom['ORAXE_QueryFile']= (qryfile,  None , None, 	ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-	tfrom['ORAXE_QueryDir']= (None,  qry_dir_ora , None,  	ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz, '"%s"' %	dbclients[dbkey],0,0)
-	tfrom['ORAXE_ParallelQueryDir']= (None,  qry_dir_ora , None,  	ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-	tfrom['ORAXE_DateTable']= (None,None,'SCOTT.%s' % from_table,  ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz, '"%s"' %	dbclients[dbkey],0,0)
-	tfrom['ORAXE_TimestampTable']= (None,None,'SCOTT.%s' % from_table,  ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz, '"%s"' %	dbclients[dbkey],0,0)
-	tfrom['ORAXE_TimezoneTable']= (None,None,'SCOTT.%s' % from_table,  ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz, '"%s"' %	dbclients[dbkey],0,0)
-	tfrom['ORAXE_Table_KeepSpoolFile']= (None,None,'SCOTT.%s' % from_table,  ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz, '"%s"' %	dbclients[dbkey],0,0)
-	tfrom['ORAXE_ShardedTable']= (None,None,'SCOTT.%s' % from_table, ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,  '"%s"' %	dbclients[dbkey],0,0)
-	
+		tfrom['%s_SubpartitionList' % dbkey]= (None,None,'SCOTT.%s' % from_sub_part_table ,None,  None,None, None,'%s,%s,%s,%s' % (oraspart,'part_15_sp2','part_14_sp1','part_14_sp2'), 	ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,   0,0)					
+		tfrom['%s_Parallel_SubpartitionList' % dbkey]= (None,None,'SCOTT.%s' % from_sub_part_table ,None,  None,None, None,'%s,%s,%s,%s' % (oraspart,'part_10_sp2','part_14_sp1','part_14_sp2'), 	ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,   0,0)					
 			
+	dbkey='ORAXE'
+	tfrom['ORAXE_QueryFile']= (qryfile,  None , None, 	ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  0,0)
+	tfrom['ORAXE_QueryDir']= (None,  qry_dir_ora , None,  	ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,0,0)
+	tfrom['ORAXE_ParallelQueryDir']= (None,  qry_dir_ora , None,  	ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz, 0,0)
+	tfrom['ORAXE_DateTable']= (None,None,'SCOTT.%s' % from_table,  ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,0,0)
+	tfrom['ORAXE_TimestampTable']= (None,None,'SCOTT.%s' % from_table,  ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,0,0)
+	tfrom['ORAXE_Table']= (None,None,'SCOTT.%s' % from_table,  ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,0,0)
+	tfrom['ORAXE_TimezoneTable']= (None,None,'SCOTT.%s' % from_table,  ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz, 0,0)
+	tfrom['ORAXE_Table_KeepSpoolFile']= (None,None,'SCOTT.%s' % from_table,  ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz, 0,0)
+	tfrom['ORAXE_ShardedTable']= (None,None,'SCOTT.%s' % from_table, ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz, 0,0)
+
+	dbkey='MONGO'
+	coll='test'
+	db='test'
+	jquery="\"{'COUNTRY':'United States'}\""
+	#tfrom['MONGO_QueryFile']= (qryfile,  None , None, 	ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz,  0,0)
+	#tfrom['MONGO_QueryDir']= (None,  qry_dir_ora , None,  	ora_user, ora_pwd, ora_sid,nls_d, nls_t,  nls_tz,0,0)
+	#tfrom['MONGO_ParallelQueryDir']= (None,  qry_dir_ora , None,  	ora_user, ora_pwd, ora_sid,nls_d, nls_t, nls_tz, 0,0)
+	#tfrom['MONGO_Table']= (None,None, coll,  '"ID,TITLE,ISIN,COUNTRY,DESCRIPTION,SECURITYTYPE,CREATED"', 'test_user', 'tast_pwd', db, 'localhost',  '27017',1)
+	tfrom['MONGO_Query']= (jquery, None,None, coll,  '"ID,TITLE,ISIN,COUNTRY,DESCRIPTION,SECURITYTYPE,CREATED"', 'test_user', 'tast_pwd', db, 'localhost',  '27017',0,0)
+	tfrom['MONGO_Collection']= (None, None,None, coll,  '"ID,TITLE,ISIN,COUNTRY,DESCRIPTION,SECURITYTYPE,CREATED"', 'test_user', 'tast_pwd', db, 'localhost',  '27017',0,0)
+	tfrom['MONGO_Collection_JSON']= (None, None,None, coll,  '"ID,TITLE,ISIN,COUNTRY,DESCRIPTION,SECURITYTYPE,CREATED"', 'test_user', 'tast_pwd', db, 'localhost',  '27017',0,0)
+	tfrom['MONGO_Collection_Limit10']= (None, None,None, coll,  '"ID,TITLE,ISIN,COUNTRY,DESCRIPTION,SECURITYTYPE,CREATED"', 'test_user', 'tast_pwd', db, 'localhost',  '27017',0,0)
+	tfrom['MONGO_Collection_withHeader']= (None, None,None, coll,  '"ID,TITLE,ISIN,COUNTRY,DESCRIPTION,SECURITYTYPE,CREATED"', 'test_user', 'tast_pwd', db, 'localhost',  '27017',1,0)
+	tfrom['MONGO_Collection_Skip10']= (None, None,None, coll,  '"ID,TITLE,ISIN,COUNTRY,DESCRIPTION,SECURITYTYPE,CREATED"', 'test_user', 'tast_pwd', db, 'localhost',  '27017',0,1)
+	
+	#mongoexport.exe -u test_user -p tast_pwd /d test /c test  /f "user_id,age,status" --type=csv  /o c:\tmp\test.csv /h localhost /port 27017
+	
 	dbkey='TTEN'
 	tfrom['TTEN_QueryFile']= ( qryfile,None, None,	'TERRY', 'secret', 'my_ttdb', nls_d, nls_t, '"%s"' %	dbclients[dbkey])
 	tfrom['TTEN_QueryFile_Limit15']= ( qryfile,None, None,	'TERRY', 'secret', 'my_ttdb', nls_d, nls_t,  '"%s"' %	dbclients[dbkey])
@@ -461,8 +523,8 @@ def create_run_tests(db_from, db_to, test,citi=False):
 	dbkey='SSEXP'
 	tfrom['SSEXP_QueryFile']= ( qryfile,None, None,	'sa', '198Morgan', 'master',	'ALEX_BUZ-PC\SQLEXPRESS',	'"%s"' %	dbclients[dbkey])
 	tfrom['SSEXP_QueryFile_Limit15']= ( qryfile,None, None,	'sa', '198Morgan', 'master',	'ALEX_BUZ-PC\SQLEXPRESS',	'"%s"' %	dbclients[dbkey])
-	tfrom['SSEXP_QueryDir']= ( None,qry_dir_ss,None,	'sa', 'ssent_pwd', 'test',	'ALEX_BUZ-PC\MSSQLSERVER_ENT',	'"%s"' %	dbclients[dbkey])
-	tfrom['SSEXP_QueryDir_Limit25']= ( None,qry_dir_ss,None,	'sa', 'ssent_pwd', 'test',	'ALEX_BUZ-PC\MSSQLSERVER_ENT',	'"%s"' %	dbclients[dbkey])
+	tfrom['SSEXP_QueryDir']= ( None,qry_dir_ss,None,	'sa', '198Morgan', 'master',	'ALEX_BUZ-PC\SQLEXPRESS',	'"%s"' %	dbclients[dbkey])
+	tfrom['SSEXP_QueryDir_Limit25']= ( None,qry_dir_ss,None,	'sa', '198Morgan', 'master',	'ALEX_BUZ-PC\SQLEXPRESS',	'"%s"' %	dbclients[dbkey])
 	tfrom['SSEXP_ShardedQueryFile']= ( qryfile,None, None, 	'sa', '198Morgan', 'master',	'ALEX_BUZ-PC\SQLEXPRESS',	'"%s"' %	dbclients[dbkey])	
 	tfrom['SSEXP_Table']= ( None,None, from_table,  	'sa', '198Morgan', 'master',	'ALEX_BUZ-PC\SQLEXPRESS',	'"%s"' %	dbclients[dbkey])
 	tfrom['SSEXP_Table_KeepSpoolFile']= ( None,None, from_table,  	'sa', '198Morgan', 'master',	'ALEX_BUZ-PC\SQLEXPRESS',	'"%s"' %	dbclients[dbkey])
@@ -470,6 +532,8 @@ def create_run_tests(db_from, db_to, test,citi=False):
 	tfrom['SSEXP_ShardedTable']= ( None, None,from_table, 'sa', '198Morgan', 'master',	'ALEX_BUZ-PC\SQLEXPRESS',	'"%s"' %	dbclients[dbkey])	
 	tfrom['SSEXP_ShardedTable_Limit50']= ( None, None,from_table, 'sa', '198Morgan', 'master',	'ALEX_BUZ-PC\SQLEXPRESS',	'"%s"' %	dbclients[dbkey])	
 
+
+	
 	
 	if 0:
 		tfrom['SS_Query']= ( qryfile, 	'sa', '198Morgan', 'master',	'ALEX_BUZ-PC\SQLEXPRESS',	'"%s"' %	dbclients[dbkey])
@@ -489,6 +553,7 @@ def create_run_tests(db_from, db_to, test,citi=False):
 	
 	tfrom['PGRES_DateTable']= 			( None, None, from_table,None, 	'"postgres"', '"postgre_pwd"', '"postgres"',	'"localhost"',	'"%s"' %	dbclients[dbkey],'5434')
 	tfrom['PGRES_TimestampTable']= 			( None, None, from_table,None, 	'"postgres"', '"postgre_pwd"', '"postgres"',	'"localhost"',	'"%s"' %	dbclients[dbkey],'5434')
+	tfrom['PGRES_Table']= 			( None, None, from_table,None, 	'"postgres"', '"postgre_pwd"', '"postgres"',	'"localhost"',	'"%s"' %	dbclients[dbkey],'5434')
 	tfrom['PGRES_TimezoneTable']= 			( None, None, from_table,None, 	'"postgres"', '"postgre_pwd"', '"postgres"',	'"localhost"',	'"%s"' %	dbclients[dbkey],'5434')
 	tfrom['PGRES_Table_KeepSpoolFile']= 			( None, None, from_table,None, 	'"postgres"', '"postgre_pwd"', '"postgres"',	'"localhost"',	'"%s"' %	dbclients[dbkey],'5434')
 	tfrom['PGRES_Table_Limit15']= 			( None, None, from_table,None, 	'"postgres"', '"postgre_pwd"', '"postgres"',	'"localhost"',	'"%s"' %	dbclients[dbkey],'5434')
@@ -644,41 +709,85 @@ def create_run_tests(db_from, db_to, test,citi=False):
 	test['TO']={}
 	tto=test['TO']
 
-	
-	for dbkey in ['ORA11G', 'ORAEXA']:
-		tto['%s_Table' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_table,None,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
+	to_orapart='part_13'
+	for dbkey in ['ORA12C','ORA11G', 'ORAEXA']:
 		
-		tto['%s_Table' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_table,None,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
+		
+		tto['%s_Table' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_table,None,None,nls_d, nls_t,nls_tz, 0)
+		tto['%s_Table_SkipHeader' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_table,None,None,nls_d, nls_t,nls_tz, "1")
 		#tto['%s_Table_WithLoaderProfile' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_table,None,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
-		tto['%s_Table_GetTabnameFromQuery' % dbkey]=(ora_user, ora_pwd, ora_sid, '',None,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
-		tto['%s_Table_GetTabnameFromQuery_DeleteTargetRecs' % dbkey]=(ora_user, ora_pwd, ora_sid, '',None,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
-		tto['%s_Table_DeleteTargetRecs' % dbkey]=(ora_user, ora_pwd, ora_sid,'SCOTT.%s' % to_table,None,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
+		tto['%s_Table_GetTabnameFromQuery' % dbkey]=(ora_user, ora_pwd, ora_sid, '',None,None,nls_d, nls_t,nls_tz, 0)
+		tto['%s_Table_GetTabnameFromQuery_DeleteTargetRecs' % dbkey]=(ora_user, ora_pwd, ora_sid, '',None,None,nls_d, nls_t,nls_tz, 0 )
+		tto['%s_Table_DeleteTargetRecs' % dbkey]=(ora_user, ora_pwd, ora_sid,'SCOTT.%s' % to_table,None,None,nls_d, nls_t,nls_tz, 0)
 		#tto['%s_Table_WithWideRows' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_table,None,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
-		tto['%s_Table_NoClient' % dbkey]=(ora_user, ora_pwd, noclient_connect_string, 'SCOTT.%s' % to_table,None,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
-		tto['%s_Table_TruncateTarget' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_table,None,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
-		tto['%s_Table_TruncateTarget_NoClient' % dbkey]=(ora_user, ora_pwd, noclient_connect_string, 'SCOTT.%s' % to_table,None,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
-		tto['%s_Partition' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_part_table,orapart,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
-		#tto['%s_Partition_WithLoaderProfile' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_part_table,orapart,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
-		tto['%s_Partition_TruncateTarget' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_part_table,orapart,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
-		tto['%s_Subpartition' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_table,None,oraspart,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
-		#tto['%s_Subpartition_WithLoaderProfile' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_table,None,oraspart,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
-		tto['%s_Subpartition_TruncateTarget' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_sub_part_table,None,oraspart,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
+		tto['%s_Table_NoClient' % dbkey]=(ora_user, ora_pwd, noclient_connect_string, 'SCOTT.%s' % to_table,None,None,nls_d, nls_t,nls_tz, 0  )
+		tto['%s_Table_TruncateTarget' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_table,None,None,nls_d, nls_t,nls_tz, 0  )
+		tto['%s_Table_TruncateTarget_NoClient' % dbkey]=(ora_user, ora_pwd, noclient_connect_string, 'SCOTT.%s' % to_table,None,None,nls_d, nls_t,nls_tz, 0  )
+		tto['%s_Partition' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_part_table,to_orapart,None,nls_d, nls_t,nls_tz, 0  )
+		#tto['%s_Partition_WithLoaderProfile' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_part_table,orapart,None,nls_d, nls_t,nls_tz  )
+		tto['%s_Partition_TruncateTarget' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_part_table,orapart,None,nls_d, nls_t,nls_tz, 0  )
+		tto['%s_Subpartition' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_table,None,oraspart,nls_d, nls_t,nls_tz, 0  )
+		#tto['%s_Subpartition_WithLoaderProfile' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_table,None,oraspart,nls_d, nls_t,nls_tz  )
+		tto['%s_Subpartition_TruncateTarget' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_sub_part_table,None,oraspart,nls_d, nls_t,nls_tz, 0  )
+	if 0:
+		for dbkey in ['ORA11G', 'ORAEXA']:
+			tto['%s_Table' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_table,None,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
+			#tto['%s_Table_WithLoaderProfile' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_table,None,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
+			tto['%s_Table_GetTabnameFromQuery' % dbkey]=(ora_user, ora_pwd, ora_sid, '',None,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
+			tto['%s_Table_GetTabnameFromQuery_DeleteTargetRecs' % dbkey]=(ora_user, ora_pwd, ora_sid, '',None,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
+			tto['%s_Table_DeleteTargetRecs' % dbkey]=(ora_user, ora_pwd, ora_sid,'SCOTT.%s' % to_table,None,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
+			#tto['%s_Table_WithWideRows' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_table,None,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
+			tto['%s_Table_NoClient' % dbkey]=(ora_user, ora_pwd, noclient_connect_string, 'SCOTT.%s' % to_table,None,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
+			tto['%s_Table_TruncateTarget' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_table,None,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
+			tto['%s_Table_TruncateTarget_NoClient' % dbkey]=(ora_user, ora_pwd, noclient_connect_string, 'SCOTT.%s' % to_table,None,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
+			tto['%s_Partition' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_part_table,orapart,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
+			#tto['%s_Partition_WithLoaderProfile' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_part_table,orapart,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
+			tto['%s_Partition_TruncateTarget' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_part_table,orapart,None,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
+			tto['%s_Subpartition' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_table,None,oraspart,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
+			#tto['%s_Subpartition_WithLoaderProfile' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_table,None,oraspart,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
+			tto['%s_Subpartition_TruncateTarget' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_sub_part_table,None,oraspart,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
+
+
+		
 	if citi:
 		tto['%s_Table' % dbkey]=('CSMARTOTD/sl14Hm@SMARTD1', 'CSMARTOTD.OTD_VOL_FX',nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )
 
 	dbkey='ORAXE'		
 	tto['%s_Table' % dbkey]=(ora_user, ora_pwd, ora_sid, 'SCOTT.%s' % to_table ,nls_d, nls_t,nls_tz, '"%s"' % dbclients[dbkey] )	
+	dbkey='MONGO'		
+	tto['MONGO_Collection' ]=('test_user', 'tast_pwd', 'test', 'localhost', '27017', 'test', '"ID,TITLE,ISIN,COUNTRY,DESCRIPTION,SECURITYTYPE,CREATED"', 0,1)	
+	tto['MONGO_Collection_Upsert' ]=('test_user', 'tast_pwd', 'test', 'localhost', '27017', 'test', '"ID,TITLE,ISIN,COUNTRY,DESCRIPTION,SECURITYTYPE,CREATED"',1,1)	
+	tto['MONGO_Collection_3_insertionWorkers' ]=('test_user', 'tast_pwd', 'test', 'localhost', '27017', 'test', '"ID,TITLE,ISIN,COUNTRY,DESCRIPTION,SECURITYTYPE,CREATED"',0,3)	
+	#mongoimport.exe  -u test_user -p tast_pwd /d test /c test /file c:\tmp\test_in.txt /f "user_id,age,status" /type csv
+		
 		
 				
-	csvOUTfile=os.path.join(conf.home,'CSV_OUT', 'test%s.data' % db_from)
+	csvOUTfile=os.path.join(conf.home,'CSV_OUT', 'test%s.csv' % db_from)
 	csvOUTdir= os.path.join(conf.home, 'CSV_OUT')
+	#print ts
+	#e(0)
+	#csvRemoteOUTfile= '/tmp/qctest/CSV_OUT/%s_spool.data' % db_from
 
 	dbkey='CSV'
 	
 	tto['CSV_File']=(csvOUTfile, None)
+	#tto['CSV_RemoteFile']=(csvRemoteOUTfile, None)
 	tto['CSV_Dir']=(None, csvOUTdir)
 	tto['CSV_Default']=(None, None)
 
+	jsonOUTfile=os.path.join(conf.home,'JSON_OUT', 'test%s.js' % db_from)
+	jsonOUTdir= os.path.join(conf.home, 'JSON_OUT')
+	#print ts
+	#e(0)
+	#csvRemoteOUTfile= '/tmp/qctest/CSV_OUT/%s_spool.data' % db_from
+
+	dbkey='JSON'
+	
+	tto['JSON_File']=(jsonOUTfile, None)
+	#tto['CSV_RemoteFile']=(csvRemoteOUTfile, None)
+	tto['JSON_Dir']=(None, jsonOUTdir)
+	tto['JSON_Default']=(None, None)
+	
 	ddlOUTfile=os.path.join(conf.home,'DDL_OUT', 'test%s.ddl' % db_from)
 	ddlOUTdir= os.path.join(conf.home, 'DDL_OUT')
 
@@ -707,7 +816,8 @@ def create_run_tests(db_from, db_to, test,citi=False):
 				#to_user, to_passwd, to_db_name, to_db_server,  to_table, mysql_client_home
 				
 	dbkey='PGRES'			
-	tto['%s_Table' % dbkey]=('"postgres"', '"postgre_pwd"', '"postgres"', 	'"localhost"', '"%s"' % to_table, '"%s"' % dbclients[dbkey],'5434')
+	tto['%s_Table' % dbkey]=('"postgres"', '"postgre_pwd"', '"postgres"', 	'"localhost"', '"%s"' % to_table, '"%s"' % dbclients[dbkey],'5434',0)
+	tto['%s_Table_SkipHeader' % dbkey]=('"postgres"', '"postgre_pwd"', '"postgres"', 	'"localhost"', '"%s"' % to_table, '"%s"' % dbclients[dbkey],'5434',1)
 				#to_user, 	to_passwd, 		to_db_name, to_db_server, to_table, postgres_client_home
 	dbkey='SYANY'			
 	tto['%s_Table' % dbkey]=('"dba"', '"sql"', '"demo"', 	'"demo16"', '"%s"' % to_table, '"%s"' % dbclients[dbkey],0)
@@ -762,7 +872,7 @@ def run_test(db_from, db_to, prog, test,citi=False):
 	#e(0)
 	#print map(lambda x: '%s %s' % (pars[core_keys[x]]['short'], test[pt][x]),range(len(core_keys)))
 	api_core={pars[core_keys[i]]['long'].strip('-'):(pars[core_keys[i]]['short'], pars[core_keys[i]]['long'],test[pt][i],pars[core_keys[i]]['help'])  for i in range(len(core_keys)) if test[pt][i]} 
-	pprint(api_core)
+	#pprint(api_core)
 	core_p= ["%s %s" % (pars[core_keys[i]]['short'],test[pt][i])  for i in range(len(core_keys)) if test[pt][i]] #conf.params['core'][core_keys[i]]['short']]
 	core_p_long= ["%s %s" % (pars[core_keys[i]]['long'],test[pt][i])  for i in range(len(core_keys)) if test[pt][i]] #conf.params['core'][core_keys[i]]['short']]
 	core_p_help= ["%s" % (pars[core_keys[i]]['help'])  for i in range(len(core_keys)) if test[pt][i]] #conf.params['core'][core_keys[i]]['short']]
@@ -777,13 +887,15 @@ def run_test(db_from, db_to, prog, test,citi=False):
 	pt='FROM'
 	paramkey_from=db_from.split('_')[0]
 	#pprint (paramkey_from)
+	#pprint(conf.params['FROM'].keys())
 	par_keys=conf.params['FROM'][paramkey_from].keys()
 	#pprint(par_keys)
 	#pprint(test[pt][db_from])
 	pars=conf.params['FROM'][paramkey_from]
-	pprint  (pars.keys())
-	pprint(test[pt][db_from])
+	#pprint  (pars.keys())
+	#pprint(test[pt][db_from])
 	#print  test[pt][db_from]
+	print db_from, db_to
 	api_from={pars[par_keys[i]]['long'].strip('-'):(pars[par_keys[i]]['short'], pars[par_keys[i]]['long'],test[pt][db_from][i],pars[par_keys[i]]['help'])  for i in range(len(par_keys)) if test[pt][db_from][i]} 
 	
 	#pprint(api_from)
@@ -826,7 +938,7 @@ def run_test(db_from, db_to, prog, test,citi=False):
 		pcmd = ' '.join(prog)+' ^\n'+' ^\n'.join(core_p+from_p+to_p)
 		tall.append(pcmd)	
 		#pprint (pcmd)
-		pprint(core_p)
+		#pprint(core_p)
 		#e(0)
 	else:	
 		cmd=' '.join(plist)
@@ -857,9 +969,9 @@ def run_test(db_from, db_to, prog, test,citi=False):
 	#sys.exit(0)
 	echo ='echo y'
 	if ('TruncateTarget' in db_from or  'TruncateTarget' in db_to) and ('AskToTruncate' in db_from or  'TruncateTarget' in db_to):
-		echo=r"""python -c "print 'y\ny'" """
+		echo=r"""..\\python -c "print 'y\ny'" """
 	if 1:
-		scr=r'%s\bat\%s2%s_test.bat' % (home,db_from.lower(), db_to.lower())
+		scr=r'%s\bat\%s%s%s_test.bat' % (home,conf._to,db_from.lower(), db_to.lower())
 		print ''
 		print scr
 		f=open( scr,'w')

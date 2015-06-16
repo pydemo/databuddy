@@ -20,7 +20,7 @@
 ::	-b[--from_db_name] is "MongoDB source database."
 ::	-n[--from_db_server] is "MongoDB source instance name."
 ::	-z[--from_db_port] is "MongoDB source database port."
-::	-O[--from_skip_rows] is "Number of rows tto skip in source MongoDBtream."
+::	-S[--from_skip_rows] is "Number of rows tto skip in source MongoDBtream."
 ::	-u[--to_user] is "Target Oracle 12c db user."
 ::	-p[--to_passwd] is "Oracle 12c user password."
 ::	-d[--to_db_name] is "Oracle 12c database."
@@ -30,7 +30,7 @@
 ::	-O[--nls_timestamp_tz_format] is "nls_timestamp_tz_format for target."
 ::	-k[--skip_rows] is "Number of rows to skip in input file."	
 	
-echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
+echo y|C:\Python27\qc_dist_32\20150614_220157\qc32\qc32.exe ^
 -w mongo-ora12c ^
 -o 1 ^
 -r 1 ^
@@ -39,7 +39,7 @@ echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20150604_155934_949000 ^
+-Y 20150614_220325_395000 ^
 -C "C:\Python27\data_migrator_1239\config\loader\sqlloader.yaml" ^
 -5 ".\config\host_map_v2.py" ^
 -6 json ^
@@ -50,7 +50,7 @@ echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
 -b test ^
 -n localhost ^
 -z 27017 ^
--O 1 ^
+-S 1 ^
 -u SCOTT ^
 -p tiger ^
 -d orcl ^

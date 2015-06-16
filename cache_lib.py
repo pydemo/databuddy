@@ -12,7 +12,7 @@ def ifCacheExists(relative_path,  suffix=''):
 	cfile_name="%s%s.p" % (relative_path.split('/')[-1], suffix)
 	cache_loc= os.path.join(gCacheLoc,relative_path)
 	cfile=os.path.join(cache_loc,cfile_name)
-	print 'reading from1:', cfile
+	#print 'reading from1:', cfile
 	#sys.exit(1)
 	if os.path.isfile(cfile):
 		print 'cache exists'
@@ -73,7 +73,7 @@ def readFromCache(relative_path,  suffix=''):
 	print 'reading from3:', cfile
 	if os.path.isfile(cfile):
 		s = pickle.load( open(cfile, "rb" ) )
-		print s
+		#print s
 		return s
 	print 'Cache ', cfile, 'does not exists.'
 	return {}

@@ -27,7 +27,7 @@
 ::	-s[--to_db_server] is "Target DB2 Enterprise Server db instance name."
 ::	-Z[--target_client_home] is "Path to DB2 Enterprise Server client home bin dir."	
 	
-echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
+echo y|C:\Python27\qc_dist_32\20150614_220157\qc32\qc32.exe ^
 -w mongo-dbtes ^
 -o 1 ^
 -r 1 ^
@@ -37,7 +37,7 @@ echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20150604_155901_707000 ^
+-Y 20150614_220218_615000 ^
 -5 ".\config\host_map_v2.py" ^
 -6 json ^
 -c test ^

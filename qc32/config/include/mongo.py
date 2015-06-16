@@ -4,7 +4,7 @@ from pprint import pprint
 from common.v101.base import base 
 import re, types, os, codecs
 from subprocess import Popen, PIPE,STDOUT
-import yaml
+#import yaml
 e=sys.exit
 import Crypto
 #sys.modules['Crypto'] = crypto

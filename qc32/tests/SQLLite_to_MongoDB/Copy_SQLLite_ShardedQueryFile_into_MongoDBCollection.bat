@@ -21,18 +21,19 @@
 ::	-s[--to_db_server] is "Target MongoDB instance name."
 ::	-T[--to_db_port] is "Target MongoDB port."
 ::	-a[--to_collection] is "To table."
-::	-Z[--to_column_names] is "To column list for MongoDB."	
+::	-Z[--to_column_names] is "To column list for MongoDB."
+::	-numIW[--numInsertionWorkers] is "Upsert rows into MongoDB."	
 	
-echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
+echo y|C:\Python27\qc_dist_32\20150614_220157\qc32\qc32.exe ^
 -w slite-mongo ^
--o 3 ^
+-o 1 ^
 -r 3 ^
 -t "," ^
 -K 1 ^
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20150604_155911_361000 ^
+-Y 20150614_220237_792000 ^
 -5 ".\config\host_map_v2.py" ^
 -6 json ^
 -q C:\Python27\data_migrator_1239_mongo\test\v101\query\sqllite_query.sql ^
@@ -44,4 +45,5 @@ echo y|C:\Python27\qc_dist_32\20150604_155850\qc32\qc32.exe ^
 -s localhost ^
 -T 27017 ^
 -a test ^
--Z "ID,TITLE,ISIN,COUNTRY,DESCRIPTION,SECURITYTYPE,CREATED"
+-Z "ID,TITLE,ISIN,COUNTRY,DESCRIPTION,SECURITYTYPE,CREATED" ^
+-numIW 1

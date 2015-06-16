@@ -422,7 +422,7 @@ class build(base):
 		shutil.copyfile(abs_path, file_path)	
 	def run_all_exe_tests(self,cmd,exefn):
 		for c in cmd:
-			print c
+			#print c
 			out=[]
 			t_from, t_to, command = c
 			

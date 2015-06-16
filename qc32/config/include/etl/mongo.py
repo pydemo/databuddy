@@ -463,7 +463,7 @@ class common(base):
 		#else:
 			#print '2'
 		#	os.environ['NLS_TIMESTAMP_FORMAT']=''
-		pprint (cfg)
+		#pprint (cfg)
 		p = Popen(cfg,  stdout=PIPE,stderr=PIPE, shell=True)
 		output, err = p.communicate()
 		#print output, err
@@ -633,7 +633,7 @@ exit;
 			else:
 				os.environ['NLS_TIMESTAMP_TZ_FORMAT'] =''	
 		#print outfn
-		pprint(spConf)
+		#pprint(spConf)
 		#e(0)
 		output=None
 		err=None
@@ -651,7 +651,7 @@ exit;
 			error=' '
 			while error:
 				error = p.stderr.readline()
-				print 1,error				
+				print error				
 				#out.append(output)		
 			#if err:
 			#	self.log.err(err)
@@ -661,7 +661,7 @@ exit;
 		#outf.close()
 		#print 1
 		#e(0)
-		print err
+		#print err
 		count=-1
 		
 		#count is in err
@@ -673,6 +673,11 @@ exit;
 			count=int(g.groups()[0])
 			#rows_total +=rows_copied
 			#print rows_total
+		else:	
+			print '#'*79
+			for e in err.split(r'\n'):
+				print 'ERROR: %s' % e
+			print '#'*79
 		#print rows_copied
 		#print count
 		return (count, status)			
@@ -874,11 +879,11 @@ class target(common):
 			error=' '
 			while error:
 				error = p.stderr.readline()
-				print 1,error				
+				print error				
 
 		status = p.wait()
 		count=-1
-		print err
+		#print err
 		#count is in err
 		r=re.compile(r'imported\s+(\d+)\s+documents')
 		g=re.search(r,err)
