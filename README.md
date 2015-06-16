@@ -5,7 +5,7 @@ Do it yourself data integration starter kit.
 
 OS|Platform|data-buddy (GUI) | QueryCopy (command line)
 ---|---|---- | -------------
-Windows|32bit|0.3.3 beta | 1.23.9 beta
+Windows|32bit|(0.3.5 beta)[https://github.com/data-buddy/DataBuddy/releases/tag/0.3.5] | 1.23.9 beta
 >There are 2 components. Upon "Run" data-buddy (UI) will kick off QueryCopy (`qc32\qc.exe`) out of process.
 
 ##Purpose
