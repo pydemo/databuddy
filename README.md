@@ -97,6 +97,25 @@ MongoDB      | yes  | yes | yes | yes
 - [x] Supports CSV file load from multiple dirs.
 - [x] --exit_on_key - let's you keep exec window open after load job is done
 
+## Pipeline types
+###SQL
+Database | Table | Partition | Subpartition
+---------|---- | ------------- | -------
+DB2      | extract/load |   | 
+Informix | extract/load |   | 
+MariaDB    | extract/load |   | 
+MySQL    |extract/load  |   | 
+**Oracle**   | extract/load | extract/load  | extract/load
+PostgreSQL| extract/load | extract/load  | extract/load
+SQLite| extract/load |  | 
+SQLServer| extract/load  | extract/load  | n/a
+Sybase   |  | extract/load  | 
+TimesTen| extract/load | n/a  | n/a
+###noSQL
+Database | Collection
+---------|-------------- 
+MongoDB      | extract/load  
+
 ##How it works.
 
 1. __DbShell__ - queries target and source for table metadata.
