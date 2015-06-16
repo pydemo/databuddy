@@ -67,7 +67,7 @@ TimesTen|  | yes  | yes
 ###noSQL
 Database |  CSV extract | CSV load | JSON extract | JSON load
 ---------|-------------- | -------| -------| -------
-MongoDB      | yes  | yes | |
+MongoDB      | yes  | yes | yes | yes
 
 ##Components
 - GUI - data-buddy (wxPython, PyInstaller).
