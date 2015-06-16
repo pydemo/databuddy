@@ -103,7 +103,7 @@ MongoDB      | yes  | yes | yes | yes
 - C __Copy__
 
 ###SQL
-Database | Table | Partition | Subpartition |Query|QueryDir
+Database | Table | Partition | Subpartition |Query(s)|QueryDir(s)
 ---------|---- | ------------- | ---------|-----|----
 DB2      | E/L/C |   | | E/C  | E/C
 Informix | E/L/C |   |  | E/C | E/C
@@ -116,7 +116,7 @@ SQLServer| E/L/C  | E/L/C  | | E/C  | E/C
 Sybase   | E/L/C |   |  | E/C | E/C
 TimesTen| E/L/C |   |  | E/C | E/C
 ###noSQL
-Database | Collection |Query|QueryDir
+Database | Collection |Query(s)|QueryDir(s)
 ---------|-------------- |-----|---
 MongoDB  | E/L/C   | E/C | E/C | E/C
 
