@@ -99,23 +99,27 @@ MongoDB      | yes  | yes | yes | yes
 
 ## Pipeline types
 ###SQL
-Database | Table | Partition | Subpartition
----------|---- | ------------- | -------
-DB2      | extract/load |   | 
-Informix | extract/load |   | 
-MariaDB    | extract/load |   | 
-MySQL    |extract/load  |   | 
-**Oracle**   | extract/load | extract/load  | extract/load
-PostgreSQL| extract/load | extract/load  | extract/load
-SQLite| extract/load |  | 
-SQLServer| extract/load  | extract/load  | 
-Sybase   | extract/load |   | 
-TimesTen| extract/load |   | 
+Database | Table | Partition | Subpartition |Query
+---------|---- | ------------- | ---------|-----
+DB2      | E/L/C |   | | E/L/C
+Informix | E/L/C |   |  | E/L/C
+MariaDB    | E/L/C |   |  | E/L/C
+MySQL    |E/L/C  |   |  | E/L/C
+**Oracle**   | E/L/C | E/L/C  | E/L/C | E/L/C
+PostgreSQL| E/L/C | E/L/C  | E/L/C | E/L/C
+SQLite| E/L/C |  |  | E/L/C
+SQLServer| E/L/C  | E/L/C  | | E/L/C 
+Sybase   | E/L/C |   |  | E/L/C
+TimesTen| E/L/C |   |  | E/L/C
 ###noSQL
-Database | Collection
----------|-------------- 
-MongoDB      | extract/load  
-
+Database | Collection |Query
+---------|-------------- |-----
+MongoDB  | E/L/C   | E/L/C
+>  E/L/C:
+ - E __Extract__
+ - L __Load__
+ - C __Copy__
+ 
 ##How it works.
 
 1. __DbShell__ - queries target and source for table metadata.
