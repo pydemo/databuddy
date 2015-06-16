@@ -99,23 +99,23 @@ MongoDB      | yes  | yes | yes | yes
 
 ## Pipeline types
 ###SQL
-Database | Table | Partition | Subpartition |Query
----------|---- | ------------- | ---------|-----
-DB2      | E/L/C |   | | E/L/C
-Informix | E/L/C |   |  | E/L/C
-MariaDB    | E/L/C |   |  | E/L/C
-MySQL    |E/L/C  |   |  | E/L/C
-**Oracle**   | E/L/C | E/L/C  | E/L/C | E/L/C
-PostgreSQL| E/L/C | E/L/C  | E/L/C | E/L/C
-SQLite| E/L/C |  |  | E/L/C
-SQLServer| E/L/C  | E/L/C  | | E/L/C 
-Sybase   | E/L/C |   |  | E/L/C
-TimesTen| E/L/C |   |  | E/L/C
+Database | Table | Partition | Subpartition |Query|QueryDir
+---------|---- | ------------- | ---------|-----|----
+DB2      | E/L/C |   | | E/C  | E/C
+Informix | E/L/C |   |  | E/C | E/C
+MariaDB    | E/L/C |   |  | E/C | E/C
+MySQL    |E/L/C  |   |  | E/C | E/C
+**Oracle**   | E/L/C | E/L/C  | E/L/C | E/C | E/C
+PostgreSQL| E/L/C | E/L/C  | E/L/C | E/C | E/C
+SQLite| E/L/C |  |  | E/C | E/C
+SQLServer| E/L/C  | E/L/C  | | E/C  | E/C
+Sybase   | E/L/C |   |  | E/C | E/C
+TimesTen| E/L/C |   |  | E/C | E/C
 ###noSQL
-Database | Collection |Query
+Database | Collection |Query|QueryDir
 ---------|-------------- |-----
-MongoDB  | E/L/C   | E/L/C
->  E/L/C:
+MongoDB  | E/L/C   | E/C | E/C | E/C
+
  - E __Extract__
  - L __Load__
  - C __Copy__
