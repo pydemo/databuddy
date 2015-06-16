@@ -108,9 +108,9 @@ MySQL    |extract/load  |   |
 **Oracle**   | extract/load | extract/load  | extract/load
 PostgreSQL| extract/load | extract/load  | extract/load
 SQLite| extract/load |  | 
-SQLServer| extract/load  | extract/load  | n/a
-Sybase   |  | extract/load  | 
-TimesTen| extract/load | n/a  | n/a
+SQLServer| extract/load  | extract/load  | 
+Sybase   | extract/load |   | 
+TimesTen| extract/load |   | 
 ###noSQL
 Database | Collection
 ---------|-------------- 
