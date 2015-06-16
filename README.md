@@ -98,9 +98,10 @@ MongoDB      | yes  | yes | yes | yes
 - [x] --exit_on_key - let's you keep exec window open after load job is done
 
 ## Pipeline types
- - E __Extract__
- - L __Load__
- - C __Copy__
+- E __Extract__
+- L __Load__
+- C __Copy__
+
 ###SQL
 Database | Table | Partition | Subpartition |Query|QueryDir
 ---------|---- | ------------- | ---------|-----|----
