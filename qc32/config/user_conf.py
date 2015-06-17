@@ -41,7 +41,7 @@ if inc.has_key(from_db.upper()):
 	#print os.path.join(dmhome,'include',inc[from_db.upper()])
 	#e(0)
 	module_file=os.path.join(dmhome,'include','etl',inc[from_db.upper()])
-	print module_file
+	#print module_file
 	source = import_module(module_file)
 #print db
 #pprint(dir(db))

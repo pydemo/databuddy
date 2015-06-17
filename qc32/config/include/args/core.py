@@ -23,8 +23,8 @@ pcore['shard_post_etl']={'short':'-4','long':'--shard_post_etl', 'type':str, 'de
 pcore['loader_profile']={'short':'-C','long':'--loader_profile', 'type':str, 'default':'', 'help':'SQL*Loader profile (user defined).'}
 pcore['host_map']={'short':'-5','long':'--host_map', 'type':str, 'default':'', 'help':'Host-to-shard map.'}
 pcore['spool_type']={'short':'-6','long':'--spool_type', 'type':str, 'default':'csv', 'help':'Spool file type (CSV or JSON).'}
-pcore['arg_7']={'short':'-7','long':'--arg_7', 'type':str, 'default':'', 'help':'Generic string argument 7.'}
-pcore['arg_8']={'short':'-8','long':'--arg_8', 'type':str, 'default':'', 'help':'Generic string argument 8.'}
-pcore['arg_9']={'short':'-9','long':'--arg_9', 'type':str, 'default':'', 'help':'Generic string argument 9.'}
+pcore['debug_level']={'short':'-dbg','long':'--debug_level', 'type':str, 'default':'', 'help':'QC Debug level.'}
+#params['core']['arg_8']={'short':'-8','long':'--arg_8', 'type':str, 'default':'', 'help':'Generic string argument 8.'}
+#params['core']['arg_9']={'short':'-9','long':'--arg_9', 'type':str, 'default':'', 'help':'Generic string argument 9.'}
 
 

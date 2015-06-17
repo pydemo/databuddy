@@ -27,6 +27,24 @@ class base_host_map(object):
 		#print from_db, to_db
 		#pprint(env)
 		return (env[from_db.upper()]['source'], env[to_db.upper()]['target'])
+	def get_remote_client_home(self):
+		#print self.conf.uargs.copy_vector
+		(from_db, to_db)=self.copy_vector #.upper().split('2')
+		#pprint(self.mapping)
+		#active_host_id=self.get_active_mapping()
+		#print self.get_h2s_map()
+		#for host_map in self.mapping['host_map'][self.mapping['active_mapping']]:
+		#	print host_map
+		#print self.mapping['host_map'][self.get_active_mapping()]['host']
+		#print self.get_active_mapping()
+		host_id=self.mapping['host_map'][self.get_active_mapping()][0]['host']
+		#pprint(self.mapping)
+		env=self.mapping['host_list'][host_id]['db_env']
+		#pprint(env)
+		#print from_db, to_db
+		#pprint(env)
+		return (env[from_db.upper()]['source'], env[to_db.upper()]['target'])
+		
 	def set_host_map(self):
 		self.remote_user='default'
 		#obj=self.args_panel.obj

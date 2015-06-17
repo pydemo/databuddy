@@ -1,7 +1,7 @@
 #		__builtin__.copy_vector = copy_vector
 #		__builtin__.cvarg = cvarg
-print copy_vector
-print cvarg
+#print copy_vector
+#print cvarg
 #e(0)
 import time, os, sys
 import logging
@@ -139,9 +139,9 @@ def set_params(params):
 		params['core']['loader_profile']={'short':'-C','long':'--loader_profile', 'type':str, 'default':'', 'help':'SQL*Loader profile (user defined).'}
 		params['core']['host_map']={'short':'-5','long':'--host_map', 'type':str, 'default':'', 'help':'Host-to-shard map.'}
 		params['core']['spool_type']={'short':'-6','long':'--spool_type', 'type':str, 'default':'csv', 'help':'Spool file type (CSV or JSON).'}
-		params['core']['arg_7']={'short':'-7','long':'--arg_7', 'type':str, 'default':'', 'help':'Generic string argument 7.'}
-		params['core']['arg_8']={'short':'-8','long':'--arg_8', 'type':str, 'default':'', 'help':'Generic string argument 8.'}
-		params['core']['arg_9']={'short':'-9','long':'--arg_9', 'type':str, 'default':'', 'help':'Generic string argument 9.'}
+		params['core']['debug_level']={'short':'-7','long':'--debug_level', 'type':str, 'default':'', 'help':'QC Debug level.'}
+		#params['core']['arg_8']={'short':'-8','long':'--arg_8', 'type':str, 'default':'', 'help':'Generic string argument 8.'}
+		#params['core']['arg_9']={'short':'-9','long':'--arg_9', 'type':str, 'default':'', 'help':'Generic string argument 9.'}
 					
 	params['FROM']={}
 	pfrom=params['FROM']
