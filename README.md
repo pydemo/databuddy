@@ -105,20 +105,20 @@ MongoDB      | yes  | yes | yes | yes
 ###SQL
 Database | Table | Partition | Subpartition |CSV Files|CSV Dirs|Query(s)|QueryDir(s)
 ---------|---- | ------------- | ---------|-----|----|-----|---
-DB2      | E/L/C |   | |   | | E/C  | E/C
-Informix | E/L/C |   |  |   | | E/C | E/C
-MariaDB    | E/L/C |   |  |   | | E/C | E/C
-MySQL    |E/L/C  |   |  |   | | E/C | E/C
-**Oracle**   | E/L/C | E/L/C  | E/L/C |   | | E/C | E/C
-PostgreSQL| E/L/C | E/L/C  | E/L/C |   | | E/C | E/C
-SQLite| E/L/C |  |  |   | | E/C | E/C
-SQLServer| E/L/C  | E/L/C  | |   | | E/C  | E/C
-Sybase   | E/L/C |   |  |    | |E/C | E/C
-TimesTen| E/L/C |   |  |   | | E/C | E/C
+DB2      | E/L/C |   | | L  |L | E/C  | E/C
+Informix | E/L/C |   |  |  L  |L | E/C | E/C
+MariaDB    | E/L/C |   |  |  L  |L | E/C | E/C
+MySQL    |E/L/C  |   |  |  L  |L | E/C | E/C
+**Oracle**   | E/L/C | E/L/C  | E/L/C |   L  |L | E/C | E/C
+PostgreSQL| E/L/C | E/L/C  | E/L/C |  L  |L | E/C | E/C
+SQLite| E/L/C |  |  |  L  |L | E/C | E/C
+SQLServer| E/L/C  | E/L/C  | |   L  |L | E/C  | E/C
+Sybase   | E/L/C |   |  |   L  |L |E/C | E/C
+TimesTen| E/L/C |   |  |  L  |L | E/C | E/C
 ###noSQL
 Database | Collection |CSV Files|CSV Dirs|JSON Files|JSON Dirs|Query(s)|QueryDir(s)
 ---------|-------------- |-----|---|-----|---|-----|---
-MongoDB  | E/L/C   | E/C |   | |   | | E/C | E/C
+MongoDB  | E/L/C   | E/C |   L  |L |   L  |L | E/C | E/C
 
 
  
