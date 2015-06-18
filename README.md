@@ -429,15 +429,15 @@ Database |Version | Export | Import | DbShell|File formats
 
 ##Databuddy Docs
 - [ ] General docs
- - [Configure_Databuddy0.3.3](https://github.com/data-buddy/DataBuddy/blob/master/Docs/Configure_Databuddy0.3.3.md)
- - [How_to_start_Databuddy](https://github.com/data-buddy/DataBuddy/blob/master/Docs/How_to_start_Databuddy.md)
+ - [Configure_Databuddy0.3.3](https://github.com/data-buddy/DataBuddy/blob/master/Docs/markdown/Configure_Databuddy0.3.3.md)
+ - [How_to_start_Databuddy](https://github.com/data-buddy/DataBuddy/blob/master/Docs/markdown/How_to_start_Databuddy.md)
  
 - [ ] SQL Server
- - [Extracting_Table_Data_From_SQLServer_to_CSV_File](https://github.com/data-buddy/DataBuddy/blob/master/Docs/SQLServer/Extract/Extracting_Table_Data_From_SQLServer_to_CSV_File.md) 
+ - [Extracting_Table_Data_From_SQLServer_to_CSV_File](https://github.com/data-buddy/DataBuddy/blob/master/Docs/markdown/SQLServer/Extract/Extracting_Table_Data_From_SQLServer_to_CSV_File.md) 
 - [ ] MongoDB
- - [Copy_Table_Data_From_Oracle_to_MongoDB_Collection](https://github.com/data-buddy/DataBuddy/blob/master/Docs/MongoDB/Copy/Copy_Table_Data_From_Oracle_to_MongoDB_Collection.md)
+ - [Copy_Table_Data_From_Oracle_to_MongoDB_Collection](https://github.com/data-buddy/DataBuddy/blob/master/Docs/markdown/MongoDB/Copy/Copy_Table_Data_From_Oracle_to_MongoDB_Collection.md)
 - [ ] Oracle
- - [Copy_Table_Data_From_Oracle_to_MongoDB_Collection](https://github.com/data-buddy/DataBuddy/blob/master/Docs/MongoDB/Copy/Copy_Table_Data_From_Oracle_to_MongoDB_Collection.md) 
+ - [Copy_Table_Data_From_Oracle_to_MongoDB_Collection](https://github.com/data-buddy/DataBuddy/blob/master/Docs/markdown/MongoDB/Copy/Copy_Table_Data_From_Oracle_to_MongoDB_Collection.md) 
 
 ##Copy vector matrix (via CSV)
 Database | DB2 | Informix | MariaDB |MySQL| **Oracle**|PostgreSQL|SQLite|SQLServer|Sybase|TimesTen|MongoDB
@@ -452,7 +452,7 @@ SQLite|x|x|x|x|x|x|x|x|x|x|x
 SQLServer|x|x|x|x|x|x|x|x|x|x|x
 Sybase|x|x|x|x|x|x|x|x|x|x|x
 TimesTen|x|x|x|x|x|x|x|x|x|x|x
-Mongo DB|x|x|x|x|[X](https://github.com/data-buddy/DataBuddy/blob/master/Docs/MongoDB/Copy/Copy_Table_Data_From_Oracle_to_MongoDB_Collection.md)|x|x|x|x|x|x
+Mongo DB|x|x|x|x|[X](https://github.com/data-buddy/DataBuddy/blob/master/Docs/markdown/MongoDB/Copy/Copy_Table_Data_From_Oracle_to_MongoDB_Collection.md)|x|x|x|x|x|x
 
 
 > 'x' means feature is implemented and is part of the release [0.3.3](https://github.com/data-buddy/DataBuddy/releases/tag/v0.3.3)
