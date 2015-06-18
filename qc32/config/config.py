@@ -17,7 +17,7 @@ import_module=import_module
 from pprint import pprint
 import argparse
 dbs={	'SYASE':'SAP Sybase ASE', 'SYANY':'Sybase SQL Anywhere','SYIQ':'Sybase IQ',
-		'ORA12C':'Oracle 12c','ORA11G':'Oracle 11g', 'ORAXE':'Oracle XE', 'ORAEXA':'Exadata',
+		'ORA12C':'Oracle 12c','ORA11G':'Oracle 11g','ORA10G':'Oracle 10g','ORA9I':'Oracle 9i','ORA8I':'Oracle 8i','ORA733':'Oracle 7.3.3', 'ORAXE':'Oracle XE', 'ORAEXA':'Exadata',
 		'TTEN':'TimesTen', 
 		'SLITE':'SQL Lite',
 		'SSEXP':'SQL Server Express','SSENT':'SQL Server Enterprise',
@@ -823,6 +823,10 @@ if copy_vector:
 #exetitle=exeTitle()	
 dbclients={ 'PGRES':r"C:\Program Files\PostgreSQL\9.4\bin",
 			'ORA11G':r'C:\app\alex_buz\product\11.2.0\dbhome_2\BIN',
+			'ORA10G':r'C:\app\alex_buz\product\11.2.0\dbhome_2\BIN',
+			'ORA9I':r'C:\app\alex_buz\product\11.2.0\dbhome_2\BIN',
+			'ORA8I':r'C:\app\alex_buz\product\11.2.0\dbhome_2\BIN',
+			'ORA733':r'C:\app\alex_buz\product\11.2.0\dbhome_2\BIN',			
 			'ORA12C':r'C:\app\alex_buz\product\11.2.0\dbhome_2\BIN',
 			'ORAXE':r'C:\app\alex_buz\product\11.2.0\dbhome_2\BIN',
 			#'ORA11G':r'C:\ORACLE\product\11.1.0\client_1\BIN',
@@ -850,6 +854,7 @@ if citi:
 dbtools={}
 dbtools['SPOOLER']={'PGRES':'psql.exe',
 			'ORA12C':	'sqlplus.exe','ORA11G':	'sqlplus.exe', 'ORAXE':	'sqlplus.exe', 'ORAEXA':	'sqlplus.exe',
+			'ORA10G':	'sqlplus.exe','ORA9I':	'sqlplus.exe','ORA8I':	'sqlplus.exe','ORA733':	'sqlplus.exe',
 			'SSENT':	'sqlcmd.exe',
 			'SSEXP':	'sqlcmd.exe',
 			'MYSQL':'mysql.exe', 'MARIA':'mysql.exe', 'INFOB':'mysql.exe',
@@ -867,6 +872,7 @@ for db in('DBTAES', 'DBTES', 'DBTAWS', 'DBTWS', 'DBTE', 'DBTEC', 'DBTDE'):
 dbtools['LOADER']={ 
 			'PGRES':'psql.exe',
 			'ORA12C':	'sqlldr.exe','ORA11G':	'sqlldr.exe', 'ORAXE':	'sqlldr.exe',
+			'ORA10G':	'sqlldr.exe','ORA9I':	'sqlldr.exe','ORA8I':	'sqlldr.exe','ORA733':	'sqlldr.exe',
 			'ORAEXA':	'sqlldr.exe',
 			'SSENT':	'sqlcmd.exe','SSEXP':	'sqlcmd.exe',
 			'MYSQL':'mysql.exe', 'MARIA':'mysql.exe', 'INFOB':'mysql.exe',
@@ -885,6 +891,7 @@ dbtools['DBSHELL']={
 			'PGRES':'psql.exe',
 			'ORA12C':	'sqlplus.exe','ORA11G':	'sqlplus.exe','ORAXE':	'sqlplus.exe',
 			'ORAEXA':	'sqlplus.exe',
+			'ORA10G':	'sqlplus.exe','ORA9I':	'sqlplus.exe','ORA8I':	'sqlplus.exe','ORA733':	'sqlplus.exe',
 			'SSENT':	'sqlcmd.exe','SSEXP':	'sqlcmd.exe',
 			'MYSQL':'mysql.exe', 'MARIA':'mysql.exe', 'INFOB':'mysql.exe',
 			'SYANY':'dbisql.com',

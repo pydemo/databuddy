@@ -15,7 +15,6 @@ __email__ = "alexbuzunov@gmail.com"
 __status__ = "Development" 
 __github__=	'https://github.com/data-buddy/DataBuddy'
 
-
 import sys,platform; 
 __platform__='32' #platform.architecture()[0]
 
@@ -111,7 +110,7 @@ def import_module(filepath):
 		py_mod = imp.load_compiled(mod_name, filepath)
 	return py_mod
 ########################################################################	
-exe=True
+exe=False
 
 e=sys.exit
 blog=cu.blog
@@ -6713,8 +6712,10 @@ class pnl_args(wx.Panel):
 			col=i/bucket*2
 			tx=wx.StaticText(panel, label=k, size=(-1,-1))
 			tx.Enable(True)
-			tc=wx.TextCtrl(panel,value=sval, style=style, size=(length,-1))
-			tc.Disable()
+			tc=None
+			if k not in ['debug_level']:
+				tc=wx.TextCtrl(panel,value=sval, style=style, size=(length,-1))
+				tc.Disable()
 			self.obj[k]= [tx, tc]
 				
 			#panel.fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
@@ -6751,7 +6752,7 @@ class pnl_args(wx.Panel):
 				#bbox.Add(self.obj[k][3], 0, flag=wx.ALIGN_CENTER, border=5)	
 				#fgs.Add(self.obj[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				#print 'common',i%bucket, col+1				
-				panel.fgs.Add(bbox, pos=(i%bucket, col+1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				#panel.fgs.Add(bbox, pos=(i%bucket, col+1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 			elif k in ['log_dir']:
 				
 				imageFile = os.path.join(home,"images/refresh_icon_16_grey2.png")
@@ -6791,7 +6792,23 @@ class pnl_args(wx.Panel):
 				#bbox.Add(self.obj[k][2], 0, flag=wx.ALIGN_CENTER, border=5)
 				#bbox.Add(self.obj[k][3], 0, flag=wx.ALIGN_CENTER, border=5)						
 				#fgs.Add(self.obj[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	
-				#panel.fgs.Add(bbox, pos=(i%bucket, col+1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)					
+				#panel.fgs.Add(bbox, pos=(i%bucket, col+1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+			elif k in ['debug_level']:
+				#self.obj[k][2].Bind(wx.EVT_BUTTON, self.OnDirButton)					
+				#self.Bind(wx.EVT_BUTTON, self.OnInputDir, self.btn_dir)
+				#bbox = wx.BoxSizer(wx.HORIZONTAL)
+				#self.add_tc(panel, (1,),  k, i,bucket,col)
+				#bbox.Add(self.obj[k][1], 0, flag=wx.ALIGN_CENTER, border=5)	
+				#bbox.Add(self.obj[k][2], 0, flag=wx.ALIGN_CENTER, border=5)
+				#bbox.Add(self.obj[k][3], 0, flag=wx.ALIGN_CENTER, border=5)						
+				#fgs.Add(self.obj[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
+				#dbg=self.obj[k][1].GetValue()
+				#del self.obj[k][1]
+				#print self.obj[k][1]
+				#e(0)
+				self.obj[k][1] = wx.ComboBox(panel, 500, sval, (50, 150), (40,-1), ['1','2','3'], wx.CB_DROPDOWN)
+				self.add_tc(panel, (1,),  k, i,bucket,col)
+				#panel.fgs.Add(self.obj[k][1], pos=(i%bucket, col+1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)				
 			elif k in ['job_pre_etl','thread_pre_etl','loader_profile', 'host_map']:
 				if 0:
 					imageFile = os.path.join(home,"images/refresh_icon_16_grey2.png")
@@ -6815,7 +6832,7 @@ class pnl_args(wx.Panel):
 				#bbox.Add(self.obj[k][2], 0, flag=wx.ALIGN_CENTER, border=5)
 				#bbox.Add(self.obj[k][3], 0, flag=wx.ALIGN_CENTER, border=5)						
 				#fgs.Add(self.obj[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	
-				panel.fgs.Add(bbox, pos=(i%bucket, col+1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)		
+				#panel.fgs.Add(bbox, pos=(i%bucket, col+1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)		
 				
 			#else:
 			#	panel.fgs.Add(self.obj[k][1], pos=(i%bucket, col+1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
