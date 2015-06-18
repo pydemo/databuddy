@@ -12,7 +12,7 @@ inc['TTEN']='tten.py'
 inc['SLITE']='slite.py'
 inc['INFOR']=inc['INFORC']='infor.py'
 inc['SYASE']=inc['SYANY']=inc['SYIQ']='sybase.py'
-inc['ORA12C']=inc['ORA11G']=inc['ORA10G']=inc['ORA9I']=inc['ORA8I']=inc['ORA733']=inc['ORAEXA']='oracle.py'
+inc['ORA12C']=inc['ORA11G']=inc['ORAEXA']='oracle.py'
 inc['ORAXE']='oraxe.py'
 inc['MONGO']='mongo.py'
 #print  inc
