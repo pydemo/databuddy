@@ -122,13 +122,12 @@ MongoDB  | E/L/C   |    E/L   |   E/L   | E/C
 
 
  
-##How it works.
+##Tools used to extract, load, and query data
 
 1. __DbShell__ - queries target and source for table metadata.
 2. __Spooler__  - extracts data to temp file from source.
 3. __Loader__ - loads temp file to target using bulk loader.
 
-###Tools used to extract, load, and query data
 ####SQL stores.
 DB family|Database | Spooler | Loader | DbShell
 ---------|----------|-------- | -------| -------
