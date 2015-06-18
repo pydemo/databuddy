@@ -128,8 +128,8 @@ MongoDB  | E/L/C   |    E/L   |   E/L   | E/C
 2. __Spooler__  - extracts data to temp file from source.
 3. __Loader__ - loads temp file to target using bulk loader.
 
-##Tools used to extract, load, and query data
-###SQL stores.
+###Tools used to extract, load, and query data
+####SQL stores.
 DB family|Database | Spooler | Loader | DbShell
 ---------|----------|-------- | -------| -------
 DB2 | DB2 Advanced Enterprise Server | db2.exe | db2.exe | db2.exe
@@ -157,7 +157,7 @@ SAP Sybase | Sybase SQL Anywhere | dbisql.com | dbisql.com | dbisql.com
 TimesTen | TimesTen | ttBulkCp.exe | ttBulkCp.exe | ttIsql.exe
 SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 
-###noSQL stores.
+####noSQL stores.
 Database | Spooler | Loader | DbShell
 ----------|-------- | -------| -------
  MongoDB | mongoexport.exe  | mongoimport.exe | mongo.exe
