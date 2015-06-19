@@ -112,7 +112,7 @@ def import_module(filepath):
 		py_mod = imp.load_compiled(mod_name, filepath)
 	return py_mod
 ########################################################################	
-exe=False
+exe=True
 
 e=sys.exit
 blog=cu.blog
@@ -906,7 +906,7 @@ class SessionList(wx.ListCtrl):
 		tc = event.GetEventObject()
 		#print 'name=',tc.Name
 		kc = event.GetKeyCode()
-		#print 'kc=', kc
+		
 		controlDown = event.CmdDown()
 		if controlDown:
 			#print 'controlDown', kc
@@ -925,9 +925,12 @@ class SessionList(wx.ListCtrl):
 				#if selected:
 				#	tc.tryToDelete()
 
-		else:		
+		else:	
+			print 'kc=', kc
 			if kc in [127]:
-				tc.tryToDelete()	
+				tc.tryToDelete()
+			elif kc in [13,32]:
+				send('run_session',())
 			event.Skip()
 	def SelectAll(self):
 		for idx in  range(self.GetItemCount()):
@@ -958,10 +961,11 @@ class SessionList(wx.ListCtrl):
 			#print items
 			#e(0)
 			send('delete_sessions', (items))
-			if len(selected)==1:
-				send('disable_all_for_delete',())
+			#if len(selected)==1:
+			send('disable_all_for_delete',())
 			self.parent.frame.btn_delete.Enable(False)
-			self.parent.frame.btn_new.Enable(True)		
+			self.parent.frame.btn_new.Enable(True)	
+			
 	def GetSelectedItems(self):
 		"""    Gets the selected items for the list control.
 		Selection is returned as a list of selected indices,
@@ -6186,7 +6190,7 @@ class pnl_args(wx.Panel):
 		dbkey=self.copy_vector[0]
 		panel.unused_from_args={} #self.fargs
 		#pprint(all_from_args)
-		(_,self.fargs,self.targs)=self.parent.unobfuscate([None,self.fargs,self.targs])
+		#(_,self.fargs,self.targs)=self.parent.unobfuscate([None,self.fargs,self.targs])
 		if dbkey:
 			
 			imp_file = os.path.join(transport_home,'config','include','args','%s_from.py' % dbkey)
@@ -6428,7 +6432,7 @@ class pnl_args(wx.Panel):
 		sender = e.GetEventObject()
 		isChecked = sender.GetValue()
 		k=sender.GetName() 
-		print k
+		#print k
 		if isChecked:
 			#print 'checked', k			
 			self.obj[k][0].Enable(True)
@@ -6998,9 +7002,10 @@ class pnl_args(wx.Panel):
 		else:
 			print 'no host_map'
 		
-		k='loader_profile'		
-		assert self.obj.has_key(k), 'loader profile ./config/sqlloader.py is not defined for this session.'
-		if 1:
+		k='loader_profile'
+			
+		#assert self.obj.has_key(k), 'loader profile ./config/sqlloader.py is not defined for this session.'
+		if hasattr(self.args, 'loader_profile')and  self.args.loader_profile:
 			loader_loc = self.obj[k][1].GetValue().strip()
 			new_hostmap_loc=self.parent.args_panel.CreateNewSessionLoaderProfile(loader_loc)
 			#if new_hostmap_loc not in [loader_loc]:
@@ -7589,11 +7594,16 @@ class pnl_args(wx.Panel):
 		for k in self.fargs:
 			assert self.obj.has_key(k), 'fargs "%s" is not set' % k
 			val=self.obj[k][1].GetValue().strip()
+			#print self.fargs[k]
 			self.fargs[k]=list(self.fargs[k])
 			#if k in ['from_passwd']:
 			#	#base64.b64decode("cGFzc3dvcmQ=")
 			#	self.targs[k][2]=base64.b64encode(val)
-			if 1: #else:			
+			if 1: #else:
+				#print val, k
+				#print self.fargs[k][2].strip('"')
+				#print val
+				#e(0)
 				if str(self.fargs[k][2]).strip('"') not in [val]:
 					#print 'fargs "%s" value changed' % k, str(self.fargs[k][2]),'-->' ,val
 					self.fargs[k][2]=val		
@@ -7656,8 +7666,8 @@ class pnl_args(wx.Panel):
 				return
 
 			paths = dlg.GetPaths()
-			for indx, path in enumerate(paths):
-				print("Path %d: %s"%(indx+1, path))
+			#for indx, path in enumerate(paths):
+			#	print("Path %d: %s"%(indx+1, path))
 			
 			dlg.Destroy()
 			self.set_dirs(dir_obj, paths)
@@ -7728,8 +7738,8 @@ class pnl_args(wx.Panel):
 				return
 
 			paths = dlg.GetPaths()
-			for indx, path in enumerate(paths):
-				print("Path %d: %s"%(indx+1, path))
+			#for indx, path in enumerate(paths):
+			#	print("Path %d: %s"%(indx+1, path))
 			
 			dlg.Destroy()
 			self.set_dirs(dir_obj, paths)
@@ -8162,7 +8172,7 @@ class pnl_output(wx.Panel):
 				if os.path.isdir(alogdir):
 					files=[d for d in os.listdir(alogdir) if os.path.isfile(os.path.join(alogdir,d))]
 					for k in files:
-						print k
+						#print k
 						lbl=''
 						if 1:
 							lbl='Log file'
@@ -8359,13 +8369,13 @@ class pnl_output(wx.Panel):
 				if os.path.isdir(ldrdir):
 					files=[d for d in os.listdir(ldrdir) if os.path.isfile(os.path.join(ldrdir,d))]
 					for k in files:
-						print k
+						#print k
 						lbl=''
 						if 1:
 							regexp1=re.compile(r'.*(\d+)\.(\w+)')
 							m= re.match(regexp1, k)
 							sid=''
-							print sid
+							#print sid
 							if m:
 								lbl='%s (%s)' % (m.groups()[1], m.groups()[0])
 						self.ldr[k]= [wx.StaticText(self.p_ldr, label=lbl), wx.TextCtrl(self.p_ldr,value=k,pos=(60,i*20), size=(length,22))]
@@ -8412,7 +8422,7 @@ class pnl_output(wx.Panel):
 	def OnEditSqlFile(self, evt,params):
 		print 'OnEditSqlFile'		
 		(file_loc,) = params
-		print file_loc
+		#print file_loc
 		#val =file_obj.GetValue()
 		#print val
 		#import os
@@ -9031,6 +9041,8 @@ class DataBuddy(wx.Frame):
 		self.hwnd={}
 		self.elapsed={}
 		self.q=[]
+
+		
 		self.closing_in=6
 		(self.cargs,self.fargs,self.targs)=(None, None, None)
 		#userhome = os.path.expanduser('~')		
@@ -9373,7 +9385,8 @@ class DataBuddy(wx.Frame):
 			hm_sizer =  wx.BoxSizer(wx.HORIZONTAL)	
 			hm_sizer.Add((175,-1))
 			hm_sizer.Add(self.btn_run,0,wx.TOP|wx.BOTTOM|wx.LEFT|wx.RIGHT, border=0)
-			self.btn_run.Enable(False)			
+			self.btn_run.Enable(False)	
+					
 			if 1:
 				#btn_sqp=wx.Button(panel, label=lbl, style=wx.BU_EXACTFIT)	
 				imageFile = os.path.join(home,"images/arrow_down_24.png")
@@ -9474,6 +9487,7 @@ class DataBuddy(wx.Frame):
 		
 		sub(self.onSaveSessionAsTemplate, "save_as_template")
 		sub(self.onSetBarStatus, "set_bar_status")
+		sub(self.onRunSession, "run_session")
 		
 		#self.SetSizeHints(250,300,500,400)
 
@@ -9495,6 +9509,30 @@ class DataBuddy(wx.Frame):
 		#print self.GetSize()
 		self._hmMenu=None
 		self._saMenu=None
+		
+	def ResetAll(self):
+		print 'reset all'
+		self.sids={}
+		self.changed=[]
+		self.copy_vector=['','']
+		self.tmpl='n/a.n/a'
+		self.the_id=[None,None,None]
+		self.btn={}
+		self.timers={}
+		self.counters={}
+		self.th={}
+		self.btn={}
+		self.p={}
+		self.hwnd={}
+		self.elapsed={}
+		self.q=[]
+		from include.default_args import default_args
+		(self.cargs,self.fargs,self.targs)=default_args
+		
+		self.nb_tab=0
+		self.cmd=''
+		self.session_name=None
+		
 	def onSetBarStatus(self, data, extra1, extra2=None):		
 		(id,msg)= data	
 		print 'data',data
@@ -10288,7 +10326,8 @@ class DataBuddy(wx.Frame):
 			if  self.args_panel.obj.has_key(k):
 				self.args_panel.obj[k][1].Enable(False)
 		#
-		#self.Refresh()	
+		#self.Refresh()
+		#send('set_focus_on_run',())
 		
 	def if_generic_tremplate(self):
 		return 'generic' in self.tmpl
@@ -10374,6 +10413,9 @@ class DataBuddy(wx.Frame):
 				send('disable_all_for_delete',())
 			self.btn_delete.Enable(False)
 			self.btn_new.Enable(True)
+			#print(len(list.GetSelectedItems()))			
+			self.ResetAll()
+			
 	def if_yes(self, message, caption = 'Warning!'):
 		dlg = wx.MessageDialog(self, message, caption, wx.YES_NO | wx.ICON_QUESTION)
 		dlg.SetSize((500,-1))
@@ -10530,7 +10572,7 @@ class DataBuddy(wx.Frame):
 					for k in reuse_cargs:
 						
 						if k in ckeys:
-							print 'adding cargs %s' % k
+							#print 'adding cargs %s' % k
 							#print k, cargs[k][2],self.args_panel.obj[k][1].GetValue()
 							cargs[k]=list(cargs[k])
 							#val=self.args_panel.obj[k][1].GetValue()
@@ -10539,7 +10581,7 @@ class DataBuddy(wx.Frame):
 					for k in reuse_fargs:
 						
 						if k in fargs.keys():
-							print 'adding fargs %s' % k
+							#print 'adding fargs %s' % k
 							#print k, fargs[k][2], self.args_panel.obj[k][1].GetValue()
 							fargs[k]=list(fargs[k])
 							#val=self.args_panel.obj[k][1].GetValue()
@@ -10548,7 +10590,7 @@ class DataBuddy(wx.Frame):
 					for k in reuse_targs:	
 						
 						if k in targs.keys():
-							print 'adding targs %s' % k
+							#print 'adding targs %s' % k
 							#print k, targs[k][2], self.args_panel.obj[k][1].GetValue()
 							targs[k]=list(targs[k])
 							#val=self.args_panel.obj[k][1].GetValue()
@@ -10599,7 +10641,7 @@ class DataBuddy(wx.Frame):
 		#print
 		#print len(args[0]), len(args[1]),len(args[2])
 		#e(0)
-		args=self.obfuscate(args)
+		#args=self.obfuscate(args)
 		#print len(args[0]), len(args[1]),len(args[2])
 		import pickle
 		pickle.dump( [sname,copy_vector, tmpl, args], open( save_to_file, "wb" ) )
@@ -10623,15 +10665,21 @@ class DataBuddy(wx.Frame):
 		
 		return (sname,copy_vector, tmpl,save_to_dir, fname)
 	def obfuscate(self, data):
-		#pprint(data)
+		
 		for k in data[1]:
 		
 			if 'passwd' in k:	
+				#print k
+				#print data[1][k]
+				#e(0)
 				data[1][k]=list(data[1][k])
 				data[1][k][2]=base64.b64encode(data[1][k][2])
 		for k in data[2]:
 			#print k
 			if 'passwd' in k:				
+				#print k
+				#print data[2][k]
+				#a=1/0
 				data[2][k]=list(data[2][k])
 				data[2][k][2]=base64.b64encode(data[2][k][2])	
 		#e(0)
@@ -10706,7 +10754,7 @@ class DataBuddy(wx.Frame):
 		#self.api_args=apimod.aa
 		#tmpl=data[2]
 		#print self.api_args[tmpl]
-		session_args=self.unobfuscate(session_args)
+		#session_args=self.unobfuscate(session_args)
 		return session_args
 	def unobfuscate(self,data) 	:
 		#pprint(data)
@@ -10717,7 +10765,8 @@ class DataBuddy(wx.Frame):
 				try:
 					data[1][k][2]=base64.b64decode(data[1][k][2])
 				except:
-					pass
+					e = sys.exc_info()[0]
+					#print sys.exc_info()
 		for k in data[2]:
 			if 'passwd' in k:				
 				#print 'data[2][k]', data[2][k]
@@ -10725,7 +10774,8 @@ class DataBuddy(wx.Frame):
 				try: 
 					data[2][k][2]=base64.b64decode(data[2][k][2])
 				except:
-					pass
+					e = sys.exc_info()[0]
+					#print sys.exc_info()
 		return data	
 		
 	def open_session(self,data):
@@ -10883,249 +10933,253 @@ class DataBuddy(wx.Frame):
 	def updateTimeStamp(self):
 		ts=datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')
 		self.args_panel.obj['time_stamp'][1].SetValue(ts)
+	def onRunSession(self, data, extra1, extra2=None):
+		self.run_session(self.btn_run)			
 	def OnButtonRun(self, event):
 		# 
 		btn = event.GetEventObject()
-		the_id=self.the_id[2]
-		
-		title=self.get_title()
-		#print the_id, title
-		#pprint(self.p.keys())
-		#print 'OnButtonRun'
-		#pprint(self.p)
-		#print len(self.cargs),len(self.fargs),len(self.targs)
-		if self.p.has_key(the_id) and self.p[the_id]:
-			#window1 = find_window(title)
-			#print window1
+		self.run_session(btn)
+	def run_session(self, btn):
+			the_id=self.the_id[2]
 			
-			if self.hwnd.has_key(the_id):
-				hwnd=self.hwnd[the_id]
-			else:
-				while not hwnd:
-					hwnd=self.get_hwnds_for_pid(self.p[the_id].pid)
-							
-			#print window1.SetFocus()
-			(x,y) = self.GetScreenPositionTuple()
-			(l,w) =self.GetClientSizeTuple()
-			dl,dw= self.GetSize()
-			#print window1.SetWindowPos(0, (x/2,y/2,dl,dw),0)
-			if 0:
-				window1 = find_window(title)
-				window1.ShowWindow()
-				window1.SetFocus()
-			win32gui.SetWindowPos (hwnd[0],  0, x/2,y/2, dl, dw, 0)
-			#print(dir(win32gui))
-			#win32gui.SetActiveWindow(hwnd[0])
-			#win32gui.BringWindowToTop(hwnd[0])
-			#win32gui.EnableWindow(hwnd[0],True)
-			#win32gui.SetFocus(hwnd[0])
-			win32gui.ShowWindow(hwnd[0], win32con.SW_SHOWNORMAL)
-			#win32gui.ShowWindow(whnd, win32con.SW_SHOWNORMAL) # SW_RESTORE does not work 
-			win32gui.SetForegroundWindow(hwnd[0])
-			#print dir(window1)
-			#win32con.HWND_TOPMOST
-		else:
+			title=self.get_title()
+			#print the_id, title
+			#pprint(self.p.keys())
+			#print 'OnButtonRun'
+			#pprint(self.p)
 			#print len(self.cargs),len(self.fargs),len(self.targs)
-			if self.validateOnRun():
-				msg='Are you sure you want to execute this command?\n%s' % self.args_panel.get_cmd(self.transport)
-				yes=True
-				if_run=self.confirm_run.GetValue()
-				if if_run:
-					if not self.send_email.GetValue():
-						msg='%s\n\nSend email: NO (Check "Post-etl email" to enable).' %msg
-					else:
-						msg='%s\n\nSend email: YES (Check "Post-etl email" to disable).' %msg
-					yes= self.if_yes_2( msg, 'Confirmation.')
+			if self.p.has_key(the_id) and self.p[the_id]:
+				#window1 = find_window(title)
+				#print window1
+				
+				if self.hwnd.has_key(the_id):
+					hwnd=self.hwnd[the_id]
 				else:
-					if_run=True
-					
-				if if_run and yes:
-					self.updateTimeStamp()
-					#time_stamp=datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')
-					
-					btn.SetLabel('Running...(0)')
-					cmd=self.args_panel.get_cmd_line_new(self.transport)
-					#pprint (cmd)
-
-					if_save=self.auto_save.GetValue() 
-					if if_save:
-						#print 'if_save'
-						(sname,cv,tmpl,dname,fname)=self.saveSession()
-						
-					
-					#yes=''
-					#if if_yes:
-					#	yes='echo y|'
-		
-					cfg=[]
-					if 1:
-						import shlex 
-						#cmd2=''.join(cmd.split('^\n'))
-						#print cmd
-						lexer=shlex.shlex(cmd)
-						#lexer = shlex.shlex(input)
-						lexer.quotes = '"'
-						#lexer.wordchars += '\''
-						lexer.whitespace_split = True
-						lexer.commenters = ''
-						cfg = list(lexer)
-						#cfg=['start',"'%s'" % title] + cfg
-						#C:\app\alex_buz\product\11.2.0\dbhome_2\BIN\sqlplus.exe SCOTT/tiger2@orcl @C:\Users\alex_buz\Documents\GitHub\DataBuddy\test\test_connnect\Oracle.sql
-						#C:\Users\alex_buz\Documents\GitHub\DataBuddy\qc32\qc32.exe -t "^|" -w "ora11g2ora11g" -r "1" -o "1" -q "C:\Python27\data_migrator_1239\test\v101\query\oracle_query.sql" -b "orcl" -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -z"C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -j "SCOTT" -x "tiger2" -d "orcl" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -p "tiger2" -m "YYYY-MM-DD HH24.MI.SS.FF2" -u "SCOTT" -e "YYYY-MM-DD HH24.MI.SS" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -a "SCOTT.Partitioned_test_to" -G "part_15"
-						if 0:
-							cfg=['C:\\Users\\alex_buz\\Documents\\GitHub\\DataBuddy\\qc32\\qc32.exe',
-			 '-t',
-			 '"^|"',
-			 '-w',
-			 'ora11g2ora11g',
-			 '-r',
-			 '1',
-			 '-o',
-			 '1',
-			 '-q',
-			 'C:\\Python27\\data_migrator_1239\\test\\v101\\query\\oracle_query.sql',
-			 '-b',
-			 '"orcl"',
-			 '-e',
-			 '"YYYY-MM-DD HH24.MI.SS"',
-			 '-m',
-			 '"YYYY-MM-DD HH24.MI.SS.FF2"',
-			 '-z',
-			 '"C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN"',
-			 '-O',
-			 '"YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM"',
-			 '-j',
-			 '"SCOTT"',
-			 '-x',
-			 '"tiger2"',
-			 '-d',
-			 '"orcl"',
-			 '-Z',
-			 "'C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN'",
-			 '-e',
-			 '"YYYY-MM-DD HH24.MI.SS"',
-			 '-m',
-			 '"YYYY-MM-DD HH24.MI.SS.FF2"',
-			 '-u',
-			 '"SCOTT"',
-			 '-p',
-			 '"tiger2"',
-			 '-O',
-			 '"YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM"',
-			 '-a',
-			 '"SCOTT.Partitioned_test_to"',
-			 '-G',
-			 '"part_15"']
-						
-						#pprint(cfg)	
-						#e(0)
-						#print  ' '.join(cfg)
-						#e(0)
-						#C:\Python27\data_migrator_1239\datamule.py -t ^| -w ora11g2ora11g -r 1 -o 1 -q C:\Python27\data_migrator_1239\test\v101\query\oracle_query.sql -b orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -z C:\app\alex_buz\product\11.2.0\dbhome_2\BIN -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -j SCOTT -x tiger2 -d orcl -Z C:\app\alex_buz\product\11.2.0\dbhome_2\BIN -p tiger2 -m "YYYY-MM-DD HH24.MI.SS.FF2" -u SCOTT -e "YYYY-MM-DD HH24.MI.SS" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -a SCOTT.Partitioned_test_to -G part_15			
-						if 0:
-							p = Popen(cfg, stdin=PIPE, stdout=PIPE, shell=True ) #creationflags=CREATE_NEW_CONSOLE
-							#print p
-							out, err = p.communicate()
-							#print out, err
-							p.wait()
+					while not hwnd:
+						hwnd=self.get_hwnds_for_pid(self.p[the_id].pid)
+								
+				#print window1.SetFocus()
+				(x,y) = self.GetScreenPositionTuple()
+				(l,w) =self.GetClientSizeTuple()
+				dl,dw= self.GetSize()
+				#print window1.SetWindowPos(0, (x/2,y/2,dl,dw),0)
+				if 0:
+					window1 = find_window(title)
+					window1.ShowWindow()
+					window1.SetFocus()
+				win32gui.SetWindowPos (hwnd[0],  0, x/2,y/2, dl, dw, 0)
+				#print(dir(win32gui))
+				#win32gui.SetActiveWindow(hwnd[0])
+				#win32gui.BringWindowToTop(hwnd[0])
+				#win32gui.EnableWindow(hwnd[0],True)
+				#win32gui.SetFocus(hwnd[0])
+				win32gui.ShowWindow(hwnd[0], win32con.SW_SHOWNORMAL)
+				#win32gui.ShowWindow(whnd, win32con.SW_SHOWNORMAL) # SW_RESTORE does not work 
+				win32gui.SetForegroundWindow(hwnd[0])
+				#print dir(window1)
+				#win32con.HWND_TOPMOST
+			else:
+				#print len(self.cargs),len(self.fargs),len(self.targs)
+				if self.validateOnRun():
+					msg='Are you sure you want to execute this command?\n%s' % self.args_panel.get_cmd(self.transport)
+					yes=True
+					if_run=self.confirm_run.GetValue()
+					if if_run:
+						if not self.send_email.GetValue():
+							msg='%s\n\nSend email: NO (Check "Post-etl email" to enable).' %msg
 						else:
-							#py
-							#
+							msg='%s\n\nSend email: YES (Check "Post-etl email" to disable).' %msg
+						yes= self.if_yes_2( msg, 'Confirmation.')
+					else:
+						if_run=True
+						
+					if if_run and yes:
+						self.updateTimeStamp()
+						#time_stamp=datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')
+						
+						btn.SetLabel('Running...(0)')
+						cmd=self.args_panel.get_cmd_line_new(self.transport)
+						#pprint (cmd)
 
-							if 0:
-								#pprint(cfg)
-								nls_timestamp_format=self.args_panel.obj['nls_timestamp_format'][1].GetValue()
-								nls_timestamp_tz_format=self.args_panel.obj['nls_timestamp_tz_format'][1].GetValue()
-								if 1:
-									if nls_timestamp_format:
-										os.environ['NLS_TIMESTAMP_FORMAT'] = nls_timestamp_format
-									else:
-										os.environ['NLS_TIMESTAMP_FORMAT'] =''
-									if nls_timestamp_tz_format:
-										os.environ['NLS_TIMESTAMP_TZ_FORMAT'] = nls_timestamp_tz_format
-									else:
-										os.environ['NLS_TIMESTAMP_TZ_FORMAT'] =''	
+						if_save=self.auto_save.GetValue() 
+						if if_save:
+							#print 'if_save'
+							(sname,cv,tmpl,dname,fname)=self.saveSession()
 							
-							if exe:	#exe										
-								cfg=cfg+['-X','1']
-								#pprint (cfg)
-								p = Popen(cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
-							else:	#py
-								cfg[0]=r'%s\datamule.py' % transport_home
-								cfg=cfg+['-X','1']
-								p = Popen([sys.executable]+cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
+						
+						#yes=''
+						#if if_yes:
+						#	yes='echo y|'
+			
+						cfg=[]
+						if 1:
+							import shlex 
+							#cmd2=''.join(cmd.split('^\n'))
+							#print cmd
+							lexer=shlex.shlex(cmd)
+							#lexer = shlex.shlex(input)
+							lexer.quotes = '"'
+							#lexer.wordchars += '\''
+							lexer.whitespace_split = True
+							lexer.commenters = ''
+							cfg = list(lexer)
+							#cfg=['start',"'%s'" % title] + cfg
+							#C:\app\alex_buz\product\11.2.0\dbhome_2\BIN\sqlplus.exe SCOTT/tiger2@orcl @C:\Users\alex_buz\Documents\GitHub\DataBuddy\test\test_connnect\Oracle.sql
+							#C:\Users\alex_buz\Documents\GitHub\DataBuddy\qc32\qc32.exe -t "^|" -w "ora11g2ora11g" -r "1" -o "1" -q "C:\Python27\data_migrator_1239\test\v101\query\oracle_query.sql" -b "orcl" -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -z"C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -j "SCOTT" -x "tiger2" -d "orcl" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -p "tiger2" -m "YYYY-MM-DD HH24.MI.SS.FF2" -u "SCOTT" -e "YYYY-MM-DD HH24.MI.SS" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -a "SCOTT.Partitioned_test_to" -G "part_15"
+							if 0:
+								cfg=['C:\\Users\\alex_buz\\Documents\\GitHub\\DataBuddy\\qc32\\qc32.exe',
+				 '-t',
+				 '"^|"',
+				 '-w',
+				 'ora11g2ora11g',
+				 '-r',
+				 '1',
+				 '-o',
+				 '1',
+				 '-q',
+				 'C:\\Python27\\data_migrator_1239\\test\\v101\\query\\oracle_query.sql',
+				 '-b',
+				 '"orcl"',
+				 '-e',
+				 '"YYYY-MM-DD HH24.MI.SS"',
+				 '-m',
+				 '"YYYY-MM-DD HH24.MI.SS.FF2"',
+				 '-z',
+				 '"C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN"',
+				 '-O',
+				 '"YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM"',
+				 '-j',
+				 '"SCOTT"',
+				 '-x',
+				 '"tiger2"',
+				 '-d',
+				 '"orcl"',
+				 '-Z',
+				 "'C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN'",
+				 '-e',
+				 '"YYYY-MM-DD HH24.MI.SS"',
+				 '-m',
+				 '"YYYY-MM-DD HH24.MI.SS.FF2"',
+				 '-u',
+				 '"SCOTT"',
+				 '-p',
+				 '"tiger2"',
+				 '-O',
+				 '"YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM"',
+				 '-a',
+				 '"SCOTT.Partitioned_test_to"',
+				 '-G',
+				 '"part_15"']
+							
+							#pprint(cfg)	
+							#e(0)
+							#print  ' '.join(cfg)
+							#e(0)
+							#C:\Python27\data_migrator_1239\datamule.py -t ^| -w ora11g2ora11g -r 1 -o 1 -q C:\Python27\data_migrator_1239\test\v101\query\oracle_query.sql -b orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -z C:\app\alex_buz\product\11.2.0\dbhome_2\BIN -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -j SCOTT -x tiger2 -d orcl -Z C:\app\alex_buz\product\11.2.0\dbhome_2\BIN -p tiger2 -m "YYYY-MM-DD HH24.MI.SS.FF2" -u SCOTT -e "YYYY-MM-DD HH24.MI.SS" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -a SCOTT.Partitioned_test_to -G part_15			
+							if 0:
+								p = Popen(cfg, stdin=PIPE, stdout=PIPE, shell=True ) #creationflags=CREATE_NEW_CONSOLE
+								#print p
+								out, err = p.communicate()
+								#print out, err
+								p.wait()
+							else:
+								#py
+								#
 
-							if 1:
-								hwnd=None
-								while not hwnd:
-									self.hwnd[the_id]=self.get_hwnds_for_pid(p.pid)
-									hwnd=self.hwnd[the_id]
-								#print hwnd
-								#e(0)
-								#pprint(dir(win32gui))
-								#(x,y) = self.GetScreenPositionTuple()
-								#(l,w) =self.GetClientSizeTuple()
-								#dl,dw= 600,400
+								if 0:
+									#pprint(cfg)
+									nls_timestamp_format=self.args_panel.obj['nls_timestamp_format'][1].GetValue()
+									nls_timestamp_tz_format=self.args_panel.obj['nls_timestamp_tz_format'][1].GetValue()
+									if 1:
+										if nls_timestamp_format:
+											os.environ['NLS_TIMESTAMP_FORMAT'] = nls_timestamp_format
+										else:
+											os.environ['NLS_TIMESTAMP_FORMAT'] =''
+										if nls_timestamp_tz_format:
+											os.environ['NLS_TIMESTAMP_TZ_FORMAT'] = nls_timestamp_tz_format
+										else:
+											os.environ['NLS_TIMESTAMP_TZ_FORMAT'] =''	
 								
-								the_id=self.the_id[2]
-								#print self.the_id,the_id
-								
-								self.btn[the_id]=event.GetEventObject()
-								sn=self.session_name
-								#print sn
-								self.p[the_id]=p
-								self.timers[the_id].Start(1000)
-								
-								win32gui.SetWindowText (hwnd[0], title)
-								#print title
-								#e(0)
-								#sending 'y' to job
-								if 1: #if_yes:
-									window1 = find_window( title )
-									#print window1
-									#sleep(0.2)
-									#hwnd= self.get_hwnds_for_pid (p.pid)
+								if exe:	#exe										
+									cfg=cfg+['-X','1']
+									#pprint (cfg)
+									p = Popen(cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
+								else:	#py
+									cfg[0]=r'%s\datamule.py' % transport_home
+									cfg=cfg+['-X','1']
+									p = Popen([sys.executable]+cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
+
+								if 1:
+									hwnd=None
+									while not hwnd:
+										self.hwnd[the_id]=self.get_hwnds_for_pid(p.pid)
+										hwnd=self.hwnd[the_id]
 									#print hwnd
-									#s_app_name
-									#win32gui.SetWindowPos (hwnd[0],  win32con.HWND_TOPMOST, x,y, 850, 500, 0)
-									(x,y) = self.GetScreenPositionTuple()
-									(l,w) =self.GetClientSizeTuple()
-									dl,dw= self.GetSize()
-									#self.SetDimensions(x+(l-dl)/2, y+(w-dw)/2, dl,dw)
-									window1.SetWindowPos(0, (x/2,y/2,dl,dw),0)
-									 #win32con.HWND_TOPMOST, x,y, 850, 500, 0)
-					 
-									send_yes( window1)
-								
-								if_confirm_truncate=self.confirm_truncate.GetValue()
-								yes_truncate=self.ifTruncateTarget()
-								#print '````', yes_truncate, if_confirm_truncate
-								if yes_truncate and if_confirm_truncate:
-									yes_truncate= self.if_yes('Truncate target')
-								
-								if yes_truncate:
-									window1 = find_window( title )
-									(x,y) = self.GetScreenPositionTuple()
-									(l,w) =self.GetClientSizeTuple()
-									dl,dw= self.GetSize()
-									window1.SetWindowPos(0, (x/2,y/2,dl,dw),0)
-					 
-									send_yes( window1)
-								else:
-									window1 = find_window( title )
-									(x,y) = self.GetScreenPositionTuple()
-									(l,w) =self.GetClientSizeTuple()
-									dl,dw= self.GetSize()
-									window1.SetWindowPos(0, (x/2,y/2,dl,dw),0)
-					 
-									send_no( window1)
+									#e(0)
+									#pprint(dir(win32gui))
+									#(x,y) = self.GetScreenPositionTuple()
+									#(l,w) =self.GetClientSizeTuple()
+									#dl,dw= 600,400
 									
+									the_id=self.the_id[2]
+									#print self.the_id,the_id
 									
-							#disable form
-							self.DisableOnRun()
-							send('highlight_session',(self.session_name,wx.BLACK))
-							self.last_log_dir[self.session_name]=self.getLogDir()
-							self.EnableShowDumpButton()
+									self.btn[the_id]=btn #event.GetEventObject()
+									sn=self.session_name
+									#print sn
+									self.p[the_id]=p
+									self.timers[the_id].Start(1000)
+									
+									win32gui.SetWindowText (hwnd[0], title)
+									#print title
+									#e(0)
+									#sending 'y' to job
+									if 1: #if_yes:
+										window1 = find_window( title )
+										#print window1
+										#sleep(0.2)
+										#hwnd= self.get_hwnds_for_pid (p.pid)
+										#print hwnd
+										#s_app_name
+										#win32gui.SetWindowPos (hwnd[0],  win32con.HWND_TOPMOST, x,y, 850, 500, 0)
+										(x,y) = self.GetScreenPositionTuple()
+										(l,w) =self.GetClientSizeTuple()
+										dl,dw= self.GetSize()
+										#self.SetDimensions(x+(l-dl)/2, y+(w-dw)/2, dl,dw)
+										window1.SetWindowPos(0, (x/2,y/2,dl,dw),0)
+										 #win32con.HWND_TOPMOST, x,y, 850, 500, 0)
+						 
+										send_yes( window1)
+									
+									if_confirm_truncate=self.confirm_truncate.GetValue()
+									yes_truncate=self.ifTruncateTarget()
+									#print '````', yes_truncate, if_confirm_truncate
+									if yes_truncate and if_confirm_truncate:
+										yes_truncate= self.if_yes('Truncate target')
+									
+									if yes_truncate:
+										window1 = find_window( title )
+										(x,y) = self.GetScreenPositionTuple()
+										(l,w) =self.GetClientSizeTuple()
+										dl,dw= self.GetSize()
+										window1.SetWindowPos(0, (x/2,y/2,dl,dw),0)
+						 
+										send_yes( window1)
+									else:
+										window1 = find_window( title )
+										(x,y) = self.GetScreenPositionTuple()
+										(l,w) =self.GetClientSizeTuple()
+										dl,dw= self.GetSize()
+										window1.SetWindowPos(0, (x/2,y/2,dl,dw),0)
+						 
+										send_no( window1)
+										
+										
+								#disable form
+								self.DisableOnRun()
+								send('highlight_session',(self.session_name,wx.BLACK))
+								self.last_log_dir[self.session_name]=self.getLogDir()
+								self.EnableShowDumpButton()
 	def validateOnRun(self):
 		if self.if_generic_tremplate():
 			return True
@@ -11383,6 +11437,7 @@ class NewDialog ( wx.Dialog ):
 		#self.setMessageLine(10)
 		self.m_staticText.SetLabel(msg)
 		self.Fit()
+		self.m_sdbSizerOK.SetFocus()
 
 	def setMessageLine(self, messageLine):
 		msg = ""

@@ -395,7 +395,7 @@ echo "log at %s/log.txt"
 echo "spool at %s"
 		""" % (  dst,  self.remote_home, dst, self.remote_home_ts, login_from, login_to,self.remote_home_ts,from_zip,self.remote_home_ts,self.remote_home_ts,self.remote_home_ts, self.result_file)
 		#self.dbg
-		if self.dbg>1:
+		if self.dbg>2:
 			print cmd
 		#e(0)
 		stdin, stdout, stderr = client.exec_command(cmd)
@@ -406,15 +406,15 @@ echo "spool at %s"
 		while line:
 			line= stdout.readline()
 			out.append(line)
-			if self.dbg:
+			if self.dbg>1:
 				print str(line)
 		#print '-'*60
 		line =' '
 		while line:
 			line= stderr.readline()
 			err.append(line)
-			if self.dbg:
-				print str(line)
+			#if self.dbg:
+			#print str(line)
 		client.close()
 		to_log_zip=os.path.join(self.in_dir,'%s_%s_log.zip' % (ts,self.shard))
 		#import time
@@ -822,7 +822,7 @@ class target(common):
 		#e(0)
 		assert hasattr(self.args, 'loader_profile') and self.args.loader_profile, 'loader profile is not set'
 		#self.log.info('using non-default loader profile')
-		loader_profile=self.args.loader_profile.strip('"')
+		loader_profile=self.args.loader_profile.strip('"')		
 		assert os.path.isfile(loader_profile), 'Loader profile\n%s\ndoes not exists.' % loader_profile
 			
 		#loader={}

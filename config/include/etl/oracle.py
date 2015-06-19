@@ -4,7 +4,7 @@ from pprint import pprint
 from common.v101.base import base 
 import re, types, os, codecs
 from subprocess import Popen, PIPE,STDOUT
-import yaml
+#import yaml
 e=sys.exit
 import Crypto
 #sys.modules['Crypto'] = crypto
@@ -18,6 +18,12 @@ import pprint as pp
 import errno
 from common.v101.exceptions import RowCountError
 import imp
+if 0:
+	from common.v101.loaders import import_module
+	d=os.path.split(os.path.split(os.path.split(os.path.dirname( __file__))[0])[0])[0]
+	hmap=import_module(os.path.join(d,'include','v101','host_map.py'))
+	print hmap
+	e(0)
 def import_module(filepath):
 	class_inst = None
 	#expected_class = 'MyClass'
@@ -30,19 +36,18 @@ def import_module(filepath):
 	elif file_ext.lower() == '.pyc':
 		py_mod = imp.load_compiled(mod_name, filepath)
 	return py_mod
-	
 d=os.path.split(os.path.split(os.path.split(os.path.dirname( __file__))[0])[0])[0]
-#os.chdir(d)
-#print '##########',os.getcwd()
-#from include.v101.host_map import host_map as hmap
-hmap=import_module(os.path.join(d,'include','v101','host_map.py'))
-#hmap= hmap.host_map
+hmap=import_module(os.path.join(d,'include','v101','host_map.py'))	
+
 class code_release(object):
 	"""Code Release object"""
 	def __init__(self,log,parent,conf, args, spConf, shard):
 		self.log=log
 		self.parent=parent
 		self.conf=conf
+		self.dbg = 0
+		if conf.args.debug_level:
+			self.dbg=int(conf.args.debug_level)
 		self.args=conf.args
 		self.spConf=spConf
 		home=self.conf.home
@@ -258,8 +263,9 @@ log "Spool file size ${SIZE}b"
 					#e(0)
 					out_tns_loc=os.path.join(out_tns_dir,'tnsnames.ora')
 					shutil.copyfile(tns_loc,out_tns_loc)
-					ora_home='/tmp/home/oracle/app/oracle/product/12.1.0/dbhome_1'
+					#ora_home='/tmp/home/oracle/app/oracle/product/12.1.0/dbhome_2'
 					#print hm.mapping
+					(ora_home, _) = hm.get_remote_client_home()
 					#e(0)
 					#tns_admin ='/home/oracle/app/oracle/product/12.1.0/dbhome_1/network/admin'
 					tns_admin ='%s/tnsnames_from' % (self.remote_home_ts)
@@ -290,7 +296,8 @@ export TNS_ADMIN
 					#e(0)
 					out_tns_loc=os.path.join(out_tns_dir,'tnsnames.ora')
 					shutil.copyfile(tns_loc,out_tns_loc)
-					ora_home='/tmp/home/oracle/app/oracle/product/12.1.0/dbhome_1'
+					#ora_home='/tmp/home/oracle/app/oracle/product/12.1.0/dbhome_2'
+					(_, ora_home) = hm.get_remote_client_home()
 					#tns_admin ='/home/oracle/app/oracle/product/12.1.0/dbhome_1/network/admin'
 					tns_admin ='%s/tnsnames_to' % (self.remote_home_ts)
 					ora_profile="""
@@ -387,21 +394,26 @@ zip %s  %s/log.txt %s/sqlloader -r	>/dev/null
 echo "log at %s/log.txt"
 echo "spool at %s"
 		""" % (  dst,  self.remote_home, dst, self.remote_home_ts, login_from, login_to,self.remote_home_ts,from_zip,self.remote_home_ts,self.remote_home_ts,self.remote_home_ts, self.result_file)
-
-		#print cmd
+		#self.dbg
+		if self.dbg>2:
+			print cmd
 		#e(0)
 		stdin, stdout, stderr = client.exec_command(cmd)
 
 		line =' '
 		out=[]
+		err=[]
 		while line:
 			line= stdout.readline()
 			out.append(line)
-			#print str(line)
+			if self.dbg>1:
+				print str(line)
 		#print '-'*60
 		line =' '
 		while line:
 			line= stderr.readline()
+			err.append(line)
+			#if self.dbg:
 			#print str(line)
 		client.close()
 		to_log_zip=os.path.join(self.in_dir,'%s_%s_log.zip' % (ts,self.shard))
@@ -411,7 +423,7 @@ echo "spool at %s"
 			ssh=SSHConnection(host, username, pw)
 			ssh.get(from_zip, to_log_zip)
 			ssh.close()	
-		return out
+		return (out,err)
 
 class common(base):
 	"""Common Oracle methods"""
@@ -419,6 +431,9 @@ class common(base):
 		self.datadir=datadir
 		self.login=login
 		self.conf=conf
+		self.dbg=0
+		if conf.args.debug_level:
+			self.dbg=int(conf.args.debug_level)
 		#self.db=db
 		self.args=conf.args
 		self.cr={} #code_release(self.conf, self.args)
@@ -440,7 +455,8 @@ class common(base):
 			exit;
 			""" % tuple(tab_name.upper().split('.'))
 			#print qry
-			
+			if self.dbg>2:
+				print qry
 			cqfn=self.save_qry('get_table_columns',qry)
 			regexp=re.compile(r'(.*)')
 			(r_int, status,err)=self.do_query(self.login, query=None,query_file=cqfn,regexp=regexp)
@@ -473,6 +489,9 @@ class common(base):
 			#print query_file
 			#q = "%s%s" % ( opt,query)
 			#cfg=[ db_client_dbshell, login]
+			if q:
+				if self.dbg>2:
+					print q
 		cfg=[ db_client_dbshell,"-S", login,r'@%s' %  query_file]
 		
 		
@@ -486,9 +505,13 @@ class common(base):
 		#print ' '. join(cfg)
 		os.chdir(os.path.dirname(db_client_dbshell))
 		#C:\app\alex_buz\product\11.2.0\dbhome_2\BIN\sqlplus.exe -S SCOTT/tiger@orcl @C:\Temp\qc_log\qc_job\20150615_114603_830000\sql\get_table_columns.sql		
+		if self.dbg>2:
+			print ' '.join(cfg)
 		p = Popen(cfg,  stdout=PIPE,stderr=PIPE, shell=False)
 		output, err = p.communicate()
 		#print output, err
+		if self.dbg>2:
+			print output
 		if err:
 			self.log.err(err)
 		status=p.wait()	
@@ -631,7 +654,7 @@ exit;
 			self.cr[shard].release()
 			#print self.cr.shard
 			#e(0)
-			self.cr[shard].execute(db_login_from=self.login, db_login_to=self.login)
+			(out,err)=self.cr[shard].execute(db_login_from=self.login, db_login_to=self.login)
 
 
 		#e(0)
@@ -660,18 +683,23 @@ exit;
 		#pprint(payload)
 		#e(0)
 		os.chdir(os.path.dirname(self.get_db_client_dbshell()))
+		if self.dbg>2:
+			print ' '.join(spConf)		
+		#pprint(spConf)
 		p = Popen(spConf, stdout=outf) # '-S',  stdin=p1.stdout,
 		
 		output, err = p.communicate()
 		#print output, err
-		
+		if output and self.dbg>1:
+			for o in output.split(r'\n'):
+				print o
 		if err:
 			self.log.err(err)
 			#print output
 		status=p.wait()
 		outf.close()
 		os.chdir(self.conf.home)
-		#e(0)
+		#print 'test'
 		count=-1
 
 		if 1:
@@ -724,6 +752,7 @@ exit;
 				#print 3,pos, char, ord(char)
 			#print 'last',pos
 			#print 			 pos
+
 			if pos > 2:
 				pos -= 1
 				file.seek(pos, os.SEEK_SET)
@@ -756,7 +785,9 @@ exit;
 					raise RowCountError(last_line)
 				
 			file.close()
-
+			if self.dbg>2:
+				tail=open(outfn).read(1000).strip()
+				print tail
 		return (count, status)			
 		
 
@@ -780,19 +811,28 @@ class target(common):
 		if not os.path.isdir(self.ctldir):
 			os.makedirs(self.ctldir)
 		#self.cr={} #code release
+	def loadProfile(self, profile_loc):	
+		assert os.path.isfile(profile_loc), 'sqloader config file %s does not exists.' % (profile_loc)
+		lc=import_module(profile_loc)
+		return lc.sqlloader_config		
 	def get_load_config(self, db_loader_loc,shard_name, row_from, row_to,ctlfn,outfn, datadir):
 		to_db=self.args.copy_vector.split(self.conf._to)[1].upper()
-		loader_profile= self.conf.dlp[to_db].strip('"')
-		if hasattr(self.args, 'loader_profile') and self.args.loader_profile:
-			self.log.info('using non-default loader profile')
-			loader_profile=self.args.loader_profile.strip('"')
+		#loader_profile= self.conf.dlp[to_db].strip('"')
+		#print loader_profile
+		#e(0)
+		assert hasattr(self.args, 'loader_profile') and self.args.loader_profile, 'loader profile is not set'
+		#self.log.info('using non-default loader profile')
+		loader_profile=self.args.loader_profile.strip('"')		
 		assert os.path.isfile(loader_profile), 'Loader profile\n%s\ndoes not exists.' % loader_profile
 			
-		loader={}
-		with open(loader_profile, 'r') as f:
-			loader = yaml.load(f)
-
-		loader_args= ['%s=%s' % (x,loader[x].strip().strip(' ')) for x in loader]
+		#loader={}
+		loadProfile= self.loadProfile(loader_profile)
+		#pprint(loadProfile)
+		#e(0)
+		#with open(loader_profile, 'r') as f:
+		#	loader = yaml.load(f)
+		#loader=loadProfile.sqlloader_config
+		loader_args= ['%s=%s' % (x,loadProfile[x].strip().strip(' ')) for x in loadProfile]
 		loader_errors=10
 		ptn=''
 		sptn=''
@@ -834,7 +874,8 @@ class target(common):
 		dpl_mode='APPEND'
 		line_term=''
 		ctl=self.get_ctl(to_table,cols,dpl_mode,(line_term,'|'))
-
+		if self.dbg>2:
+			print ctl
 		ctlfn= '%s/%s%s_Shard-%s.ctl' % (self.ctldir,to_table, "%s%s" % (ptn,sptn),shard)
 
 
@@ -904,7 +945,7 @@ class target(common):
 		self.cr[shard].release()
 		#print (self.args.from_db)
 		
-		out=self.cr[shard].execute(db_login_from=self.args.from_db, db_login_to=self.login)
+		(out,err)=self.cr[shard].execute(db_login_from=self.args.from_db, db_login_to=self.login)
 		#print (out)
 		#e(0)
 		#out,status,err,ins_cnt =([],0,None,-1)
@@ -929,6 +970,7 @@ class target(common):
 				spool_size= m.groups()[0]
 			m = re.match(regexp3, l.strip())
 			
+			
 			if m and m.groups():
 				spool_status= int(m.groups()[0])
 			m = re.match(regexp4, l.strip()) 
@@ -938,12 +980,12 @@ class target(common):
 
 		#if 		
 		#if 		
-		print ins_cnt, spool_size, spool_status , load_status
+		print 'inserted: %s,' % ins_cnt, 'spool size: %s,' % spool_size, 'spool status %s,' % spool_status , 'load status: %s' % load_status
 		status= spool_status + load_status
 		#print 
 		err=[]
-		if (ins_cnt,spool_size,str(load_status),str(spool_status) ) in [(-1, -1, '1', '0')]:
-			for l in out:
+		if ins_cnt in (-1,) or spool_size in (-1,) or int(load_status)>0 or int(spool_status)>0:
+			for l in err:
 				print 'ERROR: ',l.strip()
 		#e(0)
 		#print status,err,ins_cnt,spool_size
@@ -969,12 +1011,18 @@ class target(common):
 		#print self.get_db_client_dbshell()
 		#e(0)
 		os.chdir(os.path.dirname(self.get_db_client_dbshell()))
+		if self.dbg>2:
+			print ' '.join(loadConf)				
 		p3 = Popen(loadConf, stdin=PIPE, stdout=PIPE, stderr=PIPE)
 		output=' '
 		while output:
 			output = p3.stdout.readline()
 			#print output
-			out.append(output)
+			
+			out.append(output)	
+				
+			if output and self.dbg>1:
+				print output
 		status=p3.wait()
 		if status==0:
 			logger.info('SQL*Loader status =%s' % status)
@@ -987,6 +1035,7 @@ class target(common):
 				error = p3.stderr.readline()
 				#print error
 				err.append(error)
+				print error
 		status = p3.wait()
 		os.chdir(self.conf.home)
 		#print 'shard',shard
@@ -1012,6 +1061,7 @@ class target(common):
 			#self.log.error('Log file for shard %d is missing.' % shard)
 		else:
 			shl=open(logfn, 'r').read()
+			#print logfn
 			#print shl
 			r=re.compile(r'\s+(\d+) Rows successfully loaded\.')
 
@@ -1022,6 +1072,7 @@ class target(common):
 				#rows_total +=rows_copied
 				#print rows_total
 		#print rows_copied
+		#e(0)
 		return rows_copied
 
 		
