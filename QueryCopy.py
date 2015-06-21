@@ -112,7 +112,7 @@ def import_module(filepath):
 		py_mod = imp.load_compiled(mod_name, filepath)
 	return py_mod
 ########################################################################	
-exe=True
+exe=False
 
 e=sys.exit
 blog=cu.blog
@@ -4634,7 +4634,8 @@ class NewSessionDialog(wx.Dialog):
 		#Menu4 = FM.FlatMenu()
 		self.i +=1
 		#pprint(conf.dbs)
-		menuItem = FM.FlatMenuItem(Menu3, 20000+self.i, "%s %s" % (from_to, conf.dbs[sm2]) , "", wx.ITEM_NORMAL)
+		print from_to, conf.dbs[sm2]
+		menuItem = FM.FlatMenuItem(Menu3, wx.NewId(), "%s %s" % (from_to, conf.dbs[sm2]) , "", wx.ITEM_NORMAL)
 		#print from_db,sm2
 		self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(from_db,sm2))
 		Menu3.AppendItem(menuItem)
@@ -10718,7 +10719,7 @@ class DataBuddy(wx.Frame):
 					send('add_session',(sname,cv,tmpl,dname,fname,slib_name))
 
 			
-			dlg.Destroy()
+			#dlg.Destroy()
 			#[self.sname, self.copy_vector, self.tmpl, self.args]=dlg.getConfig()
 			#print conf
 			#print val
