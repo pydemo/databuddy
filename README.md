@@ -473,4 +473,4 @@ Mongo DB|x
 
 
 ##Download
-* [Data Buddy latest release](https://github.com/data-buddy/DataBuddy/releases/tag/v0.3.3) -- `data-buddy 0.3.3`
+* [Data Buddy latest release](https://github.com/data-buddy/DataBuddy/releases/tag/0.3.5) -- `data-buddy 0.3.5`
