@@ -1720,6 +1720,21 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		sel= self.list.GetSelectedItems()
 		#self.Freeze()
 		if len(sel)==1:
+			#self.frame.saveArgs()
+			#print '---------------', 
+			#send('save_args',())
+			if self.frame.changed: # or self.frame.output_panel.changed: #or self.frame.editor_panel.Changed():
+				if self.frame.if_yes('Save changes to %s?' % (self.frame.session_name)):
+					#,fname)=self.frame.saveSession() 
+					#send('save_args',())
+					#send('open_session',(session))
+					(sname,cv,tmpl,dname,fname)=self.parent.frame.saveSession(slib_name=self.parent.getActiveLibName())
+				else:
+					self.frame.restore_changed_args()
+			else:
+				if not self.parent.frame.saved:
+					(sname,cv,tmpl,dname,fname)=self.parent.frame.saveSession(slib_name=self.parent.getActiveLibName())
+			
 			#self.currentItem = event.m_itemIndex
 			#print self.currentItem
 			#idx=self.list.GetFirstSelected()
@@ -1742,11 +1757,11 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		#pprint (session)
 		#e(0)
 		#print self.frame.session_name
-		#print self.frame.session_name==session[0]
-		#print 'self.frame.changed', self.frame.changed
+		print self.frame.session_name,session[0]
+		print 'self.frame.changed', self.frame.changed
 		
 		if not self.frame.session_name==session[0]:
-			if self.frame.changed: # or self.frame.output_panel.changed: #or self.frame.editor_panel.Changed():
+			if 0 and self.frame.changed: # or self.frame.output_panel.changed: #or self.frame.editor_panel.Changed():
 				if self.frame.if_yes('Save changes to %s?' % (self.frame.session_name)):
 					#,fname)=self.frame.saveSession() 
 					send('save_args',())
@@ -3820,7 +3835,7 @@ class NewSessionDialog(wx.Dialog):
 		self.slib=slib
 		self.values_source=values_source
 		self.def_cv,self.def_tmpl=(None,None)
-		self.tobjects=['All', 'Query', 'Table', 'Partition', 'Subpartition']
+		self.tobjects=['All', 'Query', 'Table', 'Partition', 'Subpartition', 'List', 'Whitespace', 'Header']
 		self.fobjects=['File', 'Dir']			
 		if defaults:
 			self.def_cv=defaults[0] #default copy_vector if any
@@ -3982,14 +3997,14 @@ class NewSessionDialog(wx.Dialog):
 			self.b_vector.Bind(wx.EVT_BUTTON, self.OnCVClicked)
 			#sizer.Add(boxsizer, pos=(2, 2),  flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=5)	
 			#self.gen_bind(wx.EVT_BUTTON,self.b_vector, self.OnVectorButton,('test'))
-		optsizer = wx.BoxSizer(wx.HORIZONTAL)	
+		self.optsizer = wx.BoxSizer(wx.HORIZONTAL)	
 		#optsizer.Add(boxsizer, 0 , wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT)		
 		#optsizer.Add((3,3),0)
-		optsizer.Add(vboxsizer, 0 , wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT)		
+		self.optsizer.Add(vboxsizer, 0 , wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT)		
 		#optsizer.Add((3,3),0)
 		#optsizer.Add((5,5),1, wx.EXPAND)
 		#optsizer.Add(button4, 0 , wx.RIGHT)
-		sizer.Add(optsizer, 0, wx.EXPAND|wx.ALL|wx.GROW, 5)	
+		sizer.Add(self.optsizer, 0, wx.EXPAND|wx.ALL|wx.GROW, 5)	
 		listsizer = wx.BoxSizer(wx.HORIZONTAL)	
 		listsizer.Add(self.listCtrl, 1 , wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL,5)	
 		listsizer.Add(self.targlistCtrl, 1 , wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL,5)		
@@ -3997,7 +4012,7 @@ class NewSessionDialog(wx.Dialog):
 	
 		if 1:
 			sb = wx.StaticBox(self, label="Source Object")
-			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
+			self.rb_boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
 
 			so=self.tobjects+self.fobjects
 			self.s_rb={}
@@ -4010,11 +4025,11 @@ class NewSessionDialog(wx.Dialog):
 					style=0
 				self.s_rb[rbname]=wx.RadioButton(self, label=rbname,style=style)
 				self.s_rb[rbname].SetName=rbname
-				boxsizer.Add(self.s_rb[rbname], flag=wx.LEFT|wx.TOP, border=1)
+				self.rb_boxsizer.Add(self.s_rb[rbname], flag=wx.LEFT|wx.TOP, border=1)
 				self.s_rb[rbname].Bind(wx.EVT_RADIOBUTTON, self.onSourceObjButton)
 
 
-			optsizer.Add(boxsizer, 0 , wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT)	
+			self.optsizer.Add(self.rb_boxsizer, 0 , wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT)	
 		if 0:
 			sb = wx.StaticBox(self, label="Target Object")
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
@@ -4037,7 +4052,7 @@ class NewSessionDialog(wx.Dialog):
 				t_rb[rbname].Bind(wx.EVT_RADIOBUTTON, self.onTargetObjButton)
 
 				
-			optsizer.Add(boxsizer, 0 , wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT)	
+			self.optsizer.Add(boxsizer, 0 , wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT)	
 		btnsizer = wx.BoxSizer(wx.HORIZONTAL)
 		if 1:
 			sb = wx.StaticBox(self, label='Arguments source')
@@ -4161,6 +4176,8 @@ class NewSessionDialog(wx.Dialog):
 		self.Layout()
 		self.Fit()
 		self.SetSize((-1,size[1]))
+		self.recentMenu=None
+		self.max_recent=5
 	def getSessionLibNames(self):
 		global session_home
 		libs= [d for d in os.listdir(session_home) if os.path.isdir(os.path.join(session_home,d))]
@@ -4336,8 +4353,11 @@ class NewSessionDialog(wx.Dialog):
 		#pprint (self.fcounts)
 		if not filter:
 			for k, v in self.fcounts.items():
+				print v
 				if v:
 					self.s_rb[k].SetLabel("%s(%s)" % (k, v))
+		self.optsizer.Layout()
+		#self.optsizer.Refresh()
 
 	def OnSrcTmplSelected(self,event):
 		#print str(self.__class__) + " - OnItemSelected"
@@ -4422,6 +4442,8 @@ class NewSessionDialog(wx.Dialog):
 		#print 'writeRecent'
 		#print self.recent
 		if self.recent:
+			if len(self.recent)>self.max_recent:
+				self.recent.pop(0)
 			import pickle
 			
 			pickle.dump(self.recent, open( self.recent_fname, "wb" ) )
@@ -4441,7 +4463,7 @@ class NewSessionDialog(wx.Dialog):
 			self.Warn('Enter session name.')
 			self.tc_sname.SetFocus()
 		elif self.if_duplicate_name(libname,sname):
-			self.Warn('CREATE: Duplicate session name.')
+			self.Warn('Duplicate session name.','OnCreate')
 			self.tc_sname.SetFocus()
 
 		else:
@@ -4487,6 +4509,10 @@ class NewSessionDialog(wx.Dialog):
 		self._popUpMenu.SetOwnerHeight(btnSize.y)
 		self._popUpMenu.Popup(wx.Point(btnPt.x, btnPt.y), self)	
 	def CreatePopupMenu(self):
+		if not self.recentMenu:
+			self.recentMenu = FM.FlatMenu()
+		else:
+			self.recentMenu.Clear()
 
 		if not self._popUpMenu:
 		
@@ -4494,32 +4520,14 @@ class NewSessionDialog(wx.Dialog):
 			#-----------------------------------------------
 			# Flat Menu test
 			#-----------------------------------------------
-
-			# First we create the sub-menu item
-			
-			#subSubMenu = FM.FlatMenu()
-
-
-
-
-			#e(0)
-			
-			#dbf={'DB':'DB2', 'EX':'Exadata', 'IN', 'MA', 'MY', 'OR', 'PG', 'SL', 'SS', 'SY', 'TT'}
-			#pprint(conf.dbs)
 			dbf={'OR':'Oracle', 'SS':'SQLServer', 'MA':'MariaDB', 'MY': 'MySQL', 'PG':'PostgreSQL', 'DB':'DB2', 'TT':'TimesTen', 'SL':'SQLite', 'IN':'Informix', 'SY':'Sybase','MO':'Mongo'}
-			
-			#pprint(api_from)
-			#print conf.ff
-			# Add sub-menu to main menu
 			self.i=0
-			#print '-'*20, self.recent
 			if 1: #len(self.recent):
 				self.i +=1
-				self.recentMenu = FM.FlatMenu()
 				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, 'Recent', '', wx.ITEM_NORMAL, self.recentMenu)
 				self._popUpMenu.AppendItem(menuItem)
 				if self.recent:
-					for r in self.recent:
+					for r in reversed(self.recent):
 						(a,b)=r
 						a=a.upper()
 						b=b.upper()
@@ -4573,7 +4581,7 @@ class NewSessionDialog(wx.Dialog):
 				
 		else:
 			#pprint(dir(self.recentMenu))
-			self.recentMenu.Clear()
+			#self.recentMenu.Clear()
 			if self.recent:
 				for r in reversed(self.recent):
 					(a,b)=r
@@ -4631,17 +4639,10 @@ class NewSessionDialog(wx.Dialog):
 			
 
 	def create_Menu4(self,Menu3,sm2,from_db, from_to='To'):
-		#Menu4 = FM.FlatMenu()
 		self.i +=1
-		#pprint(conf.dbs)
-		print from_to, conf.dbs[sm2]
 		menuItem = FM.FlatMenuItem(Menu3, wx.NewId(), "%s %s" % (from_to, conf.dbs[sm2]) , "", wx.ITEM_NORMAL)
-		#print from_db,sm2
 		self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(from_db,sm2))
 		Menu3.AppendItem(menuItem)
-		#if not sm2 in self.api_menu['OR']:
-		#	menuItem.Enable(False)
-		#self.set_sub_submenu(subSubMenu,1, 'CSV')
 			
 
 	def set_vector_btn(self,a,b):	
@@ -4821,10 +4822,10 @@ class NewSessionLibraryDialog(wx.Dialog):
 		
 		sname=self.tc_sname.GetValue().strip().strip(' ').replace(' ','')
 		if not sname:
-			self.Warn('Enter session library name.')
+			self.Warn('Enter session library name.', 'OnCreate')
 			self.tc_sname.SetFocus()
 		elif self.if_duplicate_name(sname):
-			self.Warn('Duplicate session library name.')
+			self.Warn('Duplicate session library name.', 'OnCreate')
 			self.tc_sname.SetFocus()
 
 		else:
@@ -8553,7 +8554,7 @@ class etl_file(object):
 		self.etl={}
 		#self.changed=False
 		self.etl_loc={}		
-
+		self.Prepare()
 		#sub(self.onValueChanged, "value_changed")
 
 	def Prepare(self):
@@ -8797,10 +8798,10 @@ class SaveAsDialog(wx.Dialog):
 		
 		sname=self.tc_sname.GetValue().strip().strip(' ').replace(' ','')
 		if not sname:
-			self.Warn('Enter session library name.')
+			self.Warn('Enter session library name.', 'OnCreate')
 			self.tc_sname.SetFocus()
 		elif self.if_duplicate_name(sname):
-			self.Warn('Duplicate session library name.')
+			self.Warn('Duplicate session library name.', 'OnCreate')
 			self.tc_sname.SetFocus()
 
 		else:
@@ -8978,10 +8979,10 @@ class SaveAsTemplateDialog(wx.Dialog):
 		tname=self.tc_sname.GetValue().strip().strip(' ').replace(' ','')
 		tlib=self.cb_tname.GetValue().strip().strip(' ').replace(' ','')
 		if not tname:
-			self.Warn('Enter session library name.')
+			self.Warn('Enter session library name.', 'OnCreate')
 			self.tc_sname.SetFocus()
 		elif self.if_duplicate_name(tname,tlib):
-			self.Warn('Duplicate session library name.')
+			self.Warn('Duplicate session library name.', 'OnCreate')
 			self.tc_sname.SetFocus()
 
 		else:
@@ -9042,7 +9043,7 @@ class DataBuddy(wx.Frame):
 		self.hwnd={}
 		self.elapsed={}
 		self.q=[]
-
+		self.saved=True
 		
 		self.closing_in=6
 		(self.cargs,self.fargs,self.targs)=(None, None, None)
@@ -10416,6 +10417,7 @@ class DataBuddy(wx.Frame):
 			self.btn_new.Enable(True)
 			#print(len(list.GetSelectedItems()))			
 			self.ResetAll()
+			self.session_name=None
 			
 	def if_yes(self, message, caption = 'Warning!'):
 		dlg = wx.MessageDialog(self, message, caption, wx.YES_NO | wx.ICON_QUESTION)
@@ -10506,34 +10508,37 @@ class DataBuddy(wx.Frame):
 		#print 'saveArgs', slib
 		sname=self.getSessionName() 
 		save_as=self.session_name!=sname 
-		print self.session_name, sname, save_as
-		#a=1/0
-		if (save_as and self.if_duplicate_name(sname,slib)):
-			self.Warn('Duplicate session name.')
-			self.tc_session_name.SetFocus()
-		else:
-			(sname,cv,tmpl,dname,fname)=self.saveSession(slib_name=slib)
-			if save_as:
-				session=[sname,cv[0],cv[1],'Copy',tmpl,dname,fname]
-				#print dname
-				#e(0)
-				list=self.sm.lists[slib]
-				#print slib
-				#print self.sm.slps.keys()
-				slp=self.sm.slps[slib]
-				idx=slp.addSession(session)	
-				slp.list.set_data()
-				slp.RecreateList(None,(slp.list,slp.filter))
-				idx = slp.getIdFromText(sname)
-				if idx>-1:				
-					list.SetItemState(idx, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED) 
-					list.EnsureVisible(idx)
-			#self.output_panel.Save()
-			#self.editor_panel.Save()
-			#self.parent.btn_save.Enable(False)
-			#print 'test'
-			self.args_panel._sMenu=None
-			self.args_panel._tMenu=None
+		print '#'*60
+		print '#'*60
+		print 'saveArgs:', self.session_name, 'sname:', sname, 'save_as:', save_as, self.saved
+		if sname and self.session_name:		
+			#a=1/0
+			if ( save_as and ( self.if_duplicate_name(sname,slib))): #self.if_duplicate_name(self.session_name,slib) or
+				self.Warn('Duplicate session name.', 'saveArgs')
+				self.tc_session_name.SetFocus()
+			else:
+				(sname,cv,tmpl,dname,fname)=self.saveSession(slib_name=slib)
+				if save_as:
+					session=[sname,cv[0],cv[1],'Copy',tmpl,dname,fname]
+					#print dname
+					#e(0)
+					list=self.sm.lists[slib]
+					#print slib
+					#print self.sm.slps.keys()
+					slp=self.sm.slps[slib]
+					idx=slp.addSession(session)	
+					slp.list.set_data()
+					slp.RecreateList(None,(slp.list,slp.filter))
+					idx = slp.getIdFromText(sname)
+					if idx>-1:				
+						list.SetItemState(idx, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED, wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED) 
+						list.EnsureVisible(idx)
+				#self.output_panel.Save()
+				#self.editor_panel.Save()
+				#self.parent.btn_save.Enable(False)
+				#print 'test'
+				self.args_panel._sMenu=None
+				self.args_panel._tMenu=None
 		
 	def Warn(self, message, caption = 'Warning!'):
 		dlg = wx.MessageDialog(self, message, caption, wx.OK | wx.ICON_WARNING)
@@ -10546,6 +10551,7 @@ class DataBuddy(wx.Frame):
 		#print sfile_loc, os.path.isdir(sfile_loc)
 		#raise;
 		#e(0)
+		print sfile_loc
 		return os.path.isdir(sfile_loc)
 		
 	def if_sname_changed(self):
@@ -10605,7 +10611,8 @@ class DataBuddy(wx.Frame):
 			
 			if not sname:
 				sname=self.getSessionName()
-			(copy_vector,tmpl,args)=[ self.getCopyVector(), '.'.join(self.getTemplates()), self.args_panel.getArgs()]
+			if sname: 
+				(copy_vector,tmpl,args)=[ self.getCopyVector(), '.'.join(self.getTemplates()), self.args_panel.getArgs()]
 			#print len(args[0]), len(args[1]),len(args[2])
 			#assert self.session_name==sname, 'session name changed!'
 		#print sess_home
@@ -10613,58 +10620,63 @@ class DataBuddy(wx.Frame):
 		#e(0)
 		#if not os.path.isdir(sess_home):
 		#	os.makedirs(sess_home)
-		
-		
-		#sname=self.getSessionName()
-		#print self.tmpl
-		#print self.copy_vector
-		#print sname
-		#pprint((sname,copy_vector,tmpl,args)) 
-		fname='%s;%s;%s.p' % ('.'.join(copy_vector), tmpl,sname)
-		#print fname
-		#print copy_vector
-		#print tmpl
-		#print sname
-		
-		#print '#'*60
-		#print sess_home
-		#print slib_name
-		#a=1/0
-		save_to_dir=os.path.join(sess_home,slib_name)
-		assert os.path.isdir(save_to_dir), 'Cannot save new session to\n%s' % save_to_dir
-		save_to_file=os.path.join(save_to_dir, fname)
-		
-		#print save_to_file
-		#print sname
-		#print copy_vector
-		#print tmpl
-		#print args
-		#print
-		#print len(args[0]), len(args[1]),len(args[2])
-		#e(0)
-		#args=self.obfuscate(args)
-		#print len(args[0]), len(args[1]),len(args[2])
-		import pickle
-		pickle.dump( [sname,copy_vector, tmpl, args], open( save_to_file, "wb" ) )
-		#print save_to_dir
-		#print self.save_to_dir
-		
-		#e(0)
-		if self.session_name:
-			if (self.save_to_dir not in [save_to_dir]) or (sname not in [self.session_name] and self.session_name):
-				#copy session details
-				to_dir=os.path.join(save_to_dir,sname)
-				#print self.save_to_dir,self.session_name
-				from_dir=os.path.join(self.save_to_dir,self.session_name)
-				#os.mkdir(to_dir)
-				#print from_dir
-				#print to_dir
-				shutil.copytree(from_dir, to_dir)
-		self.btn_save.Enable(False)	
-		self.session_name=sname
-		self.changed=[]
-		
-		return (sname,copy_vector, tmpl,save_to_dir, fname)
+		if sname:
+			
+			#sname=self.getSessionName()
+			#print self.tmpl
+			#print self.copy_vector
+			#print sname
+			#pprint((sname,copy_vector,tmpl,args)) 
+			fname='%s;%s;%s.p' % ('.'.join(copy_vector), tmpl,sname)
+			#print fname
+			#print copy_vector
+			#print tmpl
+			#print sname
+			
+			#print '#'*60
+			#print sess_home
+			#print slib_name
+			#a=1/0
+			save_to_dir=os.path.join(sess_home,slib_name)
+			assert os.path.isdir(save_to_dir), 'Cannot save new session to\n%s' % save_to_dir
+			save_to_file=os.path.join(save_to_dir, fname)
+			
+			#print save_to_file
+			#print sname
+			#print copy_vector
+			#print tmpl
+			#print args
+			#print
+			#print len(args[0]), len(args[1]),len(args[2])
+			#e(0)
+			#args=self.obfuscate(args)
+			#print len(args[0]), len(args[1]),len(args[2])
+			import pickle
+			pickle.dump( [sname,copy_vector, tmpl, args], open( save_to_file, "wb" ) )
+			#print save_to_dir
+			#print self.save_to_dir
+			
+			#e(0)
+			if self.session_name:
+				if (self.save_to_dir not in [save_to_dir]) or (sname not in [self.session_name] and self.session_name):
+					#copy session details
+					to_dir=os.path.join(save_to_dir,sname)
+					#print self.save_to_dir,self.session_name
+					from_dir=os.path.join(self.save_to_dir,self.session_name)
+					#os.mkdir(to_dir)
+					#print from_dir
+					#print to_dir
+					if not os.path.isdir(to_dir):
+						shutil.copytree(from_dir, to_dir)
+			self.btn_save.Enable(False)	
+			self.session_name=sname
+			self.changed=[]
+			self.saved=True
+			return (sname,copy_vector, tmpl,save_to_dir, fname)
+		else:
+			self.saved=True
+			return (None,None, None,None, None)
+			
 	def obfuscate(self, data):
 		
 		for k in data[1]:
@@ -10869,6 +10881,7 @@ class DataBuddy(wx.Frame):
 			self.btn_save.Enable(True)
 			self.save_as.Enable(True)			
 			self.btn_clearall.Enable(True)
+			self.saved=False
 			#print len(self.cargs),len(self.fargs),len(self.targs)
 			
 	def updateCommand(self, page_id=1):
