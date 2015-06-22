@@ -227,6 +227,8 @@ Database | Spooler | Loader | DbShell
 - [ ] close all existing shells/shell groups upon exit.
 - [x] highlight running sessions.**DONE**
 - [ ] beep on failing sessions.
+- [x] free argument entry.**DONE**
+- [x] let user change arg list for a given group. **DONE**
 - [x] detect DONE/FAILED from cmd window. **DONE**
 - [x] let user disable post-etl email (Common: email_to). **DONE**
 - [ ] change copy_vector format from db2db to db->db or db_2_db
