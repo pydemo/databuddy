@@ -4027,8 +4027,8 @@ class NewSessionDialog(wx.Dialog):
 				self.s_rb[rbname].SetName=rbname
 				self.rb_boxsizer.Add(self.s_rb[rbname], flag=wx.LEFT|wx.TOP, border=1)
 				self.s_rb[rbname].Bind(wx.EVT_RADIOBUTTON, self.onSourceObjButton)
-
-
+				self.s_rb[rbname].Enable(False)
+			
 			self.optsizer.Add(self.rb_boxsizer, 0 , wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT)	
 		if 0:
 			sb = wx.StaticBox(self, label="Target Object")
@@ -5043,9 +5043,9 @@ class pnl_args(wx.Panel):
 		#sizer.Fit(self)
 		self.args_vbox = wx.BoxSizer(wx.VERTICAL)
 		self.args_hbox = wx.BoxSizer(wx.HORIZONTAL)
-		self.args=args_api
+		self.args_api=args_api
 		self.the_id=the_id
-		self.cargs,self.fargs,self.targs=self.args
+		self.cargs,self.fargs,self.targs=args_api
 		self.copy_vector=copy_vector
 		self.tmpl=tmpl
 		self.obj={}
@@ -5372,6 +5372,7 @@ class pnl_args(wx.Panel):
 		
 		#self.checks={}
 		sub(self.onSetLoaderProfile, "set_loader_profile")
+		sub(self.onSetEtlLoc, "set_etl_loc")
 		sub(self.onSetHostMap, "set_hostmap")
 		#sub(self.onSetEtlEditorProfile, "set_etl_editor_profile")
 		sub(self.onDisableUnusedArgs, 'disable_unused_args')
@@ -5474,7 +5475,7 @@ class pnl_args(wx.Panel):
 			send('set_loader_profile', (session_loader_loc))
 		#print session_hostmap_loc
 		#e(0)
-		return session_loader_loc	
+		#return session_loader_loc	
 		
 	def getSessionDir(self):
 		session_dir=os.path.join(self.parent.save_to_dir,self.parent.getSessionName())
@@ -5492,6 +5493,14 @@ class pnl_args(wx.Panel):
 		if self.obj.has_key(k):
 			self.obj[k][1].SetValue(profile_loc)
 		#send('save_args',())
+	def onSetEtlLoc(self, data, extra1, extra2=None):
+		(etl_loc,k)=data
+		#k='loader_profile'
+		#print self.obj.keys()
+		if self.obj.has_key(k):
+			self.obj[k][1].SetValue(etl_loc)
+		#send('save_args',())
+		
 	def onSetEtlEditorProfile_(self, data, extra1, extra2=None):
 		(etl_loc,k)=data
 		#print 'onSetEtlEditorProfile',k
@@ -6965,7 +6974,7 @@ class pnl_args(wx.Panel):
 	def load_session(self,copy_vector,tmpl,the_id,args):
 		print 'open_session args_panel'
 		#(self.copy_vector,self.tmpl,self.the_id,(self.cargs,self.fargs,self.targs))
-		self.args=args
+		#self.args=args
 		(self.cargs,self.fargs,self.targs)=args
 		#print len(self.cargs),len(self.fargs),len(self.targs)
 		#self.args=args_api
@@ -7005,13 +7014,17 @@ class pnl_args(wx.Panel):
 			print 'no host_map'
 		
 		k='loader_profile'
-			
+		#e(0)
+		#pprint(self.args)
 		#assert self.obj.has_key(k), 'loader profile ./config/sqlloader.py is not defined for this session.'
-		if hasattr(self.args, 'loader_profile')and  self.args.loader_profile:
+		if self.obj.has_key(k):
 			loader_loc = self.obj[k][1].GetValue().strip()
-			new_hostmap_loc=self.parent.args_panel.CreateNewSessionLoaderProfile(loader_loc)
+			self.parent.args_panel.CreateNewSessionLoaderProfile(loader_loc)
+			#e(0)
 			#if new_hostmap_loc not in [loader_loc]:
 			#	self.obj[k][1].SetValue(new_loader_loc)
+			#print new_hostmap_loc
+			#print loader_loc
 			#e(0)
 			#print conf._to.join(self.copy_vector)
 			
@@ -7025,8 +7038,23 @@ class pnl_args(wx.Panel):
 		if self.obj.has_key(k):
 			val=self.obj[k][1].GetValue().strip()
 			send('set_keep_data_file',(val))
-		
-		if 1:
+		self.etl_name=['job_pre_etl', 'job_post_etl', 'thread_pre_etl', 'thread_post_etl']		
+		#self.etl_file_loc={}
+		#default_etl=self.etl_name[0]
+		self.etl_file_name={x:'%s.py' % x for x in self.etl_name}		
+		#self.default_etl_file_loc={x:os.path.join(transport_home,  os.path.join('config','etl',self.etl_file_name[x])) for x in self.etl_name}		
+		#self.etl={}		
+		#self.etl_loc={}		
+			
+		k='job_pre_etl'
+		#e(0)
+		#pprint(self.args)
+		#assert self.obj.has_key(k), 'loader profile ./config/sqlloader.py is not defined for this session.'
+		if self.obj.has_key(k):
+			pre_etl_loc = self.obj[k][1].GetValue().strip()
+			self.CreateNewSessionEtlFile(pre_etl_loc,k)
+			
+		if 0:
 			if 0:
 				k='job_pre_etl'
 				etl_names=['job_pre_etl', 'job_post_etl', 'thread_pre_etl', 'thread_post_etl']
@@ -7061,7 +7089,58 @@ class pnl_args(wx.Panel):
 		self.Q=False
 		#print '###############exiting open_session args_panel'
 		#print len(self.cargs),len(self.fargs),len(self.targs)
-		
+	def getSessionEtlFileLoc(self,k):
+		session_loc=os.path.join(self.parent.save_to_dir,self.parent.getSessionName(),'etl', self.etl_file_name[k])
+		return session_loc
+	def CreateNewSessionEtlFile(self, etl_loc,k ): 
+		session_etl_loc=self.getSessionEtlFileLoc(k)
+		os.chdir(home)
+		if etl_loc.startswith(r'.'):
+			#relative
+			real_etl_loc=os.path.join(transport_home,etl_loc)
+		else:
+			real_etl_loc=os.path.realpath(etl_loc)
+				
+		if os.path.isfile(session_etl_loc):
+			#print 'session file exists'
+			pass
+		else:			
+			#print profile_loc
+			#print session_loc
+			dir=os.path.dirname(session_etl_loc)
+			if not os.path.isdir(dir):
+				os.makedirs(dir)
+			shutil.copyfile(real_etl_loc,session_etl_loc)
+			send('set_etl_loc', (session_etl_loc,k))
+		return session_etl_loc
+		if 0:
+			loader_name=os.path.basename(loader_loc)
+			session_dir=self.getSessionDir()
+			if not os.path.isdir(session_dir):
+				os.makedirs(session_dir)
+			session_loader_loc=os.path.join(session_dir,loader_name)
+			#print session_hostmap_loc
+			#print self.parent.save_to_dir
+			if os.path.isfile(session_loader_loc):
+				print 'session host map already exists'
+
+			else:
+				os.chdir(home)
+				if loader_loc.startswith(r'.'):
+					#relative
+					real_loader_loc=os.path.join(transport_home,loader_loc)
+				else:
+					real_loader_loc=os.path.realpath(loader_loc)
+				assert os.path.isfile(real_loader_loc), 'sqlloader template does not exists at\n%s' % real_loader_loc
+				#print real_hostmap_loc
+				#print session_hostmap_loc
+				shutil.copyfile(real_loader_loc,session_loader_loc)
+				#obj.SetValue(session_hostmap_loc)
+				#self.Save()
+				#print 'created new session_hostmap at \n%s' % session_hostmap_loc
+				send('set_loader_profile', (session_loader_loc))
+
+			
 	def OnEditTestConnectSQL(self, evt):
 		print 'OnEditTestConnectSQL'
 		#import webbrowser		
@@ -9139,7 +9218,7 @@ class DataBuddy(wx.Frame):
 			self.statusbar.SetStatusText("Welcome To %s!" % app_title, 1)
 			#self.statusbar.SetStatusText('', 2)		
 		self.args_panel= pnl_args(self,self.copy_vector,self.tmpl,self.the_id,(self.cargs,self.fargs,self.targs),size=(-1,-1),style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
-		self.preetl='not set'
+		#self.preetl='not set'
 		if 1:
 			
 			self.nb = fnb.FlatNotebook(panel, -1, agwStyle=fnb.FNB_NO_TAB_FOCUS|fnb.FNB_COLOURFUL_TABS|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_NO_X_BUTTON|fnb.FNB_NO_NAV_BUTTONS|fnb.FNB_NODRAG) #|fnb.FNB_DCLICK_CLOSES_TABS|fnb.FNB_X_ON_TAB|fnb.FNB_X|fnb.FNB_TAB_X|fnb.FNB_BACKGROUND_GRADIENT|fnb.FNB_BTN_NONE|fnb.FNB_BTN_PRESSED|fnb.FNB_COLOURFUL_TABS|fnb.FNB_BOTTOM|fnb.FNB_SMART_TABS|fnb.FNB_DROPDOWN_TABS_LIST|fnb.FNB_DROP_DOWN_ARROW|fnb.FNB_BTN_HOVER|fnb.FNB_NO_X_BUTTON) #|fnb.FNB_HIDE_ON_SINGLE_TAB)
