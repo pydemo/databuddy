@@ -85,6 +85,7 @@ try:
 except ImportError: # if it's not there locally, try the wxPython lib.
     from wx.lib.agw import ultimatelistctrl as ULC
 
+
 try:
 	from agw import flatmenu as FM
 	from agw.artmanager import ArtManager, RendererBase, DCSaver
@@ -115,6 +116,8 @@ def import_module(filepath):
 exe=False
 
 e=sys.exit
+#print wx.VERSION
+
 blog=cu.blog
 home=os.path.dirname(os.path.abspath(__file__))
 tmpl_home=os.path.join(home,'templates')
@@ -4177,7 +4180,8 @@ class NewSessionDialog(wx.Dialog):
 		self.Fit()
 		self.SetSize((-1,size[1]))
 		self.recentMenu=None
-		self.max_recent=5
+		self.max_recent=20
+		self.highlight=['ORA11G']
 	def getSessionLibNames(self):
 		global session_home
 		libs= [d for d in os.listdir(session_home) if os.path.isdir(os.path.join(session_home,d))]
@@ -4537,34 +4541,56 @@ class NewSessionDialog(wx.Dialog):
 						self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(a,b))
 						self.recentMenu.AppendItem(menuItem)
 					
-				self._popUpMenu.AppendSeparator()	
-			for k in self.api2:
-				self.i +=1
-				Menu1 = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, 'From %s' % dbf[k], '', wx.ITEM_NORMAL, Menu1)
-				self._popUpMenu.AppendItem(menuItem)
-				#if not k in ['OR']:
-				#	menuItem.Enable(False)
-				
-				for sm in self.api_menu[k]:
-					if len(self.api_menu[k])>1:
-						self.i +=1
-						self.create_Menu2(Menu1,sm,dbf)
-						
-					else:
-						for k2 in self.api2:
+				self._popUpMenu.AppendSeparator()
+			if len(self.api2)>1:
+				for k in self.api2:
+					self.i +=1
+					Menu1 = FM.FlatMenu()
+					menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, 'From %s' % dbf[k], '', wx.ITEM_NORMAL, Menu1)
+					self._popUpMenu.AppendItem(menuItem)
+					#if not k in ['OR']:
+					#	menuItem.Enable(False)
+					
+					for sm in self.api_menu[k]:
+						if len(self.api_menu[k])>1:
 							self.i +=1
-							if len(self.api_menu[k2])>1:
-								self.create_Menu3(Menu1,k2,dbf,from_db=sm,from_to='To')
-							else:
-								self.create_Menu4(Menu1,self.api_menu[k2][0],from_db=sm, from_to='To')
-						Menu1.AppendSeparator()
-						for sm in conf.ff:
+							self.create_Menu2(Menu1,sm,dbf)
+							
+						else:
+							for k2 in self.api2:
+								self.i +=1
+								if len(self.api_menu[k2])>1:
+									self.create_Menu3(Menu1,k2,dbf,from_db=sm,from_to='To')
+								else:
+									self.create_Menu4(Menu1,self.api_menu[k2][0],from_db=sm, from_to='To')
+							Menu1.AppendSeparator()
+							for sm in conf.ff:
+								self.i +=1
+								#Menu1 = FM.FlatMenu()
+								menuItem = FM.FlatMenuItem(Menu1, 20000+self.i, 'To %s' % sm, '', wx.ITEM_NORMAL)
+								Menu1.AppendItem(menuItem)									
+								self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(dbf[k],sm))
+			else:
+				if 1:
+					k=self.api2[0]
+					Menu1=self._popUpMenu
+					for sm in self.api_menu[k]:
+						if len(self.api_menu[k])>1:
 							self.i +=1
-							#Menu1 = FM.FlatMenu()
-							menuItem = FM.FlatMenuItem(Menu1, 20000+self.i, 'To %s' % sm, '', wx.ITEM_NORMAL)
-							Menu1.AppendItem(menuItem)									
-							self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(dbf[k],sm))
+							self.create_Menu2_short(Menu1,sm,dbf)
+							
+						else:
+							k2= self.api2[0]
+							if 1:
+								self.i +=1
+								self.create_Menu4(Menu1,self.api_menu[k2][0],from_db=sm, from_to='To 2 ')
+							Menu1.AppendSeparator()
+							for sm in conf.ff:
+								self.i +=1
+								#Menu1 = FM.FlatMenu()
+								menuItem = FM.FlatMenuItem(Menu1, 20000+self.i, 'To %s' % sm, '', wx.ITEM_NORMAL)
+								Menu1.AppendItem(menuItem)									
+								self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(dbf[k],sm))				
 			self._popUpMenu.AppendSeparator()	
 			for sm in conf.ff:
 				self.i +=1
@@ -4614,6 +4640,33 @@ class NewSessionDialog(wx.Dialog):
 			menuItem = FM.FlatMenuItem(Menu2, 20000+self.i, 'To %s' % s, '', wx.ITEM_NORMAL)
 			self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(sm,s))
 			Menu2.AppendItem(menuItem)	
+	def create_Menu2_short(self,Menu1,sm,dbf, from_to='From'):
+		self.i +=1
+		Menu2 = FM.FlatMenu()
+		if sm in self.highlight:
+			imageFile = os.path.join(home,"images/database_red_16.png")
+			context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)
+		
+			menuItem = FM.FlatMenuItem(Menu1, 20000+self.i, '%s %s' % (from_to, conf.dbs[sm]) , '', wx.ITEM_NORMAL, Menu2,context_bmp)
+		else:
+			menuItem = FM.FlatMenuItem(Menu1, 20000+self.i, '%s %s' % (from_to, conf.dbs[sm]) , '', wx.ITEM_NORMAL, Menu2)
+			
+		
+		Menu1.AppendItem(menuItem)
+		#self.set_sub_submenu(subSubMenu,1, 'CSV')
+		k2=self.api2[0]
+		for sm2 in self.api_menu[k2]:
+			self.i +=1
+			self.create_Menu4(Menu2,sm2,sm,'To')
+
+		#append to_csv
+		Menu2.AppendSeparator()
+		for s in conf.ff:
+			self.i +=1
+			#Menu1 = FM.FlatMenu()
+			menuItem = FM.FlatMenuItem(Menu2, 20000+self.i, 'To %s' % s, '', wx.ITEM_NORMAL)
+			self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(sm,s))
+			Menu2.AppendItem(menuItem)	
 	
 	def create_Menu3(self,Menu2,k2,dbf,from_db, from_to='To'):
 		#print from_db, k2
@@ -4640,7 +4693,18 @@ class NewSessionDialog(wx.Dialog):
 
 	def create_Menu4(self,Menu3,sm2,from_db, from_to='To'):
 		self.i +=1
-		menuItem = FM.FlatMenuItem(Menu3, wx.NewId(), "%s %s" % (from_to, conf.dbs[sm2]) , "", wx.ITEM_NORMAL)
+		#print sm2, from_db
+		#imageFile = os.path.join(home,"images/database_grey_16.png")
+		if sm2 in self.highlight:
+			imageFile = os.path.join(home,"images/database_red_16.png")
+			context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)
+		
+			menuItem = FM.FlatMenuItem(Menu3, wx.NewId(), "%s %s" % (from_to, conf.dbs[sm2]) , "", wx.ITEM_NORMAL, None,context_bmp)
+		else:
+			menuItem = FM.FlatMenuItem(Menu3, wx.NewId(), "%s %s" % (from_to, conf.dbs[sm2]) , "", wx.ITEM_NORMAL)
+		#menuItem.SetFont(wx.Font(10, wx.SWISS, wx.ITALIC, wx.BOLD, False, "Courier New"))
+		#menuItem.SetTextColour(wx.RED)
+		#pprint(dir(menuItem))
 		self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(from_db,sm2))
 		Menu3.AppendItem(menuItem)
 			
@@ -9094,6 +9158,13 @@ class DataBuddy(wx.Frame):
 		#super(DataBuddy, self).__init__(parent, title=title , size=(900, 565))
 		global app_title, home
 		wx.Frame.__init__(self, None, wx.ID_ANY, title=app_title, size=size)
+		self.SetIcon(images.Mondrian.GetIcon())
+		wx.SystemOptions_SetOption("msw.remap", "0")
+		#self.SetTitle("FlatMenu wxPython Demo ;-D")
+
+		#if _hasAUI:
+		#	self._mgr = AuiManager()
+		#	self._mgr.SetManagedWindow(self)		
 		self._vectMenu=None
 		#self._popUpMenu = None
 		#self.splitter = wx.SplitterWindow(self, ID_SPLITTER, style=wx.SP_BORDER)
@@ -11475,7 +11546,7 @@ class AboutDlg2(wx.Frame):
 		page="""
 <h2>%s</h2>						
 <p>Ad-hoc data migrator for Oracle 11G.</p>
-<p>Author: %s (<a href="mailto:alexbuzunov@gmail.com?subject=%s issue&body=Hi, Alex. Here's a screenshot and description of a problem.">Support</a>)</p>
+<p>Author: %s (<a href="mailto:alexbuzunov@gmail.com?subject=%s issue&body=Hi, Alex. Here's a screen-shot and description of a problem.">Support</a>)</p>
 <p><b>Software used in making this tool:</h3></p>
 <p><b><a href="http://www.python.org">Python 2.7</a></b></p>
 <p><b><a href="http://www.wxpython.org">wxPython 2.8</a></b></p>
