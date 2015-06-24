@@ -114,6 +114,7 @@ def import_module(filepath):
 	return py_mod
 ########################################################################	
 exe=True
+exe=False
 
 e=sys.exit
 #print wx.VERSION
@@ -3411,15 +3412,15 @@ class SessionListCtrlPanelManager(wx.Panel):
 		item2 = wx.MenuItem(self._rmenu, wx.ID_ANY, 
 						   "New Session Library\tCtrl+F5", 
 						   "New Session Library")
-		item3 = wx.MenuItem(self._rmenu, wx.ID_ANY, 
-						   "Open\tCtrl+F6", 
-						   "Open")						   
+		#item3 = wx.MenuItem(self._rmenu, wx.ID_ANY, 
+		#				   "Open\tCtrl+F6", 
+		#				   "Open")						   
 		self.Bind(wx.EVT_MENU, self.onDeletePage, item)
 		self.Bind(wx.EVT_MENU, self.onAddPage, item2)
-		self.Bind(wx.EVT_MENU, self.onOpenPage, item3)
+		#self.Bind(wx.EVT_MENU, self.onOpenPage, item3)
 		self._rmenu.AppendItem(item)
 		self._rmenu.AppendItem(item2)
-		self._rmenu.AppendItem(item3)
+		#self._rmenu.AppendItem(item3)
 	#----------------------------------------------------------------------
 	def onAddPage(self, event):
 		"""
@@ -3631,15 +3632,15 @@ class TemplateListCtrlPanelManager(wx.Panel):
 		item2 = wx.MenuItem(self._rmenu, wx.ID_ANY, 
 						   "New Template Library\tCtrl+F5", 
 						   "New Template Library")
-		item3 = wx.MenuItem(self._rmenu, wx.ID_ANY, 
-						   "Open\tCtrl+F6", 
-						   "Open")						   
+		#item3 = wx.MenuItem(self._rmenu, wx.ID_ANY, 
+		#				   "Open\tCtrl+F6", 
+		#				   "Open")						   
 		self.Bind(wx.EVT_MENU, self.onDeletePage, item)
 		self.Bind(wx.EVT_MENU, self.onAddPage, item2)
-		self.Bind(wx.EVT_MENU, self.onOpenPage, item3)
+		#self.Bind(wx.EVT_MENU, self.onOpenPage, item3)
 		self._rmenu.AppendItem(item)
 		self._rmenu.AppendItem(item2)
-		self._rmenu.AppendItem(item3)
+		#self._rmenu.AppendItem(item3)
 	#----------------------------------------------------------------------
 	def onAddPage(self, event):
 		"""
@@ -4184,6 +4185,25 @@ class NewSessionDialog(wx.Dialog):
 					self.targlistCtrl.EnsureVisible(i)
 					sname='%s_to_%s' % (sname,self.def_tmpl[1])
 			self.setDefaultName(sname)
+			a,b = self.copy_vector
+			if 1:
+				if a.startswith('CSV'):
+					for n in self.tobjects:
+						self.s_rb[n].Enable(False)
+					for n in self.fobjects:
+						self.s_rb[n].Enable(True)
+				elif b.startswith('CSV'):
+					for n in self.tobjects:
+						self.s_rb[n].Enable(True)
+					for n in self.fobjects:
+						self.s_rb[n].Enable(True)
+				else:
+					for n in self.tobjects:
+						self.s_rb[n].Enable(True)
+					for n in self.fobjects:
+						self.s_rb[n].Enable(True)
+				
+			#self.rb_boxsizer.Enable(True)
 		#old_size = self.GetSize()
 		self.Layout()
 		self.Fit()
@@ -9919,22 +9939,27 @@ class DataBuddy(wx.Frame):
 		global hmap
 		#global conf
 		hm_type= 'session'
+		#print self.args_panel.hm
 		if not self._hmMenu:
 		
 			self._hmMenu = FM.FlatMenu()
 			#mitems={0:'Open SQL*Plus', 1: 'count(*)', 2:'DESCRIBE'}
 			hm=self.args_panel.hm
-			if not hm:
-				hm_type='default'
-				default_hostmap_loc = os.path.join(transport_home, 'config','host_map_v2.py')
+			#default_hm=None
+			
+			#print default_hostmap_loc
+			#if not hm:
+			#	hm_type='default'
+			#default_hostmap_loc = os.path.join(transport_home, 'config','host_map_v2.py')
 				#new_hostmap_loc=self.parent.args_panel.CreateNewSessionHostMap(hostmap_loc)
 				#if new_hostmap_loc not in [hostmap_loc]:
 				#	self.obj[k][1].SetValue(new_hostmap_loc)
 				#e(0)
 				#print conf._to.join(self.copy_vector)
 				
-				hm = hmap(('ora11g','ora11g'), default_hostmap_loc)
-				self.args_panel.hm=hm
+			#	default_hm = hmap(('ora11g','ora11g'), default_hostmap_loc)
+				#self.args_panel.hm=default_hm
+			#	hm=default_hm
 
 			(hostmap, active_map) =hm.get_host_map()
 			#print active_map
@@ -9947,13 +9972,39 @@ class DataBuddy(wx.Frame):
 				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnHostMapMenu,(v,hm))
 				self._hmMenu.AppendItem(menuItem)
 				if v==active_map:
-					menuItem.Check(True)				
+					menuItem.Check(True)	
+			default_hostmap_loc = os.path.join(transport_home, 'config','host_map_v2.py')
+			is_default = hm.host_map_loc in [default_hostmap_loc]
 			if 1:
 				self.i +=1
 				self._hmMenu.AppendSeparator()
-				menuItem = FM.FlatMenuItem(self._hmMenu, 20000+self.i, 'Edit %s host_map.py' % hm_type, '', wx.ITEM_NORMAL)
-				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnEditHostMap,(hm.host_map_loc))
+				imageFile = os.path.join(home,'images','gear_24_g.png')
+				context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)
+				menuItem = FM.FlatMenuItem(self._hmMenu, 20000+self.i, 'Edit session host_map.py', '', wx.ITEM_NORMAL, None, context_bmp)
+				#print self.args_panel.hm.host_map_loc				
+				if not is_default:					
+					self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnEditHostMap,(hm.host_map_loc))
+					menuItem.Enable(True)
+				else:
+					menuItem.Enable(False)
 				self._hmMenu.AppendItem(menuItem)
+			if 1:
+				self.i +=1
+				self._hmMenu.AppendSeparator()
+				#imageFile = os.path.join(home,"images/database_red_16.png")
+				imageFile = os.path.join(home,'images','gear_24_b.png')
+				context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)
+				
+				menuItem = FM.FlatMenuItem(self._hmMenu, 20000+self.i, 'Edit global host_map.py' , '', wx.ITEM_NORMAL, None, context_bmp)
+				#print default_hm.host_map_loc
+				if is_default:
+					menuItem.Enable(True)
+					self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnEditHostMap,(hm.host_map_loc))
+				else:
+					#default_hm = hmap(('ora11g','ora11g'), default_hostmap_loc)
+					menuItem.Enable(True)
+					self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnEditHostMap,(default_hostmap_loc))
+				self._hmMenu.AppendItem(menuItem)				
 			
 	def OnEditHostMap(self, event,params):				
 		(host_map_loc)=params	

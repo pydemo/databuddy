@@ -1,0 +1,1 @@
+SELECT p.* FROM     dbo.Timestamp_test_from p;
