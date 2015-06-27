@@ -231,16 +231,19 @@ Database | Spooler | Loader | DbShell
 - [x] let user change arg list for a given group. **DONE**
 - [x] detect DONE/FAILED from cmd window. **DONE**
 - [x] let user disable post-etl email (Common: email_to). **DONE**
-- [ ] change copy_vector format from db2db to db->db or db_2_db
+- [ ] change copy_vector format from db2db to db-db **DONE**
 - [x] fix flicker on frame freeze **DONE**
 - [x] save on close **DONE**
 - [x] Table DDL export for Oracle **DONE**
-- [x] validate all path arguments before run
+- [x] validate all path arguments before run **DONE**
 - [x] add create template menu **DONE**
 - [x] add "--host_map" arg to set hosts for each thread **DONE**
 - [x] let user change host mapping **DONE**
 - [x] save as template **DONE**
 - [x] save as **DONE**
+- [x] create main menu **DONE**
+- [ ] let user configure dafault argument values  
+- [x] let user chenge frame size **DONE**
 - [ ] test ezconnect
 - [x] add "Output" tab **DONE**
 - [ ] add '--compress_spool' arg for zipped output
@@ -248,12 +251,14 @@ Database | Spooler | Loader | DbShell
 - [x] fix session sort **DONE**
 - [x] fix session refresh **DONE**
 - [ ] let user set primary dbs, source/target dbs
-- [ ] add scp/ftp/sftp as data source/target
-- [ ] make all paths relative to transport_home 
+- [ ] add scp/ftp/sftp as data source/target 
+- [ ] make all paths relative to transport_home **DONE**
 - [ ] create wizard for "New Session" template selection
 - [ ] distinguish A-Templates from B-Templates
-- [x] let data copy to be executed on Linux (bash via ssh)**DONE**
+- [x] let data copy to be executed on Linux (bash via nssh)**DONE**
 - [ ] let data spool/load to be executed on Linux (bash via ssh)
+- [ ] use netcat for job status instead of keeping open ssh conn
+- [ ] use named file for QC status report instead of CLI title.
 - [x] add [Oracle 12c Release 1](http://docs.oracle.com/database/121/index.htm) **DONE**
 - [x] add [Oracle 11g Release 2](https://docs.oracle.com/cd/E11882_01/nav/portal_4.htm) **DONE**
 - [x] add [SQLServer](https://msdn.microsoft.com/en-US/sqlserver)   **DONE**
