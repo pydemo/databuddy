@@ -16,6 +16,8 @@ Windows|32bit|[0.3.5 beta](https://github.com/data-buddy/DataBuddy/releases/tag/
 - Your data integration processes are stored as session files and can be scripted into your ETL pipelines or used in ad-hoc manner.
 - Lets you develop Extract-Copy-Load processes to scrub and ingest large, distinct data sets from multiple sources into a unified data warehouse.
 - Provides structured and ad-hoc access to large datasets.
+- Databuddy also supports enables seamless, bi-directional integration between all major RDBMSs, such as Oracle, SQLServer, DB2, SAP Sybase, Informix, MySQL, Infobright, MariaDB, and PostgreSQL. In addition,
+it supports self-service data extraction, preparation, and cleansing by database developers.
 
 ##Audience
 
