@@ -249,7 +249,8 @@ Database | Spooler | Loader | DbShell
 - [ ] test ezconnect
 - [x] add "Output" tab **DONE**
 - [ ] add '--compress_spool' arg for zipped output
-- [ ] add sqlloader.py
+- [x] add sqlloader.py **DONE**
+- [ ] load/save app state.
 - [x] fix session sort **DONE**
 - [x] fix session refresh **DONE**
 - [ ] let user set primary dbs, source/target dbs
