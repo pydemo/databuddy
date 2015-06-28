@@ -292,6 +292,7 @@ Database | Spooler | Loader | DbShell
 - [ ] add [Netezza](https://www-304.ibm.com/support/knowledgecenter/SSULQD_7.2.0/com.ibm.nz.welcome.doc/doc/welcome.html)   
 - [ ] add Parstream
 - [ ] add ParAccel
+- [ ] add [MarkLogic](http://www.marklogic.com/what-is-marklogic/features/)   
 - [ ] add [Amazon SimpleDB](http://aws.amazon.com/documentation/simpledb/)  
 - [ ] add [Twitter Streaming API](https://dev.twitter.com/streaming/overview)  (extract)
 - [ ] add [Google Analytics](https://developers.google.com/analytics/devguides/reporting/core/v3/quickstart/service-py)  
@@ -406,6 +407,7 @@ Database |Version | Export | Import | DbShell|File formats
 [Elasticsearch](https://www.found.no/foundation/elasticsearch-as-nosql/)   |||||
 [Riak](https://docs.basho.com/)|||||
 [MemSQL](http://docs.memsql.com/latest/)|||||
+[MarkLogic](http://www.marklogic.com/what-is-marklogic/features/) |||||
 
 ## Vendor architecture
 [MongoDB Architecture Guide] (http://s3.amazonaws.com/info-mongodb-com/MongoDB_Architecture_Guide.pdf)
