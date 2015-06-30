@@ -33,6 +33,17 @@ dbs={	'SYASE':'SAP Sybase ASE', 'SYANY':'Sybase SQL Anywhere','SYIQ':'Sybase IQ'
 		'JSON':'JSON',
 		'DDL':'DDL',		
 		}
+dbfam={	'SYASE':'Sybase', 'SYANY':'Sybase','SYIQ':'Sybase',
+		'ORA12C':'Oracle','ORA11G':'Oracle','ORA10G':'Oracle','ORA9I':'Oracle','ORA8I':'Oracle','ORA733':'Oracle', 'ORAXE':'Oracle', 'ORAEXA':'Oracle',
+		'TTEN':'TimesTen', 
+		'SLITE':'SQL Lite',
+		'SSEXP':'SQL Server','SSENT':'SQL Server',
+		'MYSQL':'MySQL', 'MARIA':'MariaDB', 'INFOB':'Infobright',
+		'PGRES':'PostgreSQL',		
+		'DBTAES':'DB2','DBTES':'DB2','DBTAWS':'DB2','DBTWS':'DB2','DBTE':'DB2', 'DBTEC':'DB2', 'DBTDE':'DB2',
+		'INFOR':'Informix', 'INFORC':'Informix',
+		'MONGO':'MongoDB',		
+		}		
 import __builtin__
 __builtin__.dbs = dbs		
 import release as rel 

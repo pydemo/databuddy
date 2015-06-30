@@ -100,7 +100,18 @@ except ImportError: # if it's not there locally, try the wxPython lib.
 
 from qc32.config.include.oracle import target	
 from subprocess import Popen, PIPE,CREATE_NEW_CONSOLE
+def import_module(filepath):
+	class_inst = None
+	#expected_class = 'MyClass'
 
+	mod_name,file_ext = os.path.splitext(os.path.split(filepath)[-1])
+	assert os.path.isfile(filepath), 'File %s does not exists.' % filepath
+	if file_ext.lower() == '.py':
+		py_mod = imp.load_source(mod_name, filepath)
+
+	elif file_ext.lower() == '.pyc':
+		py_mod = imp.load_compiled(mod_name, filepath)
+	return py_mod
 home=os.path.dirname(os.path.abspath(__file__))
 app_title='%s %s' % (__title__,__version__)
 
@@ -119,7 +130,11 @@ __builtin__.__email__ = __email__
 __builtin__.__github__= __github__
 __builtin__.__status__ = __status__
 
-from include.main import *
+main_file=os.path.join('include','main.py')
+main=import_module(main_file)
+#self.api_args=apimod.aa
+
+#from include.main import *
 
 if __name__ == '__main__':
 	try:
@@ -143,7 +158,7 @@ if __name__ == '__main__':
 			global imgs
 			imgs = i
 			self.Init()
-			self.frame = DataBuddy(None, -1,title=app_title, size=dimensions['frame'])
+			self.frame = main.DataBuddy(None, -1,title=app_title, size=main.dimensions['frame'])
 			
 			#1350,897
 			if default_session:

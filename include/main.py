@@ -68,7 +68,7 @@ import wx.combo
 #import yaml
 import re
 import wx.lib.scrolledpanel
-
+import  wx.lib.masked as  masked
 
 import shlex 
 		
@@ -3959,10 +3959,14 @@ class NewSessionDialog(wx.Dialog):
 		self.tc_tables={}
 		self.shards_btn={}
 		self.tmpl={}
-		self.copy_vector=[]
+		self.copy_vector=[None,None]
 		self.userhome = os.path.expanduser('~')
 		self.recent_fname= os.path.join(self.userhome,'recent.p')
 		self.recent=[]
+		self._defMenu=None
+		#self.s_default=None
+		#self.t_default=None		
+		self.default_db='Oracle'
 		if os.path.isfile(self.recent_fname):
 			self.recent=self.readRecent()
 
@@ -4061,6 +4065,7 @@ class NewSessionDialog(wx.Dialog):
 							self.targlistCtrl.SetStringItem(0, i+1, details[i])		
 		#self.listCtrl.Select(0)
 		#button4 = wx.Button(self, ID_EXIT, "Test")
+		
 		if 0:
 			sb = wx.StaticBox(self, label='Type')
 			boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
@@ -4079,12 +4084,32 @@ class NewSessionDialog(wx.Dialog):
 			sb = wx.StaticBox(self, label='Copy Vector')
 			vboxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
 			#rb_v=wx.RadioButton(panel, label="ora2ora",style=wx.RB_GROUP)
-			lbl='Click to set'
-			if self.def_cv:
+			lbl='Start(%s)' % self.default_db
+			#print self.def_cv
+			if self.def_cv and self.def_cv[0] and self.def_cv[1]:
+				#print self.def_cv
+				self.copy_vector=self.def_cv	
+				#self.reset_lbl()
+				#lbl='-'. join (self.copy_vector)
+			#else:
+			if 0:
+				if self.s_default:
+					self.copy_vector[0] = self.s_default
+					#lbl='-'. join ([self.s_default,'???'])
+					self.reset_lbl()
+				if self.t_default:
+					self.copy_vector[1] = self.t_default
+					#lbl='-'. join (['???', self.t_default])
+					self.reset_lbl()
+
+				
+				
+			#if self.def_cv:
 			#	#lbl='%s->%s' % (conf.dbs[self.def_cv[0]], conf.dbs[self.def_cv[1]])
-				lbl='Start' # % (self.def_cv[0], self.def_cv[1])
-				self.copy_vector=[self.def_cv[0].upper(), self.def_cv[1].upper()]
-			self.b_vector = wx.Button(self, label=lbl,size=(120,35))
+				
+			#	self.copy_vector=[self.def_cv[0].upper(), self.def_cv[1].upper()]
+			
+			self.b_vector = wx.Button(self, label=lbl,size=(100,35))
 			#if self.def_cv:
 				#self.set_vector_btn(self.def_cv[0], self.def_cv[1])
 				
@@ -4258,20 +4283,32 @@ class NewSessionDialog(wx.Dialog):
 			self.api_from = [ f.upper() for f in os.listdir(apidir) if os.path.isdir(os.path.join(apidir,f)) and f not in conf.ff ]
 			#print self.api_from
 			#e(0)
-			self.api2= list({ f[:2] for f in self.api_from})
+			self.api2= list(set(conf.dbfam.values()))
 			self.api2.sort()
 			#print self.api2
+			#e(0)
 			self.api_menu={}
+			if 0:
+				for m in self.api_from:
+					print m
+					
+					if not self.api_menu.has_key(m[:2]):
+						self.api_menu[m[:2]]=[]
+					self.api_menu[m[:2]].append(m)
 			for m in self.api_from:
-				#print m
-				
-				if not self.api_menu.has_key(m[:2]):
-					self.api_menu[m[:2]]=[]
-				self.api_menu[m[:2]].append(m)
+				k=conf.dbfam[m]
+				assert m in conf.dbfam.keys(), '"%s: is not defined in dbfam' % m
+				if not self.api_menu.has_key(k):
+					self.api_menu[k]=[]
+				self.api_menu[k].append(m)
+			#pprint (self.api_menu)
+			#e(0)
 			#print pprint(self.api_menu)
-		if self.def_cv and self.def_cv[0] and self.def_cv[1]:
+
+			
+		if self.copy_vector and self.copy_vector[0] and self.copy_vector[1]:
 			#print self.def_cv
-			self.copy_vector=self.def_cv
+			#self.copy_vector=self.def_cv
 			self.refresh_src_list()
 			sname=''
 			for i in range(self.listCtrl.GetItemCount()):
@@ -4311,8 +4348,10 @@ class NewSessionDialog(wx.Dialog):
 		self.recentMenu=None
 		self.max_recent=20
 		self.highlight=['ORA11G']
-		self._defMenu=None
-
+	def reset_lbl(self):
+		#pprint(self.copy_vector)
+		lbl='Start(%s)' % self.default_db
+		self.b_vector.SetLabel(lbl)
 	def OnSetDefaultsMenu(self, event):
 		# Demonstrate using the wxFlatMenu without a menu bar
 		btn = event.GetEventObject()
@@ -4343,8 +4382,39 @@ class NewSessionDialog(wx.Dialog):
 		if not self._defMenu:
 		
 			self._defMenu = FM.FlatMenu()
-
+			#pprint(conf.dbfam)
 			if 1:
+				self.i +=1
+				#self._defMenu.AppendSeparator()
+				imageFile = os.path.join(home,'images','Right_Arrow_16.png')
+				context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)
+				Menu1 = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(self._defMenu, wx.NewId(), 'Set default db', '', wx.ITEM_NORMAL, Menu1, context_bmp)
+				#print self.args_panel.hm.host_map_loc				
+				#if not is_default:					
+				#self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnEditHostMap,(hm.host_map_loc))
+				menuItem.Enable(True)
+				self._defMenu.AppendItem(menuItem)
+				dbfam= list(set([conf.dbfam[x] for x in conf.dbfam.keys()]))				
+				letters= list(set([x[0] for x in dbfam]))				
+				for ch in letters:
+					imageFile = os.path.join(home,'images','Right_Arrow_16.png')
+					context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)
+					Menu2 = FM.FlatMenu()
+					menuItem = FM.FlatMenuItem(Menu1, wx.NewId(), ch, '', wx.ITEM_NORMAL, Menu2, context_bmp)
+					#self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnEditHostMap,(hm.host_map_loc))
+					menuItem.Enable(True)
+					Menu1.AppendItem(menuItem)
+					for db in [x for x in dbfam if x.startswith(ch)]:
+						imageFile = os.path.join(home,'images','database_green_16.png')
+						context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)						
+						menuItem = FM.FlatMenuItem(Menu2, wx.NewId(), db, '', wx.ITEM_NORMAL, None, context_bmp)
+						self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnSetDefaultDb,(db,))
+						menuItem.Enable(True)
+						Menu2.AppendItem(menuItem)
+						
+						
+			if 0:
 				self.i +=1
 				#self._defMenu.AppendSeparator()
 				imageFile = os.path.join(home,'images','Right_Arrow_16.png')
@@ -4369,7 +4439,7 @@ class NewSessionDialog(wx.Dialog):
 						imageFile = os.path.join(home,'images','database_green_16.png')
 						context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)						
 						menuItem = FM.FlatMenuItem(Menu2, wx.NewId(), conf.dbs[db], '', wx.ITEM_NORMAL, None, context_bmp)
-						#self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnEditHostMap,(hm.host_map_loc))
+						self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnSetSourceDefault,(db,))
 						menuItem.Enable(True)
 						Menu2.AppendItem(menuItem)
 						
@@ -4377,36 +4447,59 @@ class NewSessionDialog(wx.Dialog):
 				
 				#else:
 				#	menuItem.Enable(False)
-				
-				imageFile = os.path.join(home,'images','Right_Arrow_16.png')
-				context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)
-				Menu1 = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(self._defMenu, wx.NewId(), 'Set "Target" default db', '', wx.ITEM_NORMAL, Menu1, context_bmp)
-				#print self.args_panel.hm.host_map_loc				
-				#if not is_default:					
-				#self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnEditHostMap,(hm.host_map_loc))
-				menuItem.Enable(True)
-				#else:
-				#	menuItem.Enable(False)
-				self._defMenu.AppendItem(menuItem)	
-				letters= list(set([x[0] for x in conf.dbs.keys() if x not in conf.ff]))				
-				for ch in letters:
+				if 0:
 					imageFile = os.path.join(home,'images','Right_Arrow_16.png')
 					context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)
-					Menu2 = FM.FlatMenu()
-					menuItem = FM.FlatMenuItem(Menu1, wx.NewId(), ch, '', wx.ITEM_NORMAL, Menu2, context_bmp)
+					Menu1 = FM.FlatMenu()
+					menuItem = FM.FlatMenuItem(self._defMenu, wx.NewId(), 'Set "Target" default db', '', wx.ITEM_NORMAL, Menu1, context_bmp)
+					#print self.args_panel.hm.host_map_loc				
+					#if not is_default:					
 					#self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnEditHostMap,(hm.host_map_loc))
 					menuItem.Enable(True)
-					Menu1.AppendItem(menuItem)
-					for db in [x for x in conf.dbs.keys() if x not in conf.ff and x.startswith(ch)]:
-						imageFile = os.path.join(home,'images','database_green_16.png')
-						context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)						
-						menuItem = FM.FlatMenuItem(Menu2, wx.NewId(), conf.dbs[db], '', wx.ITEM_NORMAL, None, context_bmp)
+					#else:
+					#	menuItem.Enable(False)
+					self._defMenu.AppendItem(menuItem)	
+					letters= list(set([x[0] for x in conf.dbs.keys() if x not in conf.ff]))				
+					for ch in letters:
+						imageFile = os.path.join(home,'images','Right_Arrow_16.png')
+						context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)
+						Menu2 = FM.FlatMenu()
+						menuItem = FM.FlatMenuItem(Menu1, wx.NewId(), ch, '', wx.ITEM_NORMAL, Menu2, context_bmp)
 						#self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnEditHostMap,(hm.host_map_loc))
 						menuItem.Enable(True)
-						Menu2.AppendItem(menuItem)
+						Menu1.AppendItem(menuItem)
+						for db in [x for x in conf.dbs.keys() if x not in conf.ff and x.startswith(ch)]:
+							imageFile = os.path.join(home,'images','database_green_16.png')
+							context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)						
+							menuItem = FM.FlatMenuItem(Menu2, wx.NewId(), conf.dbs[db], '', wx.ITEM_NORMAL, None, context_bmp)
+							self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnSetTargetDefault,(db,))
+							menuItem.Enable(True)
+							Menu2.AppendItem(menuItem)
 						
-					
+	def OnSetDefaultDb(self, event, params): 
+		[db] = params
+		#print db
+		self.default_db = db
+		#self.copy_vector[0] = self.s_default
+		#lbl='-'. join (['???', self.t_default])
+		self.reset_lbl()		
+		send('set_bar_status', (0,'Default DB is set to "%s" ' % db))
+		#self._popUpMenu.Clear()
+		#self.recentMenu.Clear()
+		#print (dir(self._popUpMenu))
+		del self._popUpMenu
+		del self.recentMenu
+		self._popUpMenu=None
+		self.recentMenu=None
+		#self._popUpMenu=None
+		#self.recentMenu=None
+	def OnSetTargetDefault_(self, event, params): 
+		[db] = params
+		self.t_default=db
+		self.copy_vector[1] = self.t_default
+		self.reset_lbl()		
+		send('set_bar_status', (0,'Target default DB is set to "%s" ' % db))
+
 	def getSessionLibNames(self):
 		global session_home
 		libs= [d for d in os.listdir(session_home) if os.path.isdir(os.path.join(session_home,d))]
@@ -4767,17 +4860,19 @@ class NewSessionDialog(wx.Dialog):
 						self.recentMenu.AppendItem(menuItem)
 					
 				self._popUpMenu.AppendSeparator()
-			if len(self.api2)>1:
+			if 0 and len(self.api2)>1:
 				for k in self.api2:
 					self.i +=1
 					Menu1 = FM.FlatMenu()
-					menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, 'From %s' % dbf[k], '', wx.ITEM_NORMAL, Menu1)
+					menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, 'From %s' % k, '', wx.ITEM_NORMAL, Menu1)
 					self._popUpMenu.AppendItem(menuItem)
 					#if not k in ['OR']:
 					#	menuItem.Enable(False)
-					
+					#print k
+					#pprint (self.api_menu)
+					e(0)
 					for sm in self.api_menu[k]:
-						if len(self.api_menu[k])>1:
+						if 1 or len(self.api_menu[k])>1:
 							self.i +=1
 							self.create_Menu2(Menu1,sm,dbf)
 							
@@ -4785,7 +4880,7 @@ class NewSessionDialog(wx.Dialog):
 							for k2 in self.api2:
 								self.i +=1
 								if len(self.api_menu[k2])>1:
-									self.create_Menu3(Menu1,k2,dbf,from_db=sm,from_to='To')
+									self.create_Menu3(Menu1,k2,from_db=sm,from_to='To')
 								else:
 									self.create_Menu4(Menu1,self.api_menu[k2][0],from_db=sm, from_to='To')
 							Menu1.AppendSeparator()
@@ -4795,39 +4890,52 @@ class NewSessionDialog(wx.Dialog):
 								menuItem = FM.FlatMenuItem(Menu1, 20000+self.i, 'To %s' % sm, '', wx.ITEM_NORMAL)
 								Menu1.AppendItem(menuItem)									
 								self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(dbf[k],sm))
-			else:
-				if 1:
-					k=self.api2[0]
-					Menu1=self._popUpMenu
-					for sm in self.api_menu[k]:
-						if len(self.api_menu[k])>1:
+			#else:
+			if 1:
+				k=self.default_db #self.api2[0]
+				#print self.api2
+				#e(0)
+				Menu1=self._popUpMenu
+				for sm in self.api_menu[k]:
+					if 1  or len(self.api_menu[k])>1:
+						self.i +=1
+						self.create_Menu2_short(Menu1,sm,dbf)
+						
+					else:
+						k2= self.api2[0]
+						if 1:
 							self.i +=1
-							self.create_Menu2_short(Menu1,sm,dbf)
-							
-						else:
-							k2= self.api2[0]
-							if 1:
-								self.i +=1
-								self.create_Menu4(Menu1,self.api_menu[k2][0],from_db=sm, from_to='To 2 ')
-							Menu1.AppendSeparator()
-							for sm in conf.ff:
-								self.i +=1
-								#Menu1 = FM.FlatMenu()
-								menuItem = FM.FlatMenuItem(Menu1, 20000+self.i, 'To %s' % sm, '', wx.ITEM_NORMAL)
-								Menu1.AppendItem(menuItem)									
-								self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(dbf[k],sm))				
+							self.create_Menu4(Menu1,self.api_menu[k2][0],from_db=sm, from_to='To 2 ')
+						
+
+						Menu1.AppendSeparator()
+						for sm in conf.ff:
+							self.i +=1
+							#Menu1 = FM.FlatMenu()
+							menuItem = FM.FlatMenuItem(Menu1, 20000+self.i, 'To %s' % sm, '', wx.ITEM_NORMAL)
+							Menu1.AppendItem(menuItem)									
+							self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(k,sm))	
+			if 1: #From other dbs
+				self._popUpMenu.AppendSeparator()
+				Menu1_2 = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(self._popUpMenu, wx.NewId(), 'From other DB', '', wx.ITEM_NORMAL, Menu1_2)
+				self._popUpMenu.AppendItem(menuItem)
+				self.from_other_db_Menu(Menu1_2)
+				#e(0)
 			self._popUpMenu.AppendSeparator()	
 			for sm in conf.ff:
 				self.i +=1
 				Menu1 = FM.FlatMenu()
 				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, 'From %s' % sm, '', wx.ITEM_NORMAL, Menu1)
 				self._popUpMenu.AppendItem(menuItem)	
+				#pprint (self.api_menu)
 				for k2 in self.api2:
 					self.i +=1
-					if len(self.api_menu[k2])>1:
-						self.create_Menu3(Menu1,k2,dbf,from_db=sm)
-					else:
-						self.create_Menu4(Menu1,self.api_menu[k2][0],from_db=sm)
+					if self.api_menu.has_key(k2): 					
+						if len(self.api_menu[k2])>1:
+							self.create_Menu3(Menu1,k2,from_db=sm)
+						else:
+							self.create_Menu4(Menu1,self.api_menu[k2][0],from_db=sm)
 						
 				
 		else:
@@ -4843,6 +4951,40 @@ class NewSessionDialog(wx.Dialog):
 					menuItem = FM.FlatMenuItem(self.recentMenu, 20000+self.i, '%s --> %s' % (conf.dbs[a],conf.dbs[b]), '', wx.ITEM_NORMAL)
 					self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(a,b))
 					self.recentMenu.AppendItem(menuItem)
+	def from_other_db_Menu(self,Menu):
+		for k in self.api_menu.keys():
+			#print k
+			if k not in [self.default_db]:
+				Menu1 = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(Menu, wx.NewId(), k, "", wx.ITEM_NORMAL, Menu1)
+				Menu.AppendItem(menuItem)
+				for k2 in self.api_menu[k]:
+					#self.create_Menu3(Menu1,k2,from_db=k)
+					
+					#print from_db, k2
+					#from_to='To_%s_%s' %(from_db,k2)
+					self.i +=1
+					Menu2 = FM.FlatMenu()
+					menuItem = FM.FlatMenuItem(Menu1, 20000+self.i, "From %s" % ( k2), "", wx.ITEM_NORMAL, Menu2)
+					Menu1.AppendItem(menuItem)
+					#if not k2 in ['OR']:
+					#	menuItem.Enable(False)
+					for sm2 in self.api_menu[self.default_db]:
+						#self.i +=1
+						self.create_Menu4(Menu2,sm2,k2,from_to='To')
+				
+	def to_other_db_Menu(self,Menu,from_db):
+		for k in self.api_menu.keys():
+			#print k
+			if k not in [self.default_db]:
+				Menu1 = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(Menu, wx.NewId(), k, "", wx.ITEM_NORMAL, Menu1)
+				Menu.AppendItem(menuItem)
+				for k2 in self.api_menu[k]:
+					#for sm2 in self.api_menu[self.default_db]:
+					#self.i +=1
+					self.create_Menu4(Menu1,k2,from_db,from_to='To')
+						
 
 	def create_Menu2(self,Menu1,sm,dbf, from_to='From'):
 		self.i +=1
@@ -4854,7 +4996,7 @@ class NewSessionDialog(wx.Dialog):
 		for k2 in self.api2:
 			self.i +=1
 			if len(self.api_menu[k2])>1:
-				self.create_Menu3(Menu2,k2,dbf,from_db=sm)
+				self.create_Menu3(Menu2,k2,from_db=sm)
 			else:
 				self.create_Menu4(Menu2,self.api_menu[k2][0],from_db=sm)
 		#append to_csv
@@ -4868,22 +5010,31 @@ class NewSessionDialog(wx.Dialog):
 	def create_Menu2_short(self,Menu1,sm,dbf, from_to='From'):
 		self.i +=1
 		Menu2 = FM.FlatMenu()
-		if sm in self.highlight:
-			imageFile = os.path.join(home,"images/database_red_16.png")
+		if sm in self.api_menu[self.default_db]:
+			imageFile = os.path.join(home,"images/database_green_16.png")
+			if sm in self.highlight:
+				imageFile = os.path.join(home,"images/database_red_16.png")
 			context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)
 		
-			menuItem = FM.FlatMenuItem(Menu1, 20000+self.i, '%s %s' % (from_to, conf.dbs[sm]) , '', wx.ITEM_NORMAL, Menu2,context_bmp)
+			menuItem = FM.FlatMenuItem(Menu1, wx.NewId(), '%s %s' % (from_to, conf.dbs[sm]) , '', wx.ITEM_NORMAL, Menu2,context_bmp)
 		else:
-			menuItem = FM.FlatMenuItem(Menu1, 20000+self.i, '%s %s' % (from_to, conf.dbs[sm]) , '', wx.ITEM_NORMAL, Menu2)
+			menuItem = FM.FlatMenuItem(Menu1, wx.NewId(), '%s %s' % (from_to, conf.dbs[sm]) , '', wx.ITEM_NORMAL, Menu2)
 			
 		
 		Menu1.AppendItem(menuItem)
-		#self.set_sub_submenu(subSubMenu,1, 'CSV')
-		k2=self.api2[0]
+		
+
+			
+		k2=self.default_db
 		for sm2 in self.api_menu[k2]:
 			self.i +=1
 			self.create_Menu4(Menu2,sm2,sm,'To')
-
+		if 1: #To other dbs
+			Menu2.AppendSeparator()
+			Menu3 = FM.FlatMenu()
+			menuItem = FM.FlatMenuItem(Menu2, wx.NewId(), 'To other DB', '', wx.ITEM_NORMAL, Menu3)
+			Menu2.AppendItem(menuItem)
+			self.to_other_db_Menu(Menu3,sm)
 		#append to_csv
 		Menu2.AppendSeparator()
 		for s in conf.ff:
@@ -4893,12 +5044,12 @@ class NewSessionDialog(wx.Dialog):
 			self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(sm,s))
 			Menu2.AppendItem(menuItem)	
 	
-	def create_Menu3(self,Menu2,k2,dbf,from_db, from_to='To'):
+	def create_Menu3(self,Menu2,k2,from_db, from_to='To'):
 		#print from_db, k2
 		#from_to='To_%s_%s' %(from_db,k2)
 		self.i +=1
 		Menu3 = FM.FlatMenu()
-		menuItem = FM.FlatMenuItem(Menu2, 20000+self.i, "%s %s" % (from_to, dbf[k2]), "", wx.ITEM_NORMAL, Menu3)
+		menuItem = FM.FlatMenuItem(Menu2, 20000+self.i, "%s %s" % (from_to, k2), "", wx.ITEM_NORMAL, Menu3)
 		Menu2.AppendItem(menuItem)
 		#if not k2 in ['OR']:
 		#	menuItem.Enable(False)
@@ -4920,10 +5071,13 @@ class NewSessionDialog(wx.Dialog):
 		self.i +=1
 		#print sm2, from_db
 		#imageFile = os.path.join(home,"images/database_grey_16.png")
-		if sm2 in self.highlight:
-			imageFile = os.path.join(home,"images/database_red_16.png")
+		if sm2 in self.api_menu[self.default_db]:
+			imageFile = os.path.join(home,"images/database_green_16.png")
+			if sm2 in self.highlight:
+				imageFile = os.path.join(home,"images/database_red_16.png")
+			assert os.path.isfile(imageFile), 'image file does not exists\n%s' % imageFile
 			context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)
-		
+			
 			menuItem = FM.FlatMenuItem(Menu3, wx.NewId(), "%s %s" % (from_to, conf.dbs[sm2]) , "", wx.ITEM_NORMAL, None,context_bmp)
 		else:
 			menuItem = FM.FlatMenuItem(Menu3, wx.NewId(), "%s %s" % (from_to, conf.dbs[sm2]) , "", wx.ITEM_NORMAL)
@@ -6056,7 +6210,7 @@ class pnl_args(wx.Panel):
 			atc= [ self.OnMessage, v[3]]
 			#for k in sorted(tkeys):
 			#v=self.targs[k]
-			print v
+			#print v
 			#print i
 			short,long,val,desc=v
 			sval=str(val).strip('"')
@@ -6326,7 +6480,7 @@ class pnl_args(wx.Panel):
 			
 			for k,v in pfrom[dbkey].items():
 				#print k
-				print v['help']
+				#print v['help']
 				if 1:
 					if self.fargs.has_key(k):
 						cb = wx.CheckBox(panel, label='', size=(20,20))
@@ -8188,7 +8342,7 @@ class DummyTextControl(object):
 		return self.value
 	def Enable(self,boo):
 		self.enabled=boo	
-import  wx.lib.masked as  masked
+
 maskText = ["Session Name", "C{90}", " ", 'F_', '^[a-zA-Z0-9_]+', '', '', '']
 maskLibName = ["Session Name", "C{40}", " ", 'F_', '^[a-zA-Z0-9_]+', '', '', '']
 #maskText = ["Session Name", "C{90}", " ", 'F_', '^[a-zA-Z0-9_]+', '', '', '']
@@ -11092,9 +11246,6 @@ class DataBuddy(wx.Frame):
 			#self.set_new_session([self.sname, self.copy_vector, self.tmpl]+[self.get_api_args(data[1], data[2])])
 			#e(0)
 
-
-			
-		
 
 	def get_api_args(self,cv,tmpl):
 		api_file= os.path.join(home,aa_dir,cv[0],'%s-%s.py' % tuple(cv))
