@@ -51,7 +51,7 @@ import win32gui, win32api
 import win32process
 import __builtin__
 #import webbrowser
-
+from wx.lib.wordwrap import wordwrap
 import ctypes as ct
 from win32con import SW_MINIMIZE, SW_RESTORE
 from win32ui import FindWindow, error as ui_err
