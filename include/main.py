@@ -10249,6 +10249,14 @@ class DataBuddy(wx.Frame):
 				self._hmMenu.AppendItem(menuItem)
 				if v==active_map:
 					menuItem.Check(True)	
+			if 1:
+				self._hmMenu.AppendSeparator()
+				imageFile = os.path.join(home,'images','Right_Arrow_16.png')
+				context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)
+				defaultMenu = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(self._hmMenu, wx.NewId(), 'Set default host_map', '', wx.ITEM_NORMAL,defaultMenu,context_bmp)
+				
+				self._hmMenu.AppendItem(menuItem)
 			default_hostmap_loc = os.path.join(transport_home, 'config','host_map_v2.py')
 			is_default = hm.host_map_loc in [default_hostmap_loc]
 			if 1:
@@ -10271,7 +10279,7 @@ class DataBuddy(wx.Frame):
 				imageFile = os.path.join(home,'images','gear_24_b.png')
 				context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)
 				
-				menuItem = FM.FlatMenuItem(self._hmMenu, 20000+self.i, 'Edit global host_map.py' , '', wx.ITEM_NORMAL, None, context_bmp)
+				menuItem = FM.FlatMenuItem(self._hmMenu, 20000+self.i, 'Edit default host_map.py' , '', wx.ITEM_NORMAL, None, context_bmp)
 				#print default_hm.host_map_loc
 				if is_default:
 					menuItem.Enable(True)
