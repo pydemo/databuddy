@@ -1,0 +1,28 @@
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\qc32\qc32.exe ^
+-l 10 ^
+-t , ^
+-r 1 ^
+-C C:\Users\alex_buz\sessions\My_Sessions\ORA11G_Partition_to_ORA11G_Table\sqlloader.py ^
+-dbg 1 ^
+-6 csv ^
+-w ora11g-ora11g ^
+-K 1 ^
+-F C:\tmp\TEST_default_spool ^
+-Y 20150630_154552_078000 ^
+-M C:\Temp\qc_log ^
+-o 1 ^
+-B qc_job ^
+-5 C:\Users\alex_buz\sessions\My_Sessions\ORA11G_Partition_to_ORA11G_Table\host_map.py ^
+-b orcl ^
+-P part_15 ^
+-j SCOTT ^
+-m "YYYY-MM-DD HH24.MI.SS.FF2" ^
+-e "YYYY-MM-DD HH24.MI.SS" ^
+-O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" ^
+-c SCOTT.Timestamp_test_from ^
+-d orcl ^
+-m "YYYY-MM-DD HH24.MI.SS.FF2" ^
+-u SCOTT ^
+-e "YYYY-MM-DD HH24.MI.SS" ^
+-O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" ^
+-a SCOTT.Timestamp_test_to 

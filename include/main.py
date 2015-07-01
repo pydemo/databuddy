@@ -115,7 +115,7 @@ def import_module(filepath):
 		py_mod = imp.load_compiled(mod_name, filepath)
 	return py_mod
 ########################################################################	
-exe=True
+exe=False
 #exe=False
 
 e=sys.exit
@@ -5861,20 +5861,24 @@ class pnl_args(wx.Panel):
 		
 		self.hm=None
 		if not self.hm:
-			hm_type='default'
-			default_hostmap_loc = os.path.join(transport_home, 'config','host_map_v2.py')
-			#new_hostmap_loc=self.parent.args_panel.CreateNewSessionHostMap(hostmap_loc)
-			#if new_hostmap_loc not in [hostmap_loc]:
-			#	self.obj[k][1].SetValue(new_hostmap_loc)
-			#e(0)
-			#print conf._to.join(self.copy_vector)
-			#print transport_home,default_hostmap_loc
-			self.hm = hmap(('ora11g','ora11g'), default_hostmap_loc)
-			#pprint(dir(self.hm))
-			am= self.hm.get_active_mapping()
-			#print am
-			self.parent.set_bar_status(2,am)
-			#send('set_bar_status', (2,am))
+			default_hostmap_loc = os.path.join(transport_home, 'config','host_map','host_map.py')
+			self.set_hm(('ORA11G','ORA11G'), default_hostmap_loc)
+			
+	def set_hm(self,copy_vector, hm_file_loc):
+		#hm_type='default'
+		
+		#new_hostmap_loc=self.parent.args_panel.CreateNewSessionHostMap(hostmap_loc)
+		#if new_hostmap_loc not in [hostmap_loc]:
+		#	self.obj[k][1].SetValue(new_hostmap_loc)
+		#e(0)
+		#print conf._to.join(self.copy_vector)
+		#print transport_home,default_hostmap_loc
+		self.hm = hmap(copy_vector, hm_file_loc)
+		#pprint(dir(self.hm))
+		am= self.hm.get_active_mapping()
+		#print am
+		self.parent.set_bar_status(2,am)
+		#send('set_bar_status', (2,am))
 	def OnMessage ( self, on, msg ) :
 		if not on : msg = ""
 		self.parent.SetStatusText ( msg )
@@ -5920,27 +5924,47 @@ class pnl_args(wx.Panel):
 		#hostmap_loc=obj.GetValue()
 		#print 'existing hostmap: %s' % hostmap_loc
 		hostmap_name=os.path.basename(hostmap_loc)
+		
+		
+		
+		
 		session_dir=self.getSessionDir()
 		if not os.path.isdir(session_dir):
 			os.makedirs(session_dir)
 		session_hostmap_loc=os.path.join(session_dir,hostmap_name)
 		#print session_hostmap_loc
 		#print self.parent.save_to_dir
-		if os.path.isfile(session_hostmap_loc):
+		if 0 and os.path.isfile(session_hostmap_loc):
 			pass
 			#print 'session host map already exists'
 
 		else:
+		
 			os.chdir(home)
 			if hostmap_loc.startswith(r'.'):
 				#relative
-				real_hostmap_loc=os.path.join(transport_home,hostmap_loc)
+				real_hostmap_loc=os.path.join(transport_home,hostmap_loc[2:])
+				#real_hostmap_loc=os.path.realpath(hostmap_loc)
 			else:
 				real_hostmap_loc=os.path.realpath(hostmap_loc)
+			#from os.path import relpath
+			hostmap_home= os.path.join(transport_home, 'config','host_map')
+			print 'real_hostmap_loc', real_hostmap_loc
+			print 'hostmap_home' , hostmap_home
+			hm_rel_path = os.path.relpath (real_hostmap_loc,hostmap_home)
+			print 'hm_rel_path', hm_rel_path
+			#e(0)
 			assert os.path.isfile(real_hostmap_loc), 'host_map template does not exists at\n%s' % real_hostmap_loc
 			#print real_hostmap_loc
 			#print session_hostmap_loc
-			shutil.copyfile(real_hostmap_loc,session_hostmap_loc)
+			session_hostmap_dir= os.path.join(session_dir,'host_map',os.path.dirname(hm_rel_path))
+			print 'session_hostmap_dir', session_hostmap_dir
+			if not os.path.isdir(session_hostmap_dir):
+				os.makedirs(session_hostmap_dir)
+			session_hostmap_loc=os.path.join(session_hostmap_dir,hostmap_name)
+			print 'session_hostmap_loc', session_hostmap_loc
+			if not os.path.isfile(session_hostmap_loc):
+				shutil.copyfile(real_hostmap_loc,session_hostmap_loc)
 			#obj.SetValue(session_hostmap_loc)
 			#self.Save()
 			#print 'created new session_hostmap at \n%s' % session_hostmap_loc
@@ -7294,10 +7318,12 @@ class pnl_args(wx.Panel):
 				self.obj[k][1].SetValue(new_hostmap_loc)
 			#e(0)
 			#print conf._to.join(self.copy_vector)
-			
-			self.hm = hmap(self.copy_vector,new_hostmap_loc)						
-			am= self.hm.get_active_mapping()
-			self.parent.set_bar_status(2,am)
+			self.set_hm(self.copy_vector, new_hostmap_loc)
+			if 0:
+				self.hm = hmap(self.copy_vector,new_hostmap_loc)						
+				am= self.hm.get_active_mapping()
+				self.parent.set_bar_status(2,am)
+			del self.parent._hmMenu
 			self.parent._hmMenu=None
 		else:
 			print 'no host_map'
@@ -9914,6 +9940,7 @@ class DataBuddy(wx.Frame):
 		self._hmMenu=None
 		self._saMenu=None
 		self._mainMenu=None
+		self.default_hm_file='host_map.py'
 	def OnMainMenu(self, event):
 		#print self.recent
 		#e(0)
@@ -10244,7 +10271,7 @@ class DataBuddy(wx.Frame):
 			for v in hostmap.keys():
 				self.i +=1
 				self.recentMenu = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(self._hmMenu, 20000+self.i, v, '', wx.ITEM_RADIO)
+				menuItem = FM.FlatMenuItem(self._hmMenu, wx.NewId(), v, '', wx.ITEM_RADIO)
 				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnHostMapMenu,(v,hm))
 				self._hmMenu.AppendItem(menuItem)
 				if v==active_map:
@@ -10254,23 +10281,42 @@ class DataBuddy(wx.Frame):
 				imageFile = os.path.join(home,'images','Right_Arrow_16.png')
 				context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)
 				defaultMenu = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(self._hmMenu, wx.NewId(), 'Set default host_map', '', wx.ITEM_NORMAL,defaultMenu,context_bmp)
+				menuItem1 = FM.FlatMenuItem(self._hmMenu, wx.NewId(), 'Set default global host_map', '', wx.ITEM_NORMAL,defaultMenu,context_bmp)
 				
-				self._hmMenu.AppendItem(menuItem)
-			default_hostmap_loc = os.path.join(transport_home, 'config','host_map_v2.py')
+				default_hostmap_dir = os.path.join(transport_home, 'config','host_map')
+				files = [x for x in os.listdir(default_hostmap_dir) if x.upper().endswith('.PY')]
+				for f in files:
+					#imageFile = os.path.join(home,'images','gear_24_g.png')
+					#context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)
+					#hmMenu = FM.FlatMenu()
+					menuItem = FM.FlatMenuItem(defaultMenu, wx.NewId(), f, '', wx.ITEM_CHECK)
+					self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnSetDefaultHostMap,(os.path.join(default_hostmap_dir,f)))
+					print f,self.default_hm_file,f==self.default_hm_file
+					#menuItem.Check(True)
+					if f==self.default_hm_file:
+						#print '---'
+						menuItem.Check(True)
+					else:
+						menuItem.Check(False)
+					#menuItem.Check(True)
+					defaultMenu.AppendItem(menuItem)
+				#e(0)
+				self._hmMenu.AppendItem(menuItem1)
+			default_hostmap_loc = os.path.join(transport_home, 'config','host_map','host_map.py')
 			is_default = hm.host_map_loc in [default_hostmap_loc]
 			if 1:
 				self.i +=1
 				self._hmMenu.AppendSeparator()
 				imageFile = os.path.join(home,'images','gear_24_g.png')
 				context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)
-				menuItem = FM.FlatMenuItem(self._hmMenu, 20000+self.i, 'Edit session host_map.py', '', wx.ITEM_NORMAL, None, context_bmp)
+				menuItem = FM.FlatMenuItem(self._hmMenu, wx.NewId(), 'Edit session "%s"' % self.default_hm_file, '', wx.ITEM_NORMAL, None, context_bmp)
 				#print self.args_panel.hm.host_map_loc				
 				if not is_default:					
 					self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnEditHostMap,(hm.host_map_loc))
 					menuItem.Enable(True)
 				else:
 					menuItem.Enable(False)
+				
 				self._hmMenu.AppendItem(menuItem)
 			if 1:
 				self.i +=1
@@ -10279,7 +10325,7 @@ class DataBuddy(wx.Frame):
 				imageFile = os.path.join(home,'images','gear_24_b.png')
 				context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)
 				
-				menuItem = FM.FlatMenuItem(self._hmMenu, 20000+self.i, 'Edit default host_map.py' , '', wx.ITEM_NORMAL, None, context_bmp)
+				menuItem = FM.FlatMenuItem(self._hmMenu, 20000+self.i, 'Edit global "%s"' % self.default_hm_file , '', wx.ITEM_NORMAL, None, context_bmp)
 				#print default_hm.host_map_loc
 				if is_default:
 					menuItem.Enable(True)
@@ -10289,7 +10335,16 @@ class DataBuddy(wx.Frame):
 					menuItem.Enable(True)
 					self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnEditHostMap,(default_hostmap_loc))
 				self._hmMenu.AppendItem(menuItem)				
-			
+		
+	def OnSetDefaultHostMap(self, event,params):
+		
+		(hm_file) = params
+		print 'OnSetDefaultHostMap',hm_file
+		#send('set_hostmap', (hm_file))
+		del self._hmMenu
+		self._hmMenu=None
+
+		
 	def OnEditHostMap(self, event,params):				
 		(host_map_loc)=params	
 		if not os.path.isfile(host_map_loc):
