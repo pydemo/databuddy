@@ -16,6 +16,9 @@ abspath=home
 import_module=import_module
 from pprint import pprint
 import argparse
+#		'SSEXP':'SQL Server Express','SS2012':'SQL Server 2012','SS2014':'SQL Server 2014','SS2016':'SQL Server 2016',
+#		'SS70':'SQL Server 7.0', 'SS2000':'SQL Server 2000', 'SS2005':'SQL Server 2005', 'SS2008':'SQL Server 2008', 
+
 dbs={	'SYASE':'SAP Sybase ASE', 'SYANY':'Sybase SQL Anywhere','SYIQ':'Sybase IQ',
 		'ORA12C':'Oracle 12c','ORA11G':'Oracle 11g','ORA10G':'Oracle 10g','ORA9I':'Oracle 9i','ORA8I':'Oracle 8i','ORA733':'Oracle 7.3.3', 'ORAXE':'Oracle XE', 'ORAEXA':'Exadata',
 		'TTEN':'TimesTen', 

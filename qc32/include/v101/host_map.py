@@ -43,6 +43,9 @@ class base_host_map(object):
 		#pprint(env)
 		#print from_db, to_db
 		#pprint(env)
+		assert env.has_key(from_db.upper()), 'host_map for "%s" is not set' % from_db.upper()
+		assert env.has_key(to_db.upper()), 'host_map for "%s" is not set' % to_db.upper()
+		
 		return (env[from_db.upper()]['source'], env[to_db.upper()]['target'])
 		
 	def set_host_map(self):
@@ -150,18 +153,21 @@ class host_map( host_map_v1,host_map_v2):
 		if host_map_loc.upper().endswith('_V2.PY'):
 			self.v=2
 		#print self.v
-		if self.v==1:
-			host_map_v1.__init__(self,copy_vector, host_map_loc, shard)
-			self.get_h2s_map=host_map_v1.get_h2s_map
-			self.if_remote=host_map_v1.if_remote
-		elif self.v==2:
-			host_map_v2.__init__(self,copy_vector, host_map_loc, shard)
-			self.get_h2s_map=host_map_v2.get_h2s_map
-			self.if_remote=host_map_v2.if_remote
-			
-		else:
-			assert 1==2, 'host map is not supported\n%s' % host_map_loc
-			
+		if 0:
+			if self.v==1:
+				host_map_v1.__init__(self,copy_vector, host_map_loc, shard)
+				self.get_h2s_map=host_map_v1.get_h2s_map
+				self.if_remote=host_map_v1.if_remote
+			elif self.v==2:
+				host_map_v2.__init__(self,copy_vector, host_map_loc, shard)
+				self.get_h2s_map=host_map_v2.get_h2s_map
+				self.if_remote=host_map_v2.if_remote
+			else:
+				assert 1==2, 'host map is not supported\n%s' % host_map_loc
+		
+		host_map_v2.__init__(self,copy_vector, host_map_loc, shard)
+		self.get_h2s_map=host_map_v2.get_h2s_map
+		self.if_remote=host_map_v2.if_remote	
 
 		
 		

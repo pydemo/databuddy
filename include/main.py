@@ -36,7 +36,8 @@ import wx.lib.agw.hyperlink as hl
 from tc_lib import sub, send
 import common_utils as cu
 import images
-import os, sys, time 
+import os, sys, time, inspect
+#from include.v101.host_map import host_map as hmap
 from pprint import pprint
 import pprint as pp
 import webbrowser
@@ -58,14 +59,14 @@ from win32con import SW_MINIMIZE, SW_RESTORE
 from win32ui import FindWindow, error as ui_err
 from time import sleep
 import datetime
-
+import pickle
 import threading
 from subprocess import Popen, PIPE,CREATE_NEW_CONSOLE
 
 import shutil
 import wx.combo
 from wx.lib.wordwrap import wordwrap
-
+import wx.lib.agw.multidirdialog as MDD
 #import yaml
 import re
 import wx.lib.scrolledpanel
@@ -116,7 +117,7 @@ def import_module(filepath):
 	return py_mod
 ########################################################################	
 exe=False
-#exe=False
+exe=True
 
 e=sys.exit
 #print wx.VERSION
@@ -149,12 +150,12 @@ if __platform__ in ['32']:
 				#os.chdir(transport_home)
 				#from include.v101.host_map import host_map as hmap
 				#os.chdir(home)
-			import os, sys, inspect
+			#import os, sys, inspect
 			# realpath() will make your script run, even if you symlink it :)
 			#cmd_folder = os.path.realpath(os.path.abspath(os.path.split(inspect.getfile( inspect.currentframe() ))[0]))
 			if transport_home not in sys.path:
 				sys.path.insert(0, transport_home)	 
-				from include.v101.host_map import host_map as hmap
+				#from include.v101.host_map import host_map as hmap
 				sys.path.pop()
 				sys.path.remove(transport_home)
 else:
@@ -1020,7 +1021,7 @@ class SessionList(wx.ListCtrl):
 				#	tc.tryToDelete()
 
 		else:	
-			print 'kc=', kc
+			#print 'kc=', kc
 			if kc in [127]:
 				tc.tryToDelete()
 			elif kc in [13,32]:
@@ -1191,7 +1192,7 @@ class SessionList(wx.ListCtrl):
 		#print 'dir'
 		#pprint(filter(os.path.isfile,os.listdir(self.save_to_dir)))
 		
-		import datetime
+		
 		for f in filter(os.path.isfile,os.listdir(self.save_to_dir)):
 			#print f
 			d= datetime.datetime.fromtimestamp(os.path.getmtime(f))
@@ -4291,7 +4292,7 @@ class NewSessionDialog(wx.Dialog):
 			self.api_menu={}
 			if 0:
 				for m in self.api_from:
-					print m
+					#print m
 					
 					if not self.api_menu.has_key(m[:2]):
 						self.api_menu[m[:2]]=[]
@@ -4347,7 +4348,7 @@ class NewSessionDialog(wx.Dialog):
 		self.Fit()
 		self.SetSize((-1,size[1]))
 		self.recentMenu=None
-		self.max_recent=20
+		self.max_recent=10
 		self.highlight=['ORA11G']
 	def reset_lbl(self):
 		#pprint(self.copy_vector)
@@ -5102,6 +5103,11 @@ class NewSessionDialog(wx.Dialog):
 		b=b.upper()
 		if (a,b) not in self.recent:
 			self.recent.append((a,b))
+		else:
+			#print dir(self.recent)
+			self.recent.remove((a,b))
+			self.recent.append((a,b))
+		self.writeRecent()
 		#print '###########', self.recent
 		self.set_vector_btn(a,b)
 		self.create_btn.Enable(False)
@@ -5861,8 +5867,10 @@ class pnl_args(wx.Panel):
 		
 		self.hm=None
 		if not self.hm:
-			default_hostmap_loc = os.path.join(transport_home, 'config','host_map','host_map.py')
-			self.set_hm(('ORA11G','ORA11G'), default_hostmap_loc)
+			default_hostmap_dir = os.path.join(transport_home, 'config','host_map')
+			default_hostmap_loc = os.path.join(default_hostmap_dir, self.parent.default_hm_file)
+			print default_hostmap_loc
+			self.set_hm(self.parent.get_default_cv(),default_hostmap_loc )
 			
 	def set_hm(self,copy_vector, hm_file_loc):
 		#hm_type='default'
@@ -5873,12 +5881,14 @@ class pnl_args(wx.Panel):
 		#e(0)
 		#print conf._to.join(self.copy_vector)
 		#print transport_home,default_hostmap_loc
+		print copy_vector, hm_file_loc
 		self.hm = hmap(copy_vector, hm_file_loc)
 		#pprint(dir(self.hm))
 		am= self.hm.get_active_mapping()
 		#print am
 		self.parent.set_bar_status(2,am)
 		#send('set_bar_status', (2,am))
+		
 	def OnMessage ( self, on, msg ) :
 		if not on : msg = ""
 		self.parent.SetStatusText ( msg )
@@ -5941,28 +5951,37 @@ class pnl_args(wx.Panel):
 		else:
 		
 			os.chdir(home)
-			if hostmap_loc.startswith(r'.'):
-				#relative
-				real_hostmap_loc=os.path.join(transport_home,hostmap_loc[2:])
-				#real_hostmap_loc=os.path.realpath(hostmap_loc)
-			else:
-				real_hostmap_loc=os.path.realpath(hostmap_loc)
-			#from os.path import relpath
-			hostmap_home= os.path.join(transport_home, 'config','host_map')
-			print 'real_hostmap_loc', real_hostmap_loc
-			print 'hostmap_home' , hostmap_home
-			hm_rel_path = os.path.relpath (real_hostmap_loc,hostmap_home)
-			print 'hm_rel_path', hm_rel_path
-			#e(0)
-			assert os.path.isfile(real_hostmap_loc), 'host_map template does not exists at\n%s' % real_hostmap_loc
-			#print real_hostmap_loc
-			#print session_hostmap_loc
+			if 0:
+				if hostmap_loc.startswith(r'.'):
+					#relative
+					real_hostmap_loc=os.path.join(transport_home,hostmap_loc[2:])
+					#real_hostmap_loc=os.path.realpath(hostmap_loc)
+				else:
+					real_hostmap_loc=os.path.realpath(hostmap_loc)
+				#from os.path import relpath
+				hostmap_home= os.path.join(transport_home, 'config','host_map')
+				#print 'real_hostmap_loc', real_hostmap_loc
+				#print 'hostmap_home' , hostmap_home
+				hm_rel_path = os.path.relpath (real_hostmap_loc,hostmap_home)
+				#print 'hm_rel_path', hm_rel_path
+				#e(0)
+				assert os.path.isfile(real_hostmap_loc), 'host_map template does not exists at\n%s' % real_hostmap_loc
+				#print real_hostmap_loc
+				#print session_hostmap_loc
+			if 1:
+				hostmap_home= os.path.join(transport_home, 'config','host_map')
+				real_hostmap_loc = os.path.join(hostmap_home, self.parent.default_hm_file)				
+				hm_rel_path = os.path.relpath (real_hostmap_loc,hostmap_home)
+				hostmap_name=os.path.basename(self.parent.default_hm_file)
+				print '#'*60
+				print self.parent.default_hm_file
+				print real_hostmap_loc
 			session_hostmap_dir= os.path.join(session_dir,'host_map',os.path.dirname(hm_rel_path))
-			print 'session_hostmap_dir', session_hostmap_dir
+			#print 'session_hostmap_dir', session_hostmap_dir
 			if not os.path.isdir(session_hostmap_dir):
 				os.makedirs(session_hostmap_dir)
 			session_hostmap_loc=os.path.join(session_hostmap_dir,hostmap_name)
-			print 'session_hostmap_loc', session_hostmap_loc
+			#print 'session_hostmap_loc', session_hostmap_loc
 			if not os.path.isfile(session_hostmap_loc):
 				shutil.copyfile(real_hostmap_loc,session_hostmap_loc)
 			#obj.SetValue(session_hostmap_loc)
@@ -6554,9 +6573,9 @@ class pnl_args(wx.Panel):
 					#tc=wx.TextCtrl(panel,value=sval, style=style, size=(length,-1))
 					tc=aTextCtrl(panel,atc,value=sval, style=style, size=(length,22))
 					tc.Disable()				
-				#tc=wx.TextCtrl(panel,value=sval, style=style, size=(length,22))
-				#tc.Disable()
-				self.obj[k]= [tx, tc]
+					#tc=wx.TextCtrl(panel,value=sval, style=style, size=(length,22))
+					#tc.Disable()
+					self.obj[k]= [tx, tc]
 				
 			panel.fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 			if self.checks and not self.checks[k].GetValue():
@@ -7313,9 +7332,12 @@ class pnl_args(wx.Panel):
 		
 		if self.obj.has_key(k):
 			hostmap_loc = self.obj[k][1].GetValue().strip()
+			print 'hm:', hostmap_loc
 			new_hostmap_loc=self.parent.args_panel.CreateNewSessionHostMap(hostmap_loc)
-			if new_hostmap_loc not in [hostmap_loc]:
-				self.obj[k][1].SetValue(new_hostmap_loc)
+			print 'hm:', new_hostmap_loc
+			#if new_hostmap_loc not in [hostmap_loc]:
+			self.obj[k][1].SetValue(new_hostmap_loc)
+			print 'set to', new_hostmap_loc
 			#e(0)
 			#print conf._to.join(self.copy_vector)
 			self.set_hm(self.copy_vector, new_hostmap_loc)
@@ -7463,7 +7485,7 @@ class pnl_args(wx.Panel):
 
 			
 	def OnEditTestConnectSQL(self, evt):
-		print 'OnEditTestConnectSQL'
+		#print 'OnEditTestConnectSQL'
 		#import webbrowser		
 		#(ftype) = params
 		#sqldr_dir=os.path.join(self.getLogDir(),'sqlloader')
@@ -7593,7 +7615,7 @@ class pnl_args(wx.Panel):
 		# Demonstrate using the wxFlatMenu without a menu bar
 		btn = event.GetEventObject()
 		#print 
-		print btn.Name
+		#print btn.Name
 		if btn.Name.startswith('source'):
 			# Create the popup menu
 			self.CreatePopupMenuS()
@@ -8123,7 +8145,7 @@ class pnl_args(wx.Panel):
 		dir= os.path.dirname(loc)
 		#print dir
 		if 1: #dirtype in ['input_dirs']:
-			import wx.lib.agw.multidirdialog as MDD
+			
 			dlg = MDD.MultiDirDialog(None, title=title, defaultPath=dir, agwStyle=MDD.DD_NEW_DIR_BUTTON)
 
 			if dlg.ShowModal() != wx.ID_OK:
@@ -9421,7 +9443,7 @@ class SaveAsTemplateDialog(wx.Dialog):
 		
 ###################################################################################################
 class DataBuddy(wx.Frame):
-	def __init__(self, parent, id, title, size):
+	def __init__(self, parent, id, title, size, aconf):
 		global tr,maskText
 		#wx.Frame.__init__(self, parent, -1, title)
 		#super(DataBuddy, self).__init__(parent, title=title , size=(900, 565))
@@ -9430,7 +9452,7 @@ class DataBuddy(wx.Frame):
 		self.SetIcon(images.Mondrian.GetIcon())
 		wx.SystemOptions_SetOption("msw.remap", "0")
 		#self.SetTitle("FlatMenu wxPython Demo ;-D")
-
+		self.aconf=aconf
 		#if _hasAUI:
 		#	self._mgr = AuiManager()
 		#	self._mgr.SetManagedWindow(self)		
@@ -9463,7 +9485,7 @@ class DataBuddy(wx.Frame):
 		self.elapsed={}
 		self.q=[]
 		self.saved=True
-		
+		self.default_hm_file=self.get_default_hm_file()
 		self.closing_in=6
 		(self.cargs,self.fargs,self.targs)=(None, None, None)
 		#userhome = os.path.expanduser('~')		
@@ -9940,7 +9962,9 @@ class DataBuddy(wx.Frame):
 		self._hmMenu=None
 		self._saMenu=None
 		self._mainMenu=None
-		self.default_hm_file='host_map.py'
+		
+	def get_default_hm_file(self):
+		return self.aconf['defaults']['host_map']
 	def OnMainMenu(self, event):
 		#print self.recent
 		#e(0)
@@ -10275,23 +10299,35 @@ class DataBuddy(wx.Frame):
 				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnHostMapMenu,(v,hm))
 				self._hmMenu.AppendItem(menuItem)
 				if v==active_map:
-					menuItem.Check(True)	
+					menuItem.Check(True)
+			#default_hostmap_loc = os.path.join(transport_home, 'config','host_map','host_map.py')
+			
+			default_hostmap_dir = os.path.join(transport_home, 'config','host_map')
+			default_hostmap_loc = os.path.join(default_hostmap_dir, self.default_hm_file)
+			#print default_hostmap_loc
+			#self.set_hm(self.parent.get_default_cv(),default_hostmap_loc )
+			
+			
+			is_default = hm.host_map_loc in [default_hostmap_loc] or not self.btn_run.Enabled
 			if 1:
 				self._hmMenu.AppendSeparator()
 				imageFile = os.path.join(home,'images','Right_Arrow_16.png')
 				context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)
 				defaultMenu = FM.FlatMenu()
-				menuItem1 = FM.FlatMenuItem(self._hmMenu, wx.NewId(), 'Set default global host_map', '', wx.ITEM_NORMAL,defaultMenu,context_bmp)
-				
-				default_hostmap_dir = os.path.join(transport_home, 'config','host_map')
-				files = [x for x in os.listdir(default_hostmap_dir) if x.upper().endswith('.PY')]
+				menuItem1 = FM.FlatMenuItem(self._hmMenu, wx.NewId(), 'Set default global "host_map"', '', wx.ITEM_NORMAL,defaultMenu,context_bmp)
+				if is_default:
+					menuItem1.Enable(True)
+				else:
+					menuItem1.Enable(False)			
+				#default_hostmap_dir = os.path.join(transport_home, 'config','host_map')
+				files = [x for x in os.listdir(default_hostmap_dir) if x.upper().endswith('.PY') and not x.startswith('__init__')]
 				for f in files:
 					#imageFile = os.path.join(home,'images','gear_24_g.png')
 					#context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)
 					#hmMenu = FM.FlatMenu()
 					menuItem = FM.FlatMenuItem(defaultMenu, wx.NewId(), f, '', wx.ITEM_CHECK)
-					self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnSetDefaultHostMap,(os.path.join(default_hostmap_dir,f)))
-					print f,self.default_hm_file,f==self.default_hm_file
+					self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnSetDefaultHostMap,(default_hostmap_dir,f))
+					#print f,self.default_hm_file,f==self.default_hm_file
 					#menuItem.Check(True)
 					if f==self.default_hm_file:
 						#print '---'
@@ -10302,8 +10338,7 @@ class DataBuddy(wx.Frame):
 					defaultMenu.AppendItem(menuItem)
 				#e(0)
 				self._hmMenu.AppendItem(menuItem1)
-			default_hostmap_loc = os.path.join(transport_home, 'config','host_map','host_map.py')
-			is_default = hm.host_map_loc in [default_hostmap_loc]
+			
 			if 1:
 				self.i +=1
 				self._hmMenu.AppendSeparator()
@@ -10335,15 +10370,35 @@ class DataBuddy(wx.Frame):
 					menuItem.Enable(True)
 					self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnEditHostMap,(default_hostmap_loc))
 				self._hmMenu.AppendItem(menuItem)				
-		
+	def get_default_cv(self):
+		return self.aconf['defaults']['copy_vector']
 	def OnSetDefaultHostMap(self, event,params):
 		
-		(hm_file) = params
-		print 'OnSetDefaultHostMap',hm_file
+		(hm_dir, hm_file) = params
+		#print 'OnSetDefaultHostMap',hm_file
 		#send('set_hostmap', (hm_file))
+		#pprint(self.aconf)
+		self.aconf['defaults']['host_map']=hm_file
+		self.save_app_config()
+		self.default_hm_file= hm_file
+		del self.args_panel.hm
+		cv=self.get_default_cv()
+		if self.copy_vector[0]:
+			cv=self.copy_vector
+		#print cv
+		hm_loc=os.path.join(hm_dir, hm_file)
+		#print hm_loc
+		self.args_panel.set_hm(cv, hm_loc)
+		#print self.args_panel.hm
 		del self._hmMenu
 		self._hmMenu=None
-
+	def save_app_config(self):
+		#change active mapping
+		app_config_loc=os.path.join(home,'config','app_config.py')
+		f = open(app_config_loc, 'w')
+		#f.write('mapping=%s' % cp.pprint(hm.mapping))
+		print >>f,'app_conf=%s' % pp.pformat(self.aconf)
+		f.close()
 		
 	def OnEditHostMap(self, event,params):				
 		(host_map_loc)=params	
@@ -10355,6 +10410,7 @@ class DataBuddy(wx.Frame):
 	def OnHostMapMenu(self, event,params):				
 		(v,hm)=params	
 		#print v
+		print self.args_panel.hm
 		self.args_panel.hm.set_active_mapping(v)
 		send('set_bar_status', (2,v))
 		
@@ -10641,6 +10697,8 @@ class DataBuddy(wx.Frame):
 		self.nb.EnableTab(0,False)
 		self.nb.EnableTab(1,False)	
 		#self.nb.EnableTab(2,False)
+		del self._hmMenu
+		self._hmMenu=None		
 		self.Thaw()
 		
 	def onDisableAll(self, data, extra1, extra2=None):	
