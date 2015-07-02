@@ -185,4 +185,4 @@ if __name__ == '__main__':
 	except Exception, e:
 		traceback.print_exc();
 	import atexit
-	atexit.register(savecounter)
+	#atexit.register(savecounter)

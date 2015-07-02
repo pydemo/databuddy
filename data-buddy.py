@@ -26,10 +26,9 @@ from multiprocessing import freeze_support #Process, Queue, cpu_count, current_p
 from wx.lib.splitter import MultiSplitterWindow
 import wx.lib.agw.flatnotebook as fnb
 import wx.lib.mixins.listctrl as listmix
-from wx.lib.wordwrap import wordwrap
-import wx.lib.agw.multidirdialog as MDD
+
 from tc_lib import cml, getPipelineConfig, activeProjName, activeProjLoc, DEFAULT_PERSPECTIVE, projRootLoc, confDirName, configDirLoc,  appLoc
-import pickle
+
 from collections import OrderedDict
 from cache_lib import ifCacheExists,readFromCache
 import wx.lib.agw.hyperlink as hl
@@ -61,6 +60,7 @@ import datetime
 
 import threading
 from subprocess import Popen, PIPE,CREATE_NEW_CONSOLE
+from wx.lib.wordwrap import wordwrap
 
 import shutil
 import wx.combo
@@ -98,7 +98,7 @@ except ImportError: # if it's not there locally, try the wxPython lib.
 	from wx.lib.agw.fmresources import ControlFocus, ControlPressed
 	from wx.lib.agw.fmresources import FM_OPT_SHOW_CUSTOMIZE, FM_OPT_SHOW_TOOLBAR, FM_OPT_MINIBAR
 
-
+import wx.lib.agw.multidirdialog as MDD
 from qc32.config.include.oracle import target	
 from subprocess import Popen, PIPE,CREATE_NEW_CONSOLE
 def import_module(filepath):
@@ -155,11 +155,14 @@ if __name__ == '__main__':
 	#e(0)
 	class MyApp(wx.App, wx.lib.mixins.inspection.InspectionMixin):
 		def OnInit(self):
-			import images as i
-			global imgs
-			imgs = i
+			#import images as i
+			#global imgs
+			#imgs = i
+			app_config_loc=os.path.join(home,'config','app_config.py')
+			ac=import_module(app_config_loc)
+
 			self.Init()
-			self.frame = main.DataBuddy(None, -1,title=app_title, size=main.dimensions['frame'])
+			self.frame = main.DataBuddy(None, -1,title=app_title, size=main.dimensions['frame'],aconf=ac.app_conf)
 			
 			#1350,897
 			if default_session:
@@ -170,7 +173,6 @@ if __name__ == '__main__':
 			#print self.frame.GetClientSizeTuple()
 			
 			return True
-
 	app = MyApp(redirect=False) #=True,filename="applogfile.txt")
 
 
@@ -182,5 +184,5 @@ if __name__ == '__main__':
 		app.MainLoop()
 	except Exception, e:
 		traceback.print_exc();
-	import atexit
-	#atexit.register(savecounter))
+	#import atexit
+	#atexit.register(savecounter)
