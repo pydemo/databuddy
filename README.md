@@ -328,6 +328,7 @@ Database | Spooler | Loader | DbShell
 - [ ] add [InterSystems Caché](http://www.intersystems.com/our-products/cache/managing-data/),  [export](http://docs.intersystems.com/ens20131/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_shell)   
 - [ ] add QV (QlikView file format)
 - [ ] add MDX (file format)
+- [ ] add [SQream DB](http://sqream.com/solutions/products/sqream-db/) 
 
 ##Limitations
 - tested to run only on Windows for now (even thou it's wxPython)
@@ -408,6 +409,7 @@ Database |Version | Export | Import | DbShell|File formats
 [Riak](https://docs.basho.com/)|||||
 [MemSQL](http://docs.memsql.com/latest/)|||||
 [MarkLogic](http://www.marklogic.com/what-is-marklogic/features/) |||||
+[SQream DB](http://sqream.com/solutions/products/sqream-db/)|||||
 
 ## Vendor architecture
 [MongoDB Architecture Guide] (http://s3.amazonaws.com/info-mongodb-com/MongoDB_Architecture_Guide.pdf)
