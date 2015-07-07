@@ -253,6 +253,8 @@ Database | Spooler | Loader | DbShell
 - [ ] load/save app state.
 - [x] fix session sort **DONE**
 - [x] fix session refresh **DONE**
+- [x] fix awg.flatmenu memory leak **DONE**
+- [x] fix awg.scrollablepanel memory leak
 - [ ] let user set primary dbs, source/target dbs
 - [ ] add scp/ftp/sftp as data source/target 
 - [ ] make all paths relative to transport_home **DONE**
