@@ -331,6 +331,9 @@ Database | Spooler | Loader | DbShell
 - [ ] add QV (QlikView file format)
 - [ ] add MDX (file format)
 - [ ] add [SQream DB](http://sqream.com/solutions/products/sqream-db/) 
+- [ ] add [1010data] (https://www.1010data.com/technology)
+- [ ] add [Kognitio](http://kognitio.com/analyticalplatform/)
+- [ ] add [SAND Technology](http://www.sand.com/)
 
 ##Limitations
 - tested to run only on Windows for now (even thou it's wxPython)
@@ -412,6 +415,9 @@ Database |Version | Export | Import | DbShell|File formats
 [MemSQL](http://docs.memsql.com/latest/)|||||
 [MarkLogic](http://www.marklogic.com/what-is-marklogic/features/) |||||
 [SQream DB](http://sqream.com/solutions/products/sqream-db/)|||||
+[1010data] (https://www.1010data.com/technology)|||||
+[Kognitio](http://kognitio.com/analyticalplatform/)|||||
+[SAND Technology](http://www.sand.com/)|||||
 
 ## Vendor architecture
 [MongoDB Architecture Guide] (http://s3.amazonaws.com/info-mongodb-com/MongoDB_Architecture_Guide.pdf)
