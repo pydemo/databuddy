@@ -18,6 +18,7 @@ if 0:
 	__status__ = "Development" 	
 
 
+USE_BUFFERED_DC = 0
 import sys,platform; 
 __platform__='32' #platform.architecture()[0]
 
@@ -62,7 +63,7 @@ import datetime
 import pickle
 import threading
 from subprocess import Popen, PIPE,CREATE_NEW_CONSOLE
-
+#from subprocess import Popen, PIPE,CREATE_NEW_CONSOLE
 import shutil
 import wx.combo
 from wx.lib.wordwrap import wordwrap
@@ -101,8 +102,33 @@ except ImportError: # if it's not there locally, try the wxPython lib.
 	from wx.lib.agw.fmresources import FM_OPT_SHOW_CUSTOMIZE, FM_OPT_SHOW_TOOLBAR, FM_OPT_MINIBAR
 
 
-from qc32.config.include.oracle import target	
-from subprocess import Popen, PIPE,CREATE_NEW_CONSOLE
+from qc32.config.include.oracle import target
+
+try:
+	from Queue import Queue, Empty
+except ImportError:
+	from queue import Queue, Empty  # python 3.x
+from threading  import Thread
+import io											
+#import os
+import subprocess
+#import sys
+#import time
+#from pprint import pprint
+if sys.platform == "win32":
+	import msvcrt
+	import _subprocess
+else:
+	import fcntl
+e=sys.exit	
+ON_POSIX = 'posix' in sys.builtin_module_names
+
+import gc
+gc.enable()
+print gc.get_count()
+#e(0)
+				
+#from subprocess import Popen, PIPE,CREATE_NEW_CONSOLE
 def import_module(filepath):
 	class_inst = None
 	#expected_class = 'MyClass'
@@ -117,9 +143,9 @@ def import_module(filepath):
 	return py_mod
 ########################################################################	
 exe=False
-exe=True
+#exe=True
 
-e=sys.exit
+
 #print wx.VERSION
 
 blog=cu.blog
@@ -1422,7 +1448,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			navig.Add(self.btn_refresh, 0, wx.LEFT)
 			
 
-			if 1:
+			if 0:
 				
 				self.p_pos=[(0,0)]
 				self.timer={}
@@ -1556,7 +1582,7 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 			#print sn
 			if os.access(v, os.W_OK) and os.path.isfile(v):
 				os.remove(v)
-				print 'removing', v, os.path.isfile(v)
+				#print 'removing', v, os.path.isfile(v)
 				dir=os.path.join(os.path.dirname(v),sn)
 				
 				if os.access(dir, os.W_OK) and os.path.isdir(dir):
@@ -1922,14 +1948,14 @@ class SessionListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 		pos=self.timer_xref[the_id]
 		#print 'the_id', the_id,pos
 		self.count[pos] = self.count[pos] + 15
-
+		#wx.CallAfter(self.gauge[pos].SetValue, self.count[pos])
 		if self.count[pos] >= 180:
 			self.count[pos] = 0
 		#print self.count
 		#self.gauge.Show()
 		#print '||||||||||||||||| setting count', self.count
+		wx.CallAfter(self.gauge[pos].SetValue, self.count[pos])
 		
-		self.gauge[pos].SetValue(self.count[pos])
 		#self.gauge.Pulse()
 		
 	def TimerHandler_pos(self, event,params):
@@ -3381,6 +3407,7 @@ class SessionListCtrlPanelManager(wx.Panel):
 		self.slib_name=default_slib_name
 		self.home_dir=sess_dir
 		default_slib=os.path.join(self.home_dir,default_slib_name)
+		#del self.lists
 		self.lists={}
 		self.slps={}
 		if os.path.isdir(default_slib):
@@ -3925,6 +3952,8 @@ class NewSessionDialog(wx.Dialog):
 		# so we can set an extra style that must be set before
 		# creation, and then we create the GUI object using the Create
 		# method.
+		wx.Dialog.__init__(self, None, -1, title, 	style=wx.DEFAULT_DIALOG_STYLE|wx.THICK_FRAME|wx.RESIZE_BORDER|wx.TAB_TRAVERSAL)
+  
 		self.parent=parent
 		self.data=data
 		self.slib=slib
@@ -3938,20 +3967,23 @@ class NewSessionDialog(wx.Dialog):
 			self.def_tmpl=defaults[1].split('.') #default templates if any
 		#print defaults
 		#pprint(data)
-		self._popUpMenu = None
+		print  '#'*40
+		print self.def_cv
+		#self._popUpMenu = None
 		#self.recent=[]
-		pre = wx.PreDialog()
-		pre.SetExtraStyle(wx.DIALOG_EX_CONTEXTHELP)
-		pre.Create(parent, ID, title, pos, size, style)
-	
-		# This next step is the most important, it turns this Python
-		# object into the real wrapper of the dialog (instead of pre)
-		# as far as the wxPython extension is concerned.
-		self.PostCreate(pre)
+		if 0:
+			pre = wx.PreDialog()
+			pre.SetExtraStyle(wx.DIALOG_EX_CONTEXTHELP)
+			pre.Create(parent, ID, title, pos, size, style)
+		
+			# This next step is the most important, it turns this Python
+			# object into the real wrapper of the dialog (instead of pre)
+			# as far as the wxPython extension is concerned.
+			self.PostCreate(pre)
 
-		# This extra style can be set after the UI object has been created.
-		if 'wxMac' in wx.PlatformInfo and useMetal:
-			self.SetExtraStyle(wx.DIALOG_EX_METAL)
+			# This extra style can be set after the UI object has been created.
+			if 'wxMac' in wx.PlatformInfo and useMetal:
+				self.SetExtraStyle(wx.DIALOG_EX_METAL)
 
 
 		# Now continue with the normal construction of the dialog
@@ -3968,7 +4000,8 @@ class NewSessionDialog(wx.Dialog):
 		self._defMenu=None
 		#self.s_default=None
 		#self.t_default=None		
-		self.default_db='Oracle'
+		self.default_db=self.parent.aconf['defaults']['default_db']
+		print self.parent.aconf
 		if os.path.isfile(self.recent_fname):
 			self.recent=self.readRecent()
 
@@ -4117,7 +4150,8 @@ class NewSessionDialog(wx.Dialog):
 				
 			#b_vector.Enable(True)
 			vboxsizer.Add(self.b_vector, flag=wx.LEFT|wx.TOP, border=0)
-			self.b_vector.Bind(wx.EVT_BUTTON, self.OnCVClicked)
+			#self.b_vector.Bind(wx.EVT_BUTTON, self.OnCVClicked)
+			self.b_vector.Bind(wx.EVT_BUTTON, self.OnShowPopup) # EVT_CONTEXT_MENU
 			if 1:
 				imageFile = os.path.join(home,"images/arrow_down_24.png")
 				image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
@@ -4350,6 +4384,366 @@ class NewSessionDialog(wx.Dialog):
 		self.recentMenu=None
 		self.max_recent=10
 		self.highlight=['ORA11G']
+		self._cvMenu=None
+		#print gc.get_count()
+		#self.popupmenu=None
+		
+	
+	def createNativeCVMenu(self):
+		if not self.recentMenu:
+			self.recentMenu = wx.Menu()
+		#else:
+		#	self.recentMenu.Clear()
+
+		if not self._cvMenu:
+			self._cvMenu = wx.Menu()
+			if 1: #len(self.recent):
+				#self.i +=1
+				#menuItem = FM.FlatMenuItem(self._cvMenu, 20005, 'Recent', '', wx.ITEM_NORMAL, self.recentMenu)
+				#menu1 = wx.Menu()
+				
+				#item = self._cvMenu.Append(-1, 'Recent')
+				#self._cvMenu.AppendItem(menuItem)
+				if self.recent:
+					for r in reversed(self.recent):
+						(a,b)=r
+						a=a.upper()
+						b=b.upper()
+						self.i +=1
+						#Menu1 = FM.FlatMenu()
+						#menuItem = FM.FlatMenuItem(self.recentMenu, wx.NewId(), '%s --> %s' % (conf.dbs[a],conf.dbs[b]), '', wx.ITEM_NORMAL)
+						item = self.recentMenu.Append(wx.NewId(), '%s --> %s' % (conf.dbs[a],conf.dbs[b]))
+						self.gen_bind(wx.EVT_MENU,item, self.OnMenu,(a,b))
+						#self.recentMenu.AppendItem(menuItem)
+			self._cvMenu.AppendMenu(wx.NewId(),'Recent',self.recentMenu)
+			#self._cvMenu.AppendSeparator()
+			
+			if 1:
+				k=self.default_db #self.api2[0]
+				#print self.api2
+				#e(0)
+				m=self._cvMenu
+				for sm in self.api_menu[k]:
+					if len(self.api_menu[k])>1:
+						self.i +=1
+						self.create_Menu2_short_2(m,sm)
+						
+					else:
+						k2= self.api2[0]
+						if 1:
+							self.i +=1
+							self.create_Menu4_2(m,self.api_menu[k2][0],from_db=sm, from_to='To 2 ')
+						
+
+						m.AppendSeparator()
+						for sm in conf.ff:
+							#self.i +=1
+							#Menu1 = FM.FlatMenu()
+							#menuItem = FM.FlatMenuItem(m, wx.NewId(), 'To %s' % sm, '', wx.ITEM_NORMAL)
+							#m.AppendItem(menuItem)		
+							item = m.Append(wx.NewId(), 'To %s' % sm)							
+							self.gen_bind(wx.EVT_MENU,item, self.OnMenu,(k,sm))	
+			if 1: #From other dbs
+				self._cvMenu.AppendSeparator()
+				Menu1_2 = wx.Menu()
+				#menuItem = FM.FlatMenuItem(self._cvMenu, wx.NewId(), 'From other DB', '', wx.ITEM_NORMAL, Menu1_2)
+				#self._cvMenu.AppendItem(menuItem)
+				self._cvMenu.AppendMenu(wx.NewId(),'From other DB',Menu1_2)
+				self.from_other_db_Menu_2(Menu1_2)
+				#e(0)
+			self._cvMenu.AppendSeparator()	
+			for sm in conf.ff:
+				#self.i +=1
+				Menu1 = wx.Menu()
+				#menuItem = FM.FlatMenuItem(self._cvMenu, wx.NewId(), 'From %s' % sm, '', wx.ITEM_NORMAL, Menu1)
+				#self._cvMenu.AppendItem(menuItem)	
+				self._cvMenu.AppendMenu(wx.NewId(),'From %s' % sm,Menu1)
+				#pprint (self.api_menu)
+				for k2 in self.api2:
+					self.i +=1
+					if self.api_menu.has_key(k2): 					
+						if len(self.api_menu[k2])>1:
+							self.create_Menu3_2(Menu1,k2,from_db=sm)
+						else:
+							self.create_Menu4_2(Menu1,self.api_menu[k2][0],from_db=sm)
+						
+				
+		else:
+			#pprint(dir(self.recentMenu))
+			#self.recentMenu.Clear()
+			if self.recent:
+				for r in reversed(self.recent):
+					(a,b)=r
+					a=a.upper()
+					b=b.upper()
+					self.i +=1
+					#Menu1 = FM.FlatMenu()
+					#menuItem = FM.FlatMenuItem(self.recentMenu, wx.NewId(), '%s --> %s' % (conf.dbs[a],conf.dbs[b]), '', wx.ITEM_NORMAL)
+					#self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(a,b))
+					#self.recentMenu.AppendItem(menuItem)
+					item = self.recentMenu.Append(wx.NewId(), '%s --> %s' % (conf.dbs[a],conf.dbs[b]))
+					self.gen_bind(wx.EVT_MENU,item, self.OnMenu,(a,b))					
+	def create_Menu3_2(self,Menu2,k2,from_db, from_to='To'):
+		#print from_db, k2
+		#from_to='To_%s_%s' %(from_db,k2)
+		self.i +=1
+		Menu3 = wx.Menu()
+		#menuItem = FM.FlatMenuItem(Menu2, wx.NewId(), "%s %s" % (from_to, k2), "", wx.ITEM_NORMAL, Menu3)
+		#Menu2.AppendItem(menuItem)
+		Menu2.AppendMenu(wx.NewId(),"%s %s" % (from_to, k2),Menu3)
+		#if not k2 in ['OR']:
+		#	menuItem.Enable(False)
+		for sm2 in self.api_menu[k2]:
+			self.i +=1
+			self.create_Menu4_2(Menu3,sm2,from_db,from_to)
+		if 0 and  from_db not in conf.ff:
+			Menu2.AppendSeparator()
+			for s in conf.ff:
+				self.i +=1
+				#Menu1 = FM.FlatMenu()
+				#menuItem = FM.FlatMenuItem(Menu2, wx.NewId(), 'To %s' % s, '', wx.ITEM_NORMAL)
+				item=Menu2.Append(wx.NewId(), 'To %s' % s)
+				self.gen_bind(wx.EVT_MENU,item, self.OnMenu,(k2,s))
+				#Menu2.AppendItem(menuItem)	
+					
+	def from_other_db_Menu_2(self,Menu):
+		for k in self.api_menu.keys():
+			#print k
+			if k not in [self.default_db]:
+				Menu1 = wx.Menu()
+				#menuItem = FM.FlatMenuItem(Menu, wx.NewId(), k, "", wx.ITEM_NORMAL, Menu1)
+				#Menu.AppendItem(menuItem)
+				Menu.AppendMenu(wx.NewId(),k,Menu1)
+				for k2 in self.api_menu[k]:
+					#self.create_Menu3(Menu1,k2,from_db=k)
+					
+					#print from_db, k2
+					#from_to='To_%s_%s' %(from_db,k2)
+					#self.i +=1
+					Menu2 = wx.Menu()
+					#menuItem = FM.FlatMenuItem(Menu1, wx.NewId(), "From %s" % ( k2), "", wx.ITEM_NORMAL, Menu2)
+					#Menu1.AppendItem(menuItem)
+					Menu1.AppendMenu(wx.NewId(),"From %s" % ( conf.dbs[k2]),Menu2)
+					#if not k2 in ['OR']:
+					#	menuItem.Enable(False)
+					for sm2 in self.api_menu[self.default_db]:
+						#self.i +=1
+						self.create_Menu4_2(Menu2,sm2,k2,from_to='To')
+	def create_Menu2_short_2(self,Menu1,sm, from_to='From'):
+		#self.i +=1
+		Menu2 = wx.Menu()
+		if 0:
+			if sm in self.api_menu[self.default_db]:
+				imageFile = os.path.join(home,"images/database_green_16.png")
+				if sm in self.highlight:
+					imageFile = os.path.join(home,"images/database_red_16.png")
+				context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)
+				item = Menu2.Append(wx.NewId(),  '%s %s' % (from_to, conf.dbs[sm]) )
+				#menuItem = FM.FlatMenuItem(Menu1, wx.NewId(), '%s %s' % (from_to, conf.dbs[sm]) , '', wx.ITEM_NORMAL, Menu2,context_bmp)
+			else:
+				item = Menu2.Append(wx.NewId(),  '%s %s' % (from_to, conf.dbs[sm]) )
+				#menuItem = FM.FlatMenuItem(Menu1, wx.NewId(), '%s %s' % (from_to, conf.dbs[sm]) , '', wx.ITEM_NORMAL, Menu2)
+			
+		Menu1.AppendMenu(wx.NewId(),'%s %s' % (from_to, conf.dbs[sm]) ,Menu2)
+		#Menu1.AppendItem(menuItem)
+		
+
+			
+		k2=self.default_db
+		for sm2 in self.api_menu[k2]:
+			self.i +=1
+			self.create_Menu4_2(Menu2,sm2,sm,'To')
+		if 1: #To other dbs
+			Menu2.AppendSeparator()
+			Menu3 = wx.Menu()
+			#menuItem = FM.FlatMenuItem(Menu2, wx.NewId(), 'To other DB', '', wx.ITEM_NORMAL, Menu3)
+			#Menu2.AppendItem(menuItem)
+			Menu2.AppendMenu(wx.NewId(), 'To other DB' ,Menu3)
+			self.to_other_db_Menu_2(Menu3,sm)
+		#append to_csv
+		Menu2.AppendSeparator()
+		for s in conf.ff:
+			#self.i +=1
+			#Menu1 = FM.FlatMenu()
+			#menuItem = FM.FlatMenuItem(Menu2, wx.NewId(), 'To %s' % s, '', wx.ITEM_NORMAL)
+			item = Menu2.Append(wx.NewId(),  'To %s' % s )
+			self.gen_bind(wx.EVT_MENU,item, self.OnMenu,(sm,s))
+			#Menu2.AppendItem(menuItem)
+
+	def create_Menu4_2(self,Menu3,sm2,from_db, from_to='To'):
+		#self.i +=1
+		#print sm2, from_db
+		#imageFile = os.path.join(home,"images/database_grey_16.png")
+		if 0:
+			if sm2 in self.api_menu[self.default_db]:
+				imageFile = os.path.join(home,"images/database_green_16.png")
+				if sm2 in self.highlight:
+					imageFile = os.path.join(home,"images/database_red_16.png")
+				assert os.path.isfile(imageFile), 'image file does not exists\n%s' % imageFile
+				context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)
+				
+				menuItem = FM.FlatMenuItem(Menu3, wx.NewId(), "%s %s" % (from_to, conf.dbs[sm2]) , "", wx.ITEM_NORMAL, None,context_bmp)
+			else:
+				menuItem = FM.FlatMenuItem(Menu3, wx.NewId(), "%s %s" % (from_to, conf.dbs[sm2]) , "", wx.ITEM_NORMAL)
+			#menuItem.SetFont(wx.Font(10, wx.SWISS, wx.ITALIC, wx.BOLD, False, "Courier New"))
+			#menuItem.SetTextColour(wx.RED)
+			#pprint(dir(menuItem))
+		item=Menu3.Append(wx.NewId(),'%s %s' % (from_to, conf.dbs[sm2]))
+		self.gen_bind(wx.EVT_MENU,item, self.OnMenu,(from_db,sm2))
+		#Menu3.AppendItem(menuItem)
+	def to_other_db_Menu_2(self,Menu,from_db):
+		for k in self.api_menu.keys():
+			#print k
+			if k not in [self.default_db]:
+				Menu1 = wx.Menu()
+				#menuItem = FM.FlatMenuItem(Menu, wx.NewId(), k, "", wx.ITEM_NORMAL, Menu1)
+				#Menu.AppendItem(menuItem)
+				Menu.AppendMenu(wx.NewId(), k ,Menu1)
+				for k2 in self.api_menu[k]:
+					#for sm2 in self.api_menu[self.default_db]:
+					#self.i +=1
+					self.create_Menu4_2(Menu1,k2,from_db,from_to='To')
+		
+	def CreatePopupMenu2(self):
+		if not self.recentMenu:
+			self.recentMenu = FM.FlatMenu()
+		else:
+			self.recentMenu.Clear()
+
+		if not self._cvMenu:
+		
+			self._cvMenu = FM.FlatMenu()
+			#-----------------------------------------------
+			# Flat Menu test
+			#-----------------------------------------------
+			dbf={'OR':'Oracle', 'SS':'SQLServer', 'MA':'MariaDB', 'MY': 'MySQL', 'PG':'PostgreSQL', 'DB':'DB2', 'TT':'TimesTen', 'SL':'SQLite', 'IN':'Informix', 'SY':'Sybase','MO':'Mongo'}
+			self.i=0
+			if 1: #len(self.recent):
+				self.i +=1
+				menuItem = FM.FlatMenuItem(self._cvMenu, 20005, 'Recent', '', wx.ITEM_NORMAL, self.recentMenu)
+				self._cvMenu.AppendItem(menuItem)
+				if self.recent:
+					for r in reversed(self.recent):
+						(a,b)=r
+						a=a.upper()
+						b=b.upper()
+						self.i +=1
+						#Menu1 = FM.FlatMenu()
+						menuItem = FM.FlatMenuItem(self.recentMenu, wx.NewId(), '%s --> %s' % (conf.dbs[a],conf.dbs[b]), '', wx.ITEM_NORMAL)
+						self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(a,b))
+						self.recentMenu.AppendItem(menuItem)
+					
+				self._cvMenu.AppendSeparator()
+			if 0 and len(self.api2)>1:
+				for k in self.api2:
+					self.i +=1
+					Menu1 = FM.FlatMenu()
+					menuItem = FM.FlatMenuItem(self._cvMenu, wx.NewId(), 'From %s' % k, '', wx.ITEM_NORMAL, Menu1)
+					self._cvMenu.AppendItem(menuItem)
+					#if not k in ['OR']:
+					#	menuItem.Enable(False)
+					#print k
+					#pprint (self.api_menu)
+					e(0)
+					for sm in self.api_menu[k]:
+						if 1 or len(self.api_menu[k])>1:
+							self.i +=1
+							self.create_Menu2(Menu1,sm,dbf)
+							
+						else:
+							for k2 in self.api2:
+								self.i +=1
+								if len(self.api_menu[k2])>1:
+									self.create_Menu3(Menu1,k2,from_db=sm,from_to='To')
+								else:
+									self.create_Menu4(Menu1,self.api_menu[k2][0],from_db=sm, from_to='To')
+							Menu1.AppendSeparator()
+							for sm in conf.ff:
+								self.i +=1
+								#Menu1 = FM.FlatMenu()
+								menuItem = FM.FlatMenuItem(Menu1, wx.NewId(), 'To %s' % sm, '', wx.ITEM_NORMAL)
+								Menu1.AppendItem(menuItem)									
+								self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(dbf[k],sm))
+			#else:
+			if 1:
+				k=self.default_db #self.api2[0]
+				#print self.api2
+				#e(0)
+				Menu1=self._cvMenu
+				for sm in self.api_menu[k]:
+					if 1  or len(self.api_menu[k])>1:
+						self.i +=1
+						self.create_Menu2_short(Menu1,sm,dbf)
+						
+					else:
+						k2= self.api2[0]
+						if 1:
+							self.i +=1
+							self.create_Menu4(Menu1,self.api_menu[k2][0],from_db=sm, from_to='To 2 ')
+						
+
+						Menu1.AppendSeparator()
+						for sm in conf.ff:
+							self.i +=1
+							#Menu1 = FM.FlatMenu()
+							menuItem = FM.FlatMenuItem(Menu1, wx.NewId(), 'To %s' % sm, '', wx.ITEM_NORMAL)
+							Menu1.AppendItem(menuItem)									
+							self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(k,sm))	
+			if 1: #From other dbs
+				self._cvMenu.AppendSeparator()
+				Menu1_2 = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(self._cvMenu, wx.NewId(), 'From other DB', '', wx.ITEM_NORMAL, Menu1_2)
+				self._cvMenu.AppendItem(menuItem)
+				self.from_other_db_Menu(Menu1_2)
+				#e(0)
+			self._cvMenu.AppendSeparator()	
+			for sm in conf.ff:
+				self.i +=1
+				Menu1 = FM.FlatMenu()
+				menuItem = FM.FlatMenuItem(self._cvMenu, wx.NewId(), 'From %s' % sm, '', wx.ITEM_NORMAL, Menu1)
+				self._cvMenu.AppendItem(menuItem)	
+				#pprint (self.api_menu)
+				for k2 in self.api2:
+					self.i +=1
+					if self.api_menu.has_key(k2): 					
+						if len(self.api_menu[k2])>1:
+							self.create_Menu3(Menu1,k2,from_db=sm)
+						else:
+							self.create_Menu4(Menu1,self.api_menu[k2][0],from_db=sm)
+						
+				
+		else:
+			#pprint(dir(self.recentMenu))
+			#self.recentMenu.Clear()
+			if self.recent:
+				for r in reversed(self.recent):
+					(a,b)=r
+					a=a.upper()
+					b=b.upper()
+					self.i +=1
+					#Menu1 = FM.FlatMenu()
+					menuItem = FM.FlatMenuItem(self.recentMenu, wx.NewId(), '%s --> %s' % (conf.dbs[a],conf.dbs[b]), '', wx.ITEM_NORMAL)
+					self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(a,b))
+					self.recentMenu.AppendItem(menuItem)
+		print gc.get_count()		
+	def OnShowPopup(self, event):
+		btn = event.GetEventObject()
+		btnSize = btn.GetSize()
+		pos =  btn.GetPosition()
+		btnPt = btn.GetScreenPosition()
+		btnPt = self.ScreenToClient(btnPt)
+		btnPt = btnPt.x, btnPt.y + btnSize.y
+		if not self._cvMenu:
+			self.createNativeCVMenu()
+		self.PopupMenu(self._cvMenu, btnPt)
+				
+		
+
+	def OnPopupItemSelected(self, event):
+		item = self._cvMenu.FindItemById(event.GetId())
+		text = item.GetText()
+		wx.MessageBox("You selected item '%s'" % text)
+		
 	def reset_lbl(self):
 		#pprint(self.copy_vector)
 		lbl='Start(%s)' % self.default_db
@@ -4357,7 +4751,7 @@ class NewSessionDialog(wx.Dialog):
 	def OnSetDefaultsMenu(self, event):
 		# Demonstrate using the wxFlatMenu without a menu bar
 		btn = event.GetEventObject()
-		#print 
+		print 1
 		if 1:
 			# Create the popup menu
 			self.CreateDefaultsMenu()
@@ -4482,6 +4876,7 @@ class NewSessionDialog(wx.Dialog):
 		[db] = params
 		#print db
 		self.default_db = db
+		self.parent.aconf['defaults']['default_db']=db
 		#self.copy_vector[0] = self.s_default
 		#lbl='-'. join (['???', self.t_default])
 		self.reset_lbl()		
@@ -4489,11 +4884,13 @@ class NewSessionDialog(wx.Dialog):
 		#self._popUpMenu.Clear()
 		#self.recentMenu.Clear()
 		#print (dir(self._popUpMenu))
-		del self._popUpMenu
+		del self._cvMenu
 		del self.recentMenu
-		self._popUpMenu=None
+		del self._defMenu
+		self._cvMenu=None
 		self.recentMenu=None
-		#self._popUpMenu=None
+		self._defMenu=None
+		#self._cvMenu=None
 		#self.recentMenu=None
 	def OnSetTargetDefault_(self, event, params): 
 		[db] = params
@@ -4623,6 +5020,8 @@ class NewSessionDialog(wx.Dialog):
 
 			
 	def refresh_src_list(self, filter=None):
+		self.Freeze()
+		print gc.get_count()
 		assert self.copy_vector, 'copy_vector is not set.'
 		self.listCtrl.ClearAll()
 		self.listCtrl.InsertColumn(0, 'Source Template')
@@ -4682,7 +5081,8 @@ class NewSessionDialog(wx.Dialog):
 					self.s_rb[k].SetLabel("%s(%s)" % (k, v))
 		self.optsizer.Layout()
 		#self.optsizer.Refresh()
-
+		self.Thaw()
+		print gc.get_count()
 	def OnSrcTmplSelected(self,event):
 		#print str(self.__class__) + " - OnItemSelected"
 		currentItem = event.m_itemIndex
@@ -4759,8 +5159,32 @@ class NewSessionDialog(wx.Dialog):
 		#self.Destroy()
 		#return
 
-		
+		#print 'OnExit'
+		#print gc.get_count()
 		self.writeRecent()
+		#del self._cvMenu
+		#del self.recentMenu
+		#del self._defMenu
+		#self._cvMenu=None
+		#self.recentMenu=None
+		#self._defMenu=None	
+		items=[]
+		
+		#print self._cvMenu.GetAllItems(self._cvMenu,items)
+		#print items	
+		#print self._cvMenu.FindItem(2005,self._cvMenu)
+		if 0 and self._cvMenu:
+			self._cvMenu.DestroyChildren()
+			self._cvMenu.DissociateHandle()
+			#itm=self._cvMenu.FindItem(2005)
+			
+			#self._cvMenu.Destroy(itm)
+			#self._cvMenu.
+			del self._cvMenu
+		#print self.mem()
+		#print gc.get_count()
+		#gc.collect()
+		self._cvMenu=None
 		e.Skip()
 	def writeRecent(self):
 		#print 'writeRecent'
@@ -4781,6 +5205,14 @@ class NewSessionDialog(wx.Dialog):
 		return self.recent
 	def OnCreate(self,e):
 		#print 'OnCreate'
+		#self._cvMenu.Clear()
+		#del self._cvMenu
+		#del self.recentMenu
+		#del self._defMenu
+		#self._cvMenu=None
+		#self.recentMenu=None
+		#self._defMenu=None
+		gc.collect()		
 		libname=self.cb_tname.GetValue()
 		sname=self.tc_sname.GetValue().strip().strip(' ').replace(' ','')
 		if not sname:
@@ -4807,7 +5239,7 @@ class NewSessionDialog(wx.Dialog):
 		#print sfile_loc, os.path.isdir(sfile_loc)
 
 		return os.path.isdir(sfile_loc)
-	def OnCVClicked(self, event):
+	def OnCVClicked_0(self, event):
 		#print self.recent
 		#e(0)
 		# Demonstrate using the wxFlatMenu without a menu bar
@@ -4830,17 +5262,43 @@ class NewSessionDialog(wx.Dialog):
 		# object that we wish to handle the menu events, in this case we
 		# pass 'self'
 		# if we wish the menu to appear under the button, we provide its height
-		self._popUpMenu.SetOwnerHeight(btnSize.y)
-		self._popUpMenu.Popup(wx.Point(btnPt.x, btnPt.y), self)	
+		self._cvMenu.SetOwnerHeight(btnSize.y)
+		self._cvMenu.Popup(wx.Point(btnPt.x, btnPt.y), self)
+	def OnCVClicked(self, event):
+		#print self.recent
+		#e(0)
+		# Demonstrate using the wxFlatMenu without a menu bar
+		print gc.get_count()
+		gc.collect()
+		btn = event.GetEventObject()
+		if 1:
+			# Create the popup menu
+			self.CreatePopupMenu()
+			btnSize = btn.GetSize()
+			
+			btnPt = btn.GetPosition()
+			#print '1 btnPt.x, btnPt.y', btnPt.x, btnPt.y
+			btnPt = btn.GetParent().ClientToScreen(btnPt)
+			#print '2 btnPt.x, btnPt.y', btnPt.x, btnPt.y
+			#print 'btnSize.y', btnSize.y
+			self._cvMenu.SetOwnerHeight(btnSize.y)
+			#print 'btnPt.x, btnPt.y', btnPt.x, btnPt.y
+			self._cvMenu.Popup(wx.Point(btnPt.x, btnPt.y+50), self)
+			mpsn=self._cvMenu.GetScreenPosition()
+			#print 'mpsn', mpsn
+			#adjust
+			if btnPt.y<mpsn[1]:
+				self._cvMenu.Popup(wx.Point(btnPt.x, btnPt.y), self)
+			
 	def CreatePopupMenu(self):
 		if not self.recentMenu:
 			self.recentMenu = FM.FlatMenu()
 		else:
 			self.recentMenu.Clear()
 
-		if not self._popUpMenu:
+		if not self._cvMenu:
 		
-			self._popUpMenu = FM.FlatMenu()
+			self._cvMenu = FM.FlatMenu()
 			#-----------------------------------------------
 			# Flat Menu test
 			#-----------------------------------------------
@@ -4848,8 +5306,8 @@ class NewSessionDialog(wx.Dialog):
 			self.i=0
 			if 1: #len(self.recent):
 				self.i +=1
-				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, 'Recent', '', wx.ITEM_NORMAL, self.recentMenu)
-				self._popUpMenu.AppendItem(menuItem)
+				menuItem = FM.FlatMenuItem(self._cvMenu, 20005, 'Recent', '', wx.ITEM_NORMAL, self.recentMenu)
+				self._cvMenu.AppendItem(menuItem)
 				if self.recent:
 					for r in reversed(self.recent):
 						(a,b)=r
@@ -4857,17 +5315,17 @@ class NewSessionDialog(wx.Dialog):
 						b=b.upper()
 						self.i +=1
 						#Menu1 = FM.FlatMenu()
-						menuItem = FM.FlatMenuItem(self.recentMenu, 20000+self.i, '%s --> %s' % (conf.dbs[a],conf.dbs[b]), '', wx.ITEM_NORMAL)
+						menuItem = FM.FlatMenuItem(self.recentMenu, wx.NewId(), '%s --> %s' % (conf.dbs[a],conf.dbs[b]), '', wx.ITEM_NORMAL)
 						self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(a,b))
 						self.recentMenu.AppendItem(menuItem)
 					
-				self._popUpMenu.AppendSeparator()
+				self._cvMenu.AppendSeparator()
 			if 0 and len(self.api2)>1:
 				for k in self.api2:
 					self.i +=1
 					Menu1 = FM.FlatMenu()
-					menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, 'From %s' % k, '', wx.ITEM_NORMAL, Menu1)
-					self._popUpMenu.AppendItem(menuItem)
+					menuItem = FM.FlatMenuItem(self._cvMenu, wx.NewId(), 'From %s' % k, '', wx.ITEM_NORMAL, Menu1)
+					self._cvMenu.AppendItem(menuItem)
 					#if not k in ['OR']:
 					#	menuItem.Enable(False)
 					#print k
@@ -4889,7 +5347,7 @@ class NewSessionDialog(wx.Dialog):
 							for sm in conf.ff:
 								self.i +=1
 								#Menu1 = FM.FlatMenu()
-								menuItem = FM.FlatMenuItem(Menu1, 20000+self.i, 'To %s' % sm, '', wx.ITEM_NORMAL)
+								menuItem = FM.FlatMenuItem(Menu1, wx.NewId(), 'To %s' % sm, '', wx.ITEM_NORMAL)
 								Menu1.AppendItem(menuItem)									
 								self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(dbf[k],sm))
 			#else:
@@ -4897,7 +5355,7 @@ class NewSessionDialog(wx.Dialog):
 				k=self.default_db #self.api2[0]
 				#print self.api2
 				#e(0)
-				Menu1=self._popUpMenu
+				Menu1=self._cvMenu
 				for sm in self.api_menu[k]:
 					if 1  or len(self.api_menu[k])>1:
 						self.i +=1
@@ -4914,22 +5372,22 @@ class NewSessionDialog(wx.Dialog):
 						for sm in conf.ff:
 							self.i +=1
 							#Menu1 = FM.FlatMenu()
-							menuItem = FM.FlatMenuItem(Menu1, 20000+self.i, 'To %s' % sm, '', wx.ITEM_NORMAL)
+							menuItem = FM.FlatMenuItem(Menu1, wx.NewId(), 'To %s' % sm, '', wx.ITEM_NORMAL)
 							Menu1.AppendItem(menuItem)									
 							self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(k,sm))	
 			if 1: #From other dbs
-				self._popUpMenu.AppendSeparator()
+				self._cvMenu.AppendSeparator()
 				Menu1_2 = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(self._popUpMenu, wx.NewId(), 'From other DB', '', wx.ITEM_NORMAL, Menu1_2)
-				self._popUpMenu.AppendItem(menuItem)
+				menuItem = FM.FlatMenuItem(self._cvMenu, wx.NewId(), 'From other DB', '', wx.ITEM_NORMAL, Menu1_2)
+				self._cvMenu.AppendItem(menuItem)
 				self.from_other_db_Menu(Menu1_2)
 				#e(0)
-			self._popUpMenu.AppendSeparator()	
+			self._cvMenu.AppendSeparator()	
 			for sm in conf.ff:
 				self.i +=1
 				Menu1 = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(self._popUpMenu, 20000+self.i, 'From %s' % sm, '', wx.ITEM_NORMAL, Menu1)
-				self._popUpMenu.AppendItem(menuItem)	
+				menuItem = FM.FlatMenuItem(self._cvMenu, wx.NewId(), 'From %s' % sm, '', wx.ITEM_NORMAL, Menu1)
+				self._cvMenu.AppendItem(menuItem)	
 				#pprint (self.api_menu)
 				for k2 in self.api2:
 					self.i +=1
@@ -4950,9 +5408,10 @@ class NewSessionDialog(wx.Dialog):
 					b=b.upper()
 					self.i +=1
 					#Menu1 = FM.FlatMenu()
-					menuItem = FM.FlatMenuItem(self.recentMenu, 20000+self.i, '%s --> %s' % (conf.dbs[a],conf.dbs[b]), '', wx.ITEM_NORMAL)
+					menuItem = FM.FlatMenuItem(self.recentMenu, wx.NewId(), '%s --> %s' % (conf.dbs[a],conf.dbs[b]), '', wx.ITEM_NORMAL)
 					self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(a,b))
 					self.recentMenu.AppendItem(menuItem)
+		print gc.get_count()
 	def from_other_db_Menu(self,Menu):
 		for k in self.api_menu.keys():
 			#print k
@@ -4967,7 +5426,7 @@ class NewSessionDialog(wx.Dialog):
 					#from_to='To_%s_%s' %(from_db,k2)
 					self.i +=1
 					Menu2 = FM.FlatMenu()
-					menuItem = FM.FlatMenuItem(Menu1, 20000+self.i, "From %s" % ( k2), "", wx.ITEM_NORMAL, Menu2)
+					menuItem = FM.FlatMenuItem(Menu1, wx.NewId(), "From %s" % ( k2), "", wx.ITEM_NORMAL, Menu2)
 					Menu1.AppendItem(menuItem)
 					#if not k2 in ['OR']:
 					#	menuItem.Enable(False)
@@ -4991,7 +5450,7 @@ class NewSessionDialog(wx.Dialog):
 	def create_Menu2(self,Menu1,sm,dbf, from_to='From'):
 		self.i +=1
 		Menu2 = FM.FlatMenu()
-		menuItem = FM.FlatMenuItem(Menu1, 20000+self.i, '%s %s' % (from_to, conf.dbs[sm]) , '', wx.ITEM_NORMAL, Menu2)
+		menuItem = FM.FlatMenuItem(Menu1, wx.NewId(), '%s %s' % (from_to, conf.dbs[sm]) , '', wx.ITEM_NORMAL, Menu2)
 		Menu1.AppendItem(menuItem)
 		#self.set_sub_submenu(subSubMenu,1, 'CSV')
 		
@@ -5006,7 +5465,7 @@ class NewSessionDialog(wx.Dialog):
 		for s in conf.ff:
 			self.i +=1
 			#Menu1 = FM.FlatMenu()
-			menuItem = FM.FlatMenuItem(Menu2, 20000+self.i, 'To %s' % s, '', wx.ITEM_NORMAL)
+			menuItem = FM.FlatMenuItem(Menu2, wx.NewId(), 'To %s' % s, '', wx.ITEM_NORMAL)
 			self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(sm,s))
 			Menu2.AppendItem(menuItem)	
 	def create_Menu2_short(self,Menu1,sm,dbf, from_to='From'):
@@ -5042,7 +5501,7 @@ class NewSessionDialog(wx.Dialog):
 		for s in conf.ff:
 			self.i +=1
 			#Menu1 = FM.FlatMenu()
-			menuItem = FM.FlatMenuItem(Menu2, 20000+self.i, 'To %s' % s, '', wx.ITEM_NORMAL)
+			menuItem = FM.FlatMenuItem(Menu2, wx.NewId(), 'To %s' % s, '', wx.ITEM_NORMAL)
 			self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(sm,s))
 			Menu2.AppendItem(menuItem)	
 	
@@ -5051,7 +5510,7 @@ class NewSessionDialog(wx.Dialog):
 		#from_to='To_%s_%s' %(from_db,k2)
 		self.i +=1
 		Menu3 = FM.FlatMenu()
-		menuItem = FM.FlatMenuItem(Menu2, 20000+self.i, "%s %s" % (from_to, k2), "", wx.ITEM_NORMAL, Menu3)
+		menuItem = FM.FlatMenuItem(Menu2, wx.NewId(), "%s %s" % (from_to, k2), "", wx.ITEM_NORMAL, Menu3)
 		Menu2.AppendItem(menuItem)
 		#if not k2 in ['OR']:
 		#	menuItem.Enable(False)
@@ -5063,7 +5522,7 @@ class NewSessionDialog(wx.Dialog):
 			for s in conf.ff:
 				self.i +=1
 				#Menu1 = FM.FlatMenu()
-				menuItem = FM.FlatMenuItem(Menu2, 20000+self.i, 'To %s' % s, '', wx.ITEM_NORMAL)
+				menuItem = FM.FlatMenuItem(Menu2, wx.NewId(), 'To %s' % s, '', wx.ITEM_NORMAL)
 				self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(k2,s))
 				Menu2.AppendItem(menuItem)	
 			
@@ -5520,6 +5979,8 @@ class pnl_args(wx.Panel):
 		if 1: #Common
 			#self.core_args_panel = wx.Panel(self, style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 			self.core_args_panel = wx.lib.scrolledpanel.ScrolledPanel(self,-1, size=dimensions['common_args'], pos=(0,0), style=wx.SIMPLE_BORDER)
+			self.core_args_panel.SetVirtualSize((500, 500))
+			self.core_args_panel.SetScrollRate(20,20)
 			self.setCommonArgs(self.core_args_panel)
 			
 			#self.sb_common = wx.StaticBox(self, label="Common")
@@ -5869,7 +6330,7 @@ class pnl_args(wx.Panel):
 		if not self.hm:
 			default_hostmap_dir = os.path.join(transport_home, 'config','host_map')
 			default_hostmap_loc = os.path.join(default_hostmap_dir, self.parent.default_hm_file)
-			print default_hostmap_loc
+			#print default_hostmap_loc
 			self.set_hm(self.parent.get_default_cv(),default_hostmap_loc )
 			
 	def set_hm(self,copy_vector, hm_file_loc):
@@ -5881,7 +6342,7 @@ class pnl_args(wx.Panel):
 		#e(0)
 		#print conf._to.join(self.copy_vector)
 		#print transport_home,default_hostmap_loc
-		print copy_vector, hm_file_loc
+		#print copy_vector, hm_file_loc
 		self.hm = hmap(copy_vector, hm_file_loc)
 		#pprint(dir(self.hm))
 		am= self.hm.get_active_mapping()
@@ -5973,9 +6434,9 @@ class pnl_args(wx.Panel):
 				real_hostmap_loc = os.path.join(hostmap_home, self.parent.default_hm_file)				
 				hm_rel_path = os.path.relpath (real_hostmap_loc,hostmap_home)
 				hostmap_name=os.path.basename(self.parent.default_hm_file)
-				print '#'*60
-				print self.parent.default_hm_file
-				print real_hostmap_loc
+				#print '#'*60
+				#print self.parent.default_hm_file
+				#print real_hostmap_loc
 			session_hostmap_dir= os.path.join(session_dir,'host_map',os.path.dirname(hm_rel_path))
 			#print 'session_hostmap_dir', session_hostmap_dir
 			if not os.path.isdir(session_hostmap_dir):
@@ -6973,6 +7434,7 @@ class pnl_args(wx.Panel):
 			#	print c.Destroy()
 			#panel.fgs.Destroy()
 			panel.hbox.Hide(0)
+			del panel.fgs
 			panel.hbox.Remove(0)
 		#else:
 		#panel.fgs = wx.GridBagSizer(10, 3)
@@ -7306,6 +7768,9 @@ class pnl_args(wx.Panel):
 		#print 'open_session args_panel'
 		#(self.copy_vector,self.tmpl,self.the_id,(self.cargs,self.fargs,self.targs))
 		#self.args=args
+		del self.cargs
+		del self.fargs
+		del self.targs
 		(self.cargs,self.fargs,self.targs)=args
 		#print len(self.cargs),len(self.fargs),len(self.targs)
 		#self.args=args_api
@@ -7314,7 +7779,19 @@ class pnl_args(wx.Panel):
 		self.copy_vector=copy_vector
 		self.tmpl=tmpl
 		#self.core_args_panel.Destroy()
+		if self.obj:
+			for o,v in self.obj.items():
+				#del v
+				for c in v:
+					if  'BitmapButton' in str(type(c)):
+						#print str(type(c))
+						c.Destroy()
+						#print(dir(c))
+					else:				
+						c.Destroy()
+		#print ''
 		self.obj={}
+		del self.checks
 		self.checks={}
 		self.setCommonArgs(self.core_args_panel)
 		#pprint(self.obj.keys())
@@ -7332,12 +7809,12 @@ class pnl_args(wx.Panel):
 		
 		if self.obj.has_key(k):
 			hostmap_loc = self.obj[k][1].GetValue().strip()
-			print 'hm:', hostmap_loc
+			#print 'hm:', hostmap_loc
 			new_hostmap_loc=self.parent.args_panel.CreateNewSessionHostMap(hostmap_loc)
-			print 'hm:', new_hostmap_loc
+			#print 'hm:', new_hostmap_loc
 			#if new_hostmap_loc not in [hostmap_loc]:
 			self.obj[k][1].SetValue(new_hostmap_loc)
-			print 'set to', new_hostmap_loc
+			#print 'set to', new_hostmap_loc
 			#e(0)
 			#print conf._to.join(self.copy_vector)
 			self.set_hm(self.copy_vector, new_hostmap_loc)
@@ -7674,7 +8151,7 @@ class pnl_args(wx.Panel):
 				for k,v in mitems.items():
 					self.i +=1
 					self.recentMenu = FM.FlatMenu()
-					menuItem = FM.FlatMenuItem(self._sMenu, 20000+self.i, v, '', wx.ITEM_NORMAL)
+					menuItem = FM.FlatMenuItem(self._sMenu, wx.NewId(), v, '', wx.ITEM_NORMAL)
 					self._sMenu.AppendItem(menuItem)
 					self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnSqpMenu,(True,k,tname))
 					if k==0 and tname:
@@ -7683,7 +8160,7 @@ class pnl_args(wx.Panel):
 				for k,v in mitems.items():
 					self.i +=1
 					self.recentMenu = FM.FlatMenu()
-					menuItem = FM.FlatMenuItem(self._sMenu, 20000+self.i, v, '', wx.ITEM_NORMAL)
+					menuItem = FM.FlatMenuItem(self._sMenu, wx.NewId(), v, '', wx.ITEM_NORMAL)
 					self._sMenu.AppendItem(menuItem)
 					
 					self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnSqpMenu,(True,k, query))
@@ -7693,7 +8170,7 @@ class pnl_args(wx.Panel):
 				for k,v in mitems.items():
 					self.i +=1
 					self.recentMenu = FM.FlatMenu()
-					menuItem = FM.FlatMenuItem(self._sMenu, 20000+self.i, v, '', wx.ITEM_NORMAL)
+					menuItem = FM.FlatMenuItem(self._sMenu, wx.NewId(), v, '', wx.ITEM_NORMAL)
 					self._sMenu.AppendItem(menuItem)
 					
 					self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnSqpMenu,(True,k, query))
@@ -7726,7 +8203,7 @@ class pnl_args(wx.Panel):
 				for k,v in mitems.items():
 					self.i +=1
 					self.recentMenu = FM.FlatMenu()
-					menuItem = FM.FlatMenuItem(self._tMenu, 20000+self.i, v, '', wx.ITEM_NORMAL)
+					menuItem = FM.FlatMenuItem(self._tMenu, wx.NewId(), v, '', wx.ITEM_NORMAL)
 					self._tMenu.AppendItem(menuItem)
 					self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnSqpMenu,(False,k, tname))
 					if k==0 and tname:
@@ -7866,7 +8343,7 @@ class pnl_args(wx.Panel):
 			#cmd=r'cmd.exe  /k %s' % ( cmd)
 			#cmd=r'%s' % ( cmd)
 			#print cmd
-			from subprocess import Popen, PIPE,CREATE_NEW_CONSOLE
+			
 			cfg=[]
 			if 1:
 				import shlex 
@@ -8459,6 +8936,17 @@ class pnl_output(wx.Panel):
 		self.Bind(type, lambda event: handler(event, *args, **kwargs), instance)			
 	def setOutputArgs(self):
 		args_panel=self.parent.args_panel
+		if hasattr(self, 'out') and self.out:
+			for o,v in self.out.items():
+				#del v
+				for c in v:
+					if  'BitmapButton' in str(type(c)):
+						#print 'out', str(type(c))
+						c.Destroy()
+						#print(dir(c))
+					else:				
+						c.Destroy()
+		#print ''		
 		self.out={}
 		if not hasattr(self, 'btnsizer'):
 			self.btnsizer = wx.BoxSizer(wx.VERTICAL)
@@ -8583,6 +9071,18 @@ class pnl_output(wx.Panel):
 			
 		if 1: #App log
 			length=255
+			if hasattr(self, 'alog') and self.alog:
+				for o,v in self.alog.items():
+					#del v
+					for c in v:
+						if  'BitmapButton' in str(type(c)):
+							#print 'alog', str(type(c))
+							c.Destroy()
+							#print(dir(c))
+						else:				
+							c.Destroy()
+			#print ''
+		
 			self.alog={}	
 			if not hasattr(self, 'vbox_alog'):
 				#empty=True
@@ -8636,6 +9136,16 @@ class pnl_output(wx.Panel):
 			
 				
 		if 1:
+			if hasattr(self, 'sql') and self.sql:
+				for o,v in self.sql.items():
+					#del v
+					for c in v:
+						if  'BitmapButton' in str(type(c)):
+							#print 'sql', str(type(c))
+							c.Destroy()
+							#print(dir(c))
+						else:				
+							c.Destroy()		
 			self.sql={}	
 			length=255
 			#self.obj={}
@@ -8739,6 +9249,17 @@ class pnl_output(wx.Panel):
 			#self.p_sql.fgs4=wx.GridBagSizer(1, 10)
 			#self.vbox4.Add(self.p_sql, flag=wx.LEFT|wx.TOP, border=5)
 			i=0
+			if hasattr(self, 'dump') and self.dump:
+				for o,v in self.dump.items():
+					#del v
+					for c in v:
+						if  'BitmapButton' in str(type(c)):
+							#print 'dump', str(type(c))
+							c.Destroy()
+							#print(dir(c))
+						else:				
+							c.Destroy()
+						
 			self.dump={}	
 			k='default_spool_dir'
 			if args_panel.obj.has_key(k) and args_panel.checks[k].GetValue():
@@ -8780,6 +9301,16 @@ class pnl_output(wx.Panel):
 			#self.h_sizer.Layout()
 		if 1: #SQL*Loader log
 			length=255
+			if hasattr(self, 'ldr') and self.ldr:
+				for o,v in self.ldr.items():
+					#del v
+					for c in v:
+						if  'BitmapButton' in str(type(c)):
+							#print 'ldr', str(type(c))
+							c.Destroy()
+							#print(dir(c))
+						else:				
+							c.Destroy()			
 			self.ldr={}	
 			if not hasattr(self, 'vbox_ldr'):
 				#empty=True
@@ -9483,7 +10014,8 @@ class DataBuddy(wx.Frame):
 		self.p={}
 		self.hwnd={}
 		self.elapsed={}
-		self.q=[]
+		self.q={}
+		self.s={}
 		self.saved=True
 		self.default_hm_file=self.get_default_hm_file()
 		self.closing_in=6
@@ -9962,6 +10494,7 @@ class DataBuddy(wx.Frame):
 		self._hmMenu=None
 		self._saMenu=None
 		self._mainMenu=None
+
 		
 	def get_default_hm_file(self):
 		return self.aconf['defaults']['host_map']
@@ -10055,7 +10588,8 @@ class DataBuddy(wx.Frame):
 		self.p={}
 		self.hwnd={}
 		self.elapsed={}
-		self.q=[]
+		self.q={}
+		self.s={}
 		from include.default_args import default_args
 		(self.cargs,self.fargs,self.targs)=default_args
 		
@@ -10360,7 +10894,7 @@ class DataBuddy(wx.Frame):
 				imageFile = os.path.join(home,'images','gear_24_b.png')
 				context_bmp = wx.Bitmap(imageFile, wx.BITMAP_TYPE_PNG)
 				
-				menuItem = FM.FlatMenuItem(self._hmMenu, 20000+self.i, 'Edit global "%s"' % self.default_hm_file , '', wx.ITEM_NORMAL, None, context_bmp)
+				menuItem = FM.FlatMenuItem(self._hmMenu, wx.NewId(), 'Edit global "%s"' % self.default_hm_file , '', wx.ITEM_NORMAL, None, context_bmp)
 				#print default_hm.host_map_loc
 				if is_default:
 					menuItem.Enable(True)
@@ -10381,7 +10915,7 @@ class DataBuddy(wx.Frame):
 		self.aconf['defaults']['host_map']=hm_file
 		self.save_app_config()
 		self.default_hm_file= hm_file
-		del self.args_panel.hm
+		self.args_panel.hm.Destroy()
 		cv=self.get_default_cv()
 		if self.copy_vector[0]:
 			cv=self.copy_vector
@@ -10758,11 +11292,17 @@ class DataBuddy(wx.Frame):
 					self.changed.append(tc.Name)		
 		event.Skip()
 
-
-			
+	def IncCounter(self, the_id):
+		self.counters[the_id] = self.counters[the_id] + 1
+	def StopTimer(self, the_id):
+		self.timers[the_id].Stop()
+	def SetBtn(self,the_id, val):
+		self.btn[the_id]=val
+	def EnableBtn(self,the_id, boo):
+		self.btn[the_id].Enable(boo)
 	def TimerHandler(self, event, the_id):
 		#self.closing_in=15
-		self.counters[the_id] = self.counters[the_id] + 1
+		wx.CallAfter(self.IncCounter, the_id)
 		#print self.counters[the_id], the_id
 		#if self.counters[the_id]>10:
 		#	self.timers[the_id].Stop()
@@ -10770,6 +11310,7 @@ class DataBuddy(wx.Frame):
 		#print 'TimerHandler', the_id, btn.Name
 		sn=self.getSessionName()
 		if btn.Name in ['source', 'target'] :
+			#SQL*Plus/Test connect
 			#print self.counters[the_id], the_id
 			
 			#print btn
@@ -10781,21 +11322,23 @@ class DataBuddy(wx.Frame):
 			hwnd= self.get_hwnds_for_pid (p.pid)
 			
 			if not hwnd or self.counters[the_id] >= self.closing_in:
-				poll=p.poll()
+				#poll=p.poll()
 				#print 'poll', p
-				self.close_exec(p)
+				wx.CallAfter(self.close_exec,p)
 				if 1:
 					self.counters[the_id] = 0
-					self.timers[the_id].Stop()
+					#self.timers[the_id].Stop()
+					wx.CallAfter(self.StopTimer,the_id)
 					
 					if btn:										
 						btn.Enable(True)
 						btn.SetLabel('Test connect')
-						self.btn[the_id]=None
+						wx.CallAfter(self.SetBtn,the_id,None)
+						
 			else:			
 				if btn and self.counters[the_id]>0:
 					#print the_id, self.counters[the_id],msg,  'poll', p.poll()
-					btn.Enable(False)
+					wx.CallAfter(self.EnableBtn, the_id, False)
 					win32gui.SetWindowText (hwnd[0], '%s: %s' %(self.session_name,msg))
 					btn.SetLabel(msg)
 					if 0:
@@ -10828,11 +11371,13 @@ class DataBuddy(wx.Frame):
 			
 			#print btn.Name, the_id, self.the_id,the_id==self.the_id[2],self.counters[the_id]
 			if the_id==self.the_id[2]:
+				print 1
 				#print btn.Name,self.counters[the_id] 
 				p=self.p[the_id]
 				poll=p.poll()
 				#print 'poll', poll
 				if poll in [None]:
+					#Still alive
 					self.Freeze()
 					msg= self.getRunning(the_id,p)
 					
@@ -10846,7 +11391,24 @@ class DataBuddy(wx.Frame):
 					self.args_panel.enableSqlLoaderButtons()
 					self.EnableShowDumpButton()
 					self.Thaw()
+					line=' '
+					if 0:
+					#for i in range(100):
+						(t,q)=self.q[the_id]
+						try:  line = q.get_nowait() # or q.get(timeout=.1)
+
+						except Empty:
+							pass
+							#print('no output yet')
+						except: 
+							raise							
+						else: # got line
+							print line
+							self.pipefh.close() 
+							#break
+													
 				else:
+					#pprint(self.s)
 					btn.SetLabel('Run')
 					self.btn_run.SetBackgroundColour(self.c_default)
 					self.timers[the_id].Stop()
@@ -10859,27 +11421,51 @@ class DataBuddy(wx.Frame):
 					if self.elapsed.has_key(self.getSessionName()):
 						del self.elapsed[self.getSessionName()]
 					#del self.sids[sn][2]
+					if self.q.has_key(the_id):
+						del self.q[the_id]
 				#else:
 				#	print 'Unknown poll status %s, id %d' % (poll, the_id)
-				
+			print 2	
+			for x,v in self.q.items():
+				(t,q)=v
+				print x
+				try:  line = q.get_nowait() # or q.get(timeout=.1)
+
+				except Empty:
+					pass
+					#print('no output yet')
+				except: 
+					raise							
+				else: # got line
+					self.s[the_id]=eval(line)
+					#self.pipefh.close() 
+					del self.q[x]
+					#break
+							
+							
+							
 	def getRunning(self,the_id, pid):
 		elapsed='%dm%ds' % (self.counters[the_id]/60,self.counters[the_id]%60)
-		
+		#print the_id, pid
+		#print self.s
 			
 		if self.counters[the_id]<60:
 			elapsed='%ds' % (self.counters[the_id])
 		#print the_id, self.hwnd[the_id]
-		title=win32gui.GetWindowText (self.hwnd[the_id][0])
+		#title=win32gui.GetWindowText (self.hwnd[the_id][0])
 		#print title
 		sn=self.getSessionName()
-		if title.startswith('DONE:'):
+		if self.s.has_key(the_id):
 			if self.elapsed and self.elapsed.has_key(sn):
 				pass
 			else:
 				self.elapsed[sn]='%dm%ds' % (self.counters[the_id]/60,self.counters[the_id]%60)
 			
-			status=title.split(':')[1]
+			#status=title.split(':')[1]
 			#print status
+			status='FAILED'
+			if self.s[the_id]['status']:
+				status='SUCCESS'
 			if status in ['FAILED']:
 				#print status
 				self.btn_run.SetBackgroundColour(self.c_failed)
@@ -11334,6 +11920,7 @@ class DataBuddy(wx.Frame):
 				defaults=(self.copy_vector, self.tmpl)
 			#print self.sm.slib_name
 			#e(0)
+			gc.collect()
 			dlg = NewSessionDialog(self, -1, "Create new session.", size=(750, 500),				
 							 #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
 							 style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
@@ -11359,8 +11946,9 @@ class DataBuddy(wx.Frame):
 					#send("create_new_session", (sname,cv, tmpl,api_args,reuse) )
 					send('add_session',(sname,cv,tmpl,dname,fname,slib_name))
 
-			
-			#dlg.Destroy()
+			print gc.get_count()
+			dlg.Destroy()
+			print gc.get_count()
 			#[self.sname, self.copy_vector, self.tmpl, self.args]=dlg.getConfig()
 			#print conf
 			#print val
@@ -11667,56 +12255,6 @@ class DataBuddy(wx.Frame):
 							#C:\app\alex_buz\product\11.2.0\dbhome_2\BIN\sqlplus.exe SCOTT/tiger2@orcl @C:\Users\alex_buz\Documents\GitHub\DataBuddy\test\test_connnect\Oracle.sql
 							#C:\Users\alex_buz\Documents\GitHub\DataBuddy\qc32\qc32.exe -t "^|" -w "ora11g2ora11g" -r "1" -o "1" -q "C:\Python27\data_migrator_1239\test\v101\query\oracle_query.sql" -b "orcl" -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -z"C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -j "SCOTT" -x "tiger2" -d "orcl" -Z "C:\app\alex_buz\product\11.2.0\dbhome_2\BIN" -p "tiger2" -m "YYYY-MM-DD HH24.MI.SS.FF2" -u "SCOTT" -e "YYYY-MM-DD HH24.MI.SS" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -a "SCOTT.Partitioned_test_to" -G "part_15"
 							if 0:
-								cfg=['C:\\Users\\alex_buz\\Documents\\GitHub\\DataBuddy\\qc32\\qc32.exe',
-				 '-t',
-				 '"^|"',
-				 '-w',
-				 'ora11g2ora11g',
-				 '-r',
-				 '1',
-				 '-o',
-				 '1',
-				 '-q',
-				 'C:\\Python27\\data_migrator_1239\\test\\v101\\query\\oracle_query.sql',
-				 '-b',
-				 '"orcl"',
-				 '-e',
-				 '"YYYY-MM-DD HH24.MI.SS"',
-				 '-m',
-				 '"YYYY-MM-DD HH24.MI.SS.FF2"',
-				 '-z',
-				 '"C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN"',
-				 '-O',
-				 '"YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM"',
-				 '-j',
-				 '"SCOTT"',
-				 '-x',
-				 '"tiger2"',
-				 '-d',
-				 '"orcl"',
-				 '-Z',
-				 "'C:\\app\\alex_buz\\product\\11.2.0\\dbhome_2\\BIN'",
-				 '-e',
-				 '"YYYY-MM-DD HH24.MI.SS"',
-				 '-m',
-				 '"YYYY-MM-DD HH24.MI.SS.FF2"',
-				 '-u',
-				 '"SCOTT"',
-				 '-p',
-				 '"tiger2"',
-				 '-O',
-				 '"YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM"',
-				 '-a',
-				 '"SCOTT.Partitioned_test_to"',
-				 '-G',
-				 '"part_15"']
-							
-							#pprint(cfg)	
-							#e(0)
-							#print  ' '.join(cfg)
-							#e(0)
-							#C:\Python27\data_migrator_1239\datamule.py -t ^| -w ora11g2ora11g -r 1 -o 1 -q C:\Python27\data_migrator_1239\test\v101\query\oracle_query.sql -b orcl -e "YYYY-MM-DD HH24.MI.SS" -m "YYYY-MM-DD HH24.MI.SS.FF2" -z C:\app\alex_buz\product\11.2.0\dbhome_2\BIN -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -j SCOTT -x tiger2 -d orcl -Z C:\app\alex_buz\product\11.2.0\dbhome_2\BIN -p tiger2 -m "YYYY-MM-DD HH24.MI.SS.FF2" -u SCOTT -e "YYYY-MM-DD HH24.MI.SS" -O "YYYY-MM-DD HH:MI:SS.FF2 TZH:TZM" -a SCOTT.Partitioned_test_to -G part_15			
-							if 0:
 								p = Popen(cfg, stdin=PIPE, stdout=PIPE, shell=True ) #creationflags=CREATE_NEW_CONSOLE
 								#print p
 								out, err = p.communicate()
@@ -11739,16 +12277,59 @@ class DataBuddy(wx.Frame):
 											os.environ['NLS_TIMESTAMP_TZ_FORMAT'] = nls_timestamp_tz_format
 										else:
 											os.environ['NLS_TIMESTAMP_TZ_FORMAT'] =''	
+								if 1:
+
+									# Create pipe for communication
+									self.pipeout, self.pipein = os.pipe()
+
+									# Prepare to pass to child process
+									if sys.platform == "win32":
+										self.curproc = _subprocess.GetCurrentProcess()
+										#pprint (dir(curproc))
+										pipeouth = msvcrt.get_osfhandle(self.pipein)
+										self.pipeoutih = _subprocess.DuplicateHandle(self.curproc, pipeouth, self.curproc, 0, 1,
+												_subprocess.DUPLICATE_SAME_ACCESS)
+
+										self.pipearg = str(int(self.pipeoutih))   
+										#print self.pipearg
+									else:
+										pipearg = str(self.pipein)
+
+							
+									
+
+
 								
 								if exe:	#exe										
-									cfg=cfg+['-X','1']
+									cfg=cfg+['-X','1'] +['-spID', self.pipearg]
 									#pprint (cfg)
-									p = Popen(cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
+									p = Popen(cfg, creationflags=CREATE_NEW_CONSOLE,close_fds=ON_POSIX) #stderr=PIPE, stdout=PIPE,
 								else:	#py
 									cfg[0]=r'%s\datamule.py' % transport_home
-									cfg=cfg+['-X','1']
-									p = Popen([sys.executable]+cfg, creationflags=CREATE_NEW_CONSOLE) #stderr=PIPE, stdout=PIPE,
+									cfg=cfg+['-X','1']+['-spID',self.pipearg]
+									#pprint (cfg)
+			
+									p = Popen([sys.executable]+cfg, creationflags=CREATE_NEW_CONSOLE,close_fds=ON_POSIX) #stderr=PIPE, stdout=PIPE,
+									#p.wait()
+								if 1:
+									#ON_POSIX = 'posix' in sys.builtin_module_names
 
+									def enqueue_output(out, queue):
+										for line in iter(out.readline, b''):
+											queue.put(line)
+										#out.close()
+										
+									q= Queue()
+									import io
+									# Write to child (could be done with os.write, without os.fdopen)
+									self.pipefh = io.open(self.pipeout, 'r') #os.fdopen(pipeout, 'r',0)
+									t = Thread(target=enqueue_output, args=(self.pipefh, q))
+									t.daemon = True # thread dies with the program
+									t.start()
+									self.q[the_id]=(t,q)
+									os.close(self.pipein)
+									#if sys.platform == "win32":
+									#	self.pipeoutih.Close()
 								if 1:
 									hwnd=None
 									while not hwnd:
@@ -11771,7 +12352,7 @@ class DataBuddy(wx.Frame):
 									self.timers[the_id].Start(1000)
 									
 									win32gui.SetWindowText (hwnd[0], title)
-									#print title
+									print title
 									#e(0)
 									#sending 'y' to job
 									if 1: #if_yes:
@@ -11814,12 +12395,54 @@ class DataBuddy(wx.Frame):
 						 
 										send_no( window1)
 										
+									#p.wait()
+									print 'after p'
+									if 1:
 										
+										#os.close(self.pipein)
+										if sys.platform == "win32":
+											self.pipeoutih.Close()
+										if 0:
+											line=' '
+											while 1:
+											#for i in range(100):
+												try:  line = q.get_nowait() # or q.get(timeout=.1)
+												except Empty:
+													pass
+													#print('no output yet')
+												else: # got line
+													print 2, line
+													self.pipefh.close() 
+													break
+												#time.sleep(1)
+									if 0:
+										#subproc = subprocess.Popen(['python', 'child_in.py', pipearg], close_fds=ON_POSIX)
+
+										# Close read end of pipe in parent
+										os.close(self.pipein)
+										if sys.platform == "win32":
+											self.pipeoutih.Close()
+										if 0:
+											import io
+											# Write to child (could be done with os.write, without os.fdopen)
+											pipefh = io.open(self.pipeout, 'r') #os.fdopen(pipeout, 'r',0)
+											#while 1:
+											# Wait for the child to finish
+											#pprint(dir(pipefh))
+											#for i in range(100):
+											print pipefh.closed, pipefh.tell(), pipefh.isatty()
+											test= pipefh.read()
+											print 1, test	
+											#time.sleep(1)
+											pipefh.close()
+											#p.wait()
+									
 								#disable form
 								self.DisableOnRun()
 								send('highlight_session',(self.session_name,wx.BLACK))
 								self.last_log_dir[self.session_name]=self.getLogDir()
 								self.EnableShowDumpButton()
+								
 	def validateOnRun(self):
 		if self.if_generic_tremplate():
 			return True

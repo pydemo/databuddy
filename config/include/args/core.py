@@ -24,6 +24,7 @@ pcore['loader_profile']={'short':'-C','long':'--loader_profile', 'type':str, 'de
 pcore['host_map']={'short':'-5','long':'--host_map', 'type':str, 'default':'', 'help':'Host-to-shard map.'}
 pcore['spool_type']={'short':'-6','long':'--spool_type', 'type':str, 'default':'csv', 'help':'Spool file type (CSV or JSON).'}
 pcore['debug_level']={'short':'-dbg','long':'--debug_level', 'type':str, 'default':'', 'help':'QC Debug level.'}
+pcore['status_pipe_id']={'short':'-spID','long':'--status_pipe_id', 'type':str, 'default':'0', 'help':'Status reporting pipe ID.'}
 #params['core']['arg_8']={'short':'-8','long':'--arg_8', 'type':str, 'default':'', 'help':'Generic string argument 8.'}
 #params['core']['arg_9']={'short':'-9','long':'--arg_9', 'type':str, 'default':'', 'help':'Generic string argument 9.'}
 

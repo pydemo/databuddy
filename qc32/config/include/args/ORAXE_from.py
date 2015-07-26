@@ -2,7 +2,8 @@
 pfrom[dbkey]['query_sql_file']={'short':'-q','long':'--query_sql_file', 'type':str, 'default':None, 'help':'Input file with %s query sql.'  % dbs[dbkey]}
 pfrom[dbkey]['query_sql_dir']={'short':'-Q','long':'--query_sql_dir', 'type':str, 'default':None, 'help':'Input dir with %s query files sql.'  % dbs[dbkey]}
 pfrom[dbkey]['from_table']=  {'short':'-c','long':'--from_table', 	'type':str, 'default':None, 'help':'From table.'}
-pfrom[dbkey]['from_table_list']=  {'short':'-cl','long':'--from_table_list', 	'type':str, 'default':None, 'help':'(From) Coma separated table list.'}
+#pfrom[dbkey]['from_partition']=  {'short':'-P','long':'--from_partition', 	'type':str, 'default':None, 'help':'From partition.'}
+#pfrom[dbkey]['from_sub_partition']=  {'short':'-S','long':'--from_sub_partition', 	'type':str, 'default':None, 'help':'From sub-partition.'}
 pfrom[dbkey]['from_user']= {'short':'-j','long':'--from_user', 	'type':str, 'default':None, 'help':'%s source user.' % dbs[dbkey]}
 pfrom[dbkey]['from_passwd']={'short':'-x','long':'--from_passwd', 'type':str, 'default':None, 'help':'%s source user password.' % dbs[dbkey]}			
 pfrom[dbkey]['from_db_name']={'short':'-b','long':'--from_db_name', 'type':str, 'default':None, 'help':'%s source database.' % dbs[dbkey]}			

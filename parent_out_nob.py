@@ -33,6 +33,7 @@ else:
 # Start child with argument indicating which FD/FH to read from
 ON_POSIX = 'posix' in sys.builtin_module_names
 subproc = subprocess.Popen(['python', 'child_in.py', pipearg], close_fds=ON_POSIX)
+subproc2 = subprocess.Popen(['python', 'child_in.py', pipearg], close_fds=ON_POSIX)
 
 # Close read end of pipe in parent
 os.close(pipein)
@@ -89,5 +90,6 @@ if 0:
 		time.sleep(1)
 	pipefh.close()
 	subproc.wait()
+	subproc2.wait()
 
 

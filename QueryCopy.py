@@ -101,6 +101,24 @@ except ImportError: # if it's not there locally, try the wxPython lib.
 import wx.lib.agw.multidirdialog as MDD
 from qc32.config.include.oracle import target	
 from subprocess import Popen, PIPE,CREATE_NEW_CONSOLE
+try:
+	from Queue import Queue, Empty
+except ImportError:
+	from queue import Queue, Empty  # python 3.x
+from threading  import Thread
+import io											
+#import os
+import subprocess
+#import sys
+#import time
+#from pprint import pprint
+if sys.platform == "win32":
+	import msvcrt
+	import _subprocess
+else:
+	import fcntl
+ON_POSIX = 'posix' in sys.builtin_module_names
+
 def import_module(filepath):
 	class_inst = None
 	#expected_class = 'MyClass'

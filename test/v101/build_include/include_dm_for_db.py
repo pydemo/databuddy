@@ -31,9 +31,12 @@ def show_default_help(for_db,from_to_dbs,appname, dbs,ff):
 	cvarg='-h'
 	print 'Databases supported (%d):' % (len(from_to_dbs)-len(ff))
 	j=1
+	
 	from_dbs=[d for d in from_to_dbs if d not in ff]
+	print from_dbs
 	for i in from_dbs:
-		if i not in ff:
+		if dbs.has_key(i):
+			#print i
 			print '%d. %s' % (j, dbs[i])
 			j +=1
 	print ''
@@ -48,15 +51,15 @@ def show_default_help(for_db,from_to_dbs,appname, dbs,ff):
 
 	
 	print """For detailed help use one of the options:"""
+	if 0:
+		assert len(from_to_dbs), 'from_to_dbs are not set.'
+		assert len(for_db), 'for_db is not set.'
 
-	assert len(from_to_dbs), 'from_to_dbs are not set.'
-	assert len(for_db), 'for_db is not set.'
-
-	print "\nFrom {:s}\n".format((dbs[for_db[0]]+':')[:50]) 
-	print (''.join(['\tTo {:20s}: {:s} {:s} {:s}2{:s}\n'.format (dbs[x.upper()],appname, cvarg,for_db[0].lower(),x.lower()) for x in from_to_dbs if '%s%s%s' % (for_db[0].lower(), _to, x.lower())!='csv%scsv' % _to]))
-	
-	print "To {:s}\n".format((dbs[for_db[0]]+':')[:50]) 
-	print (''.join(['\tFrom {:18s}: {:s} {:s} {:s}2{:s}\n'.format (dbs[x.upper()],appname, cvarg,x.lower(),for_db[0].lower()) for x in from_to_dbs if '%s%s%s' % (for_db[0].lower(), _to,  x.lower())!='csv%scsv' % _to and for_db[0].lower()!= x.lower()]))
+		print "\nFrom {:s}\n".format((dbs[for_db[0]]+':')[:50]) 
+		print (''.join(['\tTo {:20s}: {:s} {:s} {:s}2{:s}\n'.format (dbs[x.upper()],appname, cvarg,for_db[0].lower(),x.lower()) for x in from_to_dbs if '%s%s%s' % (for_db[0].lower(), _to, x.lower())!='csv%scsv' % _to]))
+		
+		print "To {:s}\n".format((dbs[for_db[0]]+':')[:50]) 
+		print (''.join(['\tFrom {:18s}: {:s} {:s} {:s}2{:s}\n'.format (dbs[x.upper()],appname, cvarg,x.lower(),for_db[0].lower()) for x in from_to_dbs if '%s%s%s' % (for_db[0].lower(), _to,  x.lower())!='csv%scsv' % _to and for_db[0].lower()!= x.lower()]))
 def show_vector_help(copy_vector,params):
 		(from_db, to_db) = copy_vector.split(_to)
 		(ufrom_db, uto_db) = copy_vector.upper().split(_to)

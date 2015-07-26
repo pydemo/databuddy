@@ -16,37 +16,13 @@ abspath=home
 import_module=import_module
 from pprint import pprint
 import argparse
-#		'SSEXP':'SQL Server Express','SS2012':'SQL Server 2012','SS2014':'SQL Server 2014','SS2016':'SQL Server 2016',
-#		'SS70':'SQL Server 7.0', 'SS2000':'SQL Server 2000', 'SS2005':'SQL Server 2005', 'SS2008':'SQL Server 2008', 
+#from common_conf import *
 
-dbs={	'SYASE':'SAP Sybase ASE', 'SYANY':'Sybase SQL Anywhere','SYIQ':'Sybase IQ',
-		'ORA12C':'Oracle 12c','ORA11G':'Oracle 11g','ORA10G':'Oracle 10g','ORA9I':'Oracle 9i','ORA8I':'Oracle 8i','ORA733':'Oracle 7.3.3', 'ORAXE':'Oracle XE', 'ORAEXA':'Exadata',
-		'TTEN':'TimesTen', 
-		'SLITE':'SQL Lite',
-		'SSEXP':'SQL Server Express','SSENT':'SQL Server Enterprise',
-		'MYSQL':'MySQL', 'MARIA':'MariaDB', 'INFOB':'Infobright',
-		'PGRES':'PostgreSQL',		
-		'DBTAES':'DB2 Advanced Enterprise Server','DBTES':'DB2 Enterprise Server',
-		'DBTAWS':'DB2 Advanced Workgroup Server',
-		'DBTWS':'DB2 Workgroup Server',
-		'DBTE':'DB2 Express', 'DBTEC':'DB2 Express C', 'DBTDE':'DB2 Developer Edition',
-		'INFOR':'Informix IDS', 'INFORC':'Informix Innovator C',
-		'MONGO':'MongoDB',		
-		'CSV':'CSV',
-		'JSON':'JSON',
-		'DDL':'DDL',		
-		}
-dbfam={	'SYASE':'Sybase', 'SYANY':'Sybase','SYIQ':'Sybase',
-		'ORA12C':'Oracle','ORA11G':'Oracle','ORA10G':'Oracle','ORA9I':'Oracle','ORA8I':'Oracle','ORA733':'Oracle', 'ORAXE':'Oracle', 'ORAEXA':'Oracle',
-		'TTEN':'TimesTen', 
-		'SLITE':'SQL Lite',
-		'SSEXP':'SQL Server','SSENT':'SQL Server',
-		'MYSQL':'MySQL', 'MARIA':'MariaDB', 'INFOB':'Infobright',
-		'PGRES':'PostgreSQL',		
-		'DBTAES':'DB2','DBTES':'DB2','DBTAWS':'DB2','DBTWS':'DB2','DBTE':'DB2', 'DBTEC':'DB2', 'DBTDE':'DB2',
-		'INFOR':'Informix', 'INFORC':'Informix',
-		'MONGO':'MongoDB',		
-		}		
+imp_file = os.path.join(abspath,'qc32','config','common_conf.py')
+cconf=import_module(imp_file)
+dbs=cconf.dbs
+
+dbfam=cconf.dbfam
 import __builtin__
 __builtin__.dbs = dbs		
 import release as rel 
@@ -63,6 +39,7 @@ citi=False
 if_hg=False #hourglass
 _to='-'
 ff=['CSV','JSON','DDL'] #file v.s. db 
+tt=['PCSP.r10156']
 #SQL*Loader init
 #dlp={}
 #dlp['ORA12C']=dlp['ORA11G']=dlp['ORAEXA']=dlp['ORAXE']=os.path.join(home,r'config','sqlloader.py')
@@ -154,7 +131,7 @@ def set_params(params):
 		params['core']['host_map']={'short':'-5','long':'--host_map', 'type':str, 'default':'', 'help':'Host-to-shard map.'}
 		params['core']['spool_type']={'short':'-6','long':'--spool_type', 'type':str, 'default':'csv', 'help':'Spool file type (CSV or JSON).'}
 		params['core']['debug_level']={'short':'-7','long':'--debug_level', 'type':str, 'default':'', 'help':'QC Debug level.'}
-		#params['core']['arg_8']={'short':'-8','long':'--arg_8', 'type':str, 'default':'', 'help':'Generic string argument 8.'}
+		params['core']['status_pipe_id']={'short':'-spID','long':'--status_pipe_id', 'type':str, 'default':'0', 'help':'Status reporting pipe ID.'}
 		#params['core']['arg_9']={'short':'-9','long':'--arg_9', 'type':str, 'default':'', 'help':'Generic string argument 9.'}
 					
 	params['FROM']={}
@@ -832,34 +809,11 @@ if copy_vector:
 #def not_supported	
 
 
-#print from_dbs
+#'SSEXP':'SQL Server','SS2012':'SQL Server','SS2014':'SQL Server','SS2016':'SQL Server',
+#'SS70':'SQL Server', 'SS2000':'SQL Server', 'SS2005':'SQL Server', 'SS2008':'SQL Server',
 
-#exetitle=exeTitle()	
-dbclients={ 'PGRES':r"C:\Program Files\PostgreSQL\9.4\bin",
-			'ORA11G':r'C:\app\alex_buz\product\11.2.0\dbhome_2\BIN',
-			'ORA10G':r'C:\app\alex_buz\product\11.2.0\dbhome_2\BIN',
-			'ORA9I':r'C:\app\alex_buz\product\11.2.0\dbhome_2\BIN',
-			'ORA8I':r'C:\app\alex_buz\product\11.2.0\dbhome_2\BIN',
-			'ORA733':r'C:\app\alex_buz\product\11.2.0\dbhome_2\BIN',			
-			'ORA12C':r'C:\app\alex_buz\product\11.2.0\dbhome_2\BIN',
-			'ORAXE':r'C:\app\alex_buz\product\11.2.0\dbhome_2\BIN',
-			#'ORA11G':r'C:\ORACLE\product\11.1.0\client_1\BIN',
-			'ORAEXA':r'C:\app\alex_buz\product\11.2.0\dbhome_2\BIN',
-			'SSENT':r'C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn',
-			'SSEXP':r'C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn',
-			'MYSQL':r'C:\Temp\mysql\bin',	'INFOB':r'C:\Temp\mysql\bin',	
-			#'CSVFILE':r'', 'CSVDIR':r'', 
-			'CSV':r'',
-			'SYANY': r'C:\Program Files\SQL Anywhere 16\Bin64',
-			'SYASE': r'C:\Program Files\SQL Anywhere 16\Bin64',
-			'SYIQ': r'C:\Program Files\SQL Anywhere 16\Bin64',
-			'TTEN':r'C:\Program Files (x86)\TimesTen\tt1122_64\bin',
-			#'DBTUDB':r'C:\Program Files (x86)\IBM\SQLLIB_01\BIN',
-			'INFOR':r'C:\Program Files (x86)\IBM Informix Software Bundle\bin',
-			'INFORC':r'C:\Program Files (x86)\IBM Informix Software Bundle\bin',
-			'MARIA':r'C:\Program Files\MariaDB 10.0\bin',
-			'SLITE':'C:\Temp\SqlLite',
-			'MONGO':r'C:\Program Files\MongoDB\Server\3.0\bin'}
+dbclients=cconf.dbclients
+
 for db in('DBTAES', 'DBTES', 'DBTAWS', 'DBTWS', 'DBTE', 'DBTEC', 'DBTDE'):
 	dbclients[db]=r'C:\Program Files (x86)\IBM\SQLLIB_01\BIN'
 #C:\Program Files\MySQL\MySQL Server 5.6\bin
@@ -869,8 +823,10 @@ dbtools={}
 dbtools['SPOOLER']={'PGRES':'psql.exe',
 			'ORA12C':	'sqlplus.exe','ORA11G':	'sqlplus.exe', 'ORAXE':	'sqlplus.exe', 'ORAEXA':	'sqlplus.exe',
 			'ORA10G':	'sqlplus.exe','ORA9I':	'sqlplus.exe','ORA8I':	'sqlplus.exe','ORA733':	'sqlplus.exe',
-			'SSENT':	'sqlcmd.exe',
-			'SSEXP':	'sqlcmd.exe',
+			#'SSENT':	'sqlcmd.exe',
+			'SSEXP':	'sqlcmd.exe','SS2012':	'sqlcmd.exe','SS2014':	'sqlcmd.exe','SS2016':	'sqlcmd.exe',
+			'SS70':	'sqlcmd.exe','SS2000':	'sqlcmd.exe', 'SS2005':	'sqlcmd.exe','SS2008':	'sqlcmd.exe',			
+			#'SSEXP':	'sqlcmd.exe',
 			'MYSQL':'mysql.exe', 'MARIA':'mysql.exe', 'INFOB':'mysql.exe',
 			'SYANY':'dbisql.com',
 			'SYASE':'dbisql.com',
@@ -882,13 +838,16 @@ dbtools['SPOOLER']={'PGRES':'psql.exe',
 			'SLITE':'sqlite3.exe',
 			'MONGO':'mongoexport.exe'}
 for db in('DBTAES', 'DBTES', 'DBTAWS', 'DBTWS', 'DBTE', 'DBTEC', 'DBTDE'):
-	dbtools['SPOOLER'][db]='db2.exe'			
+	dbtools['SPOOLER'][db]='db2.exe'
+	
 dbtools['LOADER']={ 
 			'PGRES':'psql.exe',
 			'ORA12C':	'sqlldr.exe','ORA11G':	'sqlldr.exe', 'ORAXE':	'sqlldr.exe',
 			'ORA10G':	'sqlldr.exe','ORA9I':	'sqlldr.exe','ORA8I':	'sqlldr.exe','ORA733':	'sqlldr.exe',
 			'ORAEXA':	'sqlldr.exe',
-			'SSENT':	'sqlcmd.exe','SSEXP':	'sqlcmd.exe',
+			#'SSENT':	'sqlcmd.exe','SSEXP':	'sqlcmd.exe',
+			'SSEXP':	'sqlcmd.exe','SS2012':	'sqlcmd.exe','SS2014':	'sqlcmd.exe','SS2016':	'sqlcmd.exe',
+			'SS70':	'sqlcmd.exe','SS2000':	'sqlcmd.exe', 'SS2005':	'sqlcmd.exe','SS2008':	'sqlcmd.exe',
 			'MYSQL':'mysql.exe', 'MARIA':'mysql.exe', 'INFOB':'mysql.exe',
 			'SYANY':'dbisql.com',
 			'SYASE':'dbisql.com',
@@ -901,12 +860,15 @@ dbtools['LOADER']={
 			'MONGO':'mongoimport.exe'}
 for db in('DBTAES', 'DBTES', 'DBTAWS', 'DBTWS', 'DBTE', 'DBTEC', 'DBTDE'):
 	dbtools['LOADER'][db]='db2.exe'
+		
 dbtools['DBSHELL']={ 
 			'PGRES':'psql.exe',
 			'ORA12C':	'sqlplus.exe','ORA11G':	'sqlplus.exe','ORAXE':	'sqlplus.exe',
 			'ORAEXA':	'sqlplus.exe',
 			'ORA10G':	'sqlplus.exe','ORA9I':	'sqlplus.exe','ORA8I':	'sqlplus.exe','ORA733':	'sqlplus.exe',
-			'SSENT':	'sqlcmd.exe','SSEXP':	'sqlcmd.exe',
+			#'SSENT':	'sqlcmd.exe','SSEXP':	'sqlcmd.exe',
+			'SSEXP':	'sqlcmd.exe','SS2012':	'sqlcmd.exe','SS2014':	'sqlcmd.exe','SS2016':	'sqlcmd.exe','SS70':	'sqlcmd.exe',
+			'SS2000':	'sqlcmd.exe','SS2005':	'sqlcmd.exe','SS2008':	'sqlcmd.exe',
 			'MYSQL':'mysql.exe', 'MARIA':'mysql.exe', 'INFOB':'mysql.exe',
 			'SYANY':'dbisql.com',
 			'SYASE':'dbisql.com',
