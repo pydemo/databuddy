@@ -251,6 +251,7 @@ Database | Spooler | Loader | DbShell
 - [ ] add '--compress_spool' arg for zipped output
 - [x] add sqlloader.py **DONE**
 - [ ] load/save app state.
+- [x] remove wx.BitmapButton memory leak
 - [x] fix session sort **DONE**
 - [x] fix session refresh **DONE**
 - [x] fix awg.flatmenu memory leak **DONE**
