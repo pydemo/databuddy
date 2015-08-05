@@ -1,6 +1,6 @@
 #__builtin__  pcore
 pcore['copy_vector']={'short':'-w','long':'--copy_vector', 'type':str, 'default':'-', 'help':'Data copy direction.'}
-pcore['pool_size']={'short':'-o','long':'--pool_size', 	'type':int, 'default':1, 'help':'Pool size.'}
+pcore['pool_size']={'short':'-ps','long':'--pool_size', 	'type':int, 'default':1, 'help':'Pool size.'}
 pcore['num_of_shards']={'short':'-r','long':'--num_of_shards', 'type':int, 'default':1, 'help':'Number of shards.'}
 pcore['field_term']= {'short': '-t','long':'--field_term', 'type':str, 'default':'|', 'help':'Field terminator.'}
 pcore['lame_duck']={'short':'-l','long':'--lame_duck', 'type':int, 'default':0, 'help':'Limit rows (lame duck run).'}

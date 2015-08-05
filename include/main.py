@@ -4316,7 +4316,7 @@ class NewSessionDialog(wx.Dialog):
 		self.changed=False
 		if 1:
 			apidir= os.path.join(home,aa_dir)
-			self.api_from = [ f.upper() for f in os.listdir(apidir) if os.path.isdir(os.path.join(apidir,f)) and f not in conf.ff ]
+			self.api_from = [ f.upper() for f in os.listdir(apidir) if os.path.isdir(os.path.join(apidir,f)) and f not in conf.ff and f not in conf.dt]
 			#print self.api_from
 			#e(0)
 			self.api2= list(set(conf.dbfam.values()))
@@ -4451,20 +4451,43 @@ class NewSessionDialog(wx.Dialog):
 				self._cvMenu.AppendMenu(wx.NewId(),'From other DB',Menu1_2)
 				self.from_other_db_Menu_2(Menu1_2)
 				#e(0)
+			self._cvMenu.AppendSeparator()
+			if 1: #From Web/CURL
+				#self._cvMenu.AppendSeparator()
+				Menu2_2 = wx.Menu()
+				#menuItem = FM.FlatMenuItem(self._cvMenu, wx.NewId(), 'From other DB', '', wx.ITEM_NORMAL, Menu1_2)
+				#self._cvMenu.AppendItem(menuItem)
+				self._cvMenu.AppendMenu(wx.NewId(),'From Web',Menu2_2)
+				self.from_web_Menu_2(Menu2_2)
+				Menu2_2.AppendSeparator()
+				for k2 in self.api2:
+					self.i +=1
+					if self.api_menu.has_key(k2): 
+						#print k2, len(self.api_menu[k2])
+						if len(self.api_menu[k2])>1:
+							#print 1
+							self.create_Menu3_2(Menu2_2,k2,from_db='CURL',from_to='From Web to')
+						else:
+							#print 2,self.api_menu[k2][0]
+							self.create_Menu4_2(Menu2_2,self.api_menu[k2][0],from_db='CURL',from_to='From Web to')				
+				#e(0)				
 			self._cvMenu.AppendSeparator()	
 			for sm in conf.ff:
 				#self.i +=1
 				Menu1 = wx.Menu()
 				#menuItem = FM.FlatMenuItem(self._cvMenu, wx.NewId(), 'From %s' % sm, '', wx.ITEM_NORMAL, Menu1)
 				#self._cvMenu.AppendItem(menuItem)	
-				self._cvMenu.AppendMenu(wx.NewId(),'From %s' % sm,Menu1)
+				self._cvMenu.AppendMenu(wx.NewId(),'From 1 %s' % sm,Menu1)
 				#pprint (self.api_menu)
 				for k2 in self.api2:
 					self.i +=1
-					if self.api_menu.has_key(k2): 					
+					if self.api_menu.has_key(k2): 
+						#print k2, len(self.api_menu[k2])
 						if len(self.api_menu[k2])>1:
+							#print 1
 							self.create_Menu3_2(Menu1,k2,from_db=sm)
 						else:
+							#print 2,self.api_menu[k2][0]
 							self.create_Menu4_2(Menu1,self.api_menu[k2][0],from_db=sm)
 						
 				
@@ -4529,6 +4552,16 @@ class NewSessionDialog(wx.Dialog):
 					for sm2 in self.api_menu[self.default_db]:
 						#self.i +=1
 						self.create_Menu4_2(Menu2,sm2,k2,from_to='To')
+	def from_web_Menu_2(self,Menu2):
+			for w in conf.dt:
+				for s in conf.ff[:-1]:
+					self.i +=1
+					#Menu1 = FM.FlatMenu()
+					#menuItem = FM.FlatMenuItem(Menu2, wx.NewId(), 'To %s' % s, '', wx.ITEM_NORMAL)
+					item=Menu2.Append(wx.NewId(), '%s To %s' % (w,s))
+					self.gen_bind(wx.EVT_MENU,item, self.OnMenu,(w,s))
+					#Menu2.AppendItem(menuItem)	
+				
 	def create_Menu2_short_2(self,Menu1,sm, from_to='From'):
 		#self.i +=1
 		Menu2 = wx.Menu()
@@ -6360,13 +6393,13 @@ class pnl_args(wx.Panel):
 		
 		#print self.parent.copy_vector
 		from_db,to_db=self.parent.copy_vector
-		spooler_args= os.path.join(home,'config', 'include', 'args', '%s_from.py' %from_db )
+		spooler_args= os.path.join(conf.abspath,'config', 'include', 'args', '%s_from.py' %from_db )
 		assert os.path.isfile(spooler_args), 'Spooler argument list file is not defined at\n%s' % spooler_args
 		#tc = evt.GetEventObject()
 		webbrowser.open(spooler_args)
 	def OnEditLoaderArglist(self, evt):
 		from_db,to_db=self.parent.copy_vector
-		loader_args= os.path.join(home,'config', 'include', 'args', '%s_to.py' %from_db )
+		loader_args= os.path.join(conf.abspath,'config', 'include', 'args', '%s_to.py' %from_db )
 		assert os.path.isfile(loader_args), 'Loader argument list file is not defined at\n%s' % loader_args
 		#tc = evt.GetEventObject()
 		webbrowser.open(loader_args)		
@@ -6580,6 +6613,9 @@ class pnl_args(wx.Panel):
 			#self.btn_sqlldr_open.Enable(True)
 			imageFile = os.path.join(home,"images/folder_icon_16.png")
 			image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+			
+			if hasattr(self, 'btn_sqlldr_open') and self.btn_sqlldr_open:
+				self.btn_sqlldr_open.Destroy()		
 			self.btn_sqlldr_open=wx.BitmapButton(panel, id=-1, bitmap=image1,size = (image1.GetWidth()+6, image1.GetHeight()+6))
 			panel.hbox.Add(self.btn_sqlldr_open, flag=wx.LEFT|wx.TOP, border=2)
 			self.gen_bind(wx.EVT_BUTTON,self.btn_sqlldr_open, self.OnShowSqlLdrDir, ())
@@ -6647,10 +6683,10 @@ class pnl_args(wx.Panel):
 		import __builtin__
 		__builtin__.args = args
 		__builtin__._to = conf._to
-		uargs = import_module(os.path.join(conf.abspath,'qc%d' % int(__platform__[:2]),'config','user_conf.py'))
+		uargs = import_module(os.path.join(conf.abspath,'config','user_conf.py'))
 		(_,to_tmpl)=self.tmpl.split('.')
-		if to_tmpl in ['CSV_Default']:
-			lbl='Extracting to default location (user_conf.to_dir)\nExample: %s' % uargs.to_dir
+		if 0 and to_tmpl in ['CSV_Default']:
+			lbl=''
 			default=wx.StaticText(panel, label=lbl)
 			panel.fgs.Add(default, pos=(0, 0), span=(1,2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 			#e(0)
@@ -6982,9 +7018,9 @@ class pnl_args(wx.Panel):
 			import_module(imp_file)
 			#from_args=self.fargs.keys()
 			#all_from_args=[] #pfrom[dbkey].items() #.keys()
-			
+			print self.fargs.keys()
 			for k,v in pfrom[dbkey].items():
-				#print k
+				print k
 				#print v['help']
 				if 1:
 					if self.fargs.has_key(k):
@@ -7039,7 +7075,7 @@ class pnl_args(wx.Panel):
 					self.obj[k]= [tx, tc]
 				
 			panel.fgs.Add(self.obj[k][0], pos=(i, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
-			if self.checks and not self.checks[k].GetValue():
+			if self.checks and self.checks.has_key(k) and not self.checks[k].GetValue():
 				self.obj[k][0].Enable(False)
 			#print dir(panel.fgs)
 			#print panel.fgs.Rows
@@ -7060,7 +7096,7 @@ class pnl_args(wx.Panel):
 				self.obj[k][1] = aComboBox(panel, atc , sval, (-1, 150), (-1,-1), vals[k], wx.CB_DROPDOWN)
 				self.add_tc(panel, (1,),  k, i)
 				#panel.fgs.Add(self.obj[k][1], pos=(i%bucket, col+1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	\
-			elif k in ['input_files']:
+			elif k in ['input_files','url_files','output']:
 				
 				imageFile = os.path.join(home,"images/refresh_icon_16_grey2.png")
 				image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
@@ -7120,7 +7156,7 @@ class pnl_args(wx.Panel):
 					#fgs.Add(self.obj[k][2], pos=(i, 2), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)	
 					panel.fgs.Add(bbox, pos=(i, 1), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=1)
 				
-			elif k in ['query_sql_dir', 'input_dirs', 'source_client_home']:
+			elif k in ['query_sql_dir', 'input_dirs', 'source_client_home','url_dirs']:
 				
 				imageFile = os.path.join(home,"images/refresh_icon_16_grey2.png")
 				image1 = wx.Image(imageFile, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
@@ -7831,7 +7867,7 @@ class pnl_args(wx.Panel):
 		#e(0)
 		#pprint(self.args)
 		#assert self.obj.has_key(k), 'loader profile ./config/sqlloader.py is not defined for this session.'
-		if self.obj.has_key(k):
+		if self.obj.has_key(k) and self.checks[k].GetValue():
 			loader_loc = self.obj[k][1].GetValue().strip()
 			self.parent.args_panel.CreateNewSessionLoaderProfile(loader_loc)
 			#e(0)

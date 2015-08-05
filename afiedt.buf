@@ -1,0 +1,3 @@
+create table OATS_Reportable_Securities (
+Symbol varchar2(8), Descr Varchar2(128),Exchange varchar2(8) )
+/

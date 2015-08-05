@@ -14,7 +14,8 @@ dbs={	'SYASE':'SAP Sybase ASE', 'SYANY':'Sybase SQL Anywhere','SYIQ':'Sybase IQ'
 		'MONGO':'MongoDB',		
 		'CSV':'CSV',
 		'JSON':'JSON',
-		'DDL':'DDL',		
+		'DDL':'DDL',
+		'CURL': 'Curl'
 		}
 dbfam={	'SYASE':'Sybase', 'SYANY':'Sybase','SYIQ':'Sybase',
 		'ORA12C':'Oracle','ORA11G':'Oracle','ORA10G':'Oracle','ORA9I':'Oracle','ORA8I':'Oracle','ORA733':'Oracle', 'ORAXE':'Oracle', 'ORAEXA':'Oracle',
@@ -28,6 +29,7 @@ dbfam={	'SYASE':'Sybase', 'SYANY':'Sybase','SYIQ':'Sybase',
 		'DBTAES':'DB2','DBTES':'DB2','DBTAWS':'DB2','DBTWS':'DB2','DBTE':'DB2', 'DBTEC':'DB2', 'DBTDE':'DB2',
 		'INFOR':'Informix', 'INFORC':'Informix',
 		'MONGO':'MongoDB',		
+		'CURL':'Dowloaders',		
 		}
 dbclients={ 'PGRES':r"C:\Program Files\PostgreSQL\9.4\bin",
 			'ORA11G':r'C:\app\alex_buz\product\11.2.0\dbhome_2\BIN',
@@ -59,7 +61,8 @@ dbclients={ 'PGRES':r"C:\Program Files\PostgreSQL\9.4\bin",
 			'INFORC':r'C:\Program Files (x86)\IBM Informix Software Bundle\bin',
 			'MARIA':r'C:\Program Files\MariaDB 10.0\bin',
 			'SLITE':'C:\Temp\SqlLite',
-			'MONGO':r'C:\Program Files\MongoDB\Server\3.0\bin'}	
+			'MONGO':r'C:\Program Files\MongoDB\Server\3.0\bin',
+			'CURL':'C:\Python27\data_migrator_1239_mongo\common\Tools'}	
 spoolers={'PGRES':'psql.exe',
 			'ORA12C':	'sqlplus.exe','ORA11G':	'sqlplus.exe', 'ORAXE':	'sqlplus.exe', 'ORAEXA':	'sqlplus.exe',
 			'ORA10G':	'sqlplus.exe','ORA9I':	'sqlplus.exe','ORA8I':	'sqlplus.exe','ORA733':	'sqlplus.exe',
@@ -76,7 +79,8 @@ spoolers={'PGRES':'psql.exe',
 			'INFOR': 'dbaccess.exe',
 			'INFORC': 'dbaccess.exe',
 			'SLITE':'sqlite3.exe',
-			'MONGO':'mongoexport.exe'}
+			'MONGO':'mongoexport.exe',
+			'CURL':'curl.exe'}
 
 	
 loaders={ 

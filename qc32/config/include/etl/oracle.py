@@ -263,7 +263,8 @@ log "Spool file size ${SIZE}b"
 						os.mkdir(out_tns_dir)
 					#e(0)
 					out_tns_loc=os.path.join(out_tns_dir,'tnsnames.ora')
-					shutil.copyfile(tns_loc,out_tns_loc)
+					src_tns,_=hm.get_local_tnsnames_ora()
+					shutil.copyfile(src_tns,out_tns_loc)
 					#ora_home='/tmp/home/oracle/app/oracle/product/12.1.0/dbhome_2'
 					#print hm.mapping
 					(ora_home, _) = hm.get_remote_client_home()
@@ -296,7 +297,13 @@ export TNS_ADMIN
 						os.mkdir(out_tns_dir)
 					#e(0)
 					out_tns_loc=os.path.join(out_tns_dir,'tnsnames.ora')
-					shutil.copyfile(tns_loc,out_tns_loc)
+					
+					_,trg_tns=hm.get_local_tnsnames_ora()
+					#print tl
+					#e(0)
+					#print trg_tns
+					#print tns_loc
+					shutil.copyfile(trg_tns,out_tns_loc)
 					#ora_home='/tmp/home/oracle/app/oracle/product/12.1.0/dbhome_2'
 					(_, ora_home) = hm.get_remote_client_home()
 					#tns_admin ='/home/oracle/app/oracle/product/12.1.0/dbhome_1/network/admin'

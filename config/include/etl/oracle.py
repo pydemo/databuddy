@@ -239,7 +239,7 @@ log "Load finished at $dt"
 log "Load retcode = $RC" 
 log "Elapsed (load): $DIFF sec."
 log "cleanup"
-SIZE=`du -b %s | awk '{print $1}'`
+SIZE=`du -h %s | awk '{print $1}'`
 log "Spool file size ${SIZE}b"
 %s
 
@@ -256,6 +256,7 @@ log "Spool file size ${SIZE}b"
 					admin_loc= os.path.join(os.path.dirname(self.parent.db_client_dbshell)[:-3],'network','admin')
 					#print admin_loc
 					tns_loc= os.path.join(admin_loc,'tnsnames.ora')
+
 					assert os.path.isfile(tns_loc),'"tnsnames.ora" file is missing for loader\n%s' % self.parent.db_client_dbshell
 					out_tns_dir =  os.path.join(self.out_dir,'tnsnames_from')
 					if not os.path.isdir(out_tns_dir):
@@ -289,6 +290,7 @@ export TNS_ADMIN
 					admin_loc= os.path.join(os.path.dirname(self.parent.db_client_dbshell)[:-3],'network','admin')
 					#print admin_loc
 					tns_loc= os.path.join(admin_loc,'tnsnames.ora')
+					
 					assert os.path.isfile(tns_loc),'"tnsnames.ora" file is missing for loader\n%s' % self.parent.db_client_dbshell
 					out_tns_dir =  os.path.join(self.out_dir,'tnsnames_to')
 					if not os.path.isdir(out_tns_dir):
@@ -413,8 +415,8 @@ echo "spool at %s"
 		while line:
 			line= stderr.readline()
 			err.append(line)
-			#if self.dbg:
-			#print str(line)
+			if self.dbg>1:
+				print str(line)
 		client.close()
 		to_log_zip=os.path.join(self.in_dir,'%s_%s_log.zip' % (ts,self.shard))
 		#import time

@@ -12,13 +12,18 @@ from common.v101.exceptions import CopyVectorError
 import datetime
 from common.v101.loaders import import_module
 home=os.path.abspath(os.path.dirname(sys.argv[0]))
-abspath=home
+abspath=os.path.join(home,'qc32')
+print abspath
+if not os.path.isdir(abspath):
+	abspath=home
+print abspath
+
 import_module=import_module
 from pprint import pprint
 import argparse
 #from common_conf import *
 
-imp_file = os.path.join(abspath,'qc32','config','common_conf.py')
+imp_file = os.path.join(abspath,'config','common_conf.py')
 cconf=import_module(imp_file)
 dbs=cconf.dbs
 
@@ -40,6 +45,7 @@ if_hg=False #hourglass
 _to='-'
 ff=['CSV','JSON','DDL'] #file v.s. db 
 tt=['PCSP.r10156']
+dt=['CURL'] #download tools
 #SQL*Loader init
 #dlp={}
 #dlp['ORA12C']=dlp['ORA11G']=dlp['ORAEXA']=dlp['ORAXE']=os.path.join(home,r'config','sqlloader.py')
@@ -836,7 +842,8 @@ dbtools['SPOOLER']={'PGRES':'psql.exe',
 			'INFOR': 'dbaccess.exe',
 			'INFORC': 'dbaccess.exe',
 			'SLITE':'sqlite3.exe',
-			'MONGO':'mongoexport.exe'}
+			'MONGO':'mongoexport.exe',
+			'CURL':'curl.exe'}
 for db in('DBTAES', 'DBTES', 'DBTAWS', 'DBTWS', 'DBTE', 'DBTEC', 'DBTDE'):
 	dbtools['SPOOLER'][db]='db2.exe'
 	
@@ -878,7 +885,7 @@ dbtools['DBSHELL']={
 			'INFOR': 'dbaccess.exe',
 			'INFORC': 'dbaccess.exe',			
 			'SLITE':'sqlite3.exe',
-			'MONGO':'mongo.exe'}
+			'MONGO':'mongo.exe','CURL':'curl.exe'}
 for db in('DBTAES', 'DBTES', 'DBTAWS', 'DBTWS', 'DBTE', 'DBTEC', 'DBTDE'):
 	dbtools['DBSHELL'][db]='db2.exe'			
 			

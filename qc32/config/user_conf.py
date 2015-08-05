@@ -15,6 +15,7 @@ inc['SYASE']=inc['SYANY']=inc['SYIQ']='sybase.py'
 inc['ORA12C']=inc['ORA11G']=inc['ORA10G']=inc['ORA9I']=inc['ORA8I']=inc['ORA733']=inc['ORAEXA']='oracle.py'
 inc['ORAXE']='oraxe.py'
 inc['MONGO']='mongo.py'
+inc['CURL']='curl.py'
 #print  inc
 
 #print args.copy_vector
