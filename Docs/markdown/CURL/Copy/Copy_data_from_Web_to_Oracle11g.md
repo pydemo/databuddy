@@ -1,8 +1,8 @@
 # Piping structured Web data to Oracle11g.
 In this example we are going to copy CSV file from Web to Oracle11g.
 Migration steps:
-- Download remote file from Web to CSV using Curl.
-- Load CSV file into Oracle11g using SQL*Loader.
+- Download remote file from Web using Curl.
+- Load downloaded CSV file into Oracle11g using SQL*Loader.
 
 ##Open Databuddy
 [Download](https://github.com/data-buddy/DataBuddy/releases/tag/v0.3.5), [configure](https://github.com/data-buddy/DataBuddy/blob/master/Docs/Configure_Databuddy0.3.3.md#configuration-for-mongdb), and [start](https://github.com/data-buddy/DataBuddy/blob/master/Docs/How_to_start_Databuddy.md) Databuddy. 
