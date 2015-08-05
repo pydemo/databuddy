@@ -1,7 +1,7 @@
 # Piping structured Web data to Oracle11g.
 In this example we are going to copy CSV file from Web to Oracle11g.
 Migration steps:
-- Download CSV file to CSV.
+- Download CSV file to Oracle11G.
 - Load CSV file into Oracle11g.
 
 ##Open Databuddy
