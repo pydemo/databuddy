@@ -52,6 +52,9 @@ Check job results at the bottom of the black CLI window:
 2015-06-01 11:30:09,022 - CURL-ORA11G - INFO - Elapsed: 00:00:03
 Press any key to continue . . .
 ```
+##Target row count.
+![OATS_Reportable_Securities](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/CURL/Curl_to_Oracle_OATS_Load_rowcount.png "Session executed.")
+
 
 ##Prerequisites
 ###Input
