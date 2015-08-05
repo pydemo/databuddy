@@ -29,7 +29,7 @@ Define data extraction `Copy Vector` by zooming through popup menu items:
 
 ## Select Source and Target templates
 Next and last step is template selection. Pick one from the source list on the left (`ORA11G_TimestampTable`) and one from the target list on the right (`ORA11G_Table`):
-(sample image)
+
 ![Source and target template selection](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/CURL/Copy_from_Curl_to_Oracle11G_Templates.png "Source and target template selection.")
 
 ## Define arguments.
@@ -57,8 +57,11 @@ Press any key to continue . . .
 
 
 ##Prerequisites
+
 ###Input
-![OATS Reportable Securities file URL](http://oatsreportable.finra.org/OATSReportableSecurities-SOD.txt)
+OATS Reportable Securities file URL: http://oatsreportable.finra.org/OATSReportableSecurities-SOD.txt
+
+
 ###Target Table
 ```
 drop table OATS_Reportable_Securities
