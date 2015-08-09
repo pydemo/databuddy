@@ -49,6 +49,12 @@ Database | GUI (data-buddy) | Command line (QueryCopy)
 ---------|---- | -------------
 MongoDB      | yes | yes
 
+##Data Tools
+Name| GUI (data-buddy) | Command line (QueryCopy)
+---------|---- | -------------
+CURL      | yes | yes
+
+
 ##File formats
 
 ###SQL
@@ -70,6 +76,12 @@ TimesTen|  | yes  | yes
 Database |  CSV extract | CSV load | JSON extract | JSON load
 ---------|-------------- | -------| -------| -------
 MongoDB      | yes  | yes | yes | yes
+
+###Data Tools
+Database |  CSV extract | CSV load | JSON extract | JSON load
+---------|-------------- | -------| -------| -------
+CURL      | yes  |   | yes |  
+
 
 ##Components
 - GUI - data-buddy (wxPython, PyInstaller).
@@ -98,6 +110,7 @@ MongoDB      | yes  | yes | yes | yes
 - [x] No client (url) connect.
 - [x] Supports CSV file load from multiple dirs.
 - [x] --exit_on_key - let's you keep exec window open after load job is done
+- [x] file download using curl.exe
 
 ## Pipeline types
 - E __Extract__
@@ -162,6 +175,12 @@ SQLite | SQLite | sqlite3.exe | sqlite3.exe | sqlite3.exe
 Database | Spooler | Loader | DbShell
 ----------|-------- | -------| -------
  MongoDB | mongoexport.exe  | mongoimport.exe | mongo.exe
+ 
+####Data Tools.
+Database | Spooler | Loader | DbShell
+----------|-------- | -------| -------
+ CURL | curl.exe  | n/a | n/a
+
 
 ## What it doesn't do
 - It does not create target table.
@@ -250,6 +269,7 @@ Database | Spooler | Loader | DbShell
 - [x] add "Output" tab **DONE**
 - [ ] add '--compress_spool' arg for zipped output
 - [x] add sqlloader.py **DONE**
+- [x] add curl.exe for file download **DONE**
 - [ ] load/save app state.
 - [x] remove wx.BitmapButton memory leak
 - [x] fix session sort **DONE**
@@ -423,6 +443,10 @@ Database |Version | Export | Import | DbShell|File formats
 ## Vendor architecture
 [MongoDB Architecture Guide] (http://s3.amazonaws.com/info-mongodb-com/MongoDB_Architecture_Guide.pdf)
 
+Data Tools |Version 
+---------|----------
+[cURL] (http://curl.haxx.se/download.html)| 7.33
+
 ## Screenshots
 
 - New Session Menu: 
@@ -494,6 +518,9 @@ Mongo DB|x
 - [ ] Oracle
  - [Copy_Table_Data_From_Oracle_to_MongoDB_Collection](https://github.com/data-buddy/DataBuddy/blob/master/Docs/markdown/MongoDB/Copy/Copy_Table_Data_From_Oracle_to_MongoDB_Collection.md) 
 
+- [ ] CURL
+ - [Copy_data_from_Web_to_Oracle11g](https://github.com/data-buddy/Databuddy/blob/master/Docs/markdown/CURL/Copy/Copy_data_from_Web_to_Oracle11g.md) 
+ - 
 
 ##Download
 * [Data Buddy latest release](https://github.com/data-buddy/DataBuddy/releases/tag/0.3.5) -- `data-buddy 0.3.5`
