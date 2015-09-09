@@ -1,8 +1,10 @@
 # Copy scalar data from SQL Server to Linux.
 In this example we are going to extract data from SQL Server table to CSV file and then copy it to Linux (in single session).
-Migration steps:
+
+##Migration steps:
 - Extract scalar data from SQLServer table to CSV file.
 - Copy CSV file to Linux usinf pscp.exe
+
 ##Open Databuddy
 [Download](https://github.com/data-buddy/DataBuddy/releases/tag/0.3.5), [configure](https://github.com/data-buddy/DataBuddy/blob/master/Docs/markdown/Configure_Databuddy0.3.3.md#configuration-for-mongdb), and [start](https://github.com/data-buddy/DataBuddy/blob/master/Docs/markdown/How_to_start_Databuddy.md) Databuddy. 
 It opens to a state where no sessions are selected and all tabs are disabled:
