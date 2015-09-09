@@ -2,7 +2,7 @@
 	::Description:	Copy only 10 rows from SQLServerExpress table into SQLLiteTable.
 	::Arguments:
 	::	-w[--copy_vector] is "Data copy direction."
-::	-o[--pool_size] is "Pool size."
+::	-ps[--pool_size] is "Pool size."
 ::	-r[--num_of_shards] is "Number of shards."
 ::	-t[--field_term] is "Field terminator."
 ::	-l[--lame_duck] is "Limit rows (lame duck run)."
@@ -24,9 +24,9 @@
 ::	-d[--to_db_name] is "Target database."
 ::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|c:\Python27\qc_dist_32\20150723_234254\qc32\qc32.exe ^
+echo y|C:\Python27\qc_dist_32\20150908_192607\qc32\qc32.exe ^
 -w SSEXP-SLITE ^
--o 1 ^
+-ps 1 ^
 -r 1 ^
 -t "|" ^
 -l 10 ^
@@ -34,7 +34,7 @@ echo y|c:\Python27\qc_dist_32\20150723_234254\qc32\qc32.exe ^
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20150723_234255_033000 ^
+-Y 20150908_192614_831000 ^
 -5 ".\config\host_map\host_map.py" ^
 -6 csv ^
 -dbg 1 ^

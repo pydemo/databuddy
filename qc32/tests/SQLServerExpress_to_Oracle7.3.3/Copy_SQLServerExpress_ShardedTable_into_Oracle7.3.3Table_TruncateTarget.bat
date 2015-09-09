@@ -2,7 +2,7 @@
 	::Description:	Copy SQLServerExpress table into Oracle7.3.3Table TruncateTarget.
 	::Arguments:
 	::	-w[--copy_vector] is "Data copy direction."
-::	-o[--pool_size] is "Pool size."
+::	-ps[--pool_size] is "Pool size."
 ::	-r[--num_of_shards] is "Number of shards."
 ::	-t[--field_term] is "Field terminator."
 ::	-l[--lame_duck] is "Limit rows (lame duck run)."
@@ -31,9 +31,9 @@
 ::	-m[--nls_timestamp_format] is "nls_timestamp_format for target."
 ::	-O[--nls_timestamp_tz_format] is "nls_timestamp_tz_format for target."	
 	
-..\\python -c "print 'y\ny'" |c:\Python27\qc_dist_32\20150723_234254\qc32\qc32.exe ^
+..\\python -c "print 'y\ny'" |C:\Python27\qc_dist_32\20150908_192607\qc32\qc32.exe ^
 -w SSEXP-ORA733 ^
--o 1 ^
+-ps 1 ^
 -r 3 ^
 -t "|" ^
 -l 10 ^
@@ -43,7 +43,7 @@
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20150723_234255_951000 ^
+-Y 20150908_192619_440000 ^
 -C ".\config\sqlloader.py" ^
 -5 ".\config\host_map\host_map.py" ^
 -6 csv ^

@@ -1,8 +1,8 @@
 ::Test name: SQLServerExpress_QueryDir
-	::Description:	Read each SQL query file from a directory "c:\Python27\data_migrator_1239_mongo\test\v101\query\query_dir_ss".Copy SQLServerExpress query results into Oracle10gTable SkipHeader.
+	::Description:	Read each SQL query file from a directory "C:\Python27\data_migrator_1239_mongo\test\v101\query\query_dir_ss".Copy SQLServerExpress query results into Oracle10gTable SkipHeader.
 	::Arguments:
 	::	-w[--copy_vector] is "Data copy direction."
-::	-o[--pool_size] is "Pool size."
+::	-ps[--pool_size] is "Pool size."
 ::	-r[--num_of_shards] is "Number of shards."
 ::	-t[--field_term] is "Field terminator."
 ::	-l[--lame_duck] is "Limit rows (lame duck run)."
@@ -30,9 +30,9 @@
 ::	-O[--nls_timestamp_tz_format] is "nls_timestamp_tz_format for target."
 ::	-k[--skip_rows] is "Number of rows to skip in input file."	
 	
-echo y|c:\Python27\qc_dist_32\20150723_234254\qc32\qc32.exe ^
+echo y|C:\Python27\qc_dist_32\20150908_192607\qc32\qc32.exe ^
 -w SSEXP-ORA10G ^
--o 1 ^
+-ps 1 ^
 -r 1 ^
 -t "|" ^
 -l 10 ^
@@ -40,12 +40,12 @@ echo y|c:\Python27\qc_dist_32\20150723_234254\qc32\qc32.exe ^
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20150723_234257_538000 ^
+-Y 20150908_192633_831000 ^
 -C ".\config\sqlloader.py" ^
 -5 ".\config\host_map\host_map.py" ^
 -6 csv ^
 -dbg 1 ^
--Q c:\Python27\data_migrator_1239_mongo\test\v101\query\query_dir_ss ^
+-Q C:\Python27\data_migrator_1239_mongo\test\v101\query\query_dir_ss ^
 -j sa ^
 -x 198Morgan ^
 -b master ^

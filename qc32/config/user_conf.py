@@ -16,6 +16,7 @@ inc['ORA12C']=inc['ORA11G']=inc['ORA10G']=inc['ORA9I']=inc['ORA8I']=inc['ORA733'
 inc['ORAXE']='oraxe.py'
 inc['MONGO']='mongo.py'
 inc['CURL']='curl.py'
+inc['PSCP']='pscp.py'
 #print  inc
 
 #print args.copy_vector

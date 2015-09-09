@@ -1,8 +1,8 @@
 ::Test name: SQLServerExpress_ShardedQueryFile
-	::Description:	Read SQL from a query file "c:\Python27\data_migrator_1239_mongo\test\v101\query\ss_query.sql".Copy SQLServerExpress query results into Oracle12cTable TruncateTarget NoClient.
+	::Description:	Read SQL from a query file "C:\Python27\data_migrator_1239_mongo\test\v101\query\ss_query.sql".Copy SQLServerExpress query results into Oracle12cTable TruncateTarget NoClient.
 	::Arguments:
 	::	-w[--copy_vector] is "Data copy direction."
-::	-o[--pool_size] is "Pool size."
+::	-ps[--pool_size] is "Pool size."
 ::	-r[--num_of_shards] is "Number of shards."
 ::	-t[--field_term] is "Field terminator."
 ::	-l[--lame_duck] is "Limit rows (lame duck run)."
@@ -31,9 +31,9 @@
 ::	-m[--nls_timestamp_format] is "nls_timestamp_format for target."
 ::	-O[--nls_timestamp_tz_format] is "nls_timestamp_tz_format for target."	
 	
-..\\python -c "print 'y\ny'" |c:\Python27\qc_dist_32\20150723_234254\qc32\qc32.exe ^
+..\\python -c "print 'y\ny'" |C:\Python27\qc_dist_32\20150908_192607\qc32\qc32.exe ^
 -w SSEXP-ORA12C ^
--o 1 ^
+-ps 1 ^
 -r 3 ^
 -t "|" ^
 -l 10 ^
@@ -43,12 +43,12 @@
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20150723_234258_128000 ^
+-Y 20150908_192636_808000 ^
 -C ".\config\sqlloader.py" ^
 -5 ".\config\host_map\host_map.py" ^
 -6 csv ^
 -dbg 1 ^
--q c:\Python27\data_migrator_1239_mongo\test\v101\query\ss_query.sql ^
+-q C:\Python27\data_migrator_1239_mongo\test\v101\query\ss_query.sql ^
 -j sa ^
 -x 198Morgan ^
 -b master ^

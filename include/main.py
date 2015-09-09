@@ -143,7 +143,7 @@ def import_module(filepath):
 	return py_mod
 ########################################################################	
 exe=False
-#exe=True
+exe=True
 
 
 #print wx.VERSION
@@ -3967,8 +3967,8 @@ class NewSessionDialog(wx.Dialog):
 			self.def_tmpl=defaults[1].split('.') #default templates if any
 		#print defaults
 		#pprint(data)
-		print  '#'*40
-		print self.def_cv
+		#print  '#'*40
+		#print self.def_cv
 		#self._popUpMenu = None
 		#self.recent=[]
 		if 0:
@@ -4001,7 +4001,7 @@ class NewSessionDialog(wx.Dialog):
 		#self.s_default=None
 		#self.t_default=None		
 		self.default_db=self.parent.aconf['defaults']['default_db']
-		print self.parent.aconf
+		#print self.parent.aconf
 		if os.path.isfile(self.recent_fname):
 			self.recent=self.readRecent()
 
@@ -4316,8 +4316,11 @@ class NewSessionDialog(wx.Dialog):
 		self.changed=False
 		if 1:
 			apidir= os.path.join(home,aa_dir)
-			self.api_from = [ f.upper() for f in os.listdir(apidir) if os.path.isdir(os.path.join(apidir,f)) and f not in conf.ff and f not in conf.dt]
+			#print apidir
+			self.api_from = [ f.upper() for f in os.listdir(apidir) if os.path.isdir(os.path.join(apidir,f)) and f not in conf.ff] # and f not in conf.dt]
 			#print self.api_from
+			#print conf.ff
+			#print conf.dt
 			#e(0)
 			self.api2= list(set(conf.dbfam.values()))
 			self.api2.sort()
@@ -4424,7 +4427,7 @@ class NewSessionDialog(wx.Dialog):
 				#e(0)
 				m=self._cvMenu
 				for sm in self.api_menu[k]:
-					if len(self.api_menu[k])>1:
+					if len(self.api_menu[k])>0:
 						self.i +=1
 						self.create_Menu2_short_2(m,sm)
 						
@@ -4477,7 +4480,7 @@ class NewSessionDialog(wx.Dialog):
 				Menu1 = wx.Menu()
 				#menuItem = FM.FlatMenuItem(self._cvMenu, wx.NewId(), 'From %s' % sm, '', wx.ITEM_NORMAL, Menu1)
 				#self._cvMenu.AppendItem(menuItem)	
-				self._cvMenu.AppendMenu(wx.NewId(),'From 1 %s' % sm,Menu1)
+				self._cvMenu.AppendMenu(wx.NewId(),'From %s' % sm,Menu1)
 				#pprint (self.api_menu)
 				for k2 in self.api2:
 					self.i +=1
@@ -4758,7 +4761,7 @@ class NewSessionDialog(wx.Dialog):
 					menuItem = FM.FlatMenuItem(self.recentMenu, wx.NewId(), '%s --> %s' % (conf.dbs[a],conf.dbs[b]), '', wx.ITEM_NORMAL)
 					self.gen_bind(FM.EVT_FLAT_MENU_SELECTED,menuItem, self.OnMenu,(a,b))
 					self.recentMenu.AppendItem(menuItem)
-		print gc.get_count()		
+		#print gc.get_count()		
 	def OnShowPopup(self, event):
 		btn = event.GetEventObject()
 		btnSize = btn.GetSize()
@@ -4784,7 +4787,7 @@ class NewSessionDialog(wx.Dialog):
 	def OnSetDefaultsMenu(self, event):
 		# Demonstrate using the wxFlatMenu without a menu bar
 		btn = event.GetEventObject()
-		print 1
+		#print 1
 		if 1:
 			# Create the popup menu
 			self.CreateDefaultsMenu()
@@ -7018,9 +7021,9 @@ class pnl_args(wx.Panel):
 			import_module(imp_file)
 			#from_args=self.fargs.keys()
 			#all_from_args=[] #pfrom[dbkey].items() #.keys()
-			print self.fargs.keys()
+			#print self.fargs.keys()
 			for k,v in pfrom[dbkey].items():
-				print k
+				#print k
 				#print v['help']
 				if 1:
 					if self.fargs.has_key(k):
@@ -10980,7 +10983,7 @@ class DataBuddy(wx.Frame):
 	def OnHostMapMenu(self, event,params):				
 		(v,hm)=params	
 		#print v
-		print self.args_panel.hm
+		#print self.args_panel.hm
 		self.args_panel.hm.set_active_mapping(v)
 		send('set_bar_status', (2,v))
 		
@@ -11407,7 +11410,7 @@ class DataBuddy(wx.Frame):
 			
 			#print btn.Name, the_id, self.the_id,the_id==self.the_id[2],self.counters[the_id]
 			if the_id==self.the_id[2]:
-				print 1
+				#print 1
 				#print btn.Name,self.counters[the_id] 
 				p=self.p[the_id]
 				poll=p.poll()
@@ -11439,7 +11442,7 @@ class DataBuddy(wx.Frame):
 						except: 
 							raise							
 						else: # got line
-							print line
+							#print line
 							self.pipefh.close() 
 							#break
 													
@@ -11461,10 +11464,10 @@ class DataBuddy(wx.Frame):
 						del self.q[the_id]
 				#else:
 				#	print 'Unknown poll status %s, id %d' % (poll, the_id)
-			print 2	
+			#print 2	
 			for x,v in self.q.items():
 				(t,q)=v
-				print x
+				#print x
 				try:  line = q.get_nowait() # or q.get(timeout=.1)
 
 				except Empty:
@@ -11982,9 +11985,9 @@ class DataBuddy(wx.Frame):
 					#send("create_new_session", (sname,cv, tmpl,api_args,reuse) )
 					send('add_session',(sname,cv,tmpl,dname,fname,slib_name))
 
-			print gc.get_count()
+			##print gc.get_count()
 			dlg.Destroy()
-			print gc.get_count()
+			#print gc.get_count()
 			#[self.sname, self.copy_vector, self.tmpl, self.args]=dlg.getConfig()
 			#print conf
 			#print val
@@ -12388,7 +12391,7 @@ class DataBuddy(wx.Frame):
 									self.timers[the_id].Start(1000)
 									
 									win32gui.SetWindowText (hwnd[0], title)
-									print title
+									#print title
 									#e(0)
 									#sending 'y' to job
 									if 1: #if_yes:
@@ -12432,7 +12435,7 @@ class DataBuddy(wx.Frame):
 										send_no( window1)
 										
 									#p.wait()
-									print 'after p'
+									#print 'after p'
 									if 1:
 										
 										#os.close(self.pipein)
@@ -12447,7 +12450,7 @@ class DataBuddy(wx.Frame):
 													pass
 													#print('no output yet')
 												else: # got line
-													print 2, line
+													#print 2, line
 													self.pipefh.close() 
 													break
 												#time.sleep(1)
@@ -12466,9 +12469,9 @@ class DataBuddy(wx.Frame):
 											# Wait for the child to finish
 											#pprint(dir(pipefh))
 											#for i in range(100):
-											print pipefh.closed, pipefh.tell(), pipefh.isatty()
+											#print pipefh.closed, pipefh.tell(), pipefh.isatty()
 											test= pipefh.read()
-											print 1, test	
+											#print 1, test	
 											#time.sleep(1)
 											pipefh.close()
 											#p.wait()

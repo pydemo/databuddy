@@ -48,6 +48,22 @@ class base_host_map(object):
 		
 		return (env[from_db.upper()]['source'], env[to_db.upper()]['target'])
 		
+	def get_local_tnsnames_ora(self):
+		src_loc, trg_loc=self.get_remote_client_home()
+		src_admin_loc,trg_admin_loc= os.path.join(src_loc,'network','admin'), os.path.join(trg_loc,'network','admin')
+		src_tns_loc,trg_tns_loc = os.path.join(src_admin_loc,'tnsnames.ora'),os.path.join(src_admin_loc,'tnsnames.ora')
+		(from_db, to_db)=self.copy_vector
+		#host_id=self.mapping['host_map'][self.get_active_mapping()][0]['host']		
+		env=self.mapping['host_list'][0]['db_env']
+		assert env.has_key(from_db.upper()), 'host_map for "%s" is not set' % from_db.upper()
+		assert env.has_key(to_db.upper()), 'host_map for "%s" is not set' % to_db.upper()
+		if env[from_db.upper()].has_key('source_tnsnames') and env[from_db.upper()]['source_tnsnames']:
+			src_tns_loc=env[from_db.upper()]['source_tnsnames']
+		if env[from_db.upper()].has_key('target_tnsnames') and env[from_db.upper()]['target_tnsnames']:
+			trg_tns_loc=env[from_db.upper()]['target_tnsnames']			
+
+		return (src_tns_loc, trg_tns_loc)
+		
 	def set_host_map(self):
 		self.remote_user='default'
 		#obj=self.args_panel.obj

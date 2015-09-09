@@ -1,8 +1,8 @@
 ::Test name: SQLServerExpress_QueryFile Limit15
-	::Description:	Read SQL from a query file "c:\Python27\data_migrator_1239_mongo\test\v101\query\ss_query.sql".Copy only 15 rows from SQLServerExpress query results into PostgreSQLTable.
+	::Description:	Read SQL from a query file "C:\Python27\data_migrator_1239_mongo\test\v101\query\ss_query.sql".Copy only 15 rows from SQLServerExpress query results into PostgreSQLTable.
 	::Arguments:
 	::	-w[--copy_vector] is "Data copy direction."
-::	-o[--pool_size] is "Pool size."
+::	-ps[--pool_size] is "Pool size."
 ::	-r[--num_of_shards] is "Number of shards."
 ::	-t[--field_term] is "Field terminator."
 ::	-l[--lame_duck] is "Limit rows (lame duck run)."
@@ -28,9 +28,9 @@
 ::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
 ::	-T[--target_port] is "Connection port for target PostgreSQL."	
 	
-echo y|c:\Python27\qc_dist_32\20150723_234254\qc32\qc32.exe ^
+echo y|C:\Python27\qc_dist_32\20150908_192607\qc32\qc32.exe ^
 -w SSEXP-PGRES ^
--o 1 ^
+-ps 1 ^
 -r 1 ^
 -t "|" ^
 -l 15 ^
@@ -38,11 +38,11 @@ echo y|c:\Python27\qc_dist_32\20150723_234254\qc32\qc32.exe ^
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20150723_234256_873000 ^
+-Y 20150908_192624_421000 ^
 -5 ".\config\host_map\host_map.py" ^
 -6 csv ^
 -dbg 1 ^
--q c:\Python27\data_migrator_1239_mongo\test\v101\query\ss_query.sql ^
+-q C:\Python27\data_migrator_1239_mongo\test\v101\query\ss_query.sql ^
 -j sa ^
 -x 198Morgan ^
 -b master ^

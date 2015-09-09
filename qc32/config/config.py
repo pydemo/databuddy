@@ -43,13 +43,9 @@ rel_date=rel.ts
 citi=False
 if_hg=False #hourglass
 _to='-'
-ff=['CSV','JSON','DDL'] #file v.s. db 
-tt=['PCSP.r10156']
+ff=['FILE', 'CSV','JSON','DDL'] #file v.s. db 
+tt=['PSCP'] #transfer tools
 dt=['CURL'] #download tools
-#SQL*Loader init
-#dlp={}
-#dlp['ORA12C']=dlp['ORA11G']=dlp['ORAEXA']=dlp['ORAXE']=os.path.join(home,r'config','sqlloader.py')
-#dlp['ORA11G']=r'"C:\Python27\data_migrator_1239\config\loader\sqlloader.yaml"'
 
 def getRegSize():
 	return rel.bin
@@ -150,7 +146,9 @@ def set_params(params):
 			__builtin__.dbkey = dbkey
 			__builtin__.dbs = dbs
 			imp_file = os.path.join(abspath,'config','include','args','%s_from.py' % dbkey)
+			#print dbkey
 			import_module(imp_file)	
+
 	if 0:
 		dbkey='SSEXP'				
 		if FROMDB in [None,dbkey]:
@@ -431,7 +429,7 @@ def set_params(params):
 					
 	params['TO']={}
 	pto=params['TO']
-	
+	#print params['FROM']['PSCP'].keys()
 	for dbkey in dbs.keys():
 		#dbkey='MONGO'	
 		if TODB in [None,dbkey]:
@@ -442,9 +440,12 @@ def set_params(params):
 			__builtin__.dbkey = dbkey
 			__builtin__.dbs = dbs
 			imp_file = os.path.join(abspath,'config','include','args','%s_to.py' % dbkey)
+			print dbkey=='PSCP', dbkey
 			import_module(imp_file)
 	
-	#dbkey='ORA11G'
+	#print params['TO']['PSCP'].keys()
+	#print params['FROM']['PSCP'].keys()
+	#e(0)
 	if 0:
 		for dbkey in ['ORAEXA', 'ORA11G','ORA12C','ORAXE']:
 			if TODB in [None,dbkey]:
@@ -826,68 +827,20 @@ for db in('DBTAES', 'DBTES', 'DBTAWS', 'DBTWS', 'DBTE', 'DBTEC', 'DBTDE'):
 if citi:
 	dbclients['ORA11G']=r'C:\ORACLE\product\11.1.0\client_1\BIN'			
 dbtools={}
-dbtools['SPOOLER']={'PGRES':'psql.exe',
-			'ORA12C':	'sqlplus.exe','ORA11G':	'sqlplus.exe', 'ORAXE':	'sqlplus.exe', 'ORAEXA':	'sqlplus.exe',
-			'ORA10G':	'sqlplus.exe','ORA9I':	'sqlplus.exe','ORA8I':	'sqlplus.exe','ORA733':	'sqlplus.exe',
-			#'SSENT':	'sqlcmd.exe',
-			'SSEXP':	'sqlcmd.exe','SS2012':	'sqlcmd.exe','SS2014':	'sqlcmd.exe','SS2016':	'sqlcmd.exe',
-			'SS70':	'sqlcmd.exe','SS2000':	'sqlcmd.exe', 'SS2005':	'sqlcmd.exe','SS2008':	'sqlcmd.exe',			
-			#'SSEXP':	'sqlcmd.exe',
-			'MYSQL':'mysql.exe', 'MARIA':'mysql.exe', 'INFOB':'mysql.exe',
-			'SYANY':'dbisql.com',
-			'SYASE':'dbisql.com',
-			'SYIQ': 'dbisql.com',
-			'TTEN': 'ttBulkCp.exe',
-			#'DBTUDB': 'db2.exe',
-			'INFOR': 'dbaccess.exe',
-			'INFORC': 'dbaccess.exe',
-			'SLITE':'sqlite3.exe',
-			'MONGO':'mongoexport.exe',
-			'CURL':'curl.exe'}
-for db in('DBTAES', 'DBTES', 'DBTAWS', 'DBTWS', 'DBTE', 'DBTEC', 'DBTDE'):
-	dbtools['SPOOLER'][db]='db2.exe'
+dbtools['SPOOLER']=cconf.spoolers
+#for db in('DBTAES', 'DBTES', 'DBTAWS', 'DBTWS', 'DBTE', 'DBTEC', 'DBTDE'):
+#	dbtools['SPOOLER'][db]='db2.exe'
 	
-dbtools['LOADER']={ 
-			'PGRES':'psql.exe',
-			'ORA12C':	'sqlldr.exe','ORA11G':	'sqlldr.exe', 'ORAXE':	'sqlldr.exe',
-			'ORA10G':	'sqlldr.exe','ORA9I':	'sqlldr.exe','ORA8I':	'sqlldr.exe','ORA733':	'sqlldr.exe',
-			'ORAEXA':	'sqlldr.exe',
-			#'SSENT':	'sqlcmd.exe','SSEXP':	'sqlcmd.exe',
-			'SSEXP':	'sqlcmd.exe','SS2012':	'sqlcmd.exe','SS2014':	'sqlcmd.exe','SS2016':	'sqlcmd.exe',
-			'SS70':	'sqlcmd.exe','SS2000':	'sqlcmd.exe', 'SS2005':	'sqlcmd.exe','SS2008':	'sqlcmd.exe',
-			'MYSQL':'mysql.exe', 'MARIA':'mysql.exe', 'INFOB':'mysql.exe',
-			'SYANY':'dbisql.com',
-			'SYASE':'dbisql.com',
-			'SYIQ': 'dbisql.com',
-			'TTEN': 'ttBulkCp.exe',
-			#'DBTUDB': 'db2.exe',
-			'INFOR': 'dbaccess.exe',
-			'INFORC': 'dbaccess.exe',			
-			'SLITE':'sqlite3.exe',
-			'MONGO':'mongoimport.exe'}
-for db in('DBTAES', 'DBTES', 'DBTAWS', 'DBTWS', 'DBTE', 'DBTEC', 'DBTDE'):
-	dbtools['LOADER'][db]='db2.exe'
-		
-dbtools['DBSHELL']={ 
-			'PGRES':'psql.exe',
-			'ORA12C':	'sqlplus.exe','ORA11G':	'sqlplus.exe','ORAXE':	'sqlplus.exe',
-			'ORAEXA':	'sqlplus.exe',
-			'ORA10G':	'sqlplus.exe','ORA9I':	'sqlplus.exe','ORA8I':	'sqlplus.exe','ORA733':	'sqlplus.exe',
-			#'SSENT':	'sqlcmd.exe','SSEXP':	'sqlcmd.exe',
-			'SSEXP':	'sqlcmd.exe','SS2012':	'sqlcmd.exe','SS2014':	'sqlcmd.exe','SS2016':	'sqlcmd.exe','SS70':	'sqlcmd.exe',
-			'SS2000':	'sqlcmd.exe','SS2005':	'sqlcmd.exe','SS2008':	'sqlcmd.exe',
-			'MYSQL':'mysql.exe', 'MARIA':'mysql.exe', 'INFOB':'mysql.exe',
-			'SYANY':'dbisql.com',
-			'SYASE':'dbisql.com',
-			'SYIQ': 'dbisql.com',
-			'TTEN': 'ttIsql.exe',
-			#'DBTUDB': 'db2.exe',
-			'INFOR': 'dbaccess.exe',
-			'INFORC': 'dbaccess.exe',			
-			'SLITE':'sqlite3.exe',
-			'MONGO':'mongo.exe','CURL':'curl.exe'}
-for db in('DBTAES', 'DBTES', 'DBTAWS', 'DBTWS', 'DBTE', 'DBTEC', 'DBTDE'):
-	dbtools['DBSHELL'][db]='db2.exe'			
+dbtools['LOADER']=cconf.loaders
+#for db in('DBTAES', 'DBTES', 'DBTAWS', 'DBTWS', 'DBTE', 'DBTEC', 'DBTDE'):
+#	dbtools['LOADER'][db]='db2.exe'
+
+#ttt={}	
+dbtools['DBSHELL']=cconf.dbshell
+#for db in('DBTAES', 'DBTES', 'DBTAWS', 'DBTWS', 'DBTE', 'DBTEC', 'DBTDE'):
+#	ttt[db]='db2.exe'			
+#pprint(ttt)
+#e(0)
 			
 
 

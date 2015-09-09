@@ -721,10 +721,13 @@ exit;
 		if  hasattr(self.args, 'output') and self.args.output:
 			assert self.args.num_of_shards==1, '--output cannot be set if num_of_shards>1'
 			#outfn=self.args.output
-		spConf=spConf+['-o',outfn ]
-		#pprint(spConf)
+		if outfn:
+			spConf=spConf+['-o',outfn ]
+		pprint(spConf)
+		#e(0)
 		p = Popen(spConf, stdout=PIPE, stderr=PIPE) # '-S',  stdin=p1.stdout,
 		output, err = p.communicate()
+
 		#print 'o'*20
 		#print output
 		#print 'e'*20

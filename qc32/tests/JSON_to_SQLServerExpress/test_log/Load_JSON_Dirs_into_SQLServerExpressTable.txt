@@ -1,11 +1,16 @@
 
-c:\Python27\data_migrator_1239_mongo>echo y  | c:\Python27\qc_dist_32\20150723_234254\qc32\qc32.exe -w JSON-SSEXP -o 1 -r 1 -t "|" -l 10 -K 1 -M C:\Temp\qc_log -F C:\tmp\TEST_default_spool -B qc_job -Y 20150723_234254_220000 -5 ".\config\host_map\host_map.py" -dbg 1 -I .\test\v101\data\JSON_data_dir -y 1000 -u sa -p 198Morgan -d master -s ALEX_BUZ-PC\SQLEXPRESS -a dbo.Timestamp_test_to -Z "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn" 
+C:\Python27\data_migrator_1239_mongo>echo y  | C:\Python27\qc_dist_32\20150908_192607\qc32\qc32.exe -w JSON-SSEXP -ps 1 -r 1 -t "|" -l 10 -K 1 -M C:\Temp\qc_log -F C:\tmp\TEST_default_spool -B qc_job -Y 20150908_192607_963000 -5 ".\config\host_map\host_map.py" -dbg 1 -I .\test\v101\data\JSON_data_dir -y 1000 -u sa -p 198Morgan -d master -s ALEX_BUZ-PC\SQLEXPRESS -a dbo.Timestamp_test_to -Z "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn" 
+C:\Python27\QC_DIS~1\2093C5~1\qc32\qc32
+C:\Python27\QC_DIS~1\2093C5~1\qc32
+False SSEXP
 ----------------------------------------------------------------------
-QueryCopy for SQL Server Express (v0.3.5, beta, 2015/07/23 23:42:54) [32bit]
+QueryCopy for SQL Server Express (v0.3.5, beta, 2015/09/08 19:26:07) [32bit]
 Copyright (c): 2014 Alex Buzunov, All rights reserved.
 Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
 ----------------------------------------------------------------------
+C:\Python27\QC_DIS~1\2093C5~1\qc32\include\v101\host_map.py
 .\test\v101\data\JSON_data_dir
+4
 ####################
 		
 	From JSON:	
@@ -23,16 +28,19 @@ Are you sure you want to proceed?(y/n):
 
 
 
+JSON
 ############################################################
 ############################################################
 ############################################################
 ############################################################
 Thread-0 (1, 137327L, -1)
+JSON
 ############################################################
 ############################################################
 ############################################################
 ############################################################
 Thread-0 (1, 137327L, -1)
+JSON
 ############################################################
 ############################################################
 ############################################################
@@ -41,45 +49,43 @@ Thread-0 (1, 137327L, -1)
 ############################################################
 Copy stats (1 threads, 3 shards):
 ############################################################
-spID 0
-Unexpected error: (<type 'exceptions.IOError'>, IOError(9, 'Bad file descriptor'), <traceback object at 0x034070F8>)
-2015-07-23 23:43:34,769 - JSON-SSEXP - INFO - Counting lines in input file...
-2015-07-23 23:43:34,769 - JSON-SSEXP - INFO - Done.
-2015-07-23 23:43:34,769 - JSON-SSEXP - INFO - Estimated line count: 700
-2015-07-23 23:43:34,769 - JSON-SSEXP - INFO - Counting lines in input file...
-2015-07-23 23:43:34,769 - JSON-SSEXP - INFO - Done.
-2015-07-23 23:43:34,769 - JSON-SSEXP - INFO - Estimated line count: 700
-2015-07-23 23:43:34,769 - JSON-SSEXP - INFO - Counting lines in input file...
-2015-07-23 23:43:34,769 - JSON-SSEXP - INFO - Done.
-2015-07-23 23:43:34,769 - JSON-SSEXP - INFO - Estimated line count: 700
-2015-07-23 23:43:34,769 - JSON-SSEXP - WARNING - Overriding num_of_shards 1->3.
-2015-07-23 23:43:34,782 - JSON-SSEXP - INFO - Starting Thread-0
-2015-07-23 23:43:34,782 - JSON-SSEXP - INFO - Thread-0 processing Shard-0
-2015-07-23 23:43:34,782 - JSON-SSEXP - INFO - Loading to SSEXP...
-2015-07-23 23:43:49,161 - JSON-SSEXP - ERROR - Msg 4861, Level 16, State 1, Server ALEX_BUZ-PC\SQLEXPRESS, Line 2
+2015-09-08 19:26:47,275 - JSON-SSEXP - INFO - Counting lines in input file...
+2015-09-08 19:26:47,276 - JSON-SSEXP - INFO - Done.
+2015-09-08 19:26:47,276 - JSON-SSEXP - INFO - Estimated line count: 700
+2015-09-08 19:26:47,276 - JSON-SSEXP - INFO - Counting lines in input file...
+2015-09-08 19:26:47,276 - JSON-SSEXP - INFO - Done.
+2015-09-08 19:26:47,276 - JSON-SSEXP - INFO - Estimated line count: 700
+2015-09-08 19:26:47,276 - JSON-SSEXP - INFO - Counting lines in input file...
+2015-09-08 19:26:47,278 - JSON-SSEXP - INFO - Done.
+2015-09-08 19:26:47,278 - JSON-SSEXP - INFO - Estimated line count: 700
+2015-09-08 19:26:47,278 - JSON-SSEXP - WARNING - Overriding num_of_shards 1->3.
+2015-09-08 19:26:47,279 - JSON-SSEXP - INFO - Starting Thread-0
+2015-09-08 19:26:47,279 - JSON-SSEXP - INFO - Thread-0 processing Shard-0
+2015-09-08 19:26:47,279 - JSON-SSEXP - INFO - Loading to SSEXP...
+2015-09-08 19:26:49,730 - JSON-SSEXP - ERROR - Msg 4861, Level 16, State 1, Server ALEX_BUZ-PC\SQLEXPRESS, Line 2
 Cannot bulk load because the file ".\test\v101\data\JSON_data_dir\JSON_Mongo_Collection_0.js" could not be opened. Operating system error code 3(The system cannot find the path specified.).
 
-2015-07-23 23:43:49,161 - JSON-SSEXP - ERROR - sqlcmd.exe status =1
-2015-07-23 23:43:49,161 - JSON-SSEXP - INFO - Thread-0 exit status 1
-2015-07-23 23:43:49,163 - JSON-SSEXP - INFO - Thread-0 processing Shard-1
-2015-07-23 23:43:49,163 - JSON-SSEXP - INFO - Loading to SSEXP...
-2015-07-23 23:43:49,401 - JSON-SSEXP - ERROR - Msg 4861, Level 16, State 1, Server ALEX_BUZ-PC\SQLEXPRESS, Line 2
+2015-09-08 19:26:49,730 - JSON-SSEXP - ERROR - sqlcmd.exe status =1
+2015-09-08 19:26:49,730 - JSON-SSEXP - INFO - Thread-0 exit status 1
+2015-09-08 19:26:49,730 - JSON-SSEXP - INFO - Thread-0 processing Shard-1
+2015-09-08 19:26:49,730 - JSON-SSEXP - INFO - Loading to SSEXP...
+2015-09-08 19:26:50,582 - JSON-SSEXP - ERROR - Msg 4861, Level 16, State 1, Server ALEX_BUZ-PC\SQLEXPRESS, Line 2
 Cannot bulk load because the file ".\test\v101\data\JSON_data_dir\JSON_Mongo_Collection_1.js" could not be opened. Operating system error code 3(The system cannot find the path specified.).
 
-2015-07-23 23:43:49,401 - JSON-SSEXP - ERROR - sqlcmd.exe status =1
-2015-07-23 23:43:49,401 - JSON-SSEXP - INFO - Thread-0 exit status 1
-2015-07-23 23:43:49,403 - JSON-SSEXP - INFO - Thread-0 processing Shard-2
-2015-07-23 23:43:49,403 - JSON-SSEXP - INFO - Loading to SSEXP...
-2015-07-23 23:43:49,565 - JSON-SSEXP - ERROR - Msg 4861, Level 16, State 1, Server ALEX_BUZ-PC\SQLEXPRESS, Line 2
+2015-09-08 19:26:50,582 - JSON-SSEXP - ERROR - sqlcmd.exe status =1
+2015-09-08 19:26:50,582 - JSON-SSEXP - INFO - Thread-0 exit status 1
+2015-09-08 19:26:50,582 - JSON-SSEXP - INFO - Thread-0 processing Shard-2
+2015-09-08 19:26:50,598 - JSON-SSEXP - INFO - Loading to SSEXP...
+2015-09-08 19:26:50,711 - JSON-SSEXP - ERROR - Msg 4861, Level 16, State 1, Server ALEX_BUZ-PC\SQLEXPRESS, Line 2
 Cannot bulk load because the file ".\test\v101\data\JSON_data_dir\JSON_Mongo_Collection_2.js" could not be opened. Operating system error code 3(The system cannot find the path specified.).
 
-2015-07-23 23:43:49,565 - JSON-SSEXP - ERROR - sqlcmd.exe status =1
-2015-07-23 23:43:49,565 - JSON-SSEXP - INFO - Thread-0 exit status 1
-2015-07-23 23:43:49,565 - JSON-SSEXP - INFO - Exiting Thread-0
-2015-07-23 23:43:49,565 - JSON-SSEXP - INFO - Shard-0/1:		n/a
-2015-07-23 23:43:49,565 - JSON-SSEXP - INFO - Shard-1/1:		n/a
-2015-07-23 23:43:49,565 - JSON-SSEXP - INFO - Shard-2/1:		n/a
-2015-07-23 23:43:49,565 - JSON-SSEXP - INFO - TOTAL Bytes:      411981 Bytes
-2015-07-23 23:43:49,565 - JSON-SSEXP - INFO - TOTAL Rows:		n/a
-2015-07-23 23:43:49,565 - JSON-SSEXP - ERROR - Copy failed.
-2015-07-23 23:43:49,565 - JSON-SSEXP - INFO - Elapsed: 00:00:14
+2015-09-08 19:26:50,711 - JSON-SSEXP - ERROR - sqlcmd.exe status =1
+2015-09-08 19:26:50,711 - JSON-SSEXP - INFO - Thread-0 exit status 1
+2015-09-08 19:26:50,711 - JSON-SSEXP - INFO - Exiting Thread-0
+2015-09-08 19:26:50,711 - JSON-SSEXP - INFO - Shard-0/1:		n/a
+2015-09-08 19:26:50,711 - JSON-SSEXP - INFO - Shard-1/1:		n/a
+2015-09-08 19:26:50,711 - JSON-SSEXP - INFO - Shard-2/1:		n/a
+2015-09-08 19:26:50,711 - JSON-SSEXP - INFO - TOTAL Bytes:      411981 Bytes
+2015-09-08 19:26:50,711 - JSON-SSEXP - INFO - TOTAL Rows:		n/a
+2015-09-08 19:26:50,711 - JSON-SSEXP - ERROR - Copy failed.
+2015-09-08 19:26:50,711 - JSON-SSEXP - INFO - Elapsed: 00:00:03
