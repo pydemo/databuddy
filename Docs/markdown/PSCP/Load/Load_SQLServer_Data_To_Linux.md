@@ -38,7 +38,7 @@ Please, ignore __Common__ argument section for now. Go through __Source__ and __
 ## Run Session.
 After you click __Run__ button black CLI window will pop-up executing QueryCopy (`qc32\qc.exe`).
 
-![Session executed](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/PSCP/Copy_data_from_SQLServer_to_LinuxCLI_Window.png "Session executed.")
+![Session executed](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/PSCP/Copy_data_from_SQLServer_to_Linux_CLI_Window.png "Session executed.")
 
 
 ##Checking the results
