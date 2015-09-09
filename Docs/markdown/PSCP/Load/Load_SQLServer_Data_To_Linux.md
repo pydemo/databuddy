@@ -1,4 +1,4 @@
-# Extract scalar data from SQL Server to Linux.
+# Copy scalar data from SQL Server to Linux.
 In this example we are going to extract data from SQL Server table to CSV file and then copy it to Linux (in single session).
 Migration steps:
 - Extract scalar data from SQLServer table to CSV file.
