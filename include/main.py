@@ -143,7 +143,7 @@ def import_module(filepath):
 	return py_mod
 ########################################################################	
 exe=False
-exe=True
+#exe=True
 
 
 #print wx.VERSION
@@ -4533,13 +4533,15 @@ class NewSessionDialog(wx.Dialog):
 				#Menu2.AppendItem(menuItem)	
 					
 	def from_other_db_Menu_2(self,Menu):
-		for k in self.api_menu.keys():
+		for k in  [x for x in self.api_menu.keys() if x not in conf.tt+conf.dt]:
 			#print k
 			if k not in [self.default_db]:
+			
 				Menu1 = wx.Menu()
 				#menuItem = FM.FlatMenuItem(Menu, wx.NewId(), k, "", wx.ITEM_NORMAL, Menu1)
 				#Menu.AppendItem(menuItem)
 				Menu.AppendMenu(wx.NewId(),k,Menu1)
+				#print self.api_menu[k]
 				for k2 in self.api_menu[k]:
 					#self.create_Menu3(Menu1,k2,from_db=k)
 					
@@ -4555,6 +4557,56 @@ class NewSessionDialog(wx.Dialog):
 					for sm2 in self.api_menu[self.default_db]:
 						#self.i +=1
 						self.create_Menu4_2(Menu2,sm2,k2,from_to='To')
+		Menu.AppendSeparator()
+		for k in  conf.tt:
+			#print k
+			if k not in [self.default_db]:
+			
+				Menu1 = wx.Menu()
+				#menuItem = FM.FlatMenuItem(Menu, wx.NewId(), k, "", wx.ITEM_NORMAL, Menu1)
+				#Menu.AppendItem(menuItem)
+				Menu.AppendMenu(wx.NewId(),k,Menu1)
+				#print self.api_menu[k]
+				for k2 in self.api_menu[k]:
+					#self.create_Menu3(Menu1,k2,from_db=k)
+					
+					#print from_db, k2
+					#from_to='To_%s_%s' %(from_db,k2)
+					#self.i +=1
+					Menu2 = wx.Menu()
+					#menuItem = FM.FlatMenuItem(Menu1, wx.NewId(), "From %s" % ( k2), "", wx.ITEM_NORMAL, Menu2)
+					#Menu1.AppendItem(menuItem)
+					Menu1.AppendMenu(wx.NewId(),"From %s" % ( conf.dbs[k2]),Menu2)
+					#if not k2 in ['OR']:
+					#	menuItem.Enable(False)
+					for sm2 in self.api_menu[self.default_db]:
+						#self.i +=1
+						self.create_Menu4_2(Menu2,sm2,k2,from_to='To')
+		Menu.AppendSeparator()
+		for k in  conf.dt:
+			#print k
+			if k not in [self.default_db]:
+			
+				Menu1 = wx.Menu()
+				#menuItem = FM.FlatMenuItem(Menu, wx.NewId(), k, "", wx.ITEM_NORMAL, Menu1)
+				#Menu.AppendItem(menuItem)
+				Menu.AppendMenu(wx.NewId(),k,Menu1)
+				#print self.api_menu[k]
+				for k2 in self.api_menu[k]:
+					#self.create_Menu3(Menu1,k2,from_db=k)
+					
+					#print from_db, k2
+					#from_to='To_%s_%s' %(from_db,k2)
+					#self.i +=1
+					Menu2 = wx.Menu()
+					#menuItem = FM.FlatMenuItem(Menu1, wx.NewId(), "From %s" % ( k2), "", wx.ITEM_NORMAL, Menu2)
+					#Menu1.AppendItem(menuItem)
+					Menu1.AppendMenu(wx.NewId(),"From %s" % ( conf.dbs[k2]),Menu2)
+					#if not k2 in ['OR']:
+					#	menuItem.Enable(False)
+					for sm2 in self.api_menu[self.default_db]:
+						#self.i +=1
+						self.create_Menu4_2(Menu2,sm2,k2,from_to='To')						
 	def from_web_Menu_2(self,Menu2):
 			for w in conf.dt:
 				for s in conf.ff[:-1]:
@@ -4596,6 +4648,24 @@ class NewSessionDialog(wx.Dialog):
 			#Menu2.AppendItem(menuItem)
 			Menu2.AppendMenu(wx.NewId(), 'To other DB' ,Menu3)
 			self.to_other_db_Menu_2(Menu3,sm)
+
+		#append to_csv
+		Menu2.AppendSeparator()
+		for s in conf.tt:
+			#self.i +=1
+			#Menu1 = FM.FlatMenu()
+			#menuItem = FM.FlatMenuItem(Menu2, wx.NewId(), 'To %s' % s, '', wx.ITEM_NORMAL)
+			item = Menu2.Append(wx.NewId(),  'To %s' % s )
+			self.gen_bind(wx.EVT_MENU,item, self.OnMenu,(sm,s))
+			#Menu2.AppendItem(menuItem)
+		Menu2.AppendSeparator()
+		for s in conf.dt:
+			#self.i +=1
+			#Menu1 = FM.FlatMenu()
+			#menuItem = FM.FlatMenuItem(Menu2, wx.NewId(), 'To %s' % s, '', wx.ITEM_NORMAL)
+			item = Menu2.Append(wx.NewId(),  'To %s' % s )
+			self.gen_bind(wx.EVT_MENU,item, self.OnMenu,(sm,s))
+			#Menu2.AppendItem(menuItem)	
 		#append to_csv
 		Menu2.AppendSeparator()
 		for s in conf.ff:
@@ -4604,7 +4674,7 @@ class NewSessionDialog(wx.Dialog):
 			#menuItem = FM.FlatMenuItem(Menu2, wx.NewId(), 'To %s' % s, '', wx.ITEM_NORMAL)
 			item = Menu2.Append(wx.NewId(),  'To %s' % s )
 			self.gen_bind(wx.EVT_MENU,item, self.OnMenu,(sm,s))
-			#Menu2.AppendItem(menuItem)
+			#Menu2.AppendItem(menuItem)					
 
 	def create_Menu4_2(self,Menu3,sm2,from_db, from_to='To'):
 		#self.i +=1
@@ -4628,7 +4698,7 @@ class NewSessionDialog(wx.Dialog):
 		self.gen_bind(wx.EVT_MENU,item, self.OnMenu,(from_db,sm2))
 		#Menu3.AppendItem(menuItem)
 	def to_other_db_Menu_2(self,Menu,from_db):
-		for k in self.api_menu.keys():
+		for k in [x for x in self.api_menu.keys() if x not in conf.tt+conf.dt]:
 			#print k
 			if k not in [self.default_db]:
 				Menu1 = wx.Menu()
@@ -4639,6 +4709,7 @@ class NewSessionDialog(wx.Dialog):
 					#for sm2 in self.api_menu[self.default_db]:
 					#self.i +=1
 					self.create_Menu4_2(Menu1,k2,from_db,from_to='To')
+				
 		
 	def CreatePopupMenu2(self):
 		if not self.recentMenu:
@@ -5455,9 +5526,9 @@ class NewSessionDialog(wx.Dialog):
 				Menu1 = FM.FlatMenu()
 				menuItem = FM.FlatMenuItem(Menu, wx.NewId(), k, "", wx.ITEM_NORMAL, Menu1)
 				Menu.AppendItem(menuItem)
-				for k2 in self.api_menu[k]:
+				for k2 in [x for x in self.api_menu[k] if x not in conf.tt+conf.dt]:
 					#self.create_Menu3(Menu1,k2,from_db=k)
-					
+					print k2
 					#print from_db, k2
 					#from_to='To_%s_%s' %(from_db,k2)
 					self.i +=1
@@ -12647,8 +12718,8 @@ class DataBuddy(wx.Frame):
 			350, wx.ClientDC(self.panel))
 		if __github__:
 			info.WebSite = (__github__, "%s Github" % __appname__)
-		info.Developers = [__author__]
-		#info.License = wordwrap("Open source", 500, wx.ClientDC(self.panel))
+		info.Developers = [__maintainer__]
+		info.License = wordwrap("Open source", 500, wx.ClientDC(self.panel))
 		# Show the wx.AboutBox
 		wx.AboutBox(info)		
 	def onAboutHtmlDlg(self, event):
@@ -12664,7 +12735,7 @@ class AboutDlg(wx.Frame):
 		page="""
 <h2>%s</h2>						
 <p>Ad-hoc data migrator for Oracle 11G.</p>
-<p>Author: %s (<a href="mailto:ab95022@imcnam.ssmb.com?subject=%s issue&body=Hi, Alex. Here's a screenshot and description of a problem.">Support</a>)</p>
+<p>Author: %s (<a href="mailto:alexbuzunov@gmail.com?subject=%s issue&body=Hi, Alex. Here's a screenshot and description of a problem.">Support</a>)</p>
 <p><b>Software used in making this tool:</h3></p>
 <p><b><a href="http://www.python.org">Python 2.7</a></b></p>
 <p><b><a href="http://www.wxpython.org">wxPython 2.8</a></b></p>
