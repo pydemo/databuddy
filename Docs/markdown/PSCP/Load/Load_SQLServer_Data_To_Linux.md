@@ -45,36 +45,8 @@ After you click __Run__ button black CLI window will pop-up executing QueryCopy 
 Check job results at the bottom of the black CLI window:
 ```
 ############################################################
-2015-06-01 11:30:09,022 - CURL-ORA11G - INFO - Done.
-2015-06-01 11:30:09,022 - CURL-ORA11G - INFO - Elapsed: 00:00:03
+2015-06-01 11:30:09,022 - SSEXP-PSCP - INFO - Done.
+2015-06-01 11:30:09,022 - SSEXP-PSCP - INFO - Elapsed: 00:00:03
 Press any key to continue . . .
 ```
-##Target row count.
-![OATS_Reportable_Securities](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/CURL/Curl_to_Oracle_OATS_Load_rowcount.png "Session executed.")
-
-
-##Prerequisites
-
-###Input
-OATS Reportable Securities file URL: http://oatsreportable.finra.org/OATSReportableSecurities-SOD.txt
-
-
-###Target Table
-```
-drop table OATS_Reportable_Securities
-/
-
-create table OATS_Reportable_Securities (
-	Symbol varchar2(18), 
-	Issue_Name Varchar2(256),
-	Primary_Listing_Mkt varchar2(18) 
-)
-/
-
-```
-
-
-Status __"Done"__ means export job executed successfully. 
-- [x] Temporary Oracle11g CSV spool data file will be at `C:	mp\TEST_default_spool\qc_job\[timestamp]\[table_name].data` as defined by __Common__ section `default_spool_dir` argument.
-
 	
