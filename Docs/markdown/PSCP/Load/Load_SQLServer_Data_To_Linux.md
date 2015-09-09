@@ -47,8 +47,9 @@ After you click __Run__ button black CLI window will pop-up executing QueryCopy 
 Check job results at the bottom of the black CLI window:
 ```
 ############################################################
-2015-06-01 11:30:09,022 - SSEXP-PSCP - INFO - Done.
-2015-06-01 11:30:09,022 - SSEXP-PSCP - INFO - Elapsed: 00:00:03
+2015-09-08 23:41:06,552 - SSEXP-PSCP - INFO - Done.
+2015-09-08 23:41:06,552 - SSEXP-PSCP - INFO - Elapsed: 00:00:01
+spID 932
 Press any key to continue . . .
 ```
 	
