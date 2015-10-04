@@ -394,7 +394,7 @@ Database |Version | Export | Import | DbShell|File formats
 [Enterprise DB](http://www.enterprisedb.com/products-services-training/products/documentation)  |||||
 [Foundation DB](https://foundationdb.com/key-value-store/documentation/index.html) |||||
 [Arango DB](https://www.arangodb.com/documentation/) |||||
-[Volt DB](http://docs.voltdb.com/)  |||||
+[Volt DB](http://docs.voltdb.com/)  ||||[Docker install](https://voltdb.com/community/demo#windows)|
 [OrientDB](http://orientdb.com/docs/last/) |||||
 [Clustrix](http://docs.clustrix.com/display/CLXDOC/Home)  |||||
 [NuiDB](http://doc.nuodb.com/display/doc/NuoDB+Online+Documentation) |||||
