@@ -441,75 +441,7 @@ Database |Version | Export | Import | DbShell|File formats
 [SAND Technology](http://www.sand.com/)|||||
 
 
-##Prerequisites
 
-Database |Version | Installs | Dependencies | OS|Wiki
----------|----------|-------- | -------| -------|------
-[Oracle 12c](http://docs.oracle.com/database/121/index.htm)  |`12c Release 1`||||
-[Oracle 11g](https://docs.oracle.com/cd/E11882_01/nav/portal_4.htm) | `11g Release 2`| |||
-[Disco](https://www.openhub.net/p/disco)|||||
-[Crate Data](https://www.openhub.net/p/cratedata)|||||
-[MongoDB](http://docs.mongodb.org/manual/)| `3.0` ||||
-[TimesTen](http://www.oracle.com/technetwork/database/database-technologies/timesten/documentation/index.html)|`Release 2`||||
-[DynamoDB](http://aws.amazon.com/documentation/dynamodb/) |||||
-[Hadoop](http://hadoop.apache.org/docs/r2.7.0/) |`r2.7.0` ||||
-[EXASOL](https://www.exasol.com/support/secure/attachment/30841/EXASolution_User_Manual-5.0.3-en.pdf) |`5.0.3`|||||
-[Kinesis](http://aws.amazon.com/documentation/kinesis/)||||
-[Netezza](https://www-304.ibm.com/support/knowledgecenter/SSULQD_7.2.0/com.ibm.nz.welcome.doc/doc/welcome.html) |`7.2.0` ||||
-[KDB+](http://kx.com/resources.php)|||||
-[Aster](http://www.teradata.com/Teradata-Aster/overview/) |||||
-[Aerospike](http://www.aerospike.com/docs/) |||||
-[Couchbase](http://docs.couchbase.com/admin/admin/Couchbase-intro.html) |||||
-[Redshift](http://aws.amazon.com/documentation/redshift/) |||||
-[RDS](http://aws.amazon.com/documentation/rds/) |||||
-[Enterprise DB](http://www.enterprisedb.com/products-services-training/products/documentation)  |||||
-[Foundation DB](https://foundationdb.com/key-value-store/documentation/index.html) |||||
-[Arango DB](https://www.arangodb.com/documentation/) |||||
-[Volt DB](http://docs.voltdb.com/)  ||[Docker install](https://voltdb.com/community/demo#windows)|||
-[OrientDB](http://orientdb.com/docs/last/) |||||
-[Clustrix](http://docs.clustrix.com/display/CLXDOC/Home)  |||||
-[NuiDB](http://doc.nuodb.com/display/doc/NuoDB+Online+Documentation) |||||
-[McObject](http://www.mcobject.com/embedded-database-manuals) |||||
-[Actian Ingres](http://esd.actian.com/product/docs) |||||
-[Greenplum](http://gpdb.docs.pivotal.io/gpdb-435.html)|||||
-[Salesforce](https://developer.salesforce.com/docs/atlas.en-us.dataLoader.meta/dataLoader/) ||[DataLoader](https://developer.salesforce.com/docs/atlas.en-us.dataLoader.meta/dataLoader/)|||
-[Twitter Streaming API](https://dev.twitter.com/streaming/overview)|||||
-[Google Analytics](https://developers.google.com/analytics/devguides/reporting/core/v3/quickstart/service-py)|||||
-[Vertica](http://www.vertica.com/hp-vertica-documentation/hp-vertica-7-1-x-documentation/)|`7-1-x`||||
-[SQLServer](https://msdn.microsoft.com/en-US/sqlserver)|||||
-[MySQL](http://dev.mysql.com/doc/)|||||
-[PostgreSQL](http://www.postgresql.org/docs/)|||||
-[SQLite](https://www.sqlite.org/docs.html)|||||
-[Informix](http://www-01.ibm.com/support/knowledgecenter/SSGU8G_12.1.0/com.ibm.welcome.doc/welcome.htm?lang=en)| `12.1.0`||||
-[SAP ASE Sybase](http://infocenter.sybase.com/help/index.jsp?topic=/com.sybase.infocenter.help.ase.15.7/title.htm)|||||
-[DB2](http://www-01.ibm.com/support/knowledgecenter/SSEPGG_10.5.0/com.ibm.db2.luw.kc.doc/welcome.html)| `10.5.0`||||
-[dBase](http://www.dbase.com/dbasesql/dbase-documentation-download/)|||||
-[MS Access](https://msdn.microsoft.com/en-us/library/office/ff604965%28v=office.14%29.aspx)| `10.0` ||||
-[Pandas](http://pandas.pydata.org/pandas-docs/version/0.12.0/)|||||
-[Apache Spark](https://spark.apache.org/docs/latest/)|||||
-[Apache Storm](https://storm.apache.org/documentation/Home.html)|||||
-[MariaDB](https://mariadb.com/kb/en/mariadb/documentation/)|||| |
-[Infobright](https://www.infobright.com/index.php/community-2/)|||||
-[Cassandra] (http://cassandra.apache.org/)|||||
-[HBase] (http://hbase.apache.org/)|||||
-[Teradata] (http://www.info.teradata.com/HTMLPubs/DB_TTU_14_00/index.html#page/Storage_Management/B035_2492_071A/2492ch01.084.17.html)|||||
-[Bigtable] (https://cloud.google.com/bigtable/docs/)|||||
-[Apache Hive] (http://doc.mapr.com/display/MapR/Hive)|||||
-[InterSystems Caché](http://www.intersystems.com/our-products/cache/managing-data/)||| [export](http://docs.intersystems.com/ens20131/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_shell)|||
-[Altibase HDB](http://altibase.com/)|||||
-[ZooKeeper](https://zookeeper.apache.org/)|||||
-[HDFS](https://hadoop.apache.org/docs/r2.4.1/hadoop-project-dist/hadoop-hdfs/HdfsUserGuide.html)|||||
-[Amazon SimpleDB](http://aws.amazon.com/documentation/simpledb/)|||||
-[Amazon Redshift](http://aws.amazon.com/documentation/redshift/) |||||
-[Azure DocumentDB](http://azure.microsoft.com/en-us/services/documentdb/)  |||||
-[Elasticsearch](https://www.found.no/foundation/elasticsearch-as-nosql/)   |||||
-[Riak](https://docs.basho.com/)|||||
-[MemSQL](http://docs.memsql.com/latest/)|||||
-[MarkLogic](http://www.marklogic.com/what-is-marklogic/features/) |||||
-[SQream DB](http://sqream.com/solutions/products/sqream-db/)|||||
-[1010data] (https://www.1010data.com/technology)|||||
-[Kognitio](http://kognitio.com/analyticalplatform/)|||||
-[SAND Technology](http://www.sand.com/)|||||
 
 ## Vendor architecture
 [MongoDB Architecture Guide] (http://s3.amazonaws.com/info-mongodb-com/MongoDB_Architecture_Guide.pdf)
