@@ -315,6 +315,7 @@ Database | Spooler | Loader | DbShell
 - [ ] add [Netezza](https://www-304.ibm.com/support/knowledgecenter/SSULQD_7.2.0/com.ibm.nz.welcome.doc/doc/welcome.html)   
 - [ ] add Parstream
 - [ ] add ParAccel
+- [ ] add [Redis](http://redis.io/)   
 - [ ] add [MarkLogic](http://www.marklogic.com/what-is-marklogic/features/)   
 - [ ] add [Amazon SimpleDB](http://aws.amazon.com/documentation/simpledb/)  
 - [ ] add [Twitter Streaming API](https://dev.twitter.com/streaming/overview)  (extract)
@@ -439,6 +440,7 @@ Database |Version | Export | Import | DbShell|File formats
 [1010data] (https://www.1010data.com/technology)|||||
 [Kognitio](http://kognitio.com/analyticalplatform/)|||||
 [SAND Technology](http://www.sand.com/)|||||
+[Redis](http://redis.io/)|||||
 
 
 
