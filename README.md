@@ -346,7 +346,7 @@ Database | Spooler | Loader | DbShell
 - [ ] add [Kinesis](http://aws.amazon.com/documentation/kinesis/) (extract)
 - [ ] add [Amazon Redshift](http://aws.amazon.com/documentation/redshift/)   
 - [ ] add [RDS](http://aws.amazon.com/documentation/rds/)   
-- [ ] add [DynamoDB](http://aws.amazon.com/documentation/dynamodb/)  
+- [ ] add [Amazon DynamoDB](http://aws.amazon.com/documentation/dynamodb/)  
 - [ ] add [Couchbase](http://docs.couchbase.com/admin/admin/Couchbase-intro.html)  
 - [ ] add [Aerospike](http://www.aerospike.com/docs/)   
 - [ ] add [Riak](https://docs.basho.com/)
@@ -383,7 +383,7 @@ Database |Version | Export | Import | DbShell|File formats
 [Crate Data](https://www.openhub.net/p/cratedata)|||||
 [MongoDB](http://docs.mongodb.org/manual/)| `3.0` |[mongoexport](http://docs.mongodb.org/v2.2/reference/mongoexport/)  |[mongoimport](http://docs.mongodb.org/v2.2/reference/mongoimport/) |[mongo shell](http://docs.mongodb.org/manual/faq/mongo/)  | CSV, JSON
 [TimesTen](http://www.oracle.com/technetwork/database/database-technologies/timesten/documentation/index.html)|`Release 2`||||
-[DynamoDB](http://aws.amazon.com/documentation/dynamodb/) |||||
+[Amazon DynamoDB](http://aws.amazon.com/documentation/dynamodb/) |||||
 [Hadoop](http://hadoop.apache.org/docs/r2.7.0/) |`r2.7.0` ||||
 [EXASOL](https://www.exasol.com/support/secure/attachment/30841/EXASolution_User_Manual-5.0.3-en.pdf) |`5.0.3`||||pdf
 [Kinesis](http://aws.amazon.com/documentation/kinesis/)||||
