@@ -316,6 +316,8 @@ Database | Spooler | Loader | DbShell
 - [ ] add Parstream
 - [ ] add ParAccel
 - [ ] add [Redis](http://redis.io/)   
+- [ ] add [MonetDB](https://en.wikipedia.org/wiki/MonetDB)  
+- [ ] add [Vectorwise](https://en.wikipedia.org/wiki/Vectorwise)   
 - [ ] add [MarkLogic](http://www.marklogic.com/what-is-marklogic/features/)   
 - [ ] add [Amazon SimpleDB](http://aws.amazon.com/documentation/simpledb/)  
 - [ ] add [Twitter Streaming API](https://dev.twitter.com/streaming/overview)  (extract)
