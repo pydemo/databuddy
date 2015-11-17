@@ -316,6 +316,7 @@ Database | Spooler | Loader | DbShell
 - [ ] add Parstream
 - [ ] add ParAccel
 - [ ] add [Redis](http://redis.io/)   
+- [ ] add [ZODB](http://www.zodb.org/en/latest/documentation/tutorial.html) 
 - [ ] add [MonetDB](https://en.wikipedia.org/wiki/MonetDB)  
 - [ ] add [Vectorwise](https://en.wikipedia.org/wiki/Vectorwise)   
 - [ ] add [MarkLogic](http://www.marklogic.com/what-is-marklogic/features/)   
@@ -443,6 +444,7 @@ Database |Version | Export | Import | DbShell|File formats
 [Kognitio](http://kognitio.com/analyticalplatform/)|||||
 [SAND Technology](http://www.sand.com/)|||||
 [Redis](http://redis.io/)|||||
+[ZODB](http://www.zodb.org/en/latest/documentation/tutorial.html) |||||
 
 
 
