@@ -359,6 +359,7 @@ Database | Spooler | Loader | DbShell
 - [ ] add [1010data] (https://www.1010data.com/technology)
 - [ ] add [Kognitio](http://kognitio.com/analyticalplatform/)
 - [ ] add [SAND Technology](http://www.sand.com/)
+- [ ] Create tests using [PyAutoGUI](http://pyautogui.readthedocs.org/en/latest/)
 
 ##Limitations
 - tested to run only on Windows for now (even thou it's wxPython)
