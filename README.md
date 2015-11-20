@@ -360,7 +360,7 @@ Database | Spooler | Loader | DbShell
 - [ ] add [Kognitio](http://kognitio.com/analyticalplatform/)
 - [ ] add [SAND Technology](http://www.sand.com/)
 - [ ] Create tests using [PyAutoGUI](http://pyautogui.readthedocs.org/en/latest/)
-- [ ] Add Amazon Simple Storage Service, S3 (https://aws.amazon.com/s3/)
+- [ ] Add Amazon Simple Storage Service [S3] (https://aws.amazon.com/s3/)
 - 
 ##Limitations
 - tested to run only on Windows for now (even thou it's wxPython)
