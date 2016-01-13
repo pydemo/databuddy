@@ -346,7 +346,9 @@ Database | Spooler | Loader | DbShell
 - [ ] add [Aster](http://www.teradata.com/Teradata-Aster/overview/)  
 - [ ] add [Kinesis](http://aws.amazon.com/documentation/kinesis/) (extract)
 - [ ] add [Amazon Redshift](http://aws.amazon.com/documentation/redshift/)   
-- [ ] add [RDS](http://aws.amazon.com/documentation/rds/)   
+- [ ] add [RDS](http://aws.amazon.com/documentation/rds/)
+- [ ] add [Amazon Aurora (RDS)](https://aws.amazon.com/blogs/aws/highly-scalable-mysql-compat-rds-db-engine/) 
+
 - [ ] add [Amazon DynamoDB](http://aws.amazon.com/documentation/dynamodb/)  
 - [ ] add [Couchbase](http://docs.couchbase.com/admin/admin/Couchbase-intro.html)  
 - [ ] add [Aerospike](http://www.aerospike.com/docs/)   
@@ -448,6 +450,8 @@ Database |Version | Export | Import | DbShell|File formats
 [Redis](http://redis.io/)|||||
 [ZODB](http://www.zodb.org/en/latest/documentation/tutorial.html) |||||
 [Amazon Simple Storage Service/S3](https://aws.amazon.com/s3/) |||||
+[Amazon Aurora](https://aws.amazon.com/blogs/aws/highly-scalable-mysql-compat-rds-db-engine/) |||||
+
 
 
 
