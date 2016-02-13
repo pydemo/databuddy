@@ -349,6 +349,7 @@ Database | Spooler | Loader | DbShell
 - [ ] add [RDS](http://aws.amazon.com/documentation/rds/)
 - [ ] add [Amazon Aurora (RDS)](https://aws.amazon.com/blogs/aws/highly-scalable-mysql-compat-rds-db-engine/) 
 
+- [ ] add [RethinkDB](https://www.rethinkdb.com/docs/)  
 - [ ] add [Amazon DynamoDB](http://aws.amazon.com/documentation/dynamodb/)  
 - [ ] add [Couchbase](http://docs.couchbase.com/admin/admin/Couchbase-intro.html)  
 - [ ] add [Aerospike](http://www.aerospike.com/docs/)   
@@ -451,7 +452,7 @@ Database |Version | Export | Import | DbShell|File formats
 [ZODB](http://www.zodb.org/en/latest/documentation/tutorial.html) |||||
 [Amazon Simple Storage Service/S3](https://aws.amazon.com/s3/) |||||
 [Amazon Aurora](https://aws.amazon.com/blogs/aws/highly-scalable-mysql-compat-rds-db-engine/) |||||
-
+[RethinkDB](https://www.rethinkdb.com/docs/)  |||||
 
 
 
