@@ -346,9 +346,7 @@ Database | Spooler | Loader | DbShell
 - [ ] add [Aster](http://www.teradata.com/Teradata-Aster/overview/)  
 - [ ] add [Kinesis](http://aws.amazon.com/documentation/kinesis/) (extract)
 - [ ] add [Amazon Redshift](http://aws.amazon.com/documentation/redshift/)   
-- [ ] add [RDS](http://aws.amazon.com/documentation/rds/)
 - [ ] add [Amazon Aurora (RDS)](https://aws.amazon.com/blogs/aws/highly-scalable-mysql-compat-rds-db-engine/) 
-
 - [ ] add [RethinkDB](https://www.rethinkdb.com/docs/)  
 - [ ] add [Amazon DynamoDB](http://aws.amazon.com/documentation/dynamodb/)  
 - [ ] add [Couchbase](http://docs.couchbase.com/admin/admin/Couchbase-intro.html)  
@@ -399,7 +397,6 @@ Database |Version | Export | Import | DbShell|File formats
 [Aerospike](http://www.aerospike.com/docs/) |||||
 [Couchbase](http://docs.couchbase.com/admin/admin/Couchbase-intro.html) |||||
 [Redshift](http://aws.amazon.com/documentation/redshift/) |||||
-[RDS](http://aws.amazon.com/documentation/rds/) |||||
 [Enterprise DB](http://www.enterprisedb.com/products-services-training/products/documentation)  |||||
 [Foundation DB](https://foundationdb.com/key-value-store/documentation/index.html) |||||
 [Arango DB](https://www.arangodb.com/documentation/) |||||
