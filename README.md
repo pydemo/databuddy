@@ -533,8 +533,9 @@ Mongo DB|x
  - [Copy_Table_Data_From_Oracle_to_MongoDB_Collection](https://github.com/data-buddy/DataBuddy/blob/master/Docs/markdown/MongoDB/Copy/Copy_Table_Data_From_Oracle_to_MongoDB_Collection.md) 
 
 - [ ] CURL
- - [Copy_data_from_Web_to_Oracle11g](https://github.com/data-buddy/Databuddy/blob/master/Docs/markdown/CURL/Copy/Copy_data_from_Web_to_Oracle11g.md) 
- - 
+- [Copy_data_from_Web_to_Oracle11g](https://github.com/data-buddy/Databuddy/blob/master/Docs/markdown/CURL/Copy/Copy_data_from_Web_to_Oracle11g.md) 
+
 
 ##Download
+* `git clone https://github.com/data-buddy/DataBuddy/`
 * [Data Buddy latest release](https://github.com/data-buddy/DataBuddy/releases/tag/0.3.5) -- `data-buddy 0.3.5`
