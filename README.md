@@ -1,5 +1,4 @@
-**not maintained 
-taking a new route**
+**not maintained: taking a new route**
 
 # DataBuddy
 Do it yourself data integration starter kit.
