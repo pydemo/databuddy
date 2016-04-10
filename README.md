@@ -363,6 +363,7 @@ Database | Spooler | Loader | DbShell
 - [ ] add [Kognitio](http://kognitio.com/analyticalplatform/)
 - [ ] add [SAND Technology](http://www.sand.com/)
 - [ ] add [InfiniDB](http://infinidb.co/)
+- [ ] add [SQL Data Warehouse](https://azure.microsoft.com/en-us/services/sql-data-warehouse/) 
 - [ ] Create tests using [PyAutoGUI](http://pyautogui.readthedocs.org/en/latest/)
 - [ ] Add Amazon Simple Storage Service [S3] (https://aws.amazon.com/s3/)
 - [ ] Apache Derby (https://db.apache.org/derby/)
@@ -456,7 +457,7 @@ Database |Version | Export | Import | DbShell|File formats
 [RethinkDB](https://www.rethinkdb.com/docs/)  |||||
 [Apache Derby] (https://db.apache.org/derby/) |||||
 [InfiniDB](http://infinidb.co/) |||||
-
+[SQL Data Warehouse](https://azure.microsoft.com/en-us/services/sql-data-warehouse/) |||||
 
 
 
