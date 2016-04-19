@@ -8,7 +8,7 @@ Do it yourself data integration starter kit.
 OS|Platform|data-buddy (GUI) | QueryCopy (command line)
 ---|---|---- | -------------
 Windows|32bit|[0.3.5 beta](https://github.com/data-buddy/DataBuddy/releases/tag/0.3.5) | [1.23.9 beta] (https://github.com/QueryCopy/QueryCopy-for-Oracle/releases/tag/v1.23.9)
->There are 2 components. Upon "Run" data-buddy (UI) will kick off QueryCopy (`qc32\qc.exe`) out of process.
+>There are 2 components. Upon "Run" Databuddy GUI (DataBuddy.exe) will kick off Databuddy CLI (`qc32\qc.exe`) out of process.
 
 ##Purpose
 
