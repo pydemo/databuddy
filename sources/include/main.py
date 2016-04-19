@@ -102,7 +102,7 @@ except ImportError: # if it's not there locally, try the wxPython lib.
 	from wx.lib.agw.fmresources import FM_OPT_SHOW_CUSTOMIZE, FM_OPT_SHOW_TOOLBAR, FM_OPT_MINIBAR
 
 
-from qc32.config.include.oracle import target
+from qc32.config.include.etl.oracle import target
 
 try:
 	from Queue import Queue, Empty
@@ -143,7 +143,7 @@ def import_module(filepath):
 	return py_mod
 ########################################################################	
 exe=False
-exe=True
+#exe=True
 
 
 #print wx.VERSION
@@ -155,7 +155,10 @@ userhome = os.path.expanduser('~')
 session_home=os.path.join(home,'sessions')	
 default_tmpl_lib='My_Templates'	
 default_sess_lib='My_Sessions'	
-transport_home=r'C:\Python27\data_migrator_1239_pscp'
+#transport_home=r'C:\Python27\data_migrator_1239_pscp'
+cli_path=os.path.abspath(os.path.expanduser(__file__))
+transport_home= os.path.join(os.path.dirname(cli_path),'..\\qc32')
+
 if exe:
 	transport_home=os.path.join(home,'qc%d' % int(__platform__[:2]))
 if __platform__ in ['32']:

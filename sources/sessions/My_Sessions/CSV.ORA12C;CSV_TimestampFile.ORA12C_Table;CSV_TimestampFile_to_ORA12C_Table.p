@@ -49,7 +49,7 @@ S'-C'
 p27
 aS'--loader_profile'
 p28
-aVC:\u005cUsers\u005calex_buz\u005cDocuments\u005cGitHub\u005cDataBuddy\u005csessions\u005cMy_Sessions\u005cCSV_TimestampFile_to_ORA12C_Table\u005csqlloader.py
+aVC:\u005cUsers\u005calex_buz\u005cDocuments\u005cGitHub\u005cDataBuddy\u005csources\u005csessions\u005cMy_Sessions\u005cCSV_TimestampFile_to_ORA12C_Table\u005csqlloader.py
 p29
 aS'SQL*Loader profile (user defined).'
 p30
@@ -91,20 +91,20 @@ S'-Y'
 p49
 aS'--time_stamp'
 p50
-aV20160418_230953_903000
+aV20160419_141935_163000
 p51
 aS'Timestamp (log_dir/job_name/timestamp).'
 p52
-asS'log_dir'
+asS'host_map'
 p53
 (lp54
-S'-M'
+S'-5'
 p55
-aS'--log_dir'
+aS'--host_map'
 p56
-aS'C:\\Temp\\qc_log'
+aVC:\u005cUsers\u005calex_buz\u005cDocuments\u005cGitHub\u005cDataBuddy\u005csources\u005csessions\u005cMy_Sessions\u005cCSV_TimestampFile_to_ORA12C_Table\u005chost_map\u005chost_map.py
 p57
-aS'Log destination.'
+aS'Host-to-shard map.'
 p58
 asS'pool_size'
 p59
@@ -127,16 +127,16 @@ aS'qc_job'
 p68
 aS'Job name (log_dir/job_name).'
 p69
-asS'host_map'
+asS'log_dir'
 p70
 (lp71
-S'-5'
+S'-M'
 p72
-aS'--host_map'
+aS'--log_dir'
 p73
-aVC:\u005cUsers\u005calex_buz\u005cDocuments\u005cGitHub\u005cDataBuddy\u005csessions\u005cMy_Sessions\u005cCSV_TimestampFile_to_ORA12C_Table\u005chost_map\u005chost_map.py
+aS'C:\\Temp\\qc_log'
 p74
-aS'Host-to-shard map.'
+aS'Log destination.'
 p75
 asa(dp76
 S'shard_size_kb'
@@ -173,16 +173,16 @@ aVorcl12
 p94
 aS'Oracle 12c database.'
 p95
-asS'to_passwd'
+asS'nls_date_format'
 p96
 (lp97
-S'-p'
+S'-e'
 p98
-aS'--to_passwd'
+aS'--nls_date_format'
 p99
-aVscott
+aVMM/DD/YYYY HH12:MI:SS
 p100
-aS'Oracle 12c user password.'
+aS'nls_date_format for target.'
 p101
 asS'nls_timestamp_format'
 p102
@@ -206,16 +206,16 @@ aVc##test
 p112
 aS'Target Oracle 12c db user.'
 p113
-asS'nls_date_format'
+asS'to_passwd'
 p114
 (lp115
-S'-e'
+S'-p'
 p116
-aS'--nls_date_format'
+aS'--to_passwd'
 p117
-aVMM/DD/YYYY HH12:MI:SS
+aVscott
 p118
-aS'nls_date_format for target.'
+aS'Oracle 12c user password.'
 p119
 asS'nls_timestamp_tz_format'
 p120

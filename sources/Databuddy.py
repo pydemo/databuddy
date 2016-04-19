@@ -99,7 +99,7 @@ except ImportError: # if it's not there locally, try the wxPython lib.
 	from wx.lib.agw.fmresources import FM_OPT_SHOW_CUSTOMIZE, FM_OPT_SHOW_TOOLBAR, FM_OPT_MINIBAR
 
 import wx.lib.agw.multidirdialog as MDD
-from qc32.config.include.oracle import target	
+from qc32.config.include.etl.oracle import target	
 from subprocess import Popen, PIPE,CREATE_NEW_CONSOLE
 try:
 	from Queue import Queue, Empty
