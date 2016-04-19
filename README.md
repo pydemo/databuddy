@@ -5,7 +5,7 @@ Do it yourself data integration starter kit.
 
 ##Version
 
-OS|Platform|data-buddy (GUI) | QueryCopy (command line)
+OS|Platform|data-buddy (GUI) | DataBuddy CLI (command line)
 ---|---|---- | -------------
 Windows|32bit|[0.3.5 beta](https://github.com/data-buddy/DataBuddy/releases/tag/0.3.5) | [1.23.9 beta] (https://github.com/QueryCopy/QueryCopy-for-Oracle/releases/tag/v1.23.9)
 >There are 2 components. Upon "Run" Databuddy GUI (DataBuddy.exe) will kick off Databuddy CLI (`qc32\qc.exe`) out of process.
@@ -32,7 +32,7 @@ Pre-Prod (UAT/QA/DEV)
 ##Databases supported
 
 ###SQL
-Database | GUI (data-buddy) | Command line (QueryCopy)
+Database | GUI (DataBuddy) | Command line (DataBuddy CLI)
 ---------|---- | -------------
 DB2      | yes | yes
 Informix | yes  | yes
@@ -47,12 +47,12 @@ Sybase   | yes  | yes
 TimesTen| yes  | yes
 
 ###noSQL
-Database | GUI (data-buddy) | Command line (QueryCopy)
+Database | GUI (data-buddy) | Command line (DataBuddy CLI)
 ---------|---- | -------------
 MongoDB      | yes | yes
 
 ##Data Tools
-Name| GUI (data-buddy) | Command line (QueryCopy)
+Name| GUI (data-buddy) | Command line (DataBuddy CLI)
 ---------|---- | -------------
 CURL      | yes | yes
 
@@ -87,7 +87,7 @@ CURL      | yes  |   | yes |
 
 ##Components
 - GUI - data-buddy (wxPython, PyInstaller).
-- Command line -[QueryCopy](https://github.com/QueryCopy/QueryCopy-for-Oracle/releases/tag/v1.23.9) (Python, PyInstaller).
+- Command line -[DataBuddy CLI](https://github.com/QueryCopy/QueryCopy-for-Oracle/releases/tag/v1.23.9) (Python, PyInstaller).
 
 ##Features:
 
@@ -95,7 +95,7 @@ CURL      | yes  |   | yes |
 
 - Session management.
 
-###Command line (QueryCopy):
+###Command line (DataBuddy CLI):
 - [x] Multi-query load.
 - [x] Partition/sub-partition copy
 - [x] Sharded copy (turbo mode)
@@ -210,7 +210,7 @@ Database | Spooler | Loader | DbShell
 >from Windows command line or File Explorer
 
 #Target object Truncate
-- it will popup with warning window every time you try to run QueryCopy truncating you target object.
+- it will popup with warning window every time you try to run DataBuddy CLI truncating you target object.
 ![truncate](https://raw.githubusercontent.com/data-buddy/DataBuddy/master/screenshots/truncate_target.png "Truncate target")
 
 #Templates v.s. free argument entry
@@ -379,7 +379,7 @@ Database | Spooler | Loader | DbShell
 >I've seen 10x performance improvement when I ran it on DEV Linux server (10Gb Ethernet) v.s. my office Windows Desktop (100Mb Ethernet).
 
 ##References
-* [QueryCopy for Oracle](https://github.com/QueryCopy/QueryCopy-for-Oracle) -- `qc32\qc32.exe`
+* [DataBuddy CLI for Oracle](https://github.com/QueryCopy/QueryCopy-for-Oracle) -- `qc32\qc32.exe`
 
 
 ##Vendor Docs
