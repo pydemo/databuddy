@@ -1,0 +1,21 @@
+echo y|python C:\Python27\data_migrator_1239_mongo\datamule.py ^
+-l 0 ^
+-t "," ^
+-r 1 ^
+-C C:\Users\alex_buz\sessions\My_Sessions\CSV_TimestampFile_to_ORA12C_Table\sqlloader.py ^
+-dbg 1 ^
+-w CSV-ORA11G ^
+-K 1 ^
+-Y 20160408_105129_971000 ^
+-5 C:\Users\alex_buz\sessions\My_Sessions\CSV_TimestampFile_to_ORA12C_Table\host_map\host_map.py ^
+-B qc_job ^
+-M C:\Temp\qc_log ^
+-y 1000000 ^
+-i C:\Python35-32\PROJECTS\csv2redshift\Crime.csv ^
+-d orcl12 ^
+-e "MM/DD/YYYY HH12.MI.SS AM" ^
+-m "MM/DD/YYYY HH12.MI.SS AM" ^
+-u c##test ^
+-O "MM/DD/YYYY HH12:MI:SS.FF2 TZH:TZM" ^
+-a c##test.crime_test ^
+-p scott

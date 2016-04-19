@@ -1,0 +1,6 @@
+class base_host_map(object):
+	pass
+class host_map(base_host_map):
+	"""Host Map object"""
+	def __init__(self):
+		
