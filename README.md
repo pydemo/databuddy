@@ -546,3 +546,80 @@ Mongo DB|x
 ##Download
 * `git clone https://github.com/data-buddy/DataBuddy/`
 * [Data Buddy latest release](https://github.com/data-buddy/DataBuddy/releases/tag/0.3.5) -- `data-buddy 0.3.5`
+* 
+
+
+#   
+#FAQ
+#  
+#### Can it load CSV file from Windows desktop to Oracle database.
+Yes, it is the main purpose of this tool.
+
+#### Can developers integrate CSV loader into their ETL pipelines?
+Yes, assuming they are doing it on OS Windows.
+
+#### How fast is data upload using `Databuddy`?
+It is as fast as SQL*Loader because I'm using SQL*Loader in DIRECT mode.
+
+####How to inscrease upload speed?
+Parallelize your load by loading multiple partitions in parallel or sharding your data.
+
+#### What are the other ways to upload file to Oracle?
+You can use SQL*Loader or execute insert statements using ODBC/JDBC or SQL*Plus.
+
+#### Can I just zip it using Windows File Explorer?
+No, Redshift will not recognize *.zip file format.
+You have to `gzip` it. You can use 7-Zip to do that.
+
+
+#### Does it delete source file load?
+No
+
+#### Does it create target Oracle table?
+No
+
+#### I'm experiencing errors in Oracle. How can I debug?
+You can set Common Args `debug_level` to a value>1
+
+#### Explain how it works?
+ - The CSV file you provided is analyzed - number of records in it is estimated.
+ - Control file is created using target table column names.
+ - Data is loaded using SQL*Loader
+
+
+#### How do I skip the header record in input CSV file?
+Use `--skip_rows  1` to ignore input rows.
+
+#### How do i set custom timestamp format for Oracle load?
+Use `--nls_date_format "MM/DD/YYYY HH12:MI:SS"` or `--nls_timestamp_format "MM/DD/YYYY HH12:MI:SS.FF2 PM"` or `--nls_timestamp_tz_format "MM/DD/YYYY HH12:MI:SS.FF2 TZH:TZM"` to control timestamp format.
+
+
+#### What technology was used to create this tool
+I used SQL*Loader and  wxPython to write it.
+
+
+#### Where are the sources?
+Please, contact me for sources.
+
+#### Can you modify functionality and add features?
+Yes, please, ask me for new features.
+
+#### What other AWS tools you've created?
+- [Oracle_To_S3_Data_Uploader] (https://github.com/alexbuz/Oracle_To_S3_Data_Uploader) - Stream Oracle data to Amazon- S3.
+- [S3_Sanity_Check] (https://github.com/alexbuz/S3_Sanity_Check/blob/master/README.md) - let's you `ping` Amazon-S3 bucket to see if it's publicly readable.
+- [EC2_Metrics_Plotter](https://github.com/alexbuz/EC2_Metrics_Plotter/blob/master/README.md) - plots any CloudWatch EC2 instance  metric stats.
+- [S3_File_Uploader](https://github.com/alexbuz/S3_File_Uploader/blob/master/README.md) - uploads file from Windows to S3.
+
+#### Do you have any AWS Certifications?
+Yes, [AWS Certified Developer (Associate)](https://raw.githubusercontent.com/alexbuz/FAQs/master/images/AWS_Ceritied_Developer_Associate.png)
+
+#### Can you create similar/custom data tool for our business?
+Yes, you can PM me here or email at `alex_buz@yahoo.com`.
+I'll get back to you within hours.
+
+###Links
+ - [Employment FAQ](https://github.com/alexbuz/FAQs/blob/master/README.md)
+
+
+
+
