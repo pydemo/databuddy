@@ -1,0 +1,1 @@
+SELECT p.* FROM  Timestamp_test_from p;

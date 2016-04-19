@@ -1,0 +1,21 @@
+ft_db2=['DBTWS',  'DBTES', 'DBTEC', 'DBTE','DBTDE',
+'DBTAWS', 'DBTAES']
+ft_ora=['ORA12C', 'ORAXE','ORAEXA','ORA10G','ORA9I','ORA8I','ORA733','ORA11G']
+dbs={	'SYASE':'SAP Sybase ASE', 'SYANY':'Sybase SQL Anywhere','SYIQ':'Sybase IQ',
+		'ORA12C':'Oracle 12c','ORA11G':'Oracle 11g','ORA10G':'Oracle 10g','ORA9I':'Oracle 9i','ORA8I':'Oracle 8i','ORA733':'Oracle 7.3.3', 'ORAXE':'Oracle XE', 'ORAEXA':'Exadata',
+		'TTEN':'TimesTen', 
+		'SLITE':'SQL Lite',		
+		'SSEXP':'SQL Server Express','SS2012':'SQL Server 2012','SS2014':'SQL Server 2014','SS2016':'SQL Server 2016',
+		'SS70':'SQL Server 7.0', 'SS2000':'SQL Server 2000', 'SS2005':'SQL Server 2005', 'SS2008':'SQL Server 2008', 		
+		'MYSQL':'MySQL', 'MARIA':'MariaDB', 'INFOB':'Infobright',
+		'PGRES':'PostgreSQL',		
+		'DBTAES':'DB2 Advanced Enterprise Server','DBTES':'DB2 Enterprise Server',
+		'DBTAWS':'DB2 Advanced Workgroup Server',
+		'DBTWS':'DB2 Workgroup Server',
+		'DBTE':'DB2 Express', 'DBTEC':'DB2 Express C', 'DBTDE':'DB2 Developer Edition',
+		'INFOR':'Informix IDS', 'INFORC':'Informix Innovator C',
+		'MONGO':'MongoDB',		
+		'CSV':'CSV',
+		'JSON':'JSON',
+		'DDL':'DDL',		
+		}

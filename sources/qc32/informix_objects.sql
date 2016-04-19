@@ -1,0 +1,1 @@
+Example:  LOAD FROM 'people.dat' INSERT INTO people(name, age, sex, birthday, working, salary, descript);

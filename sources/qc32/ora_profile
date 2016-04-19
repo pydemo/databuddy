@@ -1,0 +1,8 @@
+ORACLE_HOME=/tmp/home/oracle/app/oracle/product/12.1.0/dbhome_1
+export ORACLE_HOME
+#LD_LIBRARY_PATH=$ORACLE_HOME/lib;
+#export LD_LIBRARY_PATH
+PATH=$PATH:$ORACLE_HOME/bin;
+export PATH
+TNS_ADMIN=/home/oracle
+export TNS_ADMIN

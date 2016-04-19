@@ -1,0 +1,1 @@
+LOAD FROM 'C:\Python27\data_mule_informix\informix_data.csv' DELIMITER '|' INSERT INTO Persons_pipe_datetime_1

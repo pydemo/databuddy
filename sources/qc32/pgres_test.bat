@@ -1,0 +1,1 @@
+python datamule5.py -w pgres2pgres -o 1 -r 1 -t "|" -q C:\Python27\data_mule_postgre\postgre_query.sql -j "postgres" -x "postgre_pwd" -b "postgres" -n "localhost" -z "C:\Program Files\PostgreSQL\9.3\bin" -u "postgres" -p "postgre_pwd" -d "postgres" -s "localhost" -a "Persons_pipe_datetime" -Z "C:\Program Files\PostgreSQL\9.3\bin"
