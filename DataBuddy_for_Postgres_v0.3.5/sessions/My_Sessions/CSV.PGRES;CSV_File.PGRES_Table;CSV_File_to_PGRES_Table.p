@@ -93,16 +93,16 @@ aV20160528_000841_501000
 p49
 aS'Timestamp (log_dir/job_name/timestamp).'
 p50
-asS'log_dir'
+asS'host_map'
 p51
 (lp52
-S'-M'
+S'-5'
 p53
-aS'--log_dir'
+aS'--host_map'
 p54
-aS'C:\\Temp\\qc_log'
+aVC:\u005cUsers\u005calex_buz\u005cDocuments\u005cGitHub\u005cDataBuddy\u005cDataBuddy_32bit_v0.3.5\u005csessions\u005cMy_Sessions\u005cCSV_File_to_PGRES_Table\u005chost_map\u005chost_map.py
 p55
-aS'Log destination.'
+aS'Host-to-shard map.'
 p56
 asS'job_name'
 p57
@@ -115,16 +115,16 @@ aS'qc_job'
 p61
 aS'Job name (log_dir/job_name).'
 p62
-asS'host_map'
+asS'log_dir'
 p63
 (lp64
-S'-5'
+S'-M'
 p65
-aS'--host_map'
+aS'--log_dir'
 p66
-aVC:\u005cUsers\u005calex_buz\u005cDocuments\u005cGitHub\u005cDataBuddy\u005cDataBuddy_for_Postgres_v0.3.5\u005csessions\u005cMy_Sessions\u005cCSV_File_to_PGRES_Table\u005chost_map\u005chost_map.py
+aS'C:\\Temp\\qc_log'
 p67
-aS'Host-to-shard map.'
+aS'Log destination.'
 p68
 asa(dp69
 S'shard_size_kb'

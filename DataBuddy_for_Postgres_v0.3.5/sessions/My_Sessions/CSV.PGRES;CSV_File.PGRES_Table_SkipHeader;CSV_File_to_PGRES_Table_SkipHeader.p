@@ -91,20 +91,20 @@ S'-Y'
 p49
 aS'--time_stamp'
 p50
-aV20160528_004031_516000
+aV20160528_001551_761000
 p51
 aS'Timestamp (log_dir/job_name/timestamp).'
 p52
-asS'host_map'
+asS'log_dir'
 p53
 (lp54
-S'-5'
+S'-M'
 p55
-aS'--host_map'
+aS'--log_dir'
 p56
-aVC:\u005cUsers\u005calex_buz\u005cDocuments\u005cGitHub\u005cDataBuddy\u005cDataBuddy_for_Postgres_v0.3.5\u005csessions\u005cMy_Sessions\u005cCSV_File_to_PGRES_Table_SkipHeader\u005chost_map\u005chost_map.py
+aS'C:\\Temp\\qc_log'
 p57
-aS'Host-to-shard map.'
+aS'Log destination.'
 p58
 asS'job_name'
 p59
@@ -117,16 +117,16 @@ aS'qc_job'
 p63
 aS'Job name (log_dir/job_name).'
 p64
-asS'log_dir'
+asS'host_map'
 p65
 (lp66
-S'-M'
+S'-5'
 p67
-aS'--log_dir'
+aS'--host_map'
 p68
-aS'C:\\Temp\\qc_log'
+aVC:\u005cUsers\u005calex_buz\u005cDocuments\u005cGitHub\u005cDataBuddy\u005cDataBuddy_32bit_v0.3.5\u005csessions\u005cMy_Sessions\u005cCSV_File_to_PGRES_Table_SkipHeader\u005chost_map\u005chost_map.py
 p69
-aS'Log destination.'
+aS'Host-to-shard map.'
 p70
 asa(dp71
 S'shard_size_kb'

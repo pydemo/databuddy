@@ -32,7 +32,7 @@ dbfam={	'SYASE':'Sybase', 'SYANY':'Sybase','SYIQ':'Sybase',
 		'INFOR':'Informix', 'INFORC':'Informix',
 		'MONGO':'MongoDB',		
 		'CURL':'CURL',	
-		'PSCP':'PSCP',	
+		'PSCP':'PSCP',	'FILE':'Generic File',
 		}
 dbclients={ 'DBTAES': r'C:\Program Files (x86)\IBM\SQLLIB_01\BIN',
 			'DBTAWS': r'C:\Program Files (x86)\IBM\SQLLIB_01\BIN',
