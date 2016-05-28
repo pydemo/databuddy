@@ -4,7 +4,10 @@ e=sys.exit
 #_to='3'
 #print appname
 def getAppTitle(for_db, apptitle, dbs):
-	return '%s for %s' % (apptitle, dbs[for_db[0]])
+	if for_db[0] in dbs.keys():
+		return '%s for %s' % (apptitle, dbs[for_db[0]])
+	else:
+		return '%s for Databases' % apptitle
 def getAddDescr(dbs,from_dbs,to_dbs):
 	return 'Command line tool for '+dbs[self.from_dbs[0]] +' data replication to '+dbs[self.to_dbs[0]] +' database.'			
 supported0 = lambda x : x[0] in from_dbs and x[1] in to_dbs

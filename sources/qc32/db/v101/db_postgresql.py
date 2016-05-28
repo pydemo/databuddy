@@ -86,8 +86,8 @@ class PostgreSQL(base):
 				#pprint(q)
 				#print ss_db_server
 				#pgloc='%s\psql' % self.args.postgres_client_home.strip("'").strip('\\').strip('\\')
-				db_client_dbshell=self.get_db_client_dbshell()
-				#print db_client_dbshell
+				db_client_dbshell=self.get_db_client_dbshell().replace('"','')
+				print db_client_dbshell
 				cfg=[ '"%s"' % db_client_dbshell ,'-U', pg_user,'-d',pg_db_name, '-h', pg_db_server, '-p',source_port]
 				#conf=[ pgloc ,'-U', self.args.from_user,'-d',self.args.from_db_name]
 				#pprint(cfg)
@@ -101,11 +101,15 @@ class PostgreSQL(base):
 				#sys.exit(1)
 				
 				cfg=shlex.split(cmd)
-				os.environ['PGPASSWORD'] = pg_passwd
-				p2 = Popen(cfg,stdin=PIPE,  stdout=PIPE,  shell=True) # '-S',  stdin=p1.stdout,
+				env={}
+				env['PGPASSWORD'] = 'test123'
+				os.environ['PGPASSWORD'] = 'test123'
+				#print cfg
+				p2 = Popen(cfg, stdin=PIPE, stdout=PIPE, shell=True, env=os.environ) # '-S',  stdin=p1.stdout,
 				#p2 = Popen([ 'sqlplus', "-s", login], stdin=p1.stdout, stdout=PIPE,stderr=PIPE) , 
 				#out, err = p2.communicate(file("C:\\Python27\\data_mule_mysql\\spool_test.sql").read())
 				#print q
+				#p2.write(pg_passwd)
 				#output, err = p2.communicate(q)
 				(output, err) = (None, None)
 				if query_file:

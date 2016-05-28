@@ -162,8 +162,8 @@ class common_build(base):
 				print ''
 				(db_from, db_to) = element
 				
-				#print (db_from, db_to)
-				#e(0)
+				print (db_from, db_to)
+				e(0)
 				if ('CSV_Sharded' in db_from and db_to in ('SYIQ', 'SYANY', 'SYASE', 'INFORC','INFOR','SLITE','TTEN','MARIA','MYSQL','INFOB','PGRES','DBTAES', 'DBTES', 'DBTAWS', 'DBTWS', 'DBTE', 'DBTEC', 'DBTDE' )):
 					print 'Sharded load from %s to %s is not supported' % (db_from, db_to)
 				elif db_from.startswith('CSV')  and db_to.startswith('CSV') :
@@ -288,7 +288,7 @@ class common_build(base):
 			f=open( fname,'w')
 			f.write('#do not change\naa=%s' % str(args_api[t]))
 			f.close()
-			api_todir=os.path.join(r'C:\Users\alex_buz\Documents\GitHub\DataBuddy','args_api',source)
+			api_todir=os.path.join(r'C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources','args_api',source)
 			if not os.path.isdir(api_todir):
 				os.makedirs(api_todir)
 			api_tofile= os.path.join(api_todir, py_name)

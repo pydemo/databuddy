@@ -153,7 +153,7 @@ class common_build(base):
 		#print tests.keys()
 		#e(0)
 		args_api={}
-		github_dir=r'C:\Users\alex_buz\Documents\GitHub\DataBuddy'
+		github_dir=r'C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources'
 		#print os.path.dirname(os.path.realpath(__file__))
 		#e(0)
 		for t in tests:

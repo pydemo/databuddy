@@ -85,6 +85,10 @@ def build_test(relc, t_from,t_to,cmd):
 				#prog=[get_exe_name(relc)]
 				#print exe
 				#e(0)
+				print(dir(run_test))
+				a=run_test(db_from, db_to, prog,  citi=citi)
+				pprint(a)
+				e(0)
 				comment,command=run_test(db_from, db_to, prog,  citi=citi)
 				cmd.append ((db_from, db_to,command,comment))
 
@@ -1261,6 +1265,7 @@ if __name__=='__main__':
 	to_tests=['MYSQL','MARIA','INFOB']
 	to_tests=['DBTAES','DBTES','DBTAWS','DBTWS','DBTE','DBTEC','DBTDE'] 
 	to_tests=['MYSQL','MARIA','INFOB']
+	to_tests=['PGRES']
 
 	from_tests,to_tests = (None,None)	
 	app_author, apptitle, appn = ('Alex Buzunov', "CSV*Extractor", 	'csvextractor')
@@ -1274,7 +1279,7 @@ if __name__=='__main__':
 		#build_and_release_4dbs(for_dbs=['ORA'],from_dbs=['PGRES'],to_dbs=['PGRES'],app=app, regs=['32'],v=('1.23.9'),is_release=False,nor_t=(['PGRES_Table'],['CSV_File']))
 		#build_and_release_4dbs(for_dbs=['ORA'],from_dbs=['PGRES'],to_dbs=['PGRES'],app=app, regs=['32'],v=('1.23.9'),is_release=False,nor_t=(['CSV_TimezoneFile'],['ORA']))
 		#build_and_release_4dbs(for_dbs=['ORA'],from_dbs=['PGRES'],to_dbs=['PGRES'],app=app, regs=['32'],v=('1.23.9'),is_release=False,nor_t=(['PGRES_TimestampTable'],['CSV_File']))
-		build_and_release_4dbs(for_dbs=['ORA'],from_dbs=['ORA'],to_dbs=['PGRES'],app=app, regs=['64','32'],v=('1.23.9'),is_release=True,nor_t=(['ORA_QueryDir'],['PGRES']))
+		build_and_release_4dbs(for_dbs=['CSV'],from_dbs=['CSV'],to_dbs=['PGRES'],app=app, regs=['64','32'],v=('1.23.9'),is_release=True,nor_t=(['ORA_QueryDir'],['PGRES']))
 		#build_and_release_4dbs(for_dbs=['ORA'],from_dbs=['ORA'],to_dbs=['PGRES'],app=app, regs=['32'],v=('1.23.9'),is_release=False,nor_t=(['ORA_TimestampQueryDir'],['CSV_Dir']))
 	else:
 		#app = ('Alex Buzunov', "TableCopy", 'tc')

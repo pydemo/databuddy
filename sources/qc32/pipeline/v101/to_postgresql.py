@@ -46,7 +46,7 @@ class ToPostgreSQL(PostgreSQL):
 			return self.db_client_dbshell
 		loader= os.path.basename(conf.dbtools['DBSHELL'][self.db])
 		if self.args.target_client_home:
-			self.db_client_dbshell=(r'%s\%s' % (self.args.target_client_home, loader)).strip("'").strip('\\').strip('\\')
+			self.db_client_dbshell=(r'%s\bin\%s' % (self.args.target_client_home.strip('"'), loader)).strip("'").strip('\\').strip('\\')
 		else:
 			self.db_client_dbshell=conf.dbtools['DBSHELL'][self.db]
 			if not os.path.isfile(self.db_client_dbshell):
@@ -54,17 +54,30 @@ class ToPostgreSQL(PostgreSQL):
 		return self.db_client_dbshell		
 	def get_inserted_count(self,cnt):
 		return cnt
+	def load_data1(self,logger,loadConf,outfn,shard):
+		#print 1
+		#pprint(loadConf)
+		return self.uargs_db.load_data(logger,loadConf,outfn,shard)
+		
 	def load_data(self,logger,loadConf,outfn,shard):
 		out=[]
 		err=[]
 		#pprint (loadConf)
+		#e(0)
 		#print shard
 		#pprint(self.to_pld)
 		
 		
 		#print shard
 		#pprint(self.to_pld)
-		(login, to_table, shard_name, infile, row_from, row_to)=self.to_pld[int(shard)]
+		#pprint(self.to_pld)
+		#test=self.to_pld[int(shard)]
+		#pprint(test)
+		#(login, to_table, shard_name, infile, row_from, row_to)=self.to_pld[int(shard)]
+		(shard_name, pld, (login, to_table))=self.to_pld
+		(shard_name, infile, row_from, row_to,field_term) =pld
+		#e(0)
+		#(login, to_table, shard_name,outfn,row_from, row_to)=to_pld
 		#(ss_user, ss_passwd, ss_db_name, ss_db_server)=login
 		#(fmtfn,out,status,err)=self.create_format_file(self.log)
 		#assert os.path.isfile(fmtfn), 'Format file does not exists'
@@ -79,6 +92,7 @@ class ToPostgreSQL(PostgreSQL):
 		#print (load_qry)
 		#print to_table, shard_name, infile, row_from, row_to
 		
+
 		#sys.exit(0)
 		lqfn = self.save_qry('load_query_%s' % shard_name, load_qry)
 		
@@ -95,6 +109,7 @@ class ToPostgreSQL(PostgreSQL):
 			stat=os.stat(outfn).st_size		
 		return (r_int,status,err,ins_cnt,stat)	
 	def get_load_config(self,to_pld):
+		#self.to_pld[]=to_pld
 		#(shard_name,from_pld,to_pld)=payload
 		#pprint( to_pld)
 		#sys.exit(0)

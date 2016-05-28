@@ -86,6 +86,8 @@ def show_help(cvarg,copy_vector,params):
 		#print relcfg
 		#e(0)
 		fn=os.path.join(self.dmhome,'release.py')
+		#print fn
+		#e(0)
 		self.fsave(fn,relcfg)
 		os.remove(os.path.join(self.dmhome,'release.pyc'))
 		

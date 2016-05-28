@@ -1088,7 +1088,7 @@ api=args_api(%s,
 		#pprint (globals())
 		import shutil
 		
-		api_todir=os.path.join(r'C:\Users\alex_buz\Documents\GitHub\DataBuddy','args_api',source,target)
+		api_todir=os.path.join(r'C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources','args_api',source,target)
 		api_tofile= os.path.join(api_todir, py_name)
 		if not os.path.isdir(api_todir):
 			os.makedirs(api_todir) 

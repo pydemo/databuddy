@@ -1,1 +1,1 @@
-..\\python b.py
+C:\Python27\python.exe b.py

@@ -36,7 +36,8 @@ class load_from_file(pipeline):
 		input_files=self.args.input_files
 		if source.upper() in ('CSV'):
 			from pipeline.v101.from_csv import FromCSV as from_ppl
-			self.fromDb = from_ppl(self,log, input_files,self.args.skip_rows, datadir, self.conf)
+			#pprint(dir(self.args))
+			self.fromDb = from_ppl(self,log, input_files,0, datadir, self.conf)
 		elif source.upper() in ('JSON'):
 			from pipeline.v101.from_json import FromJSON as from_ppl
 			self.fromDb = from_ppl(self,log, input_files, datadir, self.conf)			
@@ -130,8 +131,8 @@ class load_from_file(pipeline):
 				#print payload
 				conf=self.toDb.get_load_config((to_login, to_tab, shard_name,outfn,row_from, row_to))
 				#conf=self.toDb.get_load_config(field_term,first_row,payload,outfn)
-				
-				#print conf
+				self.toDb.to_pld=payload
+				#pprint (conf)
 				#sys.exit(0)
 				#print payload
 				#sys.exit(0)

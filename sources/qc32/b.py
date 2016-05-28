@@ -13,7 +13,8 @@ from test.v101.test import run_test,  home, citi
 import itertools
 import shutil
 import imp	
-import release as rel 	
+import release as rel 
+from test.v101.build_dm_for_db import build		
 e=sys.exit
 
 dmhome=os.path.dirname(os.path.realpath(__file__))
@@ -34,7 +35,7 @@ if __name__=='__main__':
 		regs=['64','32']
 		regs=['32']
 		#regs=['64']
-		from test.v101.build_dm_for_db import build		
+			
 		ft_dbs_all=[ 'DBTAES', 'DBTAWS', 'DBTDE', 'DBTE', 'DBTEC', 'DBTES', 'DBTWS', 
 'ORAEXA','INFOB', 'INFOR', 'INFORC', 'MARIA', 'MYSQL', 'ORA11G', 'ORAXE', 'PGRES', 'SLITE',
 'SSENT', 'SSEXP', 'SYANY', 'SYASE', 'SYIQ', 'TTEN']
@@ -61,7 +62,7 @@ if __name__=='__main__':
 		#print ft_dbs[::-1]
 		#for db in ft_dbs[::-1]
 		#ft_dbs=['ORA11G']; 
-		
+		ft_dbs=['PGRES'];
 		#gen_args_api=False; ft_dbs=['ORA11G']; ff=['CSV']
 		#gen_args_api=False; ft_dbs=['SS2012']; ff=['CSV']
 		#gen_args_api=False; ft_dbs=['SSEXP']; ff=['CSV'] #curl

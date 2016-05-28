@@ -1,1 +1,1 @@
-..\\python runtest.py
+C:\Python27\python.exe runtest.py

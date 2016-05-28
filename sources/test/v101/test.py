@@ -2,6 +2,7 @@ import os, sys
 from pprint import pprint
 #import common.v101.config as conf 
 import config.config as conf 
+from args_api import args_api
 e=sys.exit
 #test={}
 csvf_dt={}
@@ -855,8 +856,9 @@ def create_run_tests(db_from, db_to, test,citi=False):
 	tto['%s_Table' % dbkey]= (  '%s' % to_table,  'C:\Temp\SqlLite\\database2.db', 0, '"%s"' %	dbclients[dbkey])
 					#query_sql_file, 				from_db_name, 	source_client_home	 
 	return test
-from args_api import args_api
+
 def run_test(db_from, db_to, prog, test,citi=False):
+	e(0)
 	global conf, from_table, to_table
 	#print db_from, db_to
 	#	print prog
@@ -1030,7 +1032,7 @@ api=args_api(%s,
 		#pprint (globals())
 		import shutil
 		
-		api_todir=os.path.join(r'C:\Users\alex_buz\Documents\GitHub\DataBuddy','args_api',source,target)
+		api_todir=os.path.join(r'C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources','args_api',source,target)
 		api_tofile= os.path.join(api_todir, py_name)
 		if not os.path.isdir(api_todir):
 			os.makedirs(api_todir) 

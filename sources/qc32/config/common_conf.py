@@ -13,9 +13,11 @@ dbs={	'SYASE':'SAP Sybase ASE', 'SYANY':'Sybase SQL Anywhere','SYIQ':'Sybase IQ'
 		'INFOR':'Informix IDS', 'INFORC':'Informix Innovator C',
 		'MONGO':'MongoDB',		
 		'CSV':'CSV',
+		'FILE':'Generic File',
 		'JSON':'JSON',
 		'DDL':'DDL',
-		'CURL': 'Curl'
+		'CURL': 'Curl',
+		'PSCP': 'Pscp'
 		}
 dbfam={	'SYASE':'Sybase', 'SYANY':'Sybase','SYIQ':'Sybase',
 		'ORA12C':'Oracle','ORA11G':'Oracle','ORA10G':'Oracle','ORA9I':'Oracle','ORA8I':'Oracle','ORA733':'Oracle', 'ORAXE':'Oracle', 'ORAEXA':'Oracle',
@@ -29,9 +31,17 @@ dbfam={	'SYASE':'Sybase', 'SYANY':'Sybase','SYIQ':'Sybase',
 		'DBTAES':'DB2','DBTES':'DB2','DBTAWS':'DB2','DBTWS':'DB2','DBTE':'DB2', 'DBTEC':'DB2', 'DBTDE':'DB2',
 		'INFOR':'Informix', 'INFORC':'Informix',
 		'MONGO':'MongoDB',		
-		'CURL':'Dowloaders',		
+		'CURL':'CURL',	
+		'PSCP':'PSCP',	'FILE':'Generic File',
 		}
-dbclients={ 'PGRES':r"C:\Program Files\PostgreSQL\9.4\bin",
+dbclients={ 'DBTAES': r'C:\Program Files (x86)\IBM\SQLLIB_01\BIN',
+			'DBTAWS': r'C:\Program Files (x86)\IBM\SQLLIB_01\BIN',
+			'DBTDE': r'C:\Program Files (x86)\IBM\SQLLIB_01\BIN',
+			'DBTE': r'C:\Program Files (x86)\IBM\SQLLIB_01\BIN',
+			'DBTEC': r'C:\Program Files (x86)\IBM\SQLLIB_01\BIN',
+			'DBTES': r'C:\Program Files (x86)\IBM\SQLLIB_01\BIN',
+			'DBTWS': r'C:\Program Files (x86)\IBM\SQLLIB_01\BIN',
+			'PGRES':'psql.exe','PGRES':r"C:\Program Files\PostgreSQL\9.4\bin",
 			'ORA11G':r'C:\app\alex_buz\product\11.2.0\dbhome_2\BIN',
 			'ORA10G':r'C:\app\alex_buz\product\11.2.0\dbhome_2\BIN',
 			'ORA9I':r'C:\app\alex_buz\product\11.2.0\dbhome_2\BIN',
@@ -62,8 +72,17 @@ dbclients={ 'PGRES':r"C:\Program Files\PostgreSQL\9.4\bin",
 			'MARIA':r'C:\Program Files\MariaDB 10.0\bin',
 			'SLITE':'C:\Temp\SqlLite',
 			'MONGO':r'C:\Program Files\MongoDB\Server\3.0\bin',
-			'CURL':'C:\Python27\data_migrator_1239_mongo\common\Tools'}	
-spoolers={'PGRES':'psql.exe',
+			'CURL':'C:\Python27\data_migrator_1239_mongo\common\Tools',
+			'PSCP':'C:\Python27\data_migrator_1239_mongo\common\Tools'}	
+spoolers={	'DBTAES': 'db2.exe',
+			'DBTAWS': 'db2.exe',
+			'DBTDE': 'db2.exe',
+			'DBTE': 'db2.exe',
+			'DBTEC': 'db2.exe',
+			'DBTES': 'db2.exe',
+			'DBTWS': 'db2.exe',
+			'PGRES':'psql.exe',
+			'PGRES':'psql.exe',
 			'ORA12C':	'sqlplus.exe','ORA11G':	'sqlplus.exe', 'ORAXE':	'sqlplus.exe', 'ORAEXA':	'sqlplus.exe',
 			'ORA10G':	'sqlplus.exe','ORA9I':	'sqlplus.exe','ORA8I':	'sqlplus.exe','ORA733':	'sqlplus.exe',
 			#'SSENT':	'sqlcmd.exe',
@@ -80,10 +99,17 @@ spoolers={'PGRES':'psql.exe',
 			'INFORC': 'dbaccess.exe',
 			'SLITE':'sqlite3.exe',
 			'MONGO':'mongoexport.exe',
-			'CURL':'curl.exe'}
+			'CURL':'curl.exe',
+			'PSCP':'pscp.exe'}
 
 	
-loaders={ 
+loaders={ 	'DBTAES': 'db2.exe',
+			'DBTAWS': 'db2.exe',
+			'DBTDE': 'db2.exe',
+			'DBTE': 'db2.exe',
+			'DBTEC': 'db2.exe',
+			'DBTES': 'db2.exe',
+			'DBTWS': 'db2.exe',
 			'PGRES':'psql.exe',
 			'ORA12C':	'sqlldr.exe','ORA11G':	'sqlldr.exe', 'ORAXE':	'sqlldr.exe',
 			'ORA10G':	'sqlldr.exe','ORA9I':	'sqlldr.exe','ORA8I':	'sqlldr.exe','ORA733':	'sqlldr.exe',
@@ -100,10 +126,19 @@ loaders={
 			'INFOR': 'dbaccess.exe',
 			'INFORC': 'dbaccess.exe',			
 			'SLITE':'sqlite3.exe',
-			'MONGO':'mongoimport.exe'}
+			'MONGO':'mongoimport.exe',
+			'PSCP':'pscp.exe'}
 
 		
-dbshell={ 
+dbshell={ 'DBTAES': 'db2.exe',
+			'DBTAWS': 'db2.exe',
+			'DBTDE': 'db2.exe',
+			'DBTE': 'db2.exe',
+			'DBTEC': 'db2.exe',
+			'DBTES': 'db2.exe',
+			'DBTWS': 'db2.exe',
+			'PGRES':'psql.exe',
+			'PGRES':'psql.exe',
 			'PGRES':'psql.exe',
 			'ORA12C':	'sqlplus.exe','ORA11G':	'sqlplus.exe','ORAXE':	'sqlplus.exe',
 			'ORAEXA':	'sqlplus.exe',
@@ -120,4 +155,5 @@ dbshell={
 			'INFOR': 'dbaccess.exe',
 			'INFORC': 'dbaccess.exe',			
 			'SLITE':'sqlite3.exe',
-			'MONGO':'mongo.exe'}			
+			'MONGO':'mongo.exe','CURL':'curl.exe',
+			'PSCP':'pscp.exe'}		

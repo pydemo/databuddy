@@ -11,6 +11,7 @@ from  collections import OrderedDict
 from common.v101.exceptions import CopyVectorError
 import datetime
 from common.v101.loaders import import_module
+e=sys.exit
 home=os.path.abspath(os.path.dirname(sys.argv[0]))
 abspath=os.path.join(home,'qc32')
 print abspath
@@ -24,6 +25,8 @@ import argparse
 #from common_conf import *
 
 imp_file = os.path.join(abspath,'config','common_conf.py')
+#print imp_file
+#e(0)
 cconf=import_module(imp_file)
 dbs=cconf.dbs
 
@@ -32,7 +35,7 @@ import __builtin__
 __builtin__.dbs = dbs		
 import release as rel 
 appn,bin,appex=(rel.appn,rel.bin,'exe')
-appname=rel.appname
+appname='Datamule' #rel.appname
 rv='v101'
 #app_author=rel.app_author
 #apptitle=rel.apptitle 
@@ -403,7 +406,7 @@ def set_params(params):
 			pfrom[dbkey]=OrderedDict()
 			pfrom[dbkey]['input_files']={'short':'-i','long':'--input_files', 'type':str, 'default':None, 'help':'Input CSV file(s).'}
 			pfrom[dbkey]['input_dirs']={'short':'-I','long':'--input_dirs', 'type':str, 'default':None, 'help':'Input CSV directory.'}
-			pfrom[dbkey]['skip_rows']= {'short':'-k','long':'--skip_rows', 	'type':int, 'default':0, 'help':'Header size. Number of rows to skip in input file.'}
+			#pfrom[dbkey]['skip_rows']= {'short':'-k','long':'--skip_rows', 	'type':int, 'default':0, 'help':'Header size. Number of rows to skip in input file.'}
 			pfrom[dbkey]['shard_size_kb']={'short':'-y','long':'--shard_size_kb', 'type':int, 'default':10, 'help':'Shard size in KBytes (to partition file and to estimate number of lines in input CSV file).'}				
 	if 0:
 		dbkey='DDL'	
@@ -719,9 +722,10 @@ def config_log(app):
 		log.addHandler(ch)
 		#log.info('Extracting to: \n"%s"', dumpdir)	
 	return (log,datadir)
-supported=rel.supported
+supported= True #rel.supported
 #print copy_vector
 #e(0)
+#rel.free=True
 def copyright():
 	if rel.release and rel.free:
 		print '-'*70

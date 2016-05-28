@@ -52,7 +52,7 @@ def add_argument(log,vector,parser):
 		parser.add_argument('-m','--nls_time_format', type=str, default='DD-Mon-RR HH.MI.SSXFF AM', help='nls_time_format for spool.')
 	elif source.upper() in ('CSV'):
 		parser.add_argument('-i','--input_file',type=str,  help='Input CSV file.')
-		parser.add_argument('-k','--skip_rows',type=int, default=0, help='Header size. Number of rows to skip in input file.')
+		#parser.add_argument('-k','--skip_rows',type=int, default=0, help='Header size. Number of rows to skip in input file.')
 		parser.add_argument('-y','--sample_size_pct', type=int,  default=1, help='Sample size in %% to extimate number of lines in input CSV file.')		
 	elif source.upper() in ('SS'):
 		parser.add_argument('-q','--query_sql_file',type=str,  help='Input file with query sql.')
