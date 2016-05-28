@@ -4340,7 +4340,7 @@ class NewSessionDialog(wx.Dialog):
 						self.api_menu[m[:2]]=[]
 					self.api_menu[m[:2]].append(m)
 			for m in self.api_from:
-				pprint(conf.dbfam)
+				#pprint(conf.dbfam)
 				k=conf.dbfam[m]
 				assert m in conf.dbfam.keys(), '"%s: is not defined in dbfam' % m
 				if not self.api_menu.has_key(k):
@@ -4570,7 +4570,7 @@ class NewSessionDialog(wx.Dialog):
 						#menuItem = FM.FlatMenuItem(m, wx.NewId(), 'To %s' % sm, '', wx.ITEM_NORMAL)
 						#m.AppendItem(menuItem)		
 						item = Menu2.Append(wx.NewId(), 'To %s' % sm3)	
-						print sm2,k2, k
+						#print sm2,k2, k
 						self.gen_bind(wx.EVT_MENU,item, self.OnMenu,(k2,sm3))	
 							
 		Menu.AppendSeparator()
@@ -5544,7 +5544,7 @@ class NewSessionDialog(wx.Dialog):
 				Menu.AppendItem(menuItem)
 				for k2 in [x for x in self.api_menu[k] if x not in conf.tt+conf.dt]:
 					#self.create_Menu3(Menu1,k2,from_db=k)
-					print k2
+					#print k2
 					#print from_db, k2
 					#from_to='To_%s_%s' %(from_db,k2)
 					self.i +=1
@@ -7109,7 +7109,7 @@ class pnl_args(wx.Panel):
 			#from_args=self.fargs.keys()
 			#all_from_args=[] #pfrom[dbkey].items() #.keys()
 			#print self.fargs.keys()
-			pprint (pfrom[dbkey])
+			#pprint (pfrom[dbkey])
 			for k,v in pfrom[dbkey].items():
 				#print k
 				#print v['help']
@@ -7136,7 +7136,7 @@ class pnl_args(wx.Panel):
 		#show used args
 		#for k,v in sorted(self.fargs.items()):
 		vals={'header':['0','1'],'skip_rows':['0','1']}
-		pprint(self.fargs.items())
+		#pprint(self.fargs.items())
 		for k,v in sorted(panel.unused_from_args.items()+self.fargs.items()):
 			atc= [ self.OnMessage, v[3]]
 			#all_from_args
