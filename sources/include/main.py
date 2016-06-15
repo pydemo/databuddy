@@ -142,8 +142,8 @@ def import_module(filepath):
 		py_mod = imp.load_compiled(mod_name, filepath)
 	return py_mod
 ########################################################################	
-#exe=False
-exe=True
+exe=False
+#exe=True
 
 
 #print wx.VERSION

@@ -955,7 +955,7 @@ def get_to(db):
 		assert 1==2, 'get_to() is not defined for db: %s' % db	
 def get_to_4dbs(dbs):
 	out=[]
-	pprint(dbs)
+	#pprint(dbs)
 	for db in dbs:
 		out=out+get_to(db)
 	return out
@@ -1124,7 +1124,7 @@ def build_and_release_4dbs(for_dbs,from_dbs,to_dbs, app, regs, v, is_release,nor
 			from_tst=get_from_ALL()
 		else:
 			from_tst=get_from_4dbs(from_dbs)
-		pprint(to_dbs)	
+		#pprint(to_dbs)	
 		if not to_dbs:
 			to_tst=get_to_ALL()	
 		else:

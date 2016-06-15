@@ -115,16 +115,16 @@ aS'20160418_001213_780000'
 p61
 aS'Timestamp (log_dir/job_name/timestamp).'
 p62
-asS'log_dir'
+asS'host_map'
 p63
 (lp64
-S'-M'
+S'-5'
 p65
-aS'--log_dir'
+aS'--host_map'
 p66
-aS'C:\\Temp\\qc_log'
+aVC:\u005cUsers\u005calex_buz\u005cDocuments\u005cGitHub\u005cDataBuddy\u005csources\u005csessions\u005cMy_Sessions\u005cPGRES_Table_to_CSV_File\u005chost_map\u005chost_map.py
 p67
-aS'Log destination.'
+aS'Host-to-shard map.'
 p68
 asS'job_name'
 p69
@@ -137,16 +137,16 @@ aS'qc_job'
 p73
 aS'Job name (log_dir/job_name).'
 p74
-asS'host_map'
+asS'log_dir'
 p75
 (lp76
-S'-5'
+S'-M'
 p77
-aS'--host_map'
+aS'--log_dir'
 p78
-aVC:\u005cUsers\u005calex_buz\u005cDocuments\u005cGitHub\u005cDataBuddy\u005csources\u005csessions\u005cMy_Sessions\u005cPGRES_Table_to_CSV_File\u005chost_map\u005chost_map.py
+aS'C:\\Temp\\qc_log'
 p79
-aS'Host-to-shard map.'
+aS'Log destination.'
 p80
 asa(dp81
 S'from_db_name'

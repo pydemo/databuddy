@@ -194,7 +194,7 @@ LINES TERMINATED BY '\r\n';""" % (qry,os.path.normpath(outfn).replace("\\", "\\\
 		
 		p2 = Popen(spConf,stdin=PIPE,  stdout=PIPE  )# '-S',  stdin=p1.stdout,
 		output, err = p2.communicate(file(sqfn).read())
-		pprint(output)
+		#pprint(output)
 		if err:
 			self.log.error(err)
 		#sys.exit(0)

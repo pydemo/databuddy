@@ -1,0 +1,143 @@
+
+C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32>echo y  | C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe -w MYSQL-MYSQL -ps 1 -r 3 -t "|" -l 10 -K 1 -M C:\Temp\qc_log -F C:\tmp\TEST_default_spool -B qc_job -Y 20160603_105945_756000 -5 ".\config\host_map\host_map.py" -6 csv -dbg 1 -c TEST.Partitioned_test_from -P rx2015 -j "alex" -x "mysql_pwd" -b "test" -n "localhost" -z "C:\Temp\mysql\bin" -u alex -p mysql_pwd -d test -s localhost -a Timestamp_test_to -Z "C:\Temp\mysql\bin" 
+C:\Users\alex_buz\DOCUME~1\GitHub\DATABU~1\sources\QC_DIS~1\201606~1\qc32\qc32
+C:\Users\alex_buz\DOCUME~1\GitHub\DATABU~1\sources\QC_DIS~1\201606~1\qc32
+----------------------------------------------------------------------
+QueryCopy for MySQL (v0.3.5, beta, 2016/06/03 10:59:45) [32bit]
+Copyright (c): 2014 Alex Buzunov, All rights reserved.
+Agreement: Use this tool at your own risk. Author is not liable for any damages or losses related to the use of this software.
+----------------------------------------------------------------------
+['SLITE', 'INFOB', 'ORAXE', 'DBTE', 'CSV', 'DBTAES', 'SS2005', 'DBTES', 'SYASE', 'DBTWS', 'SS2000', 'SS2012', 'INFOR', 'SSEXP', 'FILE', 'SS2016', 'PSCP', 'SS2008', 'SYANY', 'INFORC', 'DBTEC', 'DDL', 'ORA733', 'MONGO', 'ORAEXA', 'DBTAWS', 'ORA8I', 'MARIA', 'CURL', 'ORA9I', 'JSON', 'SYIQ', 'SS70', 'ORA12C', 'PGRES', 'MYSQL', 'DBTDE', 'ORA11G', 'ORA10G', 'TTEN', 'SS2014']
+<class 'pipeline.v101.to_mysql.ToMysql'>
+####################
+Performing data copy.
+		
+From MySQL:	
+	from db: alex/test/localhost
+	table: TEST.Partitioned_test_from
+partition: rx2015
+	shards:	3
+		
+	To MySQL:	
+		to db: alex/test/localhost
+		to table: Timestamp_test_to
+		
+####################
+Are you sure you want to proceed?(y/n): 
+
+0 3 Id|Title|Isin|Country|Description|SecurityType|Created
+1 3 Id|Title|Isin|Country|Description|SecurityType|Created
+2 3 Id|Title|Isin|Country|Description|SecurityType|Created
+('Shard-0',
+ ('Shard-0',
+  'C:\\tmp\\TEST_default_spool\\qc_job\\20160603_105945_756000\\TEST.Partitioned_test_from.shard_0.data',
+  0,
+  2,
+  'Id|Title|Isin|Country|Description|SecurityType|Created',
+  'C:\\Temp\\qc_log\\qc_job\\20160603_105945_756000\\sql\\query_0.sql'),
+ (('alex', 'mysql_pwd', 'test', 'localhost'), 'Timestamp_test_to'))
+pd 0
+
+
+Thread-0 (1, -1, -1)
+('Shard-1',
+ ('Shard-1',
+  'C:\\tmp\\TEST_default_spool\\qc_job\\20160603_105945_756000\\TEST.Partitioned_test_from.shard_1.data',
+  3,
+  2,
+  'Id|Title|Isin|Country|Description|SecurityType|Created',
+  'C:\\Temp\\qc_log\\qc_job\\20160603_105945_756000\\sql\\query_1.sql'),
+ (('alex', 'mysql_pwd', 'test', 'localhost'), 'Timestamp_test_to'))
+pd 1
+
+
+Thread-0 (1, -1, -1)
+('Shard-2',
+ ('Shard-2',
+  'C:\\tmp\\TEST_default_spool\\qc_job\\20160603_105945_756000\\TEST.Partitioned_test_from.shard_2.data',
+  6,
+  0,
+  'Id|Title|Isin|Country|Description|SecurityType|Created',
+  'C:\\Temp\\qc_log\\qc_job\\20160603_105945_756000\\sql\\query_2.sql'),
+ (('alex', 'mysql_pwd', 'test', 'localhost'), 'Timestamp_test_to'))
+pd 2
+
+
+Thread-0 (1, -1, -1)
+############################################################
+Copy stats (1 threads, 3 shards):
+############################################################
+2016-06-03 11:00:29,733 - MYSQL-MYSQL - INFO - Fetching table info...
+2016-06-03 11:00:29,786 - MYSQL-MYSQL - WARNING - Warning: Using a password on the command line interface can be insecure.
+
+2016-06-03 11:00:29,786 - MYSQL-MYSQL - WARNING - Warning: Using a password on the command line interface can be insecure.
+
+2016-06-03 11:00:29,786 - MYSQL-MYSQL - INFO - Done.
+2016-06-03 11:00:29,786 - MYSQL-MYSQL - INFO - Verifying partition...
+2016-06-03 11:00:29,927 - MYSQL-MYSQL - WARNING - Warning: Using a password on the command line interface can be insecure.
+
+2016-06-03 11:00:29,941 - MYSQL-MYSQL - WARNING - Warning: Using a password on the command line interface can be insecure.
+
+2016-06-03 11:00:29,941 - MYSQL-MYSQL - INFO - Check OK. Partition "rx2015" exists in table "TEST.Partitioned_test_from".
+2016-06-03 11:00:29,941 - MYSQL-MYSQL - INFO - Done.
+2016-06-03 11:00:29,941 - MYSQL-MYSQL - INFO - Counting rows in source...
+2016-06-03 11:00:29,986 - MYSQL-MYSQL - WARNING - Warning: Using a password on the command line interface can be insecure.
+
+2016-06-03 11:00:29,986 - MYSQL-MYSQL - WARNING - Warning: Using a password on the command line interface can be insecure.
+
+2016-06-03 11:00:29,986 - MYSQL-MYSQL - INFO - Fetching source column names...
+2016-06-03 11:00:30,040 - MYSQL-MYSQL - WARNING - Warning: Using a password on the command line interface can be insecure.
+
+2016-06-03 11:00:30,040 - MYSQL-MYSQL - WARNING - Warning: Using a password on the command line interface can be insecure.
+
+2016-06-03 11:00:30,040 - MYSQL-MYSQL - INFO - Got 7 columns.
+2016-06-03 11:00:30,040 - MYSQL-MYSQL - INFO - Done.
+2016-06-03 11:00:30,042 - MYSQL-MYSQL - INFO - Sharding query by Id
+2016-06-03 11:00:30,046 - MYSQL-MYSQL - INFO - Starting Thread-0
+2016-06-03 11:00:30,046 - MYSQL-MYSQL - INFO - Thread-0 processing Shard-0
+2016-06-03 11:00:30,046 - MYSQL-MYSQL - INFO - Extracting data...
+2016-06-03 11:00:30,086 - MYSQL-MYSQL - ERROR - Warning: Using a password on the command line interface can be insecure.
+ERROR 1064 (42000) at line 1: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'LIMIT 2
+INTO OUTFILE 'C:\\tmp\\TEST_default_spool\\qc_job\\20160603_105945_75600' at line 1
+
+2016-06-03 11:00:30,086 - MYSQL-MYSQL - INFO - Done
+2016-06-03 11:00:30,086 - MYSQL-MYSQL - INFO - Loading data...
+Warning: Using a password on the command line interface can be insecure.
+ERROR 29 (HY000) at line 1: File 'C:\tmp\TEST_default_spool\qc_job\20160603_105945_756000\TEST.Partitioned_test_from.shard_0.data' not found (Errcode: 2 - No such file or directory)
+2016-06-03 11:00:30,118 - MYSQL-MYSQL - INFO - Done
+2016-06-03 11:00:30,118 - MYSQL-MYSQL - INFO - keeping spool file.
+2016-06-03 11:00:30,118 - MYSQL-MYSQL - INFO - Thread-0 exit status 1
+2016-06-03 11:00:30,118 - MYSQL-MYSQL - INFO - Thread-0 processing Shard-1
+2016-06-03 11:00:30,118 - MYSQL-MYSQL - INFO - Extracting data...
+2016-06-03 11:00:30,148 - MYSQL-MYSQL - ERROR - Warning: Using a password on the command line interface can be insecure.
+ERROR 1064 (42000) at line 1: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'LIMIT 2,3
+INTO OUTFILE 'C:\\tmp\\TEST_default_spool\\qc_job\\20160603_105945_756' at line 1
+
+2016-06-03 11:00:30,148 - MYSQL-MYSQL - INFO - Done
+2016-06-03 11:00:30,148 - MYSQL-MYSQL - INFO - Loading data...
+Warning: Using a password on the command line interface can be insecure.
+ERROR 29 (HY000) at line 1: File 'C:\tmp\TEST_default_spool\qc_job\20160603_105945_756000\TEST.Partitioned_test_from.shard_1.data' not found (Errcode: 2 - No such file or directory)
+2016-06-03 11:00:30,164 - MYSQL-MYSQL - INFO - Done
+2016-06-03 11:00:30,164 - MYSQL-MYSQL - INFO - keeping spool file.
+2016-06-03 11:00:30,164 - MYSQL-MYSQL - INFO - Thread-0 exit status 1
+2016-06-03 11:00:30,164 - MYSQL-MYSQL - INFO - Thread-0 processing Shard-2
+2016-06-03 11:00:30,164 - MYSQL-MYSQL - INFO - Extracting data...
+2016-06-03 11:00:30,187 - MYSQL-MYSQL - ERROR - Warning: Using a password on the command line interface can be insecure.
+ERROR 1064 (42000) at line 1: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'LIMIT 5,5
+INTO OUTFILE 'C:\\tmp\\TEST_default_spool\\qc_job\\20160603_105945_756' at line 1
+
+2016-06-03 11:00:30,187 - MYSQL-MYSQL - INFO - Done
+2016-06-03 11:00:30,187 - MYSQL-MYSQL - INFO - Loading data...
+Warning: Using a password on the command line interface can be insecure.
+ERROR 29 (HY000) at line 1: File 'C:\tmp\TEST_default_spool\qc_job\20160603_105945_756000\TEST.Partitioned_test_from.shard_2.data' not found (Errcode: 2 - No such file or directory)
+2016-06-03 11:00:30,217 - MYSQL-MYSQL - INFO - Done
+2016-06-03 11:00:30,217 - MYSQL-MYSQL - INFO - keeping spool file.
+2016-06-03 11:00:30,217 - MYSQL-MYSQL - INFO - Thread-0 exit status 1
+2016-06-03 11:00:30,217 - MYSQL-MYSQL - INFO - Exiting Thread-0
+2016-06-03 11:00:30,217 - MYSQL-MYSQL - INFO - Shard-0/1:		n/a
+2016-06-03 11:00:30,217 - MYSQL-MYSQL - INFO - Shard-1/1:		n/a
+2016-06-03 11:00:30,217 - MYSQL-MYSQL - INFO - Shard-2/1:		n/a
+2016-06-03 11:00:30,217 - MYSQL-MYSQL - INFO - TOTAL Bytes:	n/a
+2016-06-03 11:00:30,217 - MYSQL-MYSQL - INFO - TOTAL Rows:		n/a
+2016-06-03 11:00:30,217 - MYSQL-MYSQL - ERROR - Copy failed.
+2016-06-03 11:00:30,217 - MYSQL-MYSQL - INFO - Elapsed: 00:00:00

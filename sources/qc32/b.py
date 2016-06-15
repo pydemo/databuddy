@@ -62,14 +62,14 @@ if __name__=='__main__':
 		#print ft_dbs[::-1]
 		#for db in ft_dbs[::-1]
 		#ft_dbs=['ORA11G']; 
-		ft_dbs=['PGRES'];
+		ft_dbs=['MYSQL'];
 		#gen_args_api=False; ft_dbs=['ORA11G']; ff=['CSV']
 		#gen_args_api=False; ft_dbs=['SS2012']; ff=['CSV']
 		#gen_args_api=False; ft_dbs=['SSEXP']; ff=['CSV'] #curl
 		#gen_args_api=True; ff=['CSV','DDL','JSON']
 		#gen_args_api=False; ff=['CSV','DDL','JSON']
 		ff=['CSV']
-		gen_args_api=True
+		gen_args_api=False
 		for ftd in (ft_dbs):			
 			#dbs=['ORA12C', 'ORAXE','ORAEXA','ORA10G','ORA9I','ORA8I','ORA733','ORA11G']
 			#for db in 

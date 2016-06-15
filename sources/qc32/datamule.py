@@ -67,7 +67,7 @@ Scripts\pyinstaller.exe -y C:\Python27\csvextractor_1235\csvextractor.py --log-l
 Scripts\pyinstaller.exe -y C:\Users\alex_buz\Documents\GitHub\DataBuddy\csv_loader.py --log-level DEBUG
 
 Scripts\pyinstaller.exe -y C:\Users\alex_buz\Documents\GitHub\DataBuddy\QueryCopy.py --log-level DEBUG
-Scripts\pyinstaller.exe -y C:\Users\alex_buz\Documents\GitHub\DataBuddy\data-buddy.py --log-level DEBUG
+Scripts\pyinstaller.exe -y C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\Databuddy.py --log-level DEBUG
 
 
 csv_extractor -m 'C:\Temp\mysql\bin\' -q mysql_query.sql -j alex  -x mysql_pwd -b test -n localhost -a spool/mysql_data.dump -t "|" -o 3 -r 3 -w mysql2csv
@@ -393,7 +393,7 @@ try:
 				queueLock.release()
 				log.info( "%s processing %s" % (threadName, pld[0]) )
 				shard_id=int(pld[0].split('-')[1])
-				pprint(pld)
+				#pprint(pld)
 				print 'pd', shard_id
 				#e(0)
 				if 1:

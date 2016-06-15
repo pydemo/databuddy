@@ -1,5 +1,5 @@
 
-	::Test vector: From PGRES_DateTable to CSV_Dir
+	::Test vector: From MYSQL_Partition_Limit22 to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -15,37 +15,155 @@
 ::	-6[--spool_type] is "Spool file type (CSV or JSON)."
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-D[--to_dir] is "To directory."	
+::	-P[--from_partition] is "From partition."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-MYSQL ^
 -ps 1 ^
 -r 1 ^
 -t "|" ^
--l 10 ^
+-l 22 ^
 -K 1 ^
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20160528_000207_487000 ^
+-Y 20160603_105945_518000 ^
 -5 ".\config\host_map\host_map.py" ^
 -6 csv ^
 -dbg 1 ^
--c Date_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
+-c TEST.Partitioned_test_from ^
+-P rx2015 ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
 -n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
-	::Test vector: From PGRES_DateTable to CSV_Default
+-z "C:\Temp\mysql\bin" ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_QueryFile_Limit100 to MYSQL_Table
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-q[--query_sql_file] is "Input file with MySQL query sql."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-MYSQL ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 100 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105945_587000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\mysql_query.sql ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_QueryDir_Limit333 to MYSQL_Table
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-Q[--query_sql_dir] is "Input file with MySQL query sql."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-MYSQL ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 333 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105945_656000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-Q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\query_dir_mysql ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_ShardedPartition to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -61,741 +179,21 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-6[--spool_type] is "Spool file type (CSV or JSON)."
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."	
+::	-P[--from_partition] is "From partition."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000207_560000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Date_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434
-	::Test vector: From PGRES_DateTable to CSV_File
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-g[--to_file] is "To CSV file."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000207_637000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Date_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--g C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT\testPGRES_DateTable.csv
-	::Test vector: From PGRES_Table to CSV_Dir
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-D[--to_dir] is "To directory."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000207_721000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Timestamp_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
-	::Test vector: From PGRES_Table to CSV_Default
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000207_789000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Timestamp_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434
-	::Test vector: From PGRES_Table to CSV_File
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-g[--to_file] is "To CSV file."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000207_865000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Timestamp_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--g C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT\testPGRES_Table.csv
-	::Test vector: From PGRES_QueryFile to CSV_Dir
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-q[--query_sql_file] is "Input file with PostgreSQL query sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-D[--to_dir] is "To directory."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000207_949000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\postgre_query.sql ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
-	::Test vector: From PGRES_QueryFile to CSV_Default
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-q[--query_sql_file] is "Input file with PostgreSQL query sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000208_021000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\postgre_query.sql ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434
-	::Test vector: From PGRES_QueryFile to CSV_File
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-q[--query_sql_file] is "Input file with PostgreSQL query sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-g[--to_file] is "To CSV file."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000208_098000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\postgre_query.sql ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--g C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT\testPGRES_QueryFile.csv
-	::Test vector: From PGRES_Table_Limit15 to CSV_Dir
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-D[--to_dir] is "To directory."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 15 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000208_173000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Timestamp_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
-	::Test vector: From PGRES_Table_Limit15 to CSV_Default
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 15 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000208_250000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Timestamp_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434
-	::Test vector: From PGRES_Table_Limit15 to CSV_File
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-g[--to_file] is "To CSV file."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 15 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000208_323000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Timestamp_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--g C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT\testPGRES_Table_Limit15.csv
-	::Test vector: From PGRES_QueryDir to CSV_Dir
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-Q[--query_sql_dir] is "Input dir with PostgreSQL query files sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-D[--to_dir] is "To directory."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000208_399000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--Q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\query_dir_pgres ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
-	::Test vector: From PGRES_QueryDir to CSV_Default
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-Q[--query_sql_dir] is "Input dir with PostgreSQL query files sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000208_487000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--Q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\query_dir_pgres ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434
-	::Test vector: From PGRES_QueryDir_Limit12 to CSV_Dir
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-Q[--query_sql_dir] is "Input dir with PostgreSQL query files sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-D[--to_dir] is "To directory."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 12 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000208_562000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--Q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\query_dir_pgres ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
-	::Test vector: From PGRES_QueryDir_Limit12 to CSV_Default
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-Q[--query_sql_dir] is "Input dir with PostgreSQL query files sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 12 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000208_677000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--Q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\query_dir_pgres ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434
-	::Test vector: From PGRES_QueryDir_Limit12 to CSV_File
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-Q[--query_sql_dir] is "Input dir with PostgreSQL query files sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-g[--to_file] is "To CSV file."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 12 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000208_766000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--Q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\query_dir_pgres ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--g C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT\testPGRES_QueryDir_Limit12.csv
-	::Test vector: From PGRES_ShardedPartition to CSV_Dir
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-P[--from_any_partition] is "From partition."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-D[--to_dir] is "To directory."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-MYSQL ^
 -ps 1 ^
 -r 3 ^
 -t "|" ^
@@ -804,20 +202,24 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20160528_000208_835000 ^
+-Y 20160603_105945_756000 ^
 -5 ".\config\host_map\host_map.py" ^
 -6 csv ^
 -dbg 1 ^
--c Partitioned_test_from ^
--P Partitioned_test_from_2014 ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
+-c TEST.Partitioned_test_from ^
+-P rx2015 ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
 -n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
-	::Test vector: From PGRES_ShardedPartition to CSV_Default
+-z "C:\Temp\mysql\bin" ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_Subpartition to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -833,37 +235,47 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-6[--spool_type] is "Spool file type (CSV or JSON)."
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-c[--from_table] is "From table."
-::	-P[--from_any_partition] is "From partition."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."	
+::	-S[--from_sub_partition] is "From sub-partition."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-MYSQL ^
 -ps 1 ^
--r 3 ^
+-r 1 ^
 -t "|" ^
 -l 10 ^
 -K 1 ^
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20160528_000208_909000 ^
+-Y 20160603_105945_818000 ^
 -5 ".\config\host_map\host_map.py" ^
 -6 csv ^
 -dbg 1 ^
--c Partitioned_test_from ^
--P Partitioned_test_from_2014 ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
+-c TEST.Sub_Partitioned_test_from ^
+-S subpart200 ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
 -n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434
-	::Test vector: From PGRES_TimestampTable to CSV_Dir
+-z "C:\Temp\mysql\bin" ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_ShardedSubpartition to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -879,16 +291,76 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-6[--spool_type] is "Spool file type (CSV or JSON)."
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-D[--to_dir] is "To directory."	
+::	-S[--from_sub_partition] is "From sub-partition."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-MYSQL ^
+-ps 1 ^
+-r 3 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105945_922000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Sub_Partitioned_test_from ^
+-S subpart200 ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_TimezoneQueryFile to MYSQL_Table
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-q[--query_sql_file] is "Input file with MySQL query sql."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-MYSQL ^
 -ps 1 ^
 -r 1 ^
 -t "|" ^
@@ -897,19 +369,23 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20160528_000208_997000 ^
+-Y 20160603_105945_987000 ^
 -5 ".\config\host_map\host_map.py" ^
 -6 csv ^
 -dbg 1 ^
--c Timestamp_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
+-q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\mysql_query.sql ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
 -n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
-	::Test vector: From PGRES_TimestampTable to CSV_Default
+-z "C:\Temp\mysql\bin" ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_Table_Limit1000 to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -925,15 +401,74 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-6[--spool_type] is "Spool file type (CSV or JSON)."
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."	
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-MYSQL ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 1000 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105946_056000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Timestamp_test_from ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_QueryDir to MYSQL_Table
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-Q[--query_sql_dir] is "Input file with MySQL query sql."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-MYSQL ^
 -ps 1 ^
 -r 1 ^
 -t "|" ^
@@ -942,18 +477,23 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20160528_000209_069000 ^
+-Y 20160603_105946_140000 ^
 -5 ".\config\host_map\host_map.py" ^
 -6 csv ^
 -dbg 1 ^
--c Timestamp_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
+-Q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\query_dir_mysql ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
 -n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434
-	::Test vector: From PGRES_TimestampTable to CSV_File
+-z "C:\Temp\mysql\bin" ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_Table_KeepSpoolFile to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -969,16 +509,20 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-6[--spool_type] is "Spool file type (CSV or JSON)."
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-g[--to_file] is "To CSV file."	
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-MYSQL ^
 -ps 1 ^
 -r 1 ^
 -t "|" ^
@@ -987,335 +531,23 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20160528_000209_144000 ^
+-Y 20160603_105946_237000 ^
 -5 ".\config\host_map\host_map.py" ^
 -6 csv ^
 -dbg 1 ^
--c Timestamp_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
+-c TEST.Timestamp_test_from ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
 -n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--g C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT\testPGRES_TimestampTable.csv
-	::Test vector: From PGRES_QueryFile_Limit11 to CSV_Dir
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-q[--query_sql_file] is "Input file with PostgreSQL query sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-D[--to_dir] is "To directory."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 11 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000209_219000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\postgre_query.sql ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
-	::Test vector: From PGRES_QueryFile_Limit11 to CSV_Default
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-q[--query_sql_file] is "Input file with PostgreSQL query sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 11 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000209_305000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\postgre_query.sql ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434
-	::Test vector: From PGRES_QueryFile_Limit11 to CSV_File
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-q[--query_sql_file] is "Input file with PostgreSQL query sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-g[--to_file] is "To CSV file."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 11 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000209_375000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\postgre_query.sql ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--g C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT\testPGRES_QueryFile_Limit11.csv
-	::Test vector: From PGRES_ShardedQueryFile to CSV_Dir
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-q[--query_sql_file] is "Input file with PostgreSQL query sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-D[--to_dir] is "To directory."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 3 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000209_452000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\postgre_query.sql ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
-	::Test vector: From PGRES_ShardedQueryFile to CSV_Default
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-q[--query_sql_file] is "Input file with PostgreSQL query sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 3 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000209_554000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\postgre_query.sql ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434
-	::Test vector: From PGRES_ParallelQueryDir to CSV_Dir
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-Q[--query_sql_dir] is "Input dir with PostgreSQL query files sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-D[--to_dir] is "To directory."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 3 ^
--r 3 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000209_637000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--Q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\query_dir_pgres ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
-	::Test vector: From PGRES_ParallelQueryDir to CSV_Default
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-Q[--query_sql_dir] is "Input dir with PostgreSQL query files sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 3 ^
--r 3 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000209_708000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--Q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\query_dir_pgres ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434
-	::Test vector: From PGRES_Partition_Limit33 to CSV_Dir
+-z "C:\Temp\mysql\bin" ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_Partition to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -1331,17 +563,185 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-6[--spool_type] is "Spool file type (CSV or JSON)."
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-c[--from_table] is "From table."
-::	-P[--from_any_partition] is "From partition."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-D[--to_dir] is "To directory."	
+::	-P[--from_partition] is "From partition."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-MYSQL ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105946_319000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Partitioned_test_from ^
+-P rx2015 ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_Table to MYSQL_Table
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-MYSQL ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105946_388000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Timestamp_test_from ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_ShardedQuery to MYSQL_Table
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-q[--query_sql_file] is "Input file with MySQL query sql."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-MYSQL ^
+-ps 1 ^
+-r 3 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105946_457000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\mysql_query.sql ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_Subpartition_Limit33 to MYSQL_Table
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-S[--from_sub_partition] is "From sub-partition."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-MYSQL ^
 -ps 1 ^
 -r 1 ^
 -t "|" ^
@@ -1350,20 +750,24 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20160528_000209_790000 ^
+-Y 20160603_105946_539000 ^
 -5 ".\config\host_map\host_map.py" ^
 -6 csv ^
 -dbg 1 ^
--c Partitioned_test_from ^
--P Partitioned_test_from_2014 ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
+-c TEST.Sub_Partitioned_test_from ^
+-S subpart200 ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
 -n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
-	::Test vector: From PGRES_Partition_Limit33 to CSV_Default
+-z "C:\Temp\mysql\bin" ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_ShardedTable to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -1379,246 +783,20 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-6[--spool_type] is "Spool file type (CSV or JSON)."
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-c[--from_table] is "From table."
-::	-P[--from_any_partition] is "From partition."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."	
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 33 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000209_859000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Partitioned_test_from ^
--P Partitioned_test_from_2014 ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434
-	::Test vector: From PGRES_Partition_Limit33 to CSV_File
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-P[--from_any_partition] is "From partition."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-g[--to_file] is "To CSV file."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 33 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000209_939000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Partitioned_test_from ^
--P Partitioned_test_from_2014 ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--g C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT\testPGRES_Partition_Limit33.csv
-	::Test vector: From PGRES_TimezoneTable to CSV_Dir
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-D[--to_dir] is "To directory."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000210_018000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Timezone_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
-	::Test vector: From PGRES_TimezoneTable to CSV_Default
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000210_092000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Timezone_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434
-	::Test vector: From PGRES_TimezoneTable to CSV_File
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-g[--to_file] is "To CSV file."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000210_167000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Timezone_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--g C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT\testPGRES_TimezoneTable.csv
-	::Test vector: From PGRES_ShardedTable to CSV_Dir
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-D[--to_dir] is "To directory."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-MYSQL ^
 -ps 1 ^
 -r 3 ^
 -t "|" ^
@@ -1627,19 +805,23 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20160528_000210_241000 ^
+-Y 20160603_105946_609000 ^
 -5 ".\config\host_map\host_map.py" ^
 -6 csv ^
 -dbg 1 ^
--c Timestamp_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
+-c TEST.Timestamp_test_from ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
 -n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
-	::Test vector: From PGRES_ShardedTable to CSV_Default
+-z "C:\Temp\mysql\bin" ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_QueryFile to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -1654,62 +836,21 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-5[--host_map] is "Host-to-shard map."
 ::	-6[--spool_type] is "Spool file type (CSV or JSON)."
 ::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."	
+::	-q[--query_sql_file] is "Input file with MySQL query sql."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 3 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000210_317000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Timestamp_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434
-	::Test vector: From PGRES_Partition to CSV_Dir
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-P[--from_any_partition] is "From partition."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-D[--to_dir] is "To directory."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-MYSQL ^
 -ps 1 ^
 -r 1 ^
 -t "|" ^
@@ -1718,2014 +859,23 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -M C:\Temp\qc_log ^
 -F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20160528_000210_394000 ^
+-Y 20160603_105946_672000 ^
 -5 ".\config\host_map\host_map.py" ^
 -6 csv ^
 -dbg 1 ^
--c Partitioned_test_from ^
--P Partitioned_test_from_2014 ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
+-q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\mysql_query.sql ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
 -n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
-	::Test vector: From PGRES_Partition to CSV_Default
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-P[--from_any_partition] is "From partition."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000210_477000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Partitioned_test_from ^
--P Partitioned_test_from_2014 ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434
-	::Test vector: From PGRES_Partition to CSV_File
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-P[--from_any_partition] is "From partition."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-g[--to_file] is "To CSV file."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-CSV ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000210_551000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Partitioned_test_from ^
--P Partitioned_test_from_2014 ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--g C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT\testPGRES_Partition.csv
-	::Test vector: From PGRES_DateTable to PGRES_Table_SkipHeader
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000210_632000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Date_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Date_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From PGRES_DateTable to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000210_719000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Date_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Date_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From PGRES_Table_KeepSpoolFile to PGRES_Table_SkipHeader
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000210_805000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Timestamp_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From PGRES_Table_KeepSpoolFile to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000210_892000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Timestamp_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From PGRES_Table to PGRES_Table_SkipHeader
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000210_975000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Timestamp_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From PGRES_Table to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000211_066000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Timestamp_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From PGRES_QueryFile to PGRES_Table_SkipHeader
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-q[--query_sql_file] is "Input file with PostgreSQL query sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000211_148000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\postgre_query.sql ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From PGRES_QueryFile to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-q[--query_sql_file] is "Input file with PostgreSQL query sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000211_234000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\postgre_query.sql ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From PGRES_Table_Limit15 to PGRES_Table_SkipHeader
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 15 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000211_323000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Timestamp_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From PGRES_Table_Limit15 to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 15 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000211_407000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Timestamp_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From PGRES_QueryDir to PGRES_Table_SkipHeader
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-Q[--query_sql_dir] is "Input dir with PostgreSQL query files sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000211_490000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--Q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\query_dir_pgres ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From PGRES_QueryDir to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-Q[--query_sql_dir] is "Input dir with PostgreSQL query files sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000211_574000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--Q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\query_dir_pgres ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From PGRES_QueryDir_Limit12 to PGRES_Table_SkipHeader
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-Q[--query_sql_dir] is "Input dir with PostgreSQL query files sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 12 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000211_659000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--Q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\query_dir_pgres ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From PGRES_QueryDir_Limit12 to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-Q[--query_sql_dir] is "Input dir with PostgreSQL query files sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 12 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000211_756000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--Q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\query_dir_pgres ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From PGRES_ShardedPartition to PGRES_Table_SkipHeader
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-P[--from_any_partition] is "From partition."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 3 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000211_839000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Partitioned_test_from ^
--P Partitioned_test_from_2014 ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From PGRES_ShardedPartition to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-P[--from_any_partition] is "From partition."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 3 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000211_923000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Partitioned_test_from ^
--P Partitioned_test_from_2014 ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From PGRES_TimestampTable to PGRES_Table_SkipHeader
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000212_041000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Timestamp_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From PGRES_TimestampTable to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000212_126000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Timestamp_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From PGRES_QueryFile_Limit11 to PGRES_Table_SkipHeader
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-q[--query_sql_file] is "Input file with PostgreSQL query sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 11 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000212_216000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\postgre_query.sql ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From PGRES_QueryFile_Limit11 to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-q[--query_sql_file] is "Input file with PostgreSQL query sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 11 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000212_302000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\postgre_query.sql ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From PGRES_ShardedQueryFile to PGRES_Table_SkipHeader
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-q[--query_sql_file] is "Input file with PostgreSQL query sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 3 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000212_398000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\postgre_query.sql ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From PGRES_ShardedQueryFile to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-q[--query_sql_file] is "Input file with PostgreSQL query sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 3 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000212_482000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\postgre_query.sql ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From PGRES_ParallelQueryDir to PGRES_Table_SkipHeader
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-Q[--query_sql_dir] is "Input dir with PostgreSQL query files sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 3 ^
--r 3 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000212_565000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--Q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\query_dir_pgres ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From PGRES_ParallelQueryDir to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-Q[--query_sql_dir] is "Input dir with PostgreSQL query files sql."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 3 ^
--r 3 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000212_650000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--Q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\query_dir_pgres ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From PGRES_Partition_Limit33 to PGRES_Table_SkipHeader
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-P[--from_any_partition] is "From partition."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 33 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000212_734000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Partitioned_test_from ^
--P Partitioned_test_from_2014 ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From PGRES_Partition_Limit33 to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-P[--from_any_partition] is "From partition."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 33 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000212_820000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Partitioned_test_from ^
--P Partitioned_test_from_2014 ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From PGRES_TimezoneTable to PGRES_Table_SkipHeader
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000212_907000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Timezone_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timezone_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From PGRES_TimezoneTable to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000212_990000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Timezone_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timezone_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From PGRES_ShardedTable to PGRES_Table_SkipHeader
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 3 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000213_076000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Timestamp_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From PGRES_ShardedTable to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 3 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000213_161000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Timestamp_test_from ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From PGRES_Partition to PGRES_Table_SkipHeader
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-P[--from_any_partition] is "From partition."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000213_244000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Partitioned_test_from ^
--P Partitioned_test_from_2014 ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From PGRES_Partition to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-6[--spool_type] is "Spool file type (CSV or JSON)."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-c[--from_table] is "From table."
-::	-P[--from_any_partition] is "From partition."
-::	-j[--from_user] is "PostgreSQL source user."
-::	-x[--from_passwd] is "PostgreSQL source user password."
-::	-b[--from_db_name] is "PostgreSQL source database."
-::	-n[--from_db_server] is "PostgreSQL source instance name."
-::	-z[--source_client_home] is "Path to PostgreSQL client home."
-::	-R[--source_port] is "Connection port for source PostgreSQL."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w PGRES-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--F C:\tmp\TEST_default_spool ^
--B qc_job ^
--Y 20160528_000213_332000 ^
--5 ".\config\host_map\host_map.py" ^
--6 csv ^
--dbg 1 ^
--c Partitioned_test_from ^
--P Partitioned_test_from_2014 ^
--j "postgres" ^
--x "postgre_pwd" ^
--b "postgres" ^
--n "localhost" ^
--z "C:\Program Files\PostgreSQL\9.4\bin" ^
--R 5434 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From CSV_Dirs to PGRES_Table_SkipHeader
+-z "C:\Temp\mysql\bin" ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From CSV_Dirs to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -3739,17 +889,15 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-5[--host_map] is "Host-to-shard map."
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-I[--input_dirs] is "Input CSV directory."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w CSV-MYSQL ^
 -ps 1 ^
 -r 1 ^
 -t "|" ^
@@ -3757,61 +905,17 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -K 1 ^
 -M C:\Temp\qc_log ^
 -B qc_job ^
--Y 20160528_000213_431000 ^
+-Y 20160603_105946_757000 ^
 -5 ".\config\host_map\host_map.py" ^
 -dbg 1 ^
--I .\test\v101\data\pgres_data_dir ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From CSV_Dirs to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-I[--input_dirs] is "Input CSV directory."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--B qc_job ^
--Y 20160528_000213_499000 ^
--5 ".\config\host_map\host_map.py" ^
--dbg 1 ^
--I .\test\v101\data\pgres_data_dir ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From CSV_ShardedFile to PGRES_Table_SkipHeader
+-I .\test\v101\data\mysql_data_dir ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From CSV_ShardedFile to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -3825,17 +929,15 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-5[--host_map] is "Host-to-shard map."
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-i[--input_files] is "Input CSV file(s)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w CSV-MYSQL ^
 -ps 1 ^
 -r 3 ^
 -t "|" ^
@@ -3843,61 +945,17 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -K 1 ^
 -M C:\Temp\qc_log ^
 -B qc_job ^
--Y 20160528_000213_580000 ^
+-Y 20160603_105946_820000 ^
 -5 ".\config\host_map\host_map.py" ^
 -dbg 1 ^
--i .\test\v101\data\pgres_shard_0_ts.data ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From CSV_ShardedFile to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-i[--input_files] is "Input CSV file(s)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
--ps 1 ^
--r 3 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--B qc_job ^
--Y 20160528_000213_651000 ^
--5 ".\config\host_map\host_map.py" ^
--dbg 1 ^
--i .\test\v101\data\pgres_shard_0_ts.data ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From CSV_Dirs_Limit10 to PGRES_Table_SkipHeader
+-i .\test\v101\data\mysql_shard_0.data ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From CSV_Dirs_Limit10 to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -3911,17 +969,15 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-5[--host_map] is "Host-to-shard map."
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-I[--input_dirs] is "Input CSV directory."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w CSV-MYSQL ^
 -ps 1 ^
 -r 1 ^
 -t "|" ^
@@ -3929,61 +985,17 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -K 1 ^
 -M C:\Temp\qc_log ^
 -B qc_job ^
--Y 20160528_000213_722000 ^
+-Y 20160603_105946_873000 ^
 -5 ".\config\host_map\host_map.py" ^
 -dbg 1 ^
--I .\test\v101\data\pgres_data_dir ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From CSV_Dirs_Limit10 to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-I[--input_dirs] is "Input CSV directory."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--B qc_job ^
--Y 20160528_000213_794000 ^
--5 ".\config\host_map\host_map.py" ^
--dbg 1 ^
--I .\test\v101\data\pgres_data_dir ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From CSV_File_TableNamedFile to PGRES_Table_SkipHeader
+-I .\test\v101\data\mysql_data_dir ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From CSV_File_TableNamedFile to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -3997,17 +1009,15 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-5[--host_map] is "Host-to-shard map."
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-i[--input_files] is "Input CSV file(s)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w CSV-MYSQL ^
 -ps 1 ^
 -r 1 ^
 -t "|" ^
@@ -4015,19 +1025,17 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -K 1 ^
 -M C:\Temp\qc_log ^
 -B qc_job ^
--Y 20160528_000213_869000 ^
+-Y 20160603_105946_942000 ^
 -5 ".\config\host_map\host_map.py" ^
 -dbg 1 ^
 -i ".\test\v101\data\SCOTT.Timestamp_test_to.data" ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From CSV_File_TableNamedFile to PGRES_Table
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From CSV_File_Limit10 to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -4041,16 +1049,15 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-5[--host_map] is "Host-to-shard map."
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-i[--input_files] is "Input CSV file(s)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w CSV-MYSQL ^
 -ps 1 ^
 -r 1 ^
 -t "|" ^
@@ -4058,104 +1065,17 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -K 1 ^
 -M C:\Temp\qc_log ^
 -B qc_job ^
--Y 20160528_000213_949000 ^
+-Y 20160603_105947_005000 ^
 -5 ".\config\host_map\host_map.py" ^
 -dbg 1 ^
--i ".\test\v101\data\SCOTT.Timestamp_test_to.data" ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From CSV_File_Limit10 to PGRES_Table_SkipHeader
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-i[--input_files] is "Input CSV file(s)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--B qc_job ^
--Y 20160528_000214_054000 ^
--5 ".\config\host_map\host_map.py" ^
--dbg 1 ^
--i .\test\v101\data\pgres_shard_0_ts.data ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From CSV_File_Limit10 to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-i[--input_files] is "Input CSV file(s)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--B qc_job ^
--Y 20160528_000214_130000 ^
--5 ".\config\host_map\host_map.py" ^
--dbg 1 ^
--i .\test\v101\data\pgres_shard_0_ts.data ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From CSV_ShardedFileSkip1 to PGRES_Table_SkipHeader
+-i .\test\v101\data\mysql_shard_0.data ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From CSV_ShardedFileSkip1 to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -4170,17 +1090,15 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-i[--input_files] is "Input CSV file(s)."
 ::	-y[--shard_size_kb] is "Shard size in KBytes (to partition file and to estimate number of lines in input CSV file)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w CSV-MYSQL ^
 -ps 1 ^
 -r 3 ^
 -t "|" ^
@@ -4188,20 +1106,18 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -K 1 ^
 -M C:\Temp\qc_log ^
 -B qc_job ^
--Y 20160528_000214_205000 ^
+-Y 20160603_105947_058000 ^
 -5 ".\config\host_map\host_map.py" ^
 -dbg 1 ^
--i .\test\v101\data\pgres_shard_0_ts.data ^
+-i .\test\v101\data\mysql_shard_0.data ^
 -y 1 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From CSV_ShardedFileSkip1 to PGRES_Table
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From CSV_DateFile to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -4215,61 +1131,15 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-5[--host_map] is "Host-to-shard map."
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-i[--input_files] is "Input CSV file(s)."
-::	-y[--shard_size_kb] is "Shard size in KBytes (to partition file and to estimate number of lines in input CSV file)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
--ps 1 ^
--r 3 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--B qc_job ^
--Y 20160528_000214_284000 ^
--5 ".\config\host_map\host_map.py" ^
--dbg 1 ^
--i .\test\v101\data\pgres_shard_0_ts.data ^
--y 1 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From CSV_DateFile to PGRES_Table_SkipHeader
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-i[--input_files] is "Input CSV file(s)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w CSV-MYSQL ^
 -ps 1 ^
 -r 1 ^
 -t "|" ^
@@ -4277,19 +1147,17 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -K 1 ^
 -M C:\Temp\qc_log ^
 -B qc_job ^
--Y 20160528_000214_359000 ^
+-Y 20160603_105947_121000 ^
 -5 ".\config\host_map\host_map.py" ^
 -dbg 1 ^
--i .\test\v101\data\pgres_shard_0_dt.data ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Date_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From CSV_DateFile to PGRES_Table
+-i .\test\v101\data\mysql_shard_0.data ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From CSV_TimestampFile to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -4303,16 +1171,15 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-5[--host_map] is "Host-to-shard map."
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-i[--input_files] is "Input CSV file(s)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w CSV-MYSQL ^
 -ps 1 ^
 -r 1 ^
 -t "|" ^
@@ -4320,18 +1187,17 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -K 1 ^
 -M C:\Temp\qc_log ^
 -B qc_job ^
--Y 20160528_000214_427000 ^
+-Y 20160603_105947_174000 ^
 -5 ".\config\host_map\host_map.py" ^
 -dbg 1 ^
--i .\test\v101\data\pgres_shard_0_dt.data ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Date_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From CSV_TimestampFile to PGRES_Table_SkipHeader
+-i .\test\v101\data\mysql_shard_0.data ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From CSV_TimezoneFile to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -4345,17 +1211,15 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-5[--host_map] is "Host-to-shard map."
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-i[--input_files] is "Input CSV file(s)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w CSV-MYSQL ^
 -ps 1 ^
 -r 1 ^
 -t "|" ^
@@ -4363,19 +1227,17 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -K 1 ^
 -M C:\Temp\qc_log ^
 -B qc_job ^
--Y 20160528_000214_499000 ^
+-Y 20160603_105947_274000 ^
 -5 ".\config\host_map\host_map.py" ^
 -dbg 1 ^
--i .\test\v101\data\pgres_shard_0_ts.data ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From CSV_TimestampFile to PGRES_Table
+-i .\test\v101\data\mysql_shard_0.data ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From CSV_Files_TableNamedFile to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -4389,16 +1251,15 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-5[--host_map] is "Host-to-shard map."
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-i[--input_files] is "Input CSV file(s)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w CSV-MYSQL ^
 -ps 1 ^
 -r 1 ^
 -t "|" ^
@@ -4406,190 +1267,17 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -K 1 ^
 -M C:\Temp\qc_log ^
 -B qc_job ^
--Y 20160528_000214_582000 ^
--5 ".\config\host_map\host_map.py" ^
--dbg 1 ^
--i .\test\v101\data\pgres_shard_0_ts.data ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From CSV_TimezoneFile to PGRES_Table_SkipHeader
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-i[--input_files] is "Input CSV file(s)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--B qc_job ^
--Y 20160528_000214_654000 ^
--5 ".\config\host_map\host_map.py" ^
--dbg 1 ^
--i .\test\v101\data\pgres_shard_0_tz.data ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timezone_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From CSV_TimezoneFile to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-i[--input_files] is "Input CSV file(s)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--B qc_job ^
--Y 20160528_000214_726000 ^
--5 ".\config\host_map\host_map.py" ^
--dbg 1 ^
--i .\test\v101\data\pgres_shard_0_tz.data ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timezone_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From CSV_Files_TableNamedFile to PGRES_Table_SkipHeader
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-i[--input_files] is "Input CSV file(s)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--B qc_job ^
--Y 20160528_000214_794000 ^
+-Y 20160603_105947_342000 ^
 -5 ".\config\host_map\host_map.py" ^
 -dbg 1 ^
 -i ".\test\v101\data\SCOTT.Timestamp_test_to.data",".\test\v101\data\SCOTT.Timestamp_test_to_2.data" ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From CSV_Files_TableNamedFile to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-i[--input_files] is "Input CSV file(s)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--B qc_job ^
--Y 20160528_000214_869000 ^
--5 ".\config\host_map\host_map.py" ^
--dbg 1 ^
--i ".\test\v101\data\SCOTT.Timestamp_test_to.data",".\test\v101\data\SCOTT.Timestamp_test_to_2.data" ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From CSV_Dir to PGRES_Table_SkipHeader
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From CSV_Dir to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -4603,17 +1291,15 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-5[--host_map] is "Host-to-shard map."
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-I[--input_dirs] is "Input CSV directory."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w CSV-MYSQL ^
 -ps 1 ^
 -r 1 ^
 -t "|" ^
@@ -4621,19 +1307,17 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -K 1 ^
 -M C:\Temp\qc_log ^
 -B qc_job ^
--Y 20160528_000214_945000 ^
+-Y 20160603_105947_421000 ^
 -5 ".\config\host_map\host_map.py" ^
 -dbg 1 ^
--I .\test\v101\data\pgres_data_dir ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From CSV_Dir to PGRES_Table
+-I .\test\v101\data\mysql_data_dir ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From CSV_ShardedDir_Limit10 to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -4647,59 +1331,15 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-5[--host_map] is "Host-to-shard map."
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-I[--input_dirs] is "Input CSV directory."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--B qc_job ^
--Y 20160528_000215_012000 ^
--5 ".\config\host_map\host_map.py" ^
--dbg 1 ^
--I .\test\v101\data\pgres_data_dir ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From CSV_ShardedDir_Limit10 to PGRES_Table_SkipHeader
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-I[--input_dirs] is "Input CSV directory."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w CSV-MYSQL ^
 -ps 1 ^
 -r 3 ^
 -t "|" ^
@@ -4707,61 +1347,17 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -K 1 ^
 -M C:\Temp\qc_log ^
 -B qc_job ^
--Y 20160528_000215_084000 ^
+-Y 20160603_105947_489000 ^
 -5 ".\config\host_map\host_map.py" ^
 -dbg 1 ^
--I .\test\v101\data\pgres_data_dir ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From CSV_ShardedDir_Limit10 to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-I[--input_dirs] is "Input CSV directory."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
--ps 1 ^
--r 3 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--B qc_job ^
--Y 20160528_000215_167000 ^
--5 ".\config\host_map\host_map.py" ^
--dbg 1 ^
--I .\test\v101\data\pgres_data_dir ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From CSV_FileSkip1 to PGRES_Table_SkipHeader
+-I .\test\v101\data\mysql_data_dir ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From CSV_FileSkip1 to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -4776,17 +1372,15 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-i[--input_files] is "Input CSV file(s)."
 ::	-y[--shard_size_kb] is "Shard size in KBytes (to partition file and to estimate number of lines in input CSV file)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w CSV-MYSQL ^
 -ps 1 ^
 -r 1 ^
 -t "|" ^
@@ -4794,64 +1388,18 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -K 1 ^
 -M C:\Temp\qc_log ^
 -B qc_job ^
--Y 20160528_000215_241000 ^
+-Y 20160603_105947_543000 ^
 -5 ".\config\host_map\host_map.py" ^
 -dbg 1 ^
--i .\test\v101\data\pgres_shard_0_ts.data ^
+-i .\test\v101\data\mysql_shard_0.data ^
 -y 1 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From CSV_FileSkip1 to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-i[--input_files] is "Input CSV file(s)."
-::	-y[--shard_size_kb] is "Shard size in KBytes (to partition file and to estimate number of lines in input CSV file)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--B qc_job ^
--Y 20160528_000215_314000 ^
--5 ".\config\host_map\host_map.py" ^
--dbg 1 ^
--i .\test\v101\data\pgres_shard_0_ts.data ^
--y 1 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From CSV_ShardedDirSkip1 to PGRES_Table_SkipHeader
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From CSV_ShardedDirSkip1 to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -4866,17 +1414,15 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-I[--input_dirs] is "Input CSV directory."
 ::	-y[--shard_size_kb] is "Shard size in KBytes (to partition file and to estimate number of lines in input CSV file)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w CSV-MYSQL ^
 -ps 1 ^
 -r 3 ^
 -t "|" ^
@@ -4884,64 +1430,18 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -K 1 ^
 -M C:\Temp\qc_log ^
 -B qc_job ^
--Y 20160528_000215_388000 ^
+-Y 20160603_105947_599000 ^
 -5 ".\config\host_map\host_map.py" ^
 -dbg 1 ^
--I .\test\v101\data\pgres_data_dir ^
+-I .\test\v101\data\mysql_data_dir ^
 -y 1 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From CSV_ShardedDirSkip1 to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-I[--input_dirs] is "Input CSV directory."
-::	-y[--shard_size_kb] is "Shard size in KBytes (to partition file and to estimate number of lines in input CSV file)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
--ps 1 ^
--r 3 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--B qc_job ^
--Y 20160528_000215_463000 ^
--5 ".\config\host_map\host_map.py" ^
--dbg 1 ^
--I .\test\v101\data\pgres_data_dir ^
--y 1 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From CSV_File to PGRES_Table_SkipHeader
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From CSV_File to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -4955,17 +1455,15 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-5[--host_map] is "Host-to-shard map."
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-i[--input_files] is "Input CSV file(s)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w CSV-MYSQL ^
 -ps 1 ^
 -r 1 ^
 -t "|" ^
@@ -4973,19 +1471,17 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -K 1 ^
 -M C:\Temp\qc_log ^
 -B qc_job ^
--Y 20160528_000215_541000 ^
+-Y 20160603_105947_663000 ^
 -5 ".\config\host_map\host_map.py" ^
 -dbg 1 ^
--i .\test\v101\data\pgres_shard_0_ts.data ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From CSV_File to PGRES_Table
+-i .\test\v101\data\mysql_shard_0.data ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From CSV_DateFiles to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -4999,16 +1495,15 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-5[--host_map] is "Host-to-shard map."
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-i[--input_files] is "Input CSV file(s)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w CSV-MYSQL ^
 -ps 1 ^
 -r 1 ^
 -t "|" ^
@@ -5016,18 +1511,17 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -K 1 ^
 -M C:\Temp\qc_log ^
 -B qc_job ^
--Y 20160528_000215_615000 ^
+-Y 20160603_105947_726000 ^
 -5 ".\config\host_map\host_map.py" ^
 -dbg 1 ^
--i .\test\v101\data\pgres_shard_0_ts.data ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From CSV_DateFiles to PGRES_Table_SkipHeader
+-i .\test\v101\data\mysql_shard_0.data,.\test\v101\data\mysql_shard_0.data ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From CSV_MongoFile to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -5041,17 +1535,15 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-5[--host_map] is "Host-to-shard map."
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-i[--input_files] is "Input CSV file(s)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w CSV-MYSQL ^
 -ps 1 ^
 -r 1 ^
 -t "|" ^
@@ -5059,105 +1551,17 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -K 1 ^
 -M C:\Temp\qc_log ^
 -B qc_job ^
--Y 20160528_000215_700000 ^
--5 ".\config\host_map\host_map.py" ^
--dbg 1 ^
--i .\test\v101\data\pgres_shard_0_dt.data,.\test\v101\data\pgres_shard_0_dt.data ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Date_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From CSV_DateFiles to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-i[--input_files] is "Input CSV file(s)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--B qc_job ^
--Y 20160528_000215_770000 ^
--5 ".\config\host_map\host_map.py" ^
--dbg 1 ^
--i .\test\v101\data\pgres_shard_0_dt.data,.\test\v101\data\pgres_shard_0_dt.data ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Date_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From CSV_MongoFile to PGRES_Table_SkipHeader
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-i[--input_files] is "Input CSV file(s)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--B qc_job ^
--Y 20160528_000215_840000 ^
+-Y 20160603_105947_790000 ^
 -5 ".\config\host_map\host_map.py" ^
 -dbg 1 ^
 -i .\test\v101\data\oracle_shard_0_mongo.csv ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From CSV_MongoFile to PGRES_Table
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From CSV_ShardedFile_Limit10 to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -5171,59 +1575,15 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-5[--host_map] is "Host-to-shard map."
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-i[--input_files] is "Input CSV file(s)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
--ps 1 ^
--r 1 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--B qc_job ^
--Y 20160528_000215_915000 ^
--5 ".\config\host_map\host_map.py" ^
--dbg 1 ^
--i .\test\v101\data\oracle_shard_0_mongo.csv ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From CSV_ShardedFile_Limit10 to PGRES_Table_SkipHeader
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-i[--input_files] is "Input CSV file(s)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w CSV-MYSQL ^
 -ps 1 ^
 -r 3 ^
 -t "|" ^
@@ -5231,61 +1591,17 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -K 1 ^
 -M C:\Temp\qc_log ^
 -B qc_job ^
--Y 20160528_000215_988000 ^
+-Y 20160603_105947_843000 ^
 -5 ".\config\host_map\host_map.py" ^
 -dbg 1 ^
--i .\test\v101\data\pgres_shard_0_ts.data ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From CSV_ShardedFile_Limit10 to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-i[--input_files] is "Input CSV file(s)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
--ps 1 ^
--r 3 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--B qc_job ^
--Y 20160528_000216_075000 ^
--5 ".\config\host_map\host_map.py" ^
--dbg 1 ^
--i .\test\v101\data\pgres_shard_0_ts.data ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From CSV_ShardedDir to PGRES_Table_SkipHeader
+-i .\test\v101\data\mysql_shard_0.data ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From CSV_ShardedDir to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -5299,17 +1615,15 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-5[--host_map] is "Host-to-shard map."
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-I[--input_dirs] is "Input CSV directory."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w CSV-MYSQL ^
 -ps 1 ^
 -r 3 ^
 -t "|" ^
@@ -5317,61 +1631,17 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -K 1 ^
 -M C:\Temp\qc_log ^
 -B qc_job ^
--Y 20160528_000216_151000 ^
+-Y 20160603_105947_906000 ^
 -5 ".\config\host_map\host_map.py" ^
 -dbg 1 ^
--I .\test\v101\data\pgres_data_dir ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From CSV_ShardedDir to PGRES_Table
-	::	Arguments:
-	::		-w[--copy_vector] is "Data copy direction."
-::	-ps[--pool_size] is "Pool size."
-::	-r[--num_of_shards] is "Number of shards."
-::	-t[--field_term] is "Field terminator."
-::	-l[--lame_duck] is "Limit rows (lame duck run)."
-::	-K[--keep_data_file] is "Keep data dump."
-::	-M[--log_dir] is "Log destination."
-::	-B[--job_name] is "Job name (log_dir/job_name)."
-::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
-::	-5[--host_map] is "Host-to-shard map."
-::	-dbg[--debug_level] is "QC Debug level."
-::	-I[--input_dirs] is "Input CSV directory."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
-	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
--ps 1 ^
--r 3 ^
--t "|" ^
--l 10 ^
--K 1 ^
--M C:\Temp\qc_log ^
--B qc_job ^
--Y 20160528_000216_225000 ^
--5 ".\config\host_map\host_map.py" ^
--dbg 1 ^
--I .\test\v101\data\pgres_data_dir ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
-	::Test vector: From CSV_DirsSkip1 to PGRES_Table_SkipHeader
+-I .\test\v101\data\mysql_data_dir ^
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From CSV_DirsSkip1 to MYSQL_Table
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -5386,17 +1656,15 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-dbg[--debug_level] is "QC Debug level."
 ::	-I[--input_dirs] is "Input CSV directory."
 ::	-y[--shard_size_kb] is "Shard size in KBytes (to partition file and to estimate number of lines in input CSV file)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."
-::	-k[--skip_header] is "Skip header line."	
+::	-u[--to_user] is "Target MySQL db user."
+::	-p[--to_passwd] is "Target db user password."
+::	-d[--to_db_name] is "Target database."
+::	-s[--to_db_server] is "Target db instance name."
+::	-a[--to_table] is "Target table."
+::	-Z[--target_client_home] is "Path to mysql client home."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w CSV-MYSQL ^
 -ps 1 ^
 -r 1 ^
 -t "|" ^
@@ -5404,20 +1672,18 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 -K 1 ^
 -M C:\Temp\qc_log ^
 -B qc_job ^
--Y 20160528_000216_304000 ^
+-Y 20160603_105947_959000 ^
 -5 ".\config\host_map\host_map.py" ^
 -dbg 1 ^
--I .\test\v101\data\pgres_data_dir ^
+-I .\test\v101\data\mysql_data_dir ^
 -y 1 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434 ^
--k 1
-	::Test vector: From CSV_DirsSkip1 to PGRES_Table
+-u alex ^
+-p mysql_pwd ^
+-d test ^
+-s localhost ^
+-a Timestamp_test_to ^
+-Z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_Partition_Limit22 to CSV_Dir
 	::	Arguments:
 	::		-w[--copy_vector] is "Data copy direction."
 ::	-ps[--pool_size] is "Pool size."
@@ -5426,38 +1692,1756 @@ echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_
 ::	-l[--lame_duck] is "Limit rows (lame duck run)."
 ::	-K[--keep_data_file] is "Keep data dump."
 ::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
 ::	-B[--job_name] is "Job name (log_dir/job_name)."
 ::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
 ::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
 ::	-dbg[--debug_level] is "QC Debug level."
-::	-I[--input_dirs] is "Input CSV directory."
-::	-y[--shard_size_kb] is "Shard size in KBytes (to partition file and to estimate number of lines in input CSV file)."
-::	-u[--to_user] is "Target PostgreSQL db user."
-::	-p[--to_passwd] is "Target PostgreSQL db user password."
-::	-d[--to_db_name] is "Target PostgreSQL database."
-::	-s[--to_db_server] is "Target PostgreSQL db instance name."
-::	-a[--to_table] is "Target PostgreSQL table."
-::	-Z[--target_client_home] is "Path to PostgreSQL client home bin dir."
-::	-T[--target_port] is "Connection port for target PostgreSQL."	
+::	-c[--from_table] is "From table."
+::	-P[--from_partition] is "From partition."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-D[--to_dir] is "To directory."	
 	
-echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160528_000207\qc32\qc32.exe ^
--w CSV-PGRES ^
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 22 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105948_021000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Partitioned_test_from ^
+-P rx2015 ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
+	::Test vector: From MYSQL_Partition_Limit22 to CSV_Default
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-P[--from_partition] is "From partition."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 22 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105948_094000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Partitioned_test_from ^
+-P rx2015 ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_Partition_Limit22 to CSV_File
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-P[--from_partition] is "From partition."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-g[--to_file] is "To CSV file."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 22 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105948_159000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Partitioned_test_from ^
+-P rx2015 ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-g C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT\testMYSQL_Partition_Limit22.csv
+	::Test vector: From MYSQL_QueryFile_Limit100 to CSV_Dir
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-q[--query_sql_file] is "Input file with MySQL query sql."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-D[--to_dir] is "To directory."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 100 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105948_259000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\mysql_query.sql ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
+	::Test vector: From MYSQL_QueryFile_Limit100 to CSV_Default
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-q[--query_sql_file] is "Input file with MySQL query sql."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 100 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105948_321000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\mysql_query.sql ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_QueryFile_Limit100 to CSV_File
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-q[--query_sql_file] is "Input file with MySQL query sql."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-g[--to_file] is "To CSV file."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 100 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105948_390000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\mysql_query.sql ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-g C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT\testMYSQL_QueryFile_Limit100.csv
+	::Test vector: From MYSQL_QueryDir_Limit333 to CSV_Dir
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-Q[--query_sql_dir] is "Input file with MySQL query sql."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-D[--to_dir] is "To directory."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 333 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105948_459000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-Q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\query_dir_mysql ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
+	::Test vector: From MYSQL_QueryDir_Limit333 to CSV_Default
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-Q[--query_sql_dir] is "Input file with MySQL query sql."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 333 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105948_521000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-Q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\query_dir_mysql ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_QueryDir_Limit333 to CSV_File
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-Q[--query_sql_dir] is "Input file with MySQL query sql."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-g[--to_file] is "To CSV file."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 333 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105948_590000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-Q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\query_dir_mysql ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-g C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT\testMYSQL_QueryDir_Limit333.csv
+	::Test vector: From MYSQL_ShardedPartition to CSV_Dir
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-P[--from_partition] is "From partition."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-D[--to_dir] is "To directory."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 3 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105948_659000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Partitioned_test_from ^
+-P rx2015 ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
+	::Test vector: From MYSQL_ShardedPartition to CSV_Default
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-P[--from_partition] is "From partition."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 3 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105948_721000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Partitioned_test_from ^
+-P rx2015 ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_Subpartition to CSV_Dir
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-S[--from_sub_partition] is "From sub-partition."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-D[--to_dir] is "To directory."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
 -ps 1 ^
 -r 1 ^
 -t "|" ^
 -l 10 ^
 -K 1 ^
 -M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
 -B qc_job ^
--Y 20160528_000216_380000 ^
+-Y 20160603_105948_791000 ^
 -5 ".\config\host_map\host_map.py" ^
+-6 csv ^
 -dbg 1 ^
--I .\test\v101\data\pgres_data_dir ^
--y 1 ^
--u "postgres" ^
--p "postgre_pwd" ^
--d "postgres" ^
--s "localhost" ^
--a "Timestamp_test_to" ^
--Z "C:\Program Files\PostgreSQL\9.4\bin" ^
--T 5434
+-c TEST.Sub_Partitioned_test_from ^
+-S subpart200 ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
+	::Test vector: From MYSQL_Subpartition to CSV_Default
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-S[--from_sub_partition] is "From sub-partition."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105948_844000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Sub_Partitioned_test_from ^
+-S subpart200 ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_Subpartition to CSV_File
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-S[--from_sub_partition] is "From sub-partition."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-g[--to_file] is "To CSV file."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105948_911000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Sub_Partitioned_test_from ^
+-S subpart200 ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-g C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT\testMYSQL_Subpartition.csv
+	::Test vector: From MYSQL_ShardedSubpartition to CSV_Dir
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-S[--from_sub_partition] is "From sub-partition."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-D[--to_dir] is "To directory."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 3 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105948_984000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Sub_Partitioned_test_from ^
+-S subpart200 ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
+	::Test vector: From MYSQL_ShardedSubpartition to CSV_Default
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-S[--from_sub_partition] is "From sub-partition."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 3 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105949_044000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Sub_Partitioned_test_from ^
+-S subpart200 ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_TimezoneQueryFile to CSV_Dir
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-q[--query_sql_file] is "Input file with MySQL query sql."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-D[--to_dir] is "To directory."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105949_111000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\mysql_query.sql ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
+	::Test vector: From MYSQL_TimezoneQueryFile to CSV_Default
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-q[--query_sql_file] is "Input file with MySQL query sql."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105949_160000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\mysql_query.sql ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_TimezoneQueryFile to CSV_File
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-q[--query_sql_file] is "Input file with MySQL query sql."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-g[--to_file] is "To CSV file."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105949_276000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\mysql_query.sql ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-g C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT\testMYSQL_TimezoneQueryFile.csv
+	::Test vector: From MYSQL_Table_Limit1000 to CSV_Dir
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-D[--to_dir] is "To directory."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 1000 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105949_345000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Timestamp_test_from ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
+	::Test vector: From MYSQL_Table_Limit1000 to CSV_Default
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 1000 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105949_412000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Timestamp_test_from ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_Table_Limit1000 to CSV_File
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-g[--to_file] is "To CSV file."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 1000 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105949_470000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Timestamp_test_from ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-g C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT\testMYSQL_Table_Limit1000.csv
+	::Test vector: From MYSQL_QueryDir to CSV_Dir
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-Q[--query_sql_dir] is "Input file with MySQL query sql."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-D[--to_dir] is "To directory."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105949_544000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-Q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\query_dir_mysql ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
+	::Test vector: From MYSQL_QueryDir to CSV_Default
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-Q[--query_sql_dir] is "Input file with MySQL query sql."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105949_614000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-Q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\query_dir_mysql ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_Partition to CSV_Dir
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-P[--from_partition] is "From partition."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-D[--to_dir] is "To directory."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105949_676000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Partitioned_test_from ^
+-P rx2015 ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
+	::Test vector: From MYSQL_Partition to CSV_Default
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-P[--from_partition] is "From partition."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105949_743000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Partitioned_test_from ^
+-P rx2015 ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_Partition to CSV_File
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-P[--from_partition] is "From partition."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-g[--to_file] is "To CSV file."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105949_792000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Partitioned_test_from ^
+-P rx2015 ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-g C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT\testMYSQL_Partition.csv
+	::Test vector: From MYSQL_Table to CSV_Dir
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-D[--to_dir] is "To directory."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105949_861000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Timestamp_test_from ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
+	::Test vector: From MYSQL_Table to CSV_Default
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105949_923000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Timestamp_test_from ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_Table to CSV_File
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-g[--to_file] is "To CSV file."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105949_980000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Timestamp_test_from ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-g C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT\testMYSQL_Table.csv
+	::Test vector: From MYSQL_ShardedQuery to CSV_Dir
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-q[--query_sql_file] is "Input file with MySQL query sql."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-D[--to_dir] is "To directory."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 3 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105950_047000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\mysql_query.sql ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
+	::Test vector: From MYSQL_ShardedQuery to CSV_Default
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-q[--query_sql_file] is "Input file with MySQL query sql."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 3 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105950_125000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\mysql_query.sql ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_Subpartition_Limit33 to CSV_Dir
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-S[--from_sub_partition] is "From sub-partition."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-D[--to_dir] is "To directory."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 33 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105950_176000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Sub_Partitioned_test_from ^
+-S subpart200 ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
+	::Test vector: From MYSQL_Subpartition_Limit33 to CSV_Default
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-S[--from_sub_partition] is "From sub-partition."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 33 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105950_292000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Sub_Partitioned_test_from ^
+-S subpart200 ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_Subpartition_Limit33 to CSV_File
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-S[--from_sub_partition] is "From sub-partition."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-g[--to_file] is "To CSV file."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 33 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105950_345000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Sub_Partitioned_test_from ^
+-S subpart200 ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-g C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT\testMYSQL_Subpartition_Limit33.csv
+	::Test vector: From MYSQL_ShardedTable to CSV_Dir
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-D[--to_dir] is "To directory."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 3 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105950_408000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Timestamp_test_from ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
+	::Test vector: From MYSQL_ShardedTable to CSV_Default
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-c[--from_table] is "From table."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 3 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105950_476000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-c TEST.Timestamp_test_from ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_QueryFile to CSV_Dir
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-q[--query_sql_file] is "Input file with MySQL query sql."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-D[--to_dir] is "To directory."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105950_545000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\mysql_query.sql ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-D C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT
+	::Test vector: From MYSQL_QueryFile to CSV_Default
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-q[--query_sql_file] is "Input file with MySQL query sql."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105950_608000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\mysql_query.sql ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin"
+	::Test vector: From MYSQL_QueryFile to CSV_File
+	::	Arguments:
+	::		-w[--copy_vector] is "Data copy direction."
+::	-ps[--pool_size] is "Pool size."
+::	-r[--num_of_shards] is "Number of shards."
+::	-t[--field_term] is "Field terminator."
+::	-l[--lame_duck] is "Limit rows (lame duck run)."
+::	-K[--keep_data_file] is "Keep data dump."
+::	-M[--log_dir] is "Log destination."
+::	-F[--default_spool_dir] is "Default data dump dir (default_spool_dir/job_name/timestamp)."
+::	-B[--job_name] is "Job name (log_dir/job_name)."
+::	-Y[--time_stamp] is "Timestamp (log_dir/job_name/timestamp)."
+::	-5[--host_map] is "Host-to-shard map."
+::	-6[--spool_type] is "Spool file type (CSV or JSON)."
+::	-dbg[--debug_level] is "QC Debug level."
+::	-q[--query_sql_file] is "Input file with MySQL query sql."
+::	-j[--from_user] is "MySQL source user."
+::	-x[--from_passwd] is "MySQL source user password."
+::	-b[--from_db_name] is "MySQL source database."
+::	-n[--from_db_server] is "MySQL source instance name."
+::	-z[--source_client_home] is "Path to MySQL client home."
+::	-g[--to_file] is "To CSV file."	
+	
+echo y|C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc_dist_32\20160603_105945\qc32\qc32.exe ^
+-w MYSQL-CSV ^
+-ps 1 ^
+-r 1 ^
+-t "|" ^
+-l 10 ^
+-K 1 ^
+-M C:\Temp\qc_log ^
+-F C:\tmp\TEST_default_spool ^
+-B qc_job ^
+-Y 20160603_105950_676000 ^
+-5 ".\config\host_map\host_map.py" ^
+-6 csv ^
+-dbg 1 ^
+-q C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\test\v101\query\mysql_query.sql ^
+-j "alex" ^
+-x "mysql_pwd" ^
+-b "test" ^
+-n "localhost" ^
+-z "C:\Temp\mysql\bin" ^
+-g C:\Users\alex_buz\Documents\GitHub\DataBuddy\sources\qc32\CSV_OUT\testMYSQL_QueryFile.csv

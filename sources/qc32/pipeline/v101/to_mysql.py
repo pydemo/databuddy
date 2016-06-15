@@ -4,6 +4,7 @@ from db.v101.db_mysql import Mysql
 import codecs, tempfile
 from pprint import pprint
 import config.config as conf
+e=sys.exit
 #import common.v101.config as conf 
 class ToMysql(Mysql):
 	"""Mysql db"""
@@ -49,7 +50,13 @@ class ToMysql(Mysql):
 		
 		#print shard
 		#pprint(self.to_pld)
-		(login, to_table, shard_name, infile, row_from, row_to)=self.to_pld[int(shard)]
+		#pprint(self.to_pld[int(shard)])
+		#e(0)
+		(a,b,c)=self.to_pld
+		login, to_table=c
+		shard_name, infile, row_from, row_to, field_delim=b
+		#
+		#e(0)
 		#(ss_user, ss_passwd, ss_db_name, ss_db_server)=login
 		#(fmtfn,out,status,err)=self.create_format_file(self.log)
 		#assert os.path.isfile(fmtfn), 'Format file does not exists'
@@ -63,13 +70,20 @@ class ToMysql(Mysql):
 		if row_to:
 			lr=""",
 	LASTROW = %s""" % row_to
+	
+		cols1='Incident ID,CR Number,Dispatch Date / Time,Class,Class Description,Police District Name,Block Address,City,State,Zip Code,Agency,Place,Sector,Beat,PRA,Start Date / Time,End Date / Time,Latitude,Longitude,Police District Number,Location,Address Number'.split(',')
+		cn=','.join(['C%d' % (c+1) for c in range(len(cols1))])
+		
+		#e(0)
 		load_qry="""LOAD DATA  INFILE '%s' INTO TABLE %s
-FIELDS OPTIONALLY ENCLOSED BY '"' TERMINATED BY '%s'
+FIELDS OPTIONALLY ENCLOSED BY '' TERMINATED BY '%s'
 LINES TERMINATED BY '
 '%s;
+%s
 SELECT ROW_COUNT();
-""" % (infile.replace('\\\\','\\').replace('\\','\\\\'), to_table, self.args.field_term, skip)
-		#print (load_qry)
+""" % (infile.replace('\\\\','\\').replace('\\','\\\\'), to_table, self.args.field_term, skip, cn)
+		print (load_qry)
+		e(0)
 		#pprint (loadConf)
 		cqdir='%s\\sql' % (self.datadir)
 		#to_table='Persons_pipe2'
@@ -78,6 +92,11 @@ SELECT ROW_COUNT();
 		cqf.write(load_qry)
 		cqf.close()
 		os.environ['MYSQL_HOME'] = r'%s\data' % conf.dbclients[self.db][:-3]
+		#pprint(loadConf)
+		
+		print ' '.join(loadConf)
+		#print load_qry
+		#e(0)
 		p2 = Popen(loadConf,stdin=PIPE,  stdout=PIPE)# '-S',  stdin=p1.stdout,
 		output, err = p2.communicate(load_qry)
 		#pprint(output)

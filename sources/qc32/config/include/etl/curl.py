@@ -723,7 +723,7 @@ exit;
 			#outfn=self.args.output
 		if outfn:
 			spConf=spConf+['-o',outfn ]
-		pprint(spConf)
+		#pprint(spConf)
 		#e(0)
 		p = Popen(spConf, stdout=PIPE, stderr=PIPE) # '-S',  stdin=p1.stdout,
 		output, err = p.communicate()
