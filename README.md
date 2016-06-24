@@ -19,6 +19,13 @@ DataBuddy.exe|Windows|32bit|[0.3.5 beta](https://github.com/data-buddy/DataBuddy
 - Databuddy also supports enables seamless, bi-directional integration between all major RDBMSs, such as Oracle, SQLServer, DB2, SAP Sybase, Informix, MySQL, Infobright, MariaDB, and PostgreSQL. In addition,
 it supports self-service data extraction, preparation, and cleansing by database developers.
 
+##Other scripts
+  - [Oracle -> Redshift](https://github.com/alexbuz/Oracle-To-Redshift-Data-Loader/blob/master/README.md) data loader
+  - [PostgreSQL -> Redshift](https://github.com/alexbuz/PostgreSQL_To_Redshift_Loader/blob/master/README.md) data loader
+  - [MySQL -> Redshift](https://github.com/alexbuz/MySQL_To_Redshift_Loader/blob/master/README.md) data loader
+  - [Oracle -> S3](https://github.com/alexbuz/Oracle_To_S3_Data_Uploader/blob/master/README.md) data loader
+  - [CSV -> Redshift](https://github.com/alexbuz/CSV_Loader_For_Redshift/blob/master/README.md) data loader
+  
 ##Audience
 
 Database developers, ETL developers, Data Integrators.
