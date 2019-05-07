@@ -2,14 +2,14 @@
 Do it yourself data integration starter kit.
 (Treat it as a work of art rather than something useful)
 
-##Version
+## Version
 
 Name|OS|Platform|data-buddy (GUI) | DataBuddy CLI (command line)
 ---|---|---|---- | -------------
 DataBuddy.exe|Windows|32bit|[0.3.5 beta](https://github.com/data-buddy/DataBuddy/releases/tag/0.3.5) | [1.23.9 beta] (https://github.com/QueryCopy/QueryCopy-for-Oracle/releases/tag/v1.23.9)
 >There are 2 components. Upon "Run" Databuddy GUI (DataBuddy.exe) will kick off Databuddy CLI (`qc32\qc.exe`) out of process.
 
-##Purpose
+## Purpose
 
 - It is data integration software used to define technical processes to combine data from different sources. Data is moved across RDBMS borders using CSV files.
 - __DataBuddy__ facilitates data delivery from multiple relational data sources including Oracle, SQLServer, DB2, SAP Sybase, Informix, MySQL, Infobright, MariaDB, PostgreSQL, TimesTen, and SQLite.
@@ -23,14 +23,15 @@ it supports self-service data extraction, preparation, and cleansing by database
 
 
 [<img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png">](https://www.buymeacoffee.com/0nJ32Xg)
-##Other scripts
+
+## Other scripts
   - [Oracle -> Redshift](https://github.com/alexbuz/Oracle-To-Redshift-Data-Loader/blob/master/README.md) data loader
   - [PostgreSQL -> Redshift](https://github.com/alexbuz/PostgreSQL_To_Redshift_Loader/blob/master/README.md) data loader
   - [MySQL -> Redshift](https://github.com/alexbuz/MySQL_To_Redshift_Loader/blob/master/README.md) data loader
   - [Oracle -> S3](https://github.com/alexbuz/Oracle_To_S3_Data_Uploader/blob/master/README.md) data loader
   - [CSV -> Redshift](https://github.com/alexbuz/CSV_Loader_For_Redshift/blob/master/README.md) data loader
   
-##Audience
+## Audience
 
 Database developers, ETL developers, Data Integrators.
 
