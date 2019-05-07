@@ -20,6 +20,9 @@ DataBuddy.exe|Windows|32bit|[0.3.5 beta](https://github.com/data-buddy/DataBuddy
 - Databuddy also supports enables seamless, bi-directional integration between all major RDBMSs, such as Oracle, SQLServer, DB2, SAP Sybase, Informix, MySQL, Infobright, MariaDB, and PostgreSQL. In addition,
 it supports self-service data extraction, preparation, and cleansing by database developers.
 
+
+
+[<img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png">](https://www.buymeacoffee.com/0nJ32Xg)
 ##Other scripts
   - [Oracle -> Redshift](https://github.com/alexbuz/Oracle-To-Redshift-Data-Loader/blob/master/README.md) data loader
   - [PostgreSQL -> Redshift](https://github.com/alexbuz/PostgreSQL_To_Redshift_Loader/blob/master/README.md) data loader
@@ -630,5 +633,6 @@ I'll get back to you within hours.
  - [Employment FAQ](https://github.com/alexbuz/FAQs/blob/master/README.md)
 
 
+[<img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png">](https://www.buymeacoffee.com/0nJ32Xg)
 
 
